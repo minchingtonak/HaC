@@ -1,0 +1,6 @@
+- integrate with ansible for container configuration
+  https://www.pulumi.com/registry/packages/terraform-provider/
+  `$ pulumi package add terraform-provider ansible/ansible`
+  `import \* as ansible from '@pulumi/ansible';`
+
+- finish up firewall configuration

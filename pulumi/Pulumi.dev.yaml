@@ -1,0 +1,16 @@
+encryptionsalt: v1:La9ewCKaH1M=:v1:gGxhP+gJa+ava6K3:01DP1sSJVBgXXyvdrsmPjb+wDq7NTw==
+config:
+  homelab-pve:pveNodeName: homelab
+  homelab-pve:imageTemplateDatastoreId: local
+  homelab-pve:localIpPrefix: 192.168.122
+  homelab-pve:gatewayIp: 192.168.122.1
+  homelab-pve:lxcRootPassword:
+    secure: v1:ZJ92yyCqUP+gpGJe:ddDt5e1UcePAFSUNGp7oJjlqK4to
+  homelab-pve:lxcPublicSshKey:
+    secure: v1:F/wRFOKg518nkP7I:6mnkDvY2woOeG0g9mqsxGsdIVzbAIAmi1n89PAymWeGvmouRnFGEC0EpzAIxf6LwBxsbT4zmlY05SK37xLhW4zAF+GIiTRKepMQ4Te0mFoFupI5Kq02JruSHYb8zFWdR20at6j+z0QVrMBhv
+  homelab-pve:pveEndpoint: https://homelab.akmin.dev
+  homelab-pve:pveInsecure: "false"
+  homelab-pve:pveUsername:
+    secure: v1:0Misa7AjGbv6pgG8:935A2yNp0Wg+8fhzurcPkVotrLLvO5N9
+  homelab-pve:pvePassword:
+    secure: v1:GbPQcKh46iarDfCr:T4TFcWEZPQltXrTmcnfLm2q+0QKq78LPuYo=
