@@ -1,6 +1,7 @@
 import * as pulumi from '@pulumi/pulumi';
 import * as command from '@pulumi/command';
-import path = require('node:path');
+import * as path from 'node:path';
+import * as fs from 'node:fs';
 
 export type ServiceName = string;
 
@@ -45,13 +46,20 @@ export class ComposeService extends pulumi.ComponentResource {
       },
     );
 
+    const serviceEnv = ComposeService.assembleVariableMap(args.serviceName);
+
+    // FIXME either figure out a way to stringify the env var secret values
+    // or try using a playbook to deploy the service (may be better long term)
+    const stringifiedEnv = Object.entries(serviceEnv)
+      .map(([name, value]) => pulumi.interpolate`${name}=${value}`)
+      .join(' ');
+
     this.deployService = new command.remote.Command(
       `deploy-${args.serviceName}-service`,
       {
-        create: `cd ${remoteServiceDirectory} && docker compose up -d`,
-        delete: `cd ${remoteServiceDirectory} && docker compose down`,
-        // TODO
-        environment: {},
+        create: `cd ${remoteServiceDirectory} && ${stringifiedEnv} docker compose up -d`,
+        delete: `cd ${remoteServiceDirectory} && ${stringifiedEnv} docker compose down`,
+        // environment: serviceEnv,
         addPreviousOutputInEnv: false,
         triggers: [this.serviceDirectory],
         connection: args.connection,
@@ -63,11 +71,39 @@ export class ComposeService extends pulumi.ComponentResource {
           afterCreate: [this.checkForMissingVariables.bind(this)],
           afterUpdate: [this.checkForMissingVariables.bind(this)],
         },
-        deleteBeforeReplace: true
+        deleteBeforeReplace: true,
       },
     );
 
     this.registerOutputs();
+  }
+
+  private static assembleVariableMap(serviceName: string) {
+    const serviceConfig = new pulumi.Config(serviceName);
+    const fileContent = fs.readFileSync(
+      `./services/${serviceName}/compose.yaml`,
+      { encoding: 'utf-8' },
+    );
+
+    const varPattern = /\$\{(?<varName>[^}]+)\}/g;
+    const matches = fileContent.matchAll(varPattern);
+
+    const serviceEnv: Record<string, string | pulumi.Output<string>> = {};
+
+    for (const match of matches) {
+      if (!match.groups) {
+        continue;
+      }
+
+      const varName = match.groups.varName;
+      if (varName.startsWith('SECRET')) {
+        serviceEnv[varName] = serviceConfig.requireSecret(varName);
+      } else {
+        serviceEnv[varName] = serviceConfig.require(varName);
+      }
+    }
+
+    return serviceEnv;
   }
 
   private checkForMissingVariables(args: pulumi.ResourceHookArgs) {
