@@ -1,4 +1,5 @@
 import * as pulumi from '@pulumi/pulumi';
+import * as command from '@pulumi/command';
 import * as proxmox from '@muhlba91/pulumi-proxmoxve';
 import {
   CpuCores,
@@ -9,13 +10,16 @@ import {
 } from '../constants';
 import { homelabConfig, homelabProvider } from './homelab';
 import { debian12 } from './templates';
+import { ComposeService, ServiceName } from '../docker/compose-service';
 
+// FIXME static variables of HomelabContainer? separate module for homelab config?
 const pveNodeName = homelabConfig.require('pveNodeName');
 const localIpPrefix = homelabConfig.require('localIpPrefix');
 const gatewayIp = homelabConfig.require('gatewayIp');
 
 const defaultRootPassword = homelabConfig.requireSecret('lxcRootPassword');
 const lxcPublicSshKey = homelabConfig.requireSecret('lxcPublicSshKey');
+const lxcPrivateSshKey = homelabConfig.requireSecret('lxcPrivateSshKey');
 
 export type HomelabContainerArgs = {
   id: number;
@@ -26,6 +30,7 @@ export type HomelabContainerArgs = {
   cpu?: proxmox.types.input.CT.ContainerCpu;
   memory?: proxmox.types.input.CT.ContainerMemory;
   disk?: proxmox.types.input.CT.ContainerDisk;
+  services?: ServiceName[];
 };
 
 export class HomelabContainer extends pulumi.ComponentResource {
@@ -35,15 +40,18 @@ export class HomelabContainer extends pulumi.ComponentResource {
 
   firewallAlias: proxmox.network.FirewallAlias;
 
+  services: ComposeService[] = [];
+
   constructor(
     name: string,
     args: HomelabContainerArgs,
     opts?: pulumi.ComponentResourceOptions,
   ) {
-    super('pkg:proxmox:HomelabContainer', name, {}, opts);
+    super('HaC:proxmoxve:HomelabContainer', name, {}, opts);
 
     const ctName = `${args.hostname}-lxc`;
-    const ctCidr = `${localIpPrefix}.${args.id}/24`;
+    const ctAddress = `${localIpPrefix}.${args.id}`;
+    const ctCidr = `${ctAddress}/24`;
 
     this.container = new proxmox.ct.Container(
       ctName,
@@ -111,7 +119,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
       {
         nodeName: pveNodeName,
         containerId: args.id,
-        enabled: true,
+        enabled: false, // TODO configurable firewall rules
         // copied values from the default firewall config for a new ct
         dhcp: true,
         ndp: true,
@@ -126,7 +134,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
       {
         provider: homelabProvider,
         parent: this,
-        dependsOn: [this.container],
+        dependsOn: this.container,
       },
     );
 
@@ -143,29 +151,46 @@ export class HomelabContainer extends pulumi.ComponentResource {
       {
         provider: homelabProvider,
         parent: this,
-        dependsOn: [this.container],
+        dependsOn: this.container,
       },
     );
 
+    if (args.services) {
+      const connection: command.types.input.remote.ConnectionArgs = {
+        host: ctAddress,
+        user: 'root',
+        privateKey: lxcPrivateSshKey,
+      };
+
+      const installDocker = new command.remote.Command(
+        `${ctName}-install-docker`,
+        {
+          create: 'wget -qO- https://get.docker.com | sh',
+          connection,
+        },
+        {
+          parent: this,
+          dependsOn: this.container,
+        },
+      );
+
+      for (const name of args.services) {
+        this.services.push(
+          new ComposeService(
+            `${name}-compose-service`,
+            {
+              serviceName: name,
+              connection,
+            },
+            {
+              parent: this.container,
+              dependsOn: installDocker,
+            },
+          ),
+        );
+      }
+    }
+
     this.registerOutputs();
-  }
-}
-
-const containers: HomelabContainerArgs[] = [
-  {
-    id: 206,
-    hostname: 'dashboard',
-    tags: ['monitoring'],
-  },
-  {
-    id: 207,
-    hostname: 'foobar',
-    tags: ['baz'],
-  },
-];
-
-export function deployContainers() {
-  for (const ct of containers) {
-    new HomelabContainer(`${ct.hostname}-homelab-container`, ct);
   }
 }

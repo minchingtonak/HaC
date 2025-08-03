@@ -8,6 +8,9 @@ config:
     secure: v1:ZJ92yyCqUP+gpGJe:ddDt5e1UcePAFSUNGp7oJjlqK4to
   homelab-pve:lxcPublicSshKey:
     secure: v1:F/wRFOKg518nkP7I:6mnkDvY2woOeG0g9mqsxGsdIVzbAIAmi1n89PAymWeGvmouRnFGEC0EpzAIxf6LwBxsbT4zmlY05SK37xLhW4zAF+GIiTRKepMQ4Te0mFoFupI5Kq02JruSHYb8zFWdR20at6j+z0QVrMBhv
+  # pulumi config set --secret homelab-pve:lxcPrivateSshKey -- '-----BEGIN OPENSSH PRIVATE KEY-----....'
+  homelab-pve:lxcPrivateSshKey:
+    secure: v1:Gvh1GdBO1YBpztNy:VFos5hyLijW3XoPXf/4+hqGBzRztgyz1uXCofM6WdUHi9yPXmmIlEdHcsm0W4w/B5ld5h+J7RFt/mDBSyMdipAuOspFQcGcXASSmVe+a/hJ0W/bQ1giwsN4PYw/E9hfiTez6SNtgAMHQOgG8UHvRjD+uZSr3PqsI3JZzIGan40yzVJxe5OTKkhcuTKbnJxIj1o1ljhoS8tF32sffz0HgWePvzusrpzOF8GSrTXfrWx3TBn7dE2HN9HbilWC90aaa52qasXDumMdFuJVikLVVIvMY1GZIKf0Yjan8J0riVChhwdcXk0xRMWquafqkAsgFajyLraol0gia9KXDGpzGMGp4mBvq+HNtWSceMdmp2OelD0YACpSnUJHsgNvr9dPqWDr5QtEKVguNOALI1YN3lR6VyCpujKUJIKd3lf53XatHWq8GmyYZdAXdP+g22Qc/b+hEF0x/7xiHP7QDRLVcgwaNwe2BM7okJ38qv7CTSKhCxU+8E8g3wEm4uBjUmGKJkvex1sUv8mIcZEjKiArxSfYZwAEajCiEQy+eYYkx
   homelab-pve:pveEndpoint: https://homelab.akmin.dev
   homelab-pve:pveInsecure: "false"
   homelab-pve:pveUsername:

@@ -1,3 +1,7 @@
-import { deployContainers } from './src/proxmox/homelab-container';
+import { deployContainers } from './src/proxmox/containers';
 
-deployContainers();
+function main() {
+  deployContainers();
+}
+
+main();

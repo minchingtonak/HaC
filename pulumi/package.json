@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@muhlba91/pulumi-proxmoxve": "^7.3.0",
+    "@pulumi/command": "^1.1.0",
     "@pulumi/pulumi": "^3.113.0"
   }
 }

@@ -46,6 +46,7 @@ export enum ProxmoxFirewallPolicy {
   DROP = 'DROP',
 }
 
+// https://pve.proxmox.com/pve-docs/pve-admin-guide.html#pve_firewall_host_specific_configuration
 export enum ProxmoxFirewallLogLevel {
   emerg = 'emerg',
   alert = 'alert',
