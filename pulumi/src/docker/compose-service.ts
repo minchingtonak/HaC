@@ -5,12 +5,14 @@ import * as fs from 'node:fs';
 
 export type ServiceName = string;
 
-export type ComposeServiceArgs = {
+export type ComposeStackArgs = {
   serviceName: ServiceName;
   connection: command.types.input.remote.ConnectionArgs;
 };
 
-export class ComposeService extends pulumi.ComponentResource {
+export class ComposeStack extends pulumi.ComponentResource {
+  public static RESOURCE_TYPE = 'HaC:docker:ComposeStack';
+
   serviceDirectory: pulumi.asset.FileAsset;
 
   copyServiceToRemote: command.remote.CopyToRemote;
@@ -19,10 +21,10 @@ export class ComposeService extends pulumi.ComponentResource {
 
   constructor(
     name: string,
-    args: ComposeServiceArgs,
+    args: ComposeStackArgs,
     opts?: pulumi.ComponentResourceOptions,
   ) {
-    super('HaC:docker:ComposeService', name, {}, opts);
+    super(ComposeStack.RESOURCE_TYPE, name, {}, opts);
 
     this.serviceDirectory = new pulumi.asset.FileArchive(
       `./services/${args.serviceName}`,
@@ -46,14 +48,14 @@ export class ComposeService extends pulumi.ComponentResource {
       },
     );
 
-    const serviceEnv = ComposeService.assembleVariableMap(args.serviceName);
+    const serviceEnv = ComposeStack.assembleVariableMap(args.serviceName);
 
     const stringifiedEnv = pulumi
       .all(
         Object.entries(serviceEnv).map(
           ([name, value]) =>
             // process the env vars before the apply() call to avoid exposing secrets in resource outputs
-            pulumi.interpolate`${name}="${ComposeService.escapeBashEnvValue(
+            pulumi.interpolate`${name}="${ComposeStack.escapeBashEnvValue(
               value,
             )}"`,
         ),
@@ -90,10 +92,13 @@ export class ComposeService extends pulumi.ComponentResource {
 
   private static SECRET_VARIABLE_PREFIX = 'SECRET';
 
+  private static COMPOSE_FILE_FOR = (serviceName: string) =>
+    `./stacks/${serviceName}/compose.yaml`;
+
   private static assembleVariableMap(serviceName: string) {
     const serviceConfig = new pulumi.Config(serviceName);
     const fileContent = fs.readFileSync(
-      `./services/${serviceName}/compose.yaml`,
+      ComposeStack.COMPOSE_FILE_FOR(serviceName),
       { encoding: 'utf-8' },
     );
 
@@ -108,7 +113,7 @@ export class ComposeService extends pulumi.ComponentResource {
       }
 
       const varName = match.groups.varName;
-      if (varName.startsWith(ComposeService.SECRET_VARIABLE_PREFIX)) {
+      if (varName.startsWith(ComposeStack.SECRET_VARIABLE_PREFIX)) {
         serviceEnv[varName] = serviceConfig.requireSecret(varName);
       } else {
         serviceEnv[varName] = serviceConfig.require(varName);
@@ -148,7 +153,7 @@ export class ComposeService extends pulumi.ComponentResource {
 
     const missingVars = outputs.stderr
       .split('\n')
-      .filter((line) => line.includes(ComposeService.UNSET_VARIABLE_MARKER));
+      .filter((line) => line.includes(ComposeStack.UNSET_VARIABLE_MARKER));
 
     if (missingVars.length) {
       throw new Error('\n' + missingVars.join('\n'));

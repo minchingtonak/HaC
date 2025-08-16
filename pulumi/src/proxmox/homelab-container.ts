@@ -10,7 +10,7 @@ import {
 } from '../constants';
 import { homelabConfig, homelabProvider } from './homelab';
 import { debian12 } from './templates';
-import { ComposeService, ServiceName } from '../docker/compose-service';
+import { ComposeStack, ServiceName } from '../docker/compose-service';
 
 // FIXME static variables of HomelabContainer? separate module for homelab config?
 const pveNodeName = homelabConfig.require('pveNodeName');
@@ -34,20 +34,22 @@ export type HomelabContainerArgs = {
 };
 
 export class HomelabContainer extends pulumi.ComponentResource {
+  public static RESOURCE_TYPE = 'HaC:proxmoxve:HomelabContainer';
+
   container: proxmox.ct.Container;
 
   firewallOptions: proxmox.network.FirewallOptions;
 
   firewallAlias: proxmox.network.FirewallAlias;
 
-  services: ComposeService[] = [];
+  services: ComposeStack[] = [];
 
   constructor(
     name: string,
     args: HomelabContainerArgs,
     opts?: pulumi.ComponentResourceOptions,
   ) {
-    super('HaC:proxmoxve:HomelabContainer', name, {}, opts);
+    super(HomelabContainer.RESOURCE_TYPE, name, {}, opts);
 
     const ctName = `${args.hostname}-lxc`;
     const ctAddress = `${localIpPrefix}.${args.id}`;
@@ -176,7 +178,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
 
       for (const name of args.services) {
         this.services.push(
-          new ComposeService(
+          new ComposeStack(
             `${name}-compose-service`,
             {
               serviceName: name,
