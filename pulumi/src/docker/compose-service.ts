@@ -129,9 +129,7 @@ export class ComposeService extends pulumi.ComponentResource {
         result = result.replaceAll('$', '\\$');
       }
 
-      const res = result.replaceAll('`', '\\`').replaceAll('!', '\\!');
-      pulumi.log.info(`Replaced '${value}' with '${res}'`);
-      return res;
+      return result.replaceAll('`', '\\`').replaceAll('!', '\\!');
     }
 
     if (pulumi.Output.isInstance(value)) {
