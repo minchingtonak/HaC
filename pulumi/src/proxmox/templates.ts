@@ -18,7 +18,7 @@ const debian12TemplateFile = new proxmox.download.File(
     checksumAlgorithm: 'sha512',
     overwriteUnmanaged: true,
   },
-  { provider: homelabProvider },
+  { provider: homelabProvider, retainOnDelete: true },
 );
 
 export const debian12: proxmox.types.input.CT.ContainerOperatingSystem = {

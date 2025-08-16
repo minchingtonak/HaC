@@ -11,9 +11,6 @@ importers:
       '@muhlba91/pulumi-proxmoxve':
         specifier: ^7.3.0
         version: 7.3.0(typescript@5.8.3)
-      '@pulumi/ansible':
-        specifier: file:sdks/ansible
-        version: file:sdks/ansible(typescript@5.8.3)
       '@pulumi/command':
         specifier: ^1.1.0
         version: 1.1.0(typescript@5.8.3)
@@ -224,9 +221,6 @@ packages:
   '@protobufjs/utf8@1.1.0':
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
 
-  '@pulumi/ansible@file:sdks/ansible':
-    resolution: {directory: sdks/ansible, type: directory}
-
   '@pulumi/command@1.1.0':
     resolution: {integrity: sha512-ovVec+gXeqpcm76xwYYZvfJym8bG9NRvlBGQWbn0+c0fKQziZIjiv5V+AxTKfb+dLWKe7Otyt206L1IWq41hyw==}
 
@@ -349,9 +343,6 @@ packages:
 
   argparse@1.0.10:
     resolution: {integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==}
-
-  async-mutex@0.5.0:
-    resolution: {integrity: sha512-1A94B18jkJ3DYq284ohPxoXbfTA5HsQ7/Mf4DEhcyLx3Bz27Rh59iScbB6EPiP+B+joue6YCxcMXSbFC1tZKwA==}
 
   balanced-match@1.0.2:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
@@ -1025,9 +1016,6 @@ packages:
     resolution: {integrity: sha512-gcANaAnd2QDZFmHFEOF4k7uc1J/6a6z3DJMd/QwEyxLoKGiptJRwid582r7QIsFlFMIZ3SnxfS52S4hm2DHkuQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
 
-  tslib@2.8.1:
-    resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
-
   tuf-js@2.2.1:
     resolution: {integrity: sha512-GwIJau9XaA8nLVbUXsN3IlFi7WmQ48gBUrl3FTkkL/XLu/POhBzfmX9hd33FNMX1qAsfl6ozO1iMmW9NC8YniA==}
     engines: {node: ^16.14.0 || >=18.0.0}
@@ -1383,16 +1371,6 @@ snapshots:
 
   '@protobufjs/utf8@1.1.0': {}
 
-  '@pulumi/ansible@file:sdks/ansible(typescript@5.8.3)':
-    dependencies:
-      '@pulumi/pulumi': 3.186.0(typescript@5.8.3)
-      async-mutex: 0.5.0
-    transitivePeerDependencies:
-      - bluebird
-      - supports-color
-      - ts-node
-      - typescript
-
   '@pulumi/command@1.1.0(typescript@5.8.3)':
     dependencies:
       '@pulumi/pulumi': 3.186.0(typescript@5.8.3)
@@ -1540,10 +1518,6 @@ snapshots:
   argparse@1.0.10:
     dependencies:
       sprintf-js: 1.0.3
-
-  async-mutex@0.5.0:
-    dependencies:
-      tslib: 2.8.1
 
   balanced-match@1.0.2: {}
 
@@ -2243,8 +2217,6 @@ snapshots:
   tmp@0.2.3: {}
 
   treeverse@3.0.0: {}
-
-  tslib@2.8.1: {}
 
   tuf-js@2.2.1:
     dependencies:

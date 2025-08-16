@@ -1,4 +1,4 @@
-import { deployContainers } from './src/proxmox/containers';
+import { deployContainers } from './src/proxmox/services';
 
 function main() {
   deployContainers();

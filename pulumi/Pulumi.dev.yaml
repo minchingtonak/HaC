@@ -2,8 +2,8 @@ encryptionsalt: v1:La9ewCKaH1M=:v1:gGxhP+gJa+ava6K3:01DP1sSJVBgXXyvdrsmPjb+wDq7N
 config:
   homelab-pve:pveNodeName: homelab
   homelab-pve:imageTemplateDatastoreId: local
-  homelab-pve:localIpPrefix: 192.168.122
-  homelab-pve:gatewayIp: 192.168.122.1
+  homelab-pve:localIpPrefix: 192.168.0
+  homelab-pve:gatewayIp: 192.168.0.1
   homelab-pve:lxcRootPassword:
     secure: v1:ZJ92yyCqUP+gpGJe:ddDt5e1UcePAFSUNGp7oJjlqK4to
   homelab-pve:lxcPublicSshKey:
@@ -18,5 +18,3 @@ config:
   homelab-pve:pvePassword:
     secure: v1:GbPQcKh46iarDfCr:T4TFcWEZPQltXrTmcnfLm2q+0QKq78LPuYo=
   mealie:MEALIE_BASE_URL: https://mealie.homelab.akmin.dev
-  mealie:SECRET_MEALIE_BASE_URL_TWO:
-    secure: v1:JUEmLiXen3bIMrd/:lnhgIXKGsT/br93xC3asqbZyEYqNDQ==

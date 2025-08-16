@@ -48,18 +48,23 @@ export class ComposeService extends pulumi.ComponentResource {
 
     const serviceEnv = ComposeService.assembleVariableMap(args.serviceName);
 
-    // FIXME either figure out a way to stringify the env var secret values
-    // or try using a playbook to deploy the service (may be better long term)
-    const stringifiedEnv = Object.entries(serviceEnv)
-      .map(([name, value]) => pulumi.interpolate`${name}=${value}`)
-      .join(' ');
+    const stringifiedEnv = pulumi
+      .all(
+        Object.entries(serviceEnv).map(
+          ([name, value]) =>
+            // process the env vars before the apply() call to avoid exposing secrets in resource outputs
+            pulumi.interpolate`${name}="${ComposeService.escapeBashEnvValue(
+              value,
+            )}"`,
+        ),
+      )
+      .apply((envArray) => envArray.join(' '));
 
     this.deployService = new command.remote.Command(
       `deploy-${args.serviceName}-service`,
       {
-        create: `cd ${remoteServiceDirectory} && ${stringifiedEnv} docker compose up -d`,
-        delete: `cd ${remoteServiceDirectory} && ${stringifiedEnv} docker compose down`,
-        // environment: serviceEnv,
+        create: pulumi.interpolate`cd ${remoteServiceDirectory} && ${stringifiedEnv} docker compose up -d --force-recreate`,
+        delete: pulumi.interpolate`cd ${remoteServiceDirectory} && ${stringifiedEnv} docker compose down`,
         addPreviousOutputInEnv: false,
         triggers: [this.serviceDirectory],
         connection: args.connection,
@@ -75,8 +80,15 @@ export class ComposeService extends pulumi.ComponentResource {
       },
     );
 
-    this.registerOutputs();
+    this.registerOutputs({
+      deployCommand: this.deployService.create,
+      destroyCommand: this.deployService.delete,
+      deployCommandStdout: this.deployService.stdout,
+      deployCommandStderr: this.deployService.stderr,
+    });
   }
+
+  private static SECRET_VARIABLE_PREFIX = 'SECRET';
 
   private static assembleVariableMap(serviceName: string) {
     const serviceConfig = new pulumi.Config(serviceName);
@@ -96,7 +108,7 @@ export class ComposeService extends pulumi.ComponentResource {
       }
 
       const varName = match.groups.varName;
-      if (varName.startsWith('SECRET')) {
+      if (varName.startsWith(ComposeService.SECRET_VARIABLE_PREFIX)) {
         serviceEnv[varName] = serviceConfig.requireSecret(varName);
       } else {
         serviceEnv[varName] = serviceConfig.require(varName);
@@ -106,6 +118,31 @@ export class ComposeService extends pulumi.ComponentResource {
     return serviceEnv;
   }
 
+  private static escapeBashEnvValue(
+    value: string | pulumi.Output<string>,
+    allowVariableExpansion: boolean = false,
+  ) {
+    function replacer(value: string) {
+      let result = value.replaceAll('\\', '\\\\').replaceAll('"', '\\"');
+
+      if (!allowVariableExpansion) {
+        result = result.replaceAll('$', '\\$');
+      }
+
+      const res = result.replaceAll('`', '\\`').replaceAll('!', '\\!');
+      pulumi.log.info(`Replaced '${value}' with '${res}'`);
+      return res;
+    }
+
+    if (pulumi.Output.isInstance(value)) {
+      return value.apply(replacer);
+    }
+
+    return replacer(value);
+  }
+
+  private static UNSET_VARIABLE_MARKER = 'variable is not set';
+
   private checkForMissingVariables(args: pulumi.ResourceHookArgs) {
     const outputs = args.newOutputs as {
       stderr: string;
@@ -113,7 +150,7 @@ export class ComposeService extends pulumi.ComponentResource {
 
     const missingVars = outputs.stderr
       .split('\n')
-      .filter((line) => line.includes('variable is not set'));
+      .filter((line) => line.includes(ComposeService.UNSET_VARIABLE_MARKER));
 
     if (missingVars.length) {
       throw new Error('\n' + missingVars.join('\n'));

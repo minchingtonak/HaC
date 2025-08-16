@@ -96,7 +96,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
           swap: MemorySize.GB_2,
         },
         disk: args.disk ?? {
-          datastoreId: 'local-lvm',
+          datastoreId: 'fast',
           size: DiskSize.GB_8,
         },
         features: {
