@@ -17,4 +17,3 @@ services:
       ALLOW_SIGNUP: "false"
       TZ: America/Los_Angeles
       BASE_URL: ${MEALIE_BASE_URL}
-      BASE_URL_TWO: ${MEALIE_BASE_URL_TWO}
