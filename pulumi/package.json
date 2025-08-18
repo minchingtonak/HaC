@@ -1,13 +1,15 @@
 {
   "name": "hac",
   "main": "index.ts",
+  "dependencies": {
+    "@hanseltime/pulumi-file-utils": "^1.2.0",
+    "@muhlba91/pulumi-proxmoxve": "^7.3.0",
+    "@pulumi/command": "^1.1.0",
+    "@pulumi/pulumi": "^3.113.0",
+    "handlebars": "^4.7.8"
+  },
   "devDependencies": {
     "@types/node": "^18",
     "typescript": "^5.0.0"
-  },
-  "dependencies": {
-    "@muhlba91/pulumi-proxmoxve": "^7.3.0",
-    "@pulumi/command": "^1.1.0",
-    "@pulumi/pulumi": "^3.113.0"
   }
 }

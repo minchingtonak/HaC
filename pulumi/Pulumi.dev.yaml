@@ -18,3 +18,6 @@ config:
   homelab-pve:pvePassword:
     secure: v1:GbPQcKh46iarDfCr:T4TFcWEZPQltXrTmcnfLm2q+0QKq78LPuYo=
   mealie:MEALIE_BASE_URL: https://mealie.homelab.akmin.dev
+  mealie:MY_VARIABLE_ONE: foo
+  mealie:SECRET_MY_VARIABLE_TWO:
+    secure: v1:WpAl729dwuwlpOEi:PfxeAIukavUzz7l7QZ4fqWDOxw==

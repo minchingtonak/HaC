@@ -2,6 +2,8 @@ import * as pulumi from '@pulumi/pulumi';
 import * as command from '@pulumi/command';
 import * as path from 'node:path';
 import * as fs from 'node:fs';
+import { TemplateProcessor } from '../templates/template-processor';
+import { CopyableAsset } from '@hanseltime/pulumi-file-utils';
 
 export type ServiceName = string;
 
@@ -17,6 +19,10 @@ export class ComposeStack extends pulumi.ComponentResource {
 
   copyServiceToRemote: command.remote.CopyToRemote;
 
+  processedTemplateCopies: {
+    [templatePath: string]: command.remote.CopyToRemote;
+  } = {};
+
   deployService: command.remote.Command;
 
   constructor(
@@ -26,11 +32,11 @@ export class ComposeStack extends pulumi.ComponentResource {
   ) {
     super(ComposeStack.RESOURCE_TYPE, name, {}, opts);
 
-    this.serviceDirectory = new pulumi.asset.FileArchive(
-      `./services/${args.serviceName}`,
-    );
+    const serviceDir = ComposeStack.SERVICE_DIRECTORY_FOR(args.serviceName);
 
-    const remoteServiceDirectoryBase = `/etc/pulumi`;
+    this.serviceDirectory = new pulumi.asset.FileArchive(serviceDir);
+
+    const remoteServiceDirectoryBase = '/etc/pulumi';
     const remoteServiceDirectory = path.join(
       remoteServiceDirectoryBase,
       args.serviceName,
@@ -48,8 +54,47 @@ export class ComposeStack extends pulumi.ComponentResource {
       },
     );
 
-    const serviceEnv = ComposeStack.assembleVariableMap(args.serviceName);
+    // handle template files
 
+    const templateFilePaths =
+      TemplateProcessor.discoverTemplateFiles(serviceDir);
+
+    for (const templatePath of templateFilePaths) {
+      const processedTemplate = TemplateProcessor.processTemplate(
+        templatePath,
+        args.serviceName,
+      );
+
+      this.processedTemplateCopies[templatePath] =
+        new command.remote.CopyToRemote(
+          `copy-${args.serviceName}-template-${processedTemplate.idSafeName}`,
+          {
+            source: new CopyableAsset(
+              `${args.serviceName}-rendered-template-${processedTemplate.idSafeName}`,
+              {
+                asset: pulumi.Output.isInstance(processedTemplate.content)
+                  ? processedTemplate.content.apply(
+                      (val) => new pulumi.asset.StringAsset(val),
+                    )
+                  : new pulumi.asset.StringAsset(processedTemplate.content),
+                synthName: processedTemplate.idSafeName,
+                tmpCopyDir: 'tmp',
+                noClean: false,
+              },
+            ).copyableSource,
+            remotePath: processedTemplate.remoteOutputPath,
+            connection: args.connection,
+          },
+          {
+            parent: this,
+            dependsOn: this.copyServiceToRemote,
+          },
+        );
+    }
+
+    // handle compose stack environment variables
+
+    const serviceEnv = ComposeStack.assembleVariableMap(args.serviceName);
     const stringifiedEnv = pulumi
       .all(
         Object.entries(serviceEnv).map(
@@ -75,8 +120,8 @@ export class ComposeStack extends pulumi.ComponentResource {
         parent: this,
         dependsOn: this.copyServiceToRemote,
         hooks: {
-          afterCreate: [this.checkForMissingVariables.bind(this)],
-          afterUpdate: [this.checkForMissingVariables.bind(this)],
+          afterCreate: [ComposeStack.checkForMissingVariables],
+          afterUpdate: [ComposeStack.checkForMissingVariables],
         },
         deleteBeforeReplace: true,
       },
@@ -87,13 +132,17 @@ export class ComposeStack extends pulumi.ComponentResource {
       destroyCommand: this.deployService.delete,
       deployCommandStdout: this.deployService.stdout,
       deployCommandStderr: this.deployService.stderr,
+      processedTemplates: this.prepareProcessedTemplateOutputs(),
     });
   }
 
-  private static SECRET_VARIABLE_PREFIX = 'SECRET';
+  private static SECRET_VARIABLE_PREFIX = 'SECRET_';
+
+  private static SERVICE_DIRECTORY_FOR = (serviceName: string) =>
+    `./stacks/${serviceName}`;
 
   private static COMPOSE_FILE_FOR = (serviceName: string) =>
-    `./stacks/${serviceName}/compose.yaml`;
+    `${ComposeStack.SERVICE_DIRECTORY_FOR(serviceName)}/compose.yaml`;
 
   private static assembleVariableMap(serviceName: string) {
     const serviceConfig = new pulumi.Config(serviceName);
@@ -146,7 +195,7 @@ export class ComposeStack extends pulumi.ComponentResource {
 
   private static UNSET_VARIABLE_MARKER = 'variable is not set';
 
-  private checkForMissingVariables(args: pulumi.ResourceHookArgs) {
+  private static checkForMissingVariables(args: pulumi.ResourceHookArgs) {
     const outputs = args.newOutputs as {
       stderr: string;
     };
@@ -158,5 +207,22 @@ export class ComposeStack extends pulumi.ComponentResource {
     if (missingVars.length) {
       throw new Error('\n' + missingVars.join('\n'));
     }
+  }
+
+  private prepareProcessedTemplateOutputs() {
+    return Object.entries(this.processedTemplateCopies).reduce(
+      (acc, [name, copy]) => {
+        acc[`template-${name}`] = {
+          remotePath: copy.remotePath,
+          sourcePath: copy.source.apply((v) =>
+            v instanceof pulumi.asset.FileAsset
+              ? v.path
+              : '(not found, something is wrong)',
+          ),
+        };
+        return acc;
+      },
+      {} as pulumi.Inputs,
+    );
   }
 }

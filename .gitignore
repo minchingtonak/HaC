@@ -27,3 +27,5 @@ Thumbs.db
 
 .pulumi/
 node_modules/
+
+tmp/
