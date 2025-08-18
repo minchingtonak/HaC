@@ -10,7 +10,7 @@ import {
 } from '../constants';
 import { homelabConfig, homelabProvider } from './homelab';
 import { debian12 } from './templates';
-import { ComposeStack, ServiceName } from '../docker/compose-service';
+import { ComposeStack, ServiceName } from '../docker/compose-stack';
 
 // FIXME static variables of HomelabContainer? separate module for homelab config?
 const pveNodeName = homelabConfig.require('pveNodeName');

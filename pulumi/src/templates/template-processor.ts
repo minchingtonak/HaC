@@ -216,7 +216,11 @@ export class TemplateProcessor {
     const context: TemplateContext = {};
 
     for (const varName of variables) {
-      if (varName.startsWith(TemplateProcessor.SECRET_VARIABLE_PREFIX)) {
+      if (
+        varName
+          .toLocaleUpperCase()
+          .startsWith(TemplateProcessor.SECRET_VARIABLE_PREFIX)
+      ) {
         context[varName] = serviceConfig.requireSecret(varName);
       } else {
         context[varName] = serviceConfig.require(varName);
@@ -240,7 +244,7 @@ export class TemplateProcessor {
     return `/etc/pulumi/${stackRelativePath}`;
   }
 
-  private static buildSanitizedNameForId(templatePath: string): string {
+  static buildSanitizedNameForId(templatePath: string): string {
     const filename = path.basename(templatePath);
     return filename.replaceAll('.', '-').replaceAll(/[^a-zA-Z0-9_-]/g, '');
   }

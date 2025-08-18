@@ -21,3 +21,6 @@ config:
   mealie:MY_VARIABLE_ONE: foo
   mealie:SECRET_MY_VARIABLE_TWO:
     secure: v1:WpAl729dwuwlpOEi:PfxeAIukavUzz7l7QZ4fqWDOxw==
+  mealie:config_var_one: varOneValue
+  mealie:secret_config_var_two:
+    secure: v1:8EW+7R+Km+Cchov/:xH9eq2N2qsQBDWsWCin9+nl+8LlTxasc3ZL5Gw==

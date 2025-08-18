@@ -2,8 +2,7 @@ import * as pulumi from '@pulumi/pulumi';
 import * as command from '@pulumi/command';
 import * as path from 'node:path';
 import * as fs from 'node:fs';
-import { TemplateProcessor } from '../templates/template-processor';
-import { CopyableAsset } from '@hanseltime/pulumi-file-utils';
+import { HandlebarsTemplateDirectory } from '../templates/handlebars-template-directory';
 
 export type ServiceName = string;
 
@@ -18,6 +17,8 @@ export class ComposeStack extends pulumi.ComponentResource {
   serviceDirectory: pulumi.asset.FileAsset;
 
   copyServiceToRemote: command.remote.CopyToRemote;
+
+  handlebarsTemplateDirectory: HandlebarsTemplateDirectory;
 
   processedTemplateCopies: {
     [templatePath: string]: command.remote.CopyToRemote;
@@ -56,33 +57,26 @@ export class ComposeStack extends pulumi.ComponentResource {
 
     // handle template files
 
-    const templateFilePaths =
-      TemplateProcessor.discoverTemplateFiles(serviceDir);
+    this.handlebarsTemplateDirectory = new HandlebarsTemplateDirectory(
+      `${args.serviceName}-handlebars-template-folder`,
+      {
+        serviceName: args.serviceName,
+        templateDirectory: serviceDir,
+      },
+      {
+        parent: this,
+      },
+    );
 
-    for (const templatePath of templateFilePaths) {
-      const processedTemplate = TemplateProcessor.processTemplate(
-        templatePath,
-        args.serviceName,
-      );
-
+    for (const [templatePath, templateFile] of Object.entries(
+      this.handlebarsTemplateDirectory.templateFiles,
+    )) {
       this.processedTemplateCopies[templatePath] =
         new command.remote.CopyToRemote(
-          `copy-${args.serviceName}-template-${processedTemplate.idSafeName}`,
+          `copy-${args.serviceName}-template-${templateFile.processedTemplate.idSafeName}`,
           {
-            source: new CopyableAsset(
-              `${args.serviceName}-rendered-template-${processedTemplate.idSafeName}`,
-              {
-                asset: pulumi.Output.isInstance(processedTemplate.content)
-                  ? processedTemplate.content.apply(
-                      (val) => new pulumi.asset.StringAsset(val),
-                    )
-                  : new pulumi.asset.StringAsset(processedTemplate.content),
-                synthName: processedTemplate.idSafeName,
-                tmpCopyDir: 'tmp',
-                noClean: false,
-              },
-            ).copyableSource,
-            remotePath: processedTemplate.remoteOutputPath,
+            source: templateFile.asset.copyableSource,
+            remotePath: templateFile.processedTemplate.remoteOutputPath,
             connection: args.connection,
           },
           {
@@ -162,7 +156,11 @@ export class ComposeStack extends pulumi.ComponentResource {
       }
 
       const varName = match.groups.varName;
-      if (varName.startsWith(ComposeStack.SECRET_VARIABLE_PREFIX)) {
+      if (
+        varName
+          .toLocaleUpperCase()
+          .startsWith(ComposeStack.SECRET_VARIABLE_PREFIX)
+      ) {
         serviceEnv[varName] = serviceConfig.requireSecret(varName);
       } else {
         serviceEnv[varName] = serviceConfig.require(varName);
