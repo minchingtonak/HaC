@@ -10,7 +10,8 @@ import {
 } from '../constants';
 import { homelabConfig, homelabProvider } from './homelab';
 import { debian12 } from './templates';
-import { ComposeStack, ServiceName } from '../docker/compose-stack';
+import { ComposeStack } from '../docker/compose-stack';
+import { HostConfigToml } from './host-config-parser';
 
 // FIXME static variables of HomelabContainer? separate module for homelab config?
 const pveNodeName = homelabConfig.require('pveNodeName');
@@ -21,17 +22,7 @@ const defaultRootPassword = homelabConfig.requireSecret('lxcRootPassword');
 const lxcPublicSshKey = homelabConfig.requireSecret('lxcPublicSshKey');
 const lxcPrivateSshKey = homelabConfig.requireSecret('lxcPrivateSshKey');
 
-export type HomelabContainerArgs = {
-  id: number;
-  hostname: string;
-  description?: string;
-  tags?: string[];
-  os?: proxmox.types.input.CT.ContainerOperatingSystem;
-  cpu?: proxmox.types.input.CT.ContainerCpu;
-  memory?: proxmox.types.input.CT.ContainerMemory;
-  disk?: proxmox.types.input.CT.ContainerDisk;
-  services?: ServiceName[];
-};
+export type HomelabContainerArgs = HostConfigToml;
 
 export class HomelabContainer extends pulumi.ComponentResource {
   public static RESOURCE_TYPE = 'HaC:proxmoxve:HomelabContainer';
@@ -55,6 +46,17 @@ export class HomelabContainer extends pulumi.ComponentResource {
     const ctAddress = `${localIpPrefix}.${args.id}`;
     const ctCidr = `${ctAddress}/24`;
 
+    const mountPoints = args.mountPoints?.map((mp) => ({
+      volume: mp.volume,
+      path: mp.mountPoint,
+      size: mp.size ? `${mp.size}G` : undefined,
+      acl: mp.acl,
+      backup: mp.backup,
+      quota: mp.quota,
+      replicate: mp.replicate,
+      shared: mp.shared,
+    })) ?? [];
+
     this.container = new proxmox.ct.Container(
       ctName,
       {
@@ -66,6 +68,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
         startOnBoot: true,
         protection: false,
         operatingSystem: args.os ?? debian12,
+        mountPoints: mountPoints,
         initialization: {
           hostname: args.hostname,
           ipConfigs: [

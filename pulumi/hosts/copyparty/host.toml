@@ -1,0 +1,10 @@
+id = 200
+hostname = "copyparty-pulumi"
+
+description = "copyparty lightweight fileserver container"
+tags = ["fileserver", "fileshare"]
+services = ["copyparty"]
+
+[[mountPoints]]
+volume = "/void/documents"
+mountPoint = "/mnt/documents"

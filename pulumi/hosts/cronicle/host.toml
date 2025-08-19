@@ -1,0 +1,7 @@
+id = 216
+hostname = "cronicle-pulumi"
+enabled = false
+
+description = "Cronicle backup worker container"
+tags = ["backup"]
+services = ["cronicle"]

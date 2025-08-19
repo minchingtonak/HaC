@@ -1,0 +1,36 @@
+# use pulumi up with details options to see default values
+
+id = 1
+hostname = "example"
+description = "managed by pulumi"
+enabled = true  # set to false to disable container creation
+tags = ["pulumi"]
+
+services = ["stack-name"] # see folders in pulumi/stacks for stack names
+
+[os]
+templateFileId = "local:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst"
+type = "debian"  # alpine, archlinux, centos, debian, devuan, fedora, gentoo, nixos, opensuse, ubuntu, unmanaged
+
+[cpu]
+architecture = "amd64"  # amd64, arm64, armhf, i386
+cores = 2
+units = 1024
+
+[memory]
+dedicated = 4096  # MB
+swap = 2048       # MB
+
+[disk]
+datastoreId = "fast"
+size = 8  # GB
+
+[[mountPoints]]
+volume = "/void/media"       # can also use storage:size format (ex: local:8)
+mountPoint = "/mnt/media"    # path inside container
+size = 10                    # GB
+replicate = true
+acl = false
+backup = false               # bind mounts cannot be included in backups
+quota = false
+shared = false

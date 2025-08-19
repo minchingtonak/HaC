@@ -24,3 +24,19 @@ config:
   mealie:config_var_one: varOneValue
   mealie:secret_config_var_two:
     secure: v1:8EW+7R+Km+Cchov/:xH9eq2N2qsQBDWsWCin9+nl+8LlTxasc3ZL5Gw==
+  cronicle:SECRET_B2_ACCOUNT_ID:
+    secure: v1:NV+g80iUpRXDXKxH:wIKyVkc8oAelpyd/VJL1OniVzHB8EJ89PXusTdPVYj2gQFQ7PE7k+B0=
+  cronicle:SECRET_B2_ACCOUNT_KEY:
+    secure: v1:KizcajXuoIQS9RBs:xWhD7CtabpiC++zF38W8snyTLXkxTT+jeefzt5zupN+myMqMm1buxQ4zWTPQQVY=
+  cronicle:SECRET_B2_EU_ACCOUNT_ID:
+    secure: v1:SxP/vasdeAL6ipQS:1+LBAHcByyqi6tCzja4CMZ+RKekkORCgt4r2vhDkwqtgXkZLkmlHHdM=
+  cronicle:SECRET_B2_EU_ACCOUNT_KEY:
+    secure: v1:pBsI5ni0nPIeDKwO:Hhp06vRV3ZjpQaHR0T06+V9ypJGiVjwNnVAKz+6AqHeqihtxj5oro3Kw7WJ5kuE=
+  cronicle:SECRET_RESTIC_PASSWORD:
+    secure: v1:K5gnxDKtlcOHst6z:qsdkR4AOO+5As2VslPO6ERzlJlA01xcTglsp6Ct8i374V6G/TqwUifpw+8gKHiU30SPJMfsI3dF7xfFFAnAcPg==
+  cronicle:RESTIC_CHECK_PERCENTAGE: "5"
+  cronicle:SECRET_B2_HEALTHCHECK_URL:
+    secure: v1:+wCA5m2zsGeupOzU:0TqufLdbUSRVv6HMHfsCjYF5q/q6d8TWTGYmIbPDTAB4BjV/sq8uXJdZswAeIH1MzC7Bz418ppHq/1JrlyHPDvlm+Z0/GOvK
+  cronicle:CRONICLE_BASE_APP_URL: https://cronicle.homelab.akmin.dev
+  cronicle:SECRET_CRONICLE_UNIVERSAL_WEB_HOOK:
+    secure: v1:UiKAJNHijNn0sxiS:QWspnq95k6UcAZ6hxzMQw3LsE3JDfDdsjxx2gB0s2ChJ3nTj0LRmcuqTdF6PWCQrjlOhP5KOM2XFniDlF/4bOUpwOkioAdB+W3dwoepydWEpxk2poFWxZHEs0aznDstYeQ==

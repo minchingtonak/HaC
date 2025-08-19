@@ -1,0 +1,11 @@
+id = 215
+hostname = "mealie-pulumi"
+enabled = false
+
+description = "Mealie recipe management container"
+tags = ["recipe"]
+services = ["mealie"]
+
+[memory]
+dedicated = 4096
+swap = 2048

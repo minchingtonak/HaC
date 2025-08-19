@@ -1,0 +1,30 @@
+services:
+  cronicle:
+    image: bluet/cronicle-docker:latest
+    container_name: cronicle
+    hostname: cronicle
+    user: "0:10000"
+    environment:
+      - TZ=America/Los_Angeles
+      - CRONICLE_base_app_url=${CRONICLE_BASE_APP_URL}
+      - CRONICLE_custom_live_log_socket_url=${CRONICLE_BASE_APP_URL}
+      - CRONICLE_universal_web_hook=${SECRET_CRONICLE_UNIVERSAL_WEB_HOOK}
+    ports:
+      - "3012:3012"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /docker/cronicle/data:/opt/cronicle/data
+      - /docker/cronicle/logs:/opt/cronicle/logs
+      - /docker/cronicle/plugins:/opt/cronicle/plugins
+      - /docker/cronicle/workloads/app:/app
+      - ./:/opt/scripts
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider localhost:3012/api/app/ping || exit 1"]
+      interval: 5s
+      timeout: 1s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+    restart: unless-stopped

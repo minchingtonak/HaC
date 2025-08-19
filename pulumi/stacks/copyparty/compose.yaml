@@ -1,0 +1,10 @@
+services:
+  ac:
+    image: copyparty/ac
+    volumes:
+      - ./:/cfg
+      - /mnt:/void
+    ports:
+      - 3939:3939
+    user: 0:0
+    restart: unless-stopped

@@ -16,6 +16,9 @@ importers:
       '@hanseltime/pulumi-file-utils':
         specifier: ^1.2.0
         version: 1.2.0(patch_hash=e5d211be610d1ebcd0e4781e82cb1ec57ab59635056aa758f4366f001a469c10)(@pulumi/pulumi@3.186.0(typescript@5.8.3))
+      '@iarna/toml':
+        specifier: ^2.0.0
+        version: 2.2.5
       '@muhlba91/pulumi-proxmoxve':
         specifier: ^7.3.0
         version: 7.3.0(typescript@5.8.3)
@@ -28,6 +31,9 @@ importers:
       handlebars:
         specifier: ^4.7.8
         version: 4.7.8
+      zod:
+        specifier: ^4.0.17
+        version: 4.0.17
     devDependencies:
       '@types/node':
         specifier: ^18
@@ -52,6 +58,9 @@ packages:
     engines: {node: '>=20'}
     peerDependencies:
       '@pulumi/pulumi': ^3.158.0
+
+  '@iarna/toml@2.2.5':
+    resolution: {integrity: sha512-trnsAYxU3xnS1gPHPyU961coFyLkh4gAD/0zQ5mymY4yOZ+CYvsPqUbOFSw0aDM4y0tV7tiFxL/1XfXPNC6IPg==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -1130,6 +1139,9 @@ packages:
     resolution: {integrity: sha512-AyeEbWOu/TAXdxlV9wmGcR0+yh2j3vYPGOECcIj2S7MkrLyC7ne+oye2BKTItt0ii2PHk4cDy+95+LshzbXnGg==}
     engines: {node: '>=12.20'}
 
+  zod@4.0.17:
+    resolution: {integrity: sha512-1PHjlYRevNxxdy2JZ8JcNAw7rX8V9P1AKkP+x/xZfxB0K5FYfuV+Ug6P/6NVSR2jHQ+FzDDoDHS04nYUsOIyLQ==}
+
 snapshots:
 
   '@grpc/grpc-js@1.13.4':
@@ -1147,6 +1159,8 @@ snapshots:
   '@hanseltime/pulumi-file-utils@1.2.0(patch_hash=e5d211be610d1ebcd0e4781e82cb1ec57ab59635056aa758f4366f001a469c10)(@pulumi/pulumi@3.186.0(typescript@5.8.3))':
     dependencies:
       '@pulumi/pulumi': 3.186.0(typescript@5.8.3)
+
+  '@iarna/toml@2.2.5': {}
 
   '@isaacs/cliui@8.0.2':
     dependencies:
@@ -2348,3 +2362,5 @@ snapshots:
       yargs-parser: 21.1.1
 
   yocto-queue@1.2.1: {}
+
+  zod@4.0.17: {}

@@ -1,20 +1,14 @@
-import { HomelabContainer, HomelabContainerArgs } from './homelab-container';
-
-const HOMELAB_CONTAINERS: HomelabContainerArgs[] = [
-  {
-    id: 215,
-    hostname: 'mealie-pulumi',
-    tags: ['recipe'],
-    services: ['mealie'],
-  },
-];
+import * as path from 'node:path';
+import { HomelabContainer } from './homelab-container';
+import { HostConfigParser } from './host-config-parser';
 
 export function deployContainers() {
-  const containers: HomelabContainer[] = [];
-  for (const ct of HOMELAB_CONTAINERS) {
-    containers.push(
-      new HomelabContainer(`${ct.hostname}-homelab-container`, ct),
+  const hostsDir = path.join(__dirname, '../../hosts');
+  const hostConfigs = HostConfigParser.loadAllHostConfigs(hostsDir);
+
+  return hostConfigs
+    .filter((host) => host.enabled)
+    .map(
+      (host) => new HomelabContainer(`${host.hostname}-homelab-container`, host),
     );
-  }
-  return containers;
 }
