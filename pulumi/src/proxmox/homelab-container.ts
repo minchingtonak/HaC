@@ -8,21 +8,13 @@ import {
   ProxmoxFirewallLogLevel,
   ProxmoxFirewallPolicy,
 } from '../constants';
-import { homelabConfig, homelabProvider } from './homelab';
-import { debian12 } from './templates';
+import { HomelabProvider } from './homelab-provider';
 import { ComposeStack } from '../docker/compose-stack';
 import { HostConfigToml } from './host-config-parser';
 
-// FIXME static variables of HomelabContainer? separate module for homelab config?
-const pveNodeName = homelabConfig.require('pveNodeName');
-const localIpPrefix = homelabConfig.require('localIpPrefix');
-const gatewayIp = homelabConfig.require('gatewayIp');
-
-const defaultRootPassword = homelabConfig.requireSecret('lxcRootPassword');
-const lxcPublicSshKey = homelabConfig.requireSecret('lxcPublicSshKey');
-const lxcPrivateSshKey = homelabConfig.requireSecret('lxcPrivateSshKey');
-
-export type HomelabContainerArgs = HostConfigToml;
+export type HomelabContainerArgs = HostConfigToml & {
+  provider: HomelabProvider;
+};
 
 export class HomelabContainer extends pulumi.ComponentResource {
   public static RESOURCE_TYPE = 'HaC:proxmoxve:HomelabContainer';
@@ -43,31 +35,36 @@ export class HomelabContainer extends pulumi.ComponentResource {
     super(HomelabContainer.RESOURCE_TYPE, name, {}, opts);
 
     const ctName = `${args.hostname}-lxc`;
-    const ctAddress = `${localIpPrefix}.${args.id}`;
-    const ctCidr = `${ctAddress}/24`;
+    const ctAddress = pulumi.interpolate`${args.provider.localIpPrefix}.${args.id}`;
+    const ctCidr = pulumi.interpolate`${ctAddress}/24`;
 
-    const mountPoints = args.mountPoints?.map((mp) => ({
-      volume: mp.volume,
-      path: mp.mountPoint,
-      size: mp.size ? `${mp.size}G` : undefined,
-      acl: mp.acl,
-      backup: mp.backup,
-      quota: mp.quota,
-      replicate: mp.replicate,
-      shared: mp.shared,
-    })) ?? [];
+    const mountPoints =
+      args.mountPoints?.map((mp) => ({
+        volume: mp.volume,
+        path: mp.mountPoint,
+        size: mp.size ? `${mp.size}G` : undefined,
+        acl: mp.acl,
+        backup: mp.backup,
+        quota: mp.quota,
+        replicate: mp.replicate,
+        shared: mp.shared,
+      })) ?? [];
 
     this.container = new proxmox.ct.Container(
       ctName,
       {
-        nodeName: pveNodeName,
+        nodeName: args.provider.pveNodeName,
         vmId: args.id,
         description: args.description ?? 'managed by pulumi',
         tags: ['pulumi', ...(args.tags ?? [])],
         unprivileged: true,
         startOnBoot: true,
         protection: false,
-        operatingSystem: args.os ?? debian12,
+        operatingSystem: args.os ?? {
+          type: 'debian',
+          templateFileId:
+            'local:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst',
+        },
         mountPoints: mountPoints,
         initialization: {
           hostname: args.hostname,
@@ -75,13 +72,13 @@ export class HomelabContainer extends pulumi.ComponentResource {
             {
               ipv4: {
                 address: ctCidr,
-                gateway: gatewayIp,
+                gateway: args.provider.gatewayIp,
               },
             },
           ],
           userAccount: {
-            keys: [lxcPublicSshKey],
-            password: defaultRootPassword,
+            keys: [args.provider.lxcPublicSshKey],
+            password: args.provider.defaultRootPassword,
           },
         },
         networkInterfaces: [
@@ -116,13 +113,16 @@ export class HomelabContainer extends pulumi.ComponentResource {
           ttyCount: 2,
         },
       },
-      { provider: homelabProvider, parent: this },
+      {
+        provider: args.provider,
+        parent: this,
+      },
     );
 
     this.firewallOptions = new proxmox.network.FirewallOptions(
       `${ctName}-fw-options`,
       {
-        nodeName: pveNodeName,
+        nodeName: args.provider.pveNodeName,
         containerId: args.id,
         enabled: false, // TODO configurable firewall rules
         // copied values from the default firewall config for a new ct
@@ -137,7 +137,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
         outputPolicy: ProxmoxFirewallPolicy.ACCEPT,
       },
       {
-        provider: homelabProvider,
+        provider: args.provider,
         parent: this,
         dependsOn: this.container,
       },
@@ -147,14 +147,14 @@ export class HomelabContainer extends pulumi.ComponentResource {
     this.firewallAlias = new proxmox.network.FirewallAlias(
       fwAliasName,
       {
-        nodeName: pveNodeName,
+        nodeName: args.provider.pveNodeName,
         containerId: args.id,
         name: fwAliasName,
         cidr: ctCidr,
         comment: 'created by pulumi',
       },
       {
-        provider: homelabProvider,
+        provider: args.provider,
         parent: this,
         dependsOn: this.container,
       },
@@ -164,7 +164,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
       const connection: command.types.input.remote.ConnectionArgs = {
         host: ctAddress,
         user: 'root',
-        privateKey: lxcPrivateSshKey,
+        privateKey: args.provider.lxcPrivateSshKey,
       };
 
       const installDocker = new command.remote.Command(
