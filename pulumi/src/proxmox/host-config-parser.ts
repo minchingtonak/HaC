@@ -39,7 +39,7 @@ export const HostConfigSchema = z.object({
   id: z.number().positive().int(),
   hostname: z.string().min(1),
   description: z.string().optional(),
-  enabled: z.boolean().optional().default(true),
+  enabled: z.boolean().default(true).optional(),
   tags: z.array(z.string()).optional(),
   os: OsConfigSchema.optional(),
   cpu: CpuConfigSchema.optional(),
