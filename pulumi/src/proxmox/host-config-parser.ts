@@ -35,7 +35,7 @@ const MountPointSchema = z.object({
   shared: z.boolean().optional(),
 });
 
-const HostConfigSchema = z.object({
+export const HostConfigSchema = z.object({
   id: z.number().positive().int(),
   hostname: z.string().min(1),
   description: z.string().optional(),

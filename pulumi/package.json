@@ -1,6 +1,9 @@
 {
   "name": "hac",
   "main": "index.ts",
+  "scripts": {
+    "generate-host-schema": "tsx scripts/generate-host-schema.ts"
+  },
   "dependencies": {
     "@hanseltime/pulumi-file-utils": "^1.2.0",
     "@iarna/toml": "^2.0.0",
@@ -12,6 +15,7 @@
   },
   "devDependencies": {
     "@types/node": "^18",
+    "tsx": "^4.7.0",
     "typescript": "^5.0.0"
   }
 }
