@@ -1,4 +1,5 @@
 onlyBuiltDependencies:
+  - '@pulumi/ansible'
   - '@pulumi/command'
   - esbuild
   - protobufjs

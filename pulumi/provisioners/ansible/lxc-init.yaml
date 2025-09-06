@@ -1,0 +1,130 @@
+---
+- name: Configure server with SSH hardening and user setup
+  hosts: all # ansible-playbook playbook.yml --limit "target_host|group"
+  become: true
+
+  tasks:
+    - name: Update apt cache and upgrade packages
+      ansible.builtin.apt:
+        update_cache: true
+        upgrade: dist
+        cache_valid_time: 3600
+      tags:
+        - update
+
+    # - name: Create user with specified groups
+    #   ansible.builtin.user:
+    #     name: '{{ ssh_user }}'
+    #     uid: '{{ ssh_user_id | default(1000) }}'
+    #     password: "{{ ssh_user_password | password_hash('sha512') }}"
+    #     groups: users,docker
+    #     append: yes
+    #     shell: /bin/bash
+    #     create_home: yes
+    #   tags:
+    #     - user
+
+    # - name: Add user to sudoers with NOPASSWD
+    #   ansible.builtin.lineinfile:
+    #     path: /etc/sudoers
+    #     line: '{{ ssh_user }} ALL=(ALL) NOPASSWD:ALL'
+    #     validate: 'visudo -cf %s'
+    #   tags:
+    #     - user
+
+    # - name: Set up SSH authorized keys
+    #   ansible.posix.authorized_key:
+    #     user: '{{ ssh_user }}'
+    #     key: '{{ ssh_pub_key_value }}'
+    #     state: present
+    #   tags:
+    #     - user
+
+    # this allows remote access via ssh key only while also allowing
+    # allowing password login from the proxmox virtual console
+    # - name: Configure SSH daemon settings
+    #   blockinfile:
+    #     path: /etc/ssh/sshd_config
+    #     marker: '# {mark} ANSIBLE MANAGED SSH SECURITY BLOCK'
+    #     block: |
+    #       PermitRootLogin no
+    #       PasswordAuthentication no
+    #       KbdInteractiveAuthentication no
+    #       ChallengeResponseAuthentication no
+    #       MaxAuthTries 2
+    #       AllowTcpForwarding yes # necessary for VS Code remote SSH
+    #       X11Forwarding no
+    #       AllowAgentForwarding no
+    #       AuthorizedKeysFile .ssh/authorized_keys
+    #       AllowUsers {{ ssh_user }}
+    #     backup: true
+    #   notify: restart sshd
+    #   tags:
+    #     - ssh
+
+    - name: Configure SSH daemon settings
+      ansible.builtin.blockinfile:
+        path: /etc/ssh/sshd_config
+        marker: '# {mark} ANSIBLE MANAGED SSH SECURITY BLOCK'
+        block: |
+          PermitRootLogin yes
+          PasswordAuthentication no
+          KbdInteractiveAuthentication no
+          ChallengeResponseAuthentication no
+          MaxAuthTries 2
+          AllowTcpForwarding yes # necessary for VS Code remote SSH
+          X11Forwarding no
+          AllowAgentForwarding no
+          AuthorizedKeysFile .ssh/authorized_keys
+        backup: true
+      # notify: restart sshd
+      tags:
+        - ssh
+
+    - name: Create void-access group with specific GID
+      ansible.builtin.group:
+        name: void-access
+        gid: 10000
+        state: present
+      tags:
+        - void-access
+
+    - name: Add root user to void-access group
+      ansible.builtin.user:
+        name: root
+        groups: void-access
+        append: true
+      tags:
+        - void-access
+
+    - name: Configure automatic security updates
+      ansible.builtin.blockinfile:
+        path: /etc/apt/apt.conf.d/20auto-upgrades
+        marker: '// {mark} ANSIBLE MANAGED AUTO-UPDATES BLOCK'
+        block: |
+          APT::Periodic::Update-Package-Lists "1";
+          APT::Periodic::Unattended-Upgrade "1";
+        create: true
+        mode: "0700"
+      tags:
+        - updates
+
+    - name: Reboot the host
+      ansible.builtin.reboot:
+        reboot_timeout: 600
+
+    # - name: Add new user to void-access group
+    #   ansible.builtin.user:
+    #     name: '{{ ssh_user }}'
+    #     groups: void-access
+    #     append: yes
+    #   tags:
+    #     - void-access
+
+  # handlers:
+  #   - name: restart sshd
+  #     service:
+  #       name: sshd
+  #       state: restarted
+  #     tags:
+  #       - ssh

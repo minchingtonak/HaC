@@ -8,3 +8,9 @@ config:
   pulumi:tags:
     value:
       pulumi:template: typescript
+packages:
+  ansible:
+    source: terraform-provider
+    version: 0.12.0
+    parameters:
+      - ansible/ansible

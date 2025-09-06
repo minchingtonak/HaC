@@ -11,7 +11,11 @@ services = ["copyparty"]
 # mountPoint = "/mnt/documents"
 
 [[provisioners]]
+type = "ansible"
+name = "lxc-init"
+playbook = "provisioners/ansible/lxc-init.yaml"
+
+[[provisioners]]
 type = "script"
-runOn = ["create"]
 name = "install-docker"
 script = "provisioners/scripts/install-docker.sh"

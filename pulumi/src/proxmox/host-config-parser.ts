@@ -61,10 +61,13 @@ const AnsibleProvisionerSchema = z.object({
   type: z.literal('ansible'),
   name: z.string().min(1),
   playbook: z.string().min(1),
-  variables: z.record(z.string(), z.any()).optional(),
+  variables: z.record(z.string(), z.unknown()).optional(),
+  user: z.string().default('root'),
+  privateKeyFile: z.string().default('~/.ssh/lxc_ed25519'),
   tags: z.array(z.string()).optional(),
   limit: z.string().optional(),
   timeout: z.number().positive().default(600),
+  replayable: z.boolean().default(true),
   connection: ConnectionOverrideSchema.optional(),
 });
 

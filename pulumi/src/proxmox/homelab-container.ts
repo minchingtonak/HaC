@@ -12,7 +12,7 @@ import {
 import { HomelabProvider } from './homelab-provider';
 import { ComposeStack } from '../docker/compose-stack';
 import { HostConfigToml } from './host-config-parser';
-import { ProvisionerEngine } from './provisioner-engine';
+import { ProvisionerEngine, ProvisionerResource } from './provisioner-engine';
 
 export type HomelabContainerArgs = HostConfigToml & {
   provider: HomelabProvider;
@@ -29,7 +29,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
 
   services: ComposeStack[] = [];
 
-  provisionerCommands: command.remote.Command[] = [];
+  provisionerResources: ProvisionerResource[] = [];
 
   constructor(
     name: string,
@@ -177,9 +177,9 @@ export class HomelabContainer extends pulumi.ComponentResource {
         hostname: args.hostname,
       });
 
-      this.provisionerCommands = provisionerEngine.executeProvisioners(
+      this.provisionerResources = provisionerEngine.executeProvisioners(
         args.provisioners,
-        this,
+        this.container,
       );
     }
 
@@ -194,7 +194,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
             },
             {
               parent: this.container,
-              dependsOn: this.provisionerCommands
+              dependsOn: this.provisionerResources,
               // hooks: {
               //   afterCreate: [(args) => console.dir(args, { depth: Infinity })],
               //   afterUpdate: [(args) => console.dir(args, { depth: Infinity })]

@@ -90,8 +90,8 @@ export class ComposeStack extends pulumi.ComponentResource {
 
     // handle compose stack environment variables
 
-    const stringifiedEnv = ComposeFileProcessor.getStringifiedEnvVarsForService(
-      args.serviceName,
+    const stringifiedEnv = pulumi.secret(
+      ComposeFileProcessor.getStringifiedEnvVarsForService(args.serviceName),
     );
 
     this.deployService = new command.remote.Command(
@@ -111,6 +111,7 @@ export class ComposeStack extends pulumi.ComponentResource {
           afterUpdate: [ComposeFileProcessor.checkForMissingVariables],
         },
         deleteBeforeReplace: true,
+        additionalSecretOutputs: ['stdout', 'stderr'],
       },
     );
 

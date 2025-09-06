@@ -1,5 +1,6 @@
 import * as pulumi from '@pulumi/pulumi';
 import * as command from '@pulumi/command';
+import * as ansible from '@pulumi/ansible';
 import * as fs from 'fs';
 import * as path from 'path';
 import {
@@ -8,6 +9,8 @@ import {
   AnsibleProvisioner,
 } from './host-config-parser';
 import { EnvUtils } from '../utils/env-utils';
+
+export type ProvisionerResource = command.remote.Command | ansible.Playbook;
 
 export interface ProvisionerEngineArgs {
   connection: command.types.input.remote.ConnectionArgs;
@@ -24,10 +27,10 @@ export class ProvisionerEngine {
   executeProvisioners(
     provisioners: Provisioner[],
     parent: pulumi.Resource,
-  ): command.remote.Command[] {
-    const commands: command.remote.Command[] = [];
+  ): ProvisionerResource[] {
+    const resources: ProvisionerResource[] = [];
 
-    let previousCommand: command.remote.Command | undefined;
+    let previousCommand: ProvisionerResource | undefined;
 
     for (let i = 0; i < provisioners.length; i++) {
       const provisioner = provisioners[i];
@@ -37,19 +40,19 @@ export class ProvisionerEngine {
         previousCommand,
         i,
       );
-      commands.push(cmd);
+      resources.push(cmd);
       previousCommand = cmd;
     }
 
-    return commands;
+    return resources;
   }
 
   private createProvisionerCommand(
     provisioner: Provisioner,
     parent: pulumi.Resource,
-    dependsOn?: command.remote.Command,
+    dependsOn?: ProvisionerResource,
     index?: number,
-  ): command.remote.Command {
+  ): ProvisionerResource {
     const connection = this.buildConnection(provisioner);
     const commandName = `${this.args.hostname}-provisioner-${index}-${provisioner.name}`;
 
@@ -63,8 +66,7 @@ export class ProvisionerEngine {
           dependsOn,
         );
       case 'ansible':
-        // FIXME needs testing/rework
-        return this.createAnsibleCommand(
+        return this.createAnsiblePlaybook(
           provisioner,
           commandName,
           connection,
@@ -96,7 +98,7 @@ export class ProvisionerEngine {
     commandName: string,
     connection: command.types.input.remote.ConnectionArgs,
     parent: pulumi.Resource,
-    dependsOn?: command.remote.Command,
+    dependsOn?: ProvisionerResource,
   ): command.remote.Command {
     const scriptPath = path.resolve(this.args.projectRoot, provisioner.script);
 
@@ -105,7 +107,7 @@ export class ProvisionerEngine {
 
     const scriptContent = fs.readFileSync(scriptPath, 'utf-8');
 
-    const executeScript = this.buildExecutionCommands(
+    const executeScript = ProvisionerEngine.buildExecutionCommands(
       provisioner,
       scriptContent,
     );
@@ -135,7 +137,7 @@ export class ProvisionerEngine {
     );
   }
 
-  private buildExecutionCommands(
+  private static buildExecutionCommands(
     provisioner: ScriptProvisioner,
     scriptContent: string,
   ): string {
@@ -200,65 +202,70 @@ export class ProvisionerEngine {
     return commands.join('\n');
   }
 
-  private createAnsibleCommand(
+  private createAnsiblePlaybook(
     provisioner: AnsibleProvisioner,
     commandName: string,
     connection: command.types.input.remote.ConnectionArgs,
     parent: pulumi.Resource,
-    dependsOn?: command.remote.Command,
-  ): command.remote.Command {
+    dependsOn?: ProvisionerResource,
+  ): ansible.Playbook {
     const playbookPath = path.resolve(
       this.args.projectRoot,
-      'provisioners/ansible',
       provisioner.playbook,
     );
 
-    // Validate playbook path exists
     this.validatePlaybookPath(playbookPath, provisioner.playbook);
 
-    // Build ansible-playbook command
-    let ansibleCmd = `ansible-playbook ${playbookPath} -i "${connection.host},"`;
+    // Check for requirements file and install collections if needed
+    const requirementsCommand = this.createRequirementsInstallCommand(
+      provisioner,
+      commandName,
+      parent,
+      dependsOn,
+    );
 
-    if (provisioner.variables) {
-      const extraVars = Object.entries(provisioner.variables)
-        .map(([key, value]) => `${key}=${JSON.stringify(value)}`)
-        .join(' ');
-      ansibleCmd += ` --extra-vars "${extraVars}"`;
-    }
-
-    if (provisioner.tags) {
-      ansibleCmd += ` --tags "${provisioner.tags.join(',')}"`;
-    }
-
-    if (provisioner.limit) {
-      ansibleCmd += ` --limit "${provisioner.limit}"`;
-    }
-
-    // Run ansible-playbook from the remote host
-    const runAnsible = [
-      `cd /tmp`,
-      `export ANSIBLE_HOST_KEY_CHECKING=False`,
-      `export ANSIBLE_SSH_PRIVATE_KEY_FILE=/tmp/ansible_key`,
-      `export ANSIBLE_REMOTE_USER=${connection.user}`,
-      `cat > /tmp/ansible_key << 'EOF'`,
-      connection.privateKey as string,
-      'EOF',
-      `chmod 600 /tmp/ansible_key`,
-      ansibleCmd,
-      `rm -f /tmp/ansible_key`,
-    ].join('\n');
-
-    return new command.remote.Command(
+    const playbook = new ansible.Playbook(
       commandName,
       {
-        create: runAnsible,
-        connection,
+        playbook: playbookPath,
+        name: provisioner.name,
+        replayable: provisioner.replayable,
+        ...(provisioner.tags && { tags: provisioner.tags }),
+        ...(provisioner.limit && { limits: [provisioner.limit] }),
+        timeouts: {
+          create: `${provisioner.timeout}s`,
+        },
+        extraVars: {
+          // https://docs.ansible.com/ansible/latest/reference_appendices/special_variables.html#connection-variables
+          ansible_host: connection.host,
+          ansible_user: provisioner.user,
+          // https://docs.ansible.com/ansible/2.9/plugins/connection/ssh.html#ssh-connection
+          ansible_ssh_private_key_file: provisioner.privateKeyFile,
+          ansible_ssh_host_key_checking: 'false',
+          ansible_ssh_retries: '3',
+          // disable warning due to ansible automatically choosing the python version on the target
+          ansible_python_interpreter: 'auto_silent',
+          ...(provisioner.variables
+            ? Object.entries(provisioner.variables).reduce((acc, [k, v]) => {
+                acc[k] = String(v);
+                return acc;
+              }, {} as Record<string, string>)
+            : {}),
+        },
       },
       {
         parent,
-        ...(dependsOn && { dependsOn }),
+        ...(requirementsCommand
+          ? { dependsOn: requirementsCommand }
+          : dependsOn && { dependsOn }),
+        additionalSecretOutputs: [
+          'ansiblePlaybookStdout',
+          'ansiblePlaybookStderr',
+        ],
       },
     );
+
+    return playbook;
   }
 
   private validateScriptPath(absolutePath: string, relativePath: string): void {
@@ -276,26 +283,66 @@ export class ProvisionerEngine {
     }
   }
 
+  /**
+   * Creates a local command to install Ansible requirements if a requirements file exists
+   * for the given playbook. The requirements file should be named <playbookname>.requirements.yaml
+   */
+  private createRequirementsInstallCommand(
+    provisioner: AnsibleProvisioner,
+    commandName: string,
+    parent: pulumi.Resource,
+    dependsOn?: ProvisionerResource,
+  ): command.local.Command | null {
+    const playbookPath = path.resolve(
+      this.args.projectRoot,
+      provisioner.playbook,
+    );
+    const playbookDir = path.dirname(playbookPath);
+    const playbookName = path.basename(
+      playbookPath,
+      path.extname(playbookPath),
+    );
+    const requirementsPath = path.join(
+      playbookDir,
+      `${playbookName}.requirements.yaml`,
+    );
+
+    if (!fs.existsSync(requirementsPath)) {
+      return null;
+    }
+
+    const requirementsCommandName = `${commandName}-requirements`;
+
+    return new command.local.Command(
+      requirementsCommandName,
+      {
+        create: `ansible-galaxy collection install -r "${requirementsPath}"`,
+        environment: {
+          ANSIBLE_COLLECTIONS_PATH:
+            process.env.ANSIBLE_COLLECTIONS_PATH || '~/.ansible/collections',
+        },
+      },
+      {
+        parent,
+        ...(dependsOn && { dependsOn }),
+      },
+    );
+  }
+
   private validatePlaybookPath(
     absolutePath: string,
     relativePath: string,
   ): void {
-    // Check if file exists
     if (!fs.existsSync(absolutePath)) {
-      throw new Error(
-        `Provisioner playbook not found: provisioners/ansible/${relativePath}`,
-      );
+      throw new Error(`Provisioner playbook not found: ${relativePath}`);
     }
 
-    // Security check: ensure path is within provisioners directory
-    const normalizedProvisionersDir = path.normalize(
-      path.join(this.args.projectRoot, 'provisioners'),
-    );
+    const normalizedProjectRoot = path.normalize(this.args.projectRoot);
     const normalizedPlaybookPath = path.normalize(absolutePath);
 
-    if (!normalizedPlaybookPath.startsWith(normalizedProvisionersDir)) {
+    if (!normalizedPlaybookPath.startsWith(normalizedProjectRoot)) {
       throw new Error(
-        `Provisioner playbook path outside provisioners directory: ${relativePath}`,
+        `Provisioner playbook path outside project directory: ${relativePath}`,
       );
     }
   }
