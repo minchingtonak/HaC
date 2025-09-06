@@ -1,10 +1,17 @@
 id = 200
 hostname = "copyparty-pulumi"
+enabled = true
 
 description = "copyparty lightweight fileserver container"
 tags = ["fileserver", "fileshare"]
 services = ["copyparty"]
 
-[[mountPoints]]
-volume = "/void/documents"
-mountPoint = "/mnt/documents"
+# [[mountPoints]]
+# volume = "/void/documents"
+# mountPoint = "/mnt/documents"
+
+[[provisioners]]
+type = "script"
+runOn = ["create"]
+name = "install-docker"
+script = "provisioners/scripts/install-docker.sh"

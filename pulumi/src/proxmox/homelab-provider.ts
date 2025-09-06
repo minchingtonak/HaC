@@ -24,6 +24,15 @@ export class HomelabProvider extends proxmox.Provider {
   public readonly lxcPrivateSshKey: pulumi.Output<string>;
   public readonly imageTemplateDatastoreId: pulumi.Output<string>;
 
+  // Raw config values
+  private readonly rawPveNodeName: string;
+  private readonly rawLocalIpPrefix: string;
+  private readonly rawGatewayIp: string;
+  private readonly rawDefaultRootPassword: string | pulumi.Output<string>;
+  private readonly rawLxcPublicSshKey: string | pulumi.Output<string>;
+  private readonly rawLxcPrivateSshKey: string | pulumi.Output<string>;
+  private readonly rawImageTemplateDatastoreId: string;
+
   constructor(
     name: string,
     args?: HomelabProviderArgs,
@@ -40,27 +49,23 @@ export class HomelabProvider extends proxmox.Provider {
 
     super(name, providerArgs, opts);
 
-    this.pveNodeName = pulumi.output(
-      args?.pveNodeName ?? homelabConfig.require('pveNodeName'),
-    );
-    this.localIpPrefix = pulumi.output(
-      args?.localIpPrefix ?? homelabConfig.require('localIpPrefix'),
-    );
-    this.gatewayIp = pulumi.output(
-      args?.gatewayIp ?? homelabConfig.require('gatewayIp'),
-    );
-    this.defaultRootPassword = pulumi.output(
-      args?.lxcRootPassword ?? homelabConfig.requireSecret('lxcRootPassword'),
-    );
-    this.lxcPublicSshKey = pulumi.output(
-      args?.lxcPublicSshKey ?? homelabConfig.requireSecret('lxcPublicSshKey'),
-    );
-    this.lxcPrivateSshKey = pulumi.output(
-      args?.lxcPrivateSshKey ?? homelabConfig.requireSecret('lxcPrivateSshKey'),
-    );
-    this.imageTemplateDatastoreId = pulumi.output(
-      args?.imageTemplateDatastoreId ??
-        homelabConfig.require('imageTemplateDatastoreId'),
-    );
+    // Store raw config values
+    this.rawPveNodeName = args?.pveNodeName ?? homelabConfig.require('pveNodeName');
+    this.rawLocalIpPrefix = args?.localIpPrefix ?? homelabConfig.require('localIpPrefix');
+    this.rawGatewayIp = args?.gatewayIp ?? homelabConfig.require('gatewayIp');
+    this.rawDefaultRootPassword = args?.lxcRootPassword ?? homelabConfig.requireSecret('lxcRootPassword');
+    this.rawLxcPublicSshKey = args?.lxcPublicSshKey ?? homelabConfig.requireSecret('lxcPublicSshKey');
+    this.rawLxcPrivateSshKey = args?.lxcPrivateSshKey ?? homelabConfig.requireSecret('lxcPrivateSshKey');
+    this.rawImageTemplateDatastoreId = args?.imageTemplateDatastoreId ??
+      homelabConfig.require('imageTemplateDatastoreId');
+
+    // Create pulumi outputs from raw values
+    this.pveNodeName = pulumi.output(this.rawPveNodeName);
+    this.localIpPrefix = pulumi.output(this.rawLocalIpPrefix);
+    this.gatewayIp = pulumi.output(this.rawGatewayIp);
+    this.defaultRootPassword = pulumi.output(this.rawDefaultRootPassword);
+    this.lxcPublicSshKey = pulumi.output(this.rawLxcPublicSshKey);
+    this.lxcPrivateSshKey = pulumi.output(this.rawLxcPrivateSshKey);
+    this.imageTemplateDatastoreId = pulumi.output(this.rawImageTemplateDatastoreId);
   }
 }

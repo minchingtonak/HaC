@@ -1,6 +1,7 @@
 import * as pulumi from '@pulumi/pulumi';
 import * as command from '@pulumi/command';
 import * as proxmox from '@muhlba91/pulumi-proxmoxve';
+import * as path from 'path';
 import {
   CpuCores,
   DiskSize,
@@ -11,6 +12,7 @@ import {
 import { HomelabProvider } from './homelab-provider';
 import { ComposeStack } from '../docker/compose-stack';
 import { HostConfigToml } from './host-config-parser';
+import { ProvisionerEngine } from './provisioner-engine';
 
 export type HomelabContainerArgs = HostConfigToml & {
   provider: HomelabProvider;
@@ -26,6 +28,8 @@ export class HomelabContainer extends pulumi.ComponentResource {
   firewallAlias: proxmox.network.FirewallAlias;
 
   services: ComposeStack[] = [];
+
+  provisionerCommands: command.remote.Command[] = [];
 
   constructor(
     name: string,
@@ -160,25 +164,26 @@ export class HomelabContainer extends pulumi.ComponentResource {
       },
     );
 
-    if (args.services) {
-      const connection: command.types.input.remote.ConnectionArgs = {
-        host: ctAddress,
-        user: 'root',
-        privateKey: args.provider.lxcPrivateSshKey,
-      };
+    const connection: command.types.input.remote.ConnectionArgs = {
+      host: ctAddress,
+      user: 'root',
+      privateKey: args.provider.lxcPrivateSshKey,
+    };
 
-      const installDocker = new command.remote.Command(
-        `${ctName}-install-docker`,
-        {
-          create: 'wget -qO- https://get.docker.com | sh',
-          connection,
-        },
-        {
-          parent: this,
-          dependsOn: this.container,
-        },
+    if (args.provisioners && args.provisioners.length > 0) {
+      const provisionerEngine = new ProvisionerEngine({
+        connection,
+        projectRoot: path.resolve(__dirname, '../..'),
+        hostname: args.hostname,
+      });
+
+      this.provisionerCommands = provisionerEngine.executeProvisioners(
+        args.provisioners,
+        this,
       );
+    }
 
+    if (args.services) {
       for (const name of args.services) {
         this.services.push(
           new ComposeStack(
@@ -189,7 +194,11 @@ export class HomelabContainer extends pulumi.ComponentResource {
             },
             {
               parent: this.container,
-              dependsOn: installDocker,
+              dependsOn: this.provisionerCommands
+              // hooks: {
+              //   afterCreate: [(args) => console.dir(args, { depth: Infinity })],
+              //   afterUpdate: [(args) => console.dir(args, { depth: Infinity })]
+              // }
             },
           ),
         );

@@ -6,11 +6,11 @@
   },
   "dependencies": {
     "@hanseltime/pulumi-file-utils": "^1.2.0",
-    "@iarna/toml": "^2.0.0",
     "@muhlba91/pulumi-proxmoxve": "^7.3.0",
     "@pulumi/command": "^1.1.0",
     "@pulumi/pulumi": "^3.113.0",
     "handlebars": "^4.7.8",
+    "smol-toml": "^1.4.2",
     "zod": "^4.0.17"
   },
   "devDependencies": {

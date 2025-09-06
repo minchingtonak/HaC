@@ -16,9 +16,6 @@ importers:
       '@hanseltime/pulumi-file-utils':
         specifier: ^1.2.0
         version: 1.2.0(patch_hash=e5d211be610d1ebcd0e4781e82cb1ec57ab59635056aa758f4366f001a469c10)(@pulumi/pulumi@3.186.0(typescript@5.8.3))
-      '@iarna/toml':
-        specifier: ^2.0.0
-        version: 2.2.5
       '@muhlba91/pulumi-proxmoxve':
         specifier: ^7.3.0
         version: 7.3.0(typescript@5.8.3)
@@ -31,6 +28,9 @@ importers:
       handlebars:
         specifier: ^4.7.8
         version: 4.7.8
+      smol-toml:
+        specifier: ^1.4.2
+        version: 1.4.2
       zod:
         specifier: ^4.0.17
         version: 4.0.17
@@ -217,9 +217,6 @@ packages:
     engines: {node: '>=20'}
     peerDependencies:
       '@pulumi/pulumi': ^3.158.0
-
-  '@iarna/toml@2.2.5':
-    resolution: {integrity: sha512-trnsAYxU3xnS1gPHPyU961coFyLkh4gAD/0zQ5mymY4yOZ+CYvsPqUbOFSw0aDM4y0tV7tiFxL/1XfXPNC6IPg==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -1152,6 +1149,10 @@ packages:
     resolution: {integrity: sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==}
     engines: {node: '>= 6.0.0', npm: '>= 3.0.0'}
 
+  smol-toml@1.4.2:
+    resolution: {integrity: sha512-rInDH6lCNiEyn3+hH8KVGFdbjc099j47+OSgbMrfDYX1CmXLfdKd7qi6IfcWj2wFxvSVkuI46M+wPGYfEOEj6g==}
+    engines: {node: '>= 18'}
+
   socks-proxy-agent@8.0.5:
     resolution: {integrity: sha512-HehCEsotFqbPW9sJ8WVYB6UbmIMv7kUUORIF2Nncq4VQvBfNBLibW9YZR5dlYCSUhwcD628pRllm7n+E+YTzJw==}
     engines: {node: '>= 14'}
@@ -1417,8 +1418,6 @@ snapshots:
   '@hanseltime/pulumi-file-utils@1.2.0(patch_hash=e5d211be610d1ebcd0e4781e82cb1ec57ab59635056aa758f4366f001a469c10)(@pulumi/pulumi@3.186.0(typescript@5.8.3))':
     dependencies:
       '@pulumi/pulumi': 3.186.0(typescript@5.8.3)
-
-  '@iarna/toml@2.2.5': {}
 
   '@isaacs/cliui@8.0.2':
     dependencies:
@@ -2496,6 +2495,8 @@ snapshots:
       - supports-color
 
   smart-buffer@4.2.0: {}
+
+  smol-toml@1.4.2: {}
 
   socks-proxy-agent@8.0.5:
     dependencies:

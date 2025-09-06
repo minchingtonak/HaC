@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as toml from '@iarna/toml';
+import TOML from 'smol-toml';
 import { z } from 'zod';
 
 const CpuConfigSchema = z.object({
@@ -35,6 +35,44 @@ const MountPointSchema = z.object({
   shared: z.boolean().optional(),
 });
 
+const ConnectionOverrideSchema = z.object({
+  host: z.string().optional(),
+  user: z.string().optional(),
+  port: z.number().positive().optional(),
+  privateKey: z.string().optional(),
+});
+
+const ScriptProvisionerSchema = z.object({
+  type: z.literal('script'),
+  name: z.string().min(1),
+  script: z.string().min(1),
+  workingDirectory: z.string().default('/tmp'),
+  runAs: z.string().default('root'),
+  environment: z.record(z.string(), z.string()).optional(),
+  timeout: z.number().positive().default(600),
+  connection: ConnectionOverrideSchema.optional(),
+  runOn: z
+    .array(z.enum(['create', 'update', 'delete']))
+    .optional()
+    .default(['create']),
+});
+
+const AnsibleProvisionerSchema = z.object({
+  type: z.literal('ansible'),
+  name: z.string().min(1),
+  playbook: z.string().min(1),
+  variables: z.record(z.string(), z.any()).optional(),
+  tags: z.array(z.string()).optional(),
+  limit: z.string().optional(),
+  timeout: z.number().positive().default(600),
+  connection: ConnectionOverrideSchema.optional(),
+});
+
+const ProvisionerSchema = z.discriminatedUnion('type', [
+  ScriptProvisionerSchema,
+  AnsibleProvisionerSchema,
+]);
+
 export const HostConfigSchema = z.object({
   id: z.number().positive().int(),
   hostname: z.string().min(1),
@@ -47,23 +85,27 @@ export const HostConfigSchema = z.object({
   disk: DiskConfigSchema.optional(),
   services: z.array(z.string()).optional(),
   mountPoints: z.array(MountPointSchema).optional(),
+  provisioners: z.array(ProvisionerSchema).optional(),
 });
 
 export type HostConfigToml = z.infer<typeof HostConfigSchema>;
+export type Provisioner = z.infer<typeof ProvisionerSchema>;
+export type ScriptProvisioner = z.infer<typeof ScriptProvisionerSchema>;
+export type AnsibleProvisioner = z.infer<typeof AnsibleProvisionerSchema>;
 
 export class HostConfigParser {
   private static readonly HOST_CONFIG_FILENAME = 'host.toml';
 
-  private static validateHostConfig(config: unknown): HostConfigToml {
+  private static validateHostConfig(config: any): HostConfigToml {
     try {
       return HostConfigSchema.parse(config);
     } catch (error) {
       if (error instanceof z.ZodError) {
         const errorMessages = error.issues
-          .map(
-            (err: z.core.$ZodIssue) => `${err.path.join('.')}: ${err.message}`,
-          )
-          .join('; ');
+          .map((err: z.core.$ZodIssue) => {
+            return JSON.stringify(err); // FIXME this may crash when err.path contains symbol values
+          })
+          .join('\n;\n');
         throw new Error(`Invalid TOML structure: ${errorMessages}`);
       }
       throw error;
@@ -73,15 +115,11 @@ export class HostConfigParser {
   static parseHostConfigFile(filePath: string): HostConfigToml {
     const tomlContent = fs.readFileSync(filePath, 'utf-8');
 
-    const parsed = toml.parse(tomlContent);
-
-    const validatedConfig = HostConfigParser.validateHostConfig(parsed);
-
-    return validatedConfig;
+    return HostConfigParser.parseHostConfigString(tomlContent);
   }
 
   static parseHostConfigString(tomlContent: string): HostConfigToml {
-    const parsed = toml.parse(tomlContent);
+    const parsed = TOML.parse(tomlContent);
 
     const validatedConfig = HostConfigParser.validateHostConfig(parsed);
 
