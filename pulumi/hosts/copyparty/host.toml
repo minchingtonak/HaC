@@ -6,14 +6,15 @@ description = "copyparty lightweight fileserver container"
 tags = ["fileserver", "fileshare"]
 services = ["copyparty"]
 
-# [[mountPoints]]
-# volume = "/void/documents"
-# mountPoint = "/mnt/documents"
+[[mountPoints]]
+volume = "/void/documents"
+mountPoint = "/mnt/documents"
 
 [[provisioners]]
 type = "ansible"
 name = "lxc-init"
 playbook = "provisioners/ansible/lxc-init.yaml"
+replayable = false
 
 [[provisioners]]
 type = "script"
