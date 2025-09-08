@@ -28,9 +28,11 @@ export class HomelabContainer extends pulumi.ComponentResource {
 
   firewallAlias: proxmox.network.FirewallAlias;
 
-  services: ComposeStack[] = [];
-
   provisionerResources: ProvisionerResource[] = [];
+
+  proxyNetwork?: command.remote.Command;
+
+  services: ComposeStack[] = [];
 
   baseDnsRecord: porkbun.DnsRecord;
 
@@ -222,17 +224,35 @@ export class HomelabContainer extends pulumi.ComponentResource {
     }
 
     if (args.services) {
+      if (args.services.includes('traefik')) {
+        this.proxyNetwork = new command.remote.Command(
+          `${args.hostname}-create-traefik-network`,
+          {
+            create:
+              'if ! docker network ls --format "{{.Name}}" | grep -q "^traefik$"; then docker network create traefik; fi',
+            delete:
+              'if docker network ls --format "{{.Name}}" | grep -q "^traefik$"; then docker network rm traefik; fi',
+            connection,
+          },
+          {
+            parent: this.container,
+            dependsOn: this.provisionerResources,
+          },
+        );
+      }
+
       for (const name of args.services) {
         this.services.push(
           new ComposeStack(
-            `${name}-compose-service`,
+            `${args.hostname}-${name}-compose-service`,
             {
               serviceName: name,
               connection,
+              hostConfig: args,
             },
             {
               parent: this.container,
-              dependsOn: this.provisionerResources,
+              dependsOn: this.proxyNetwork ?? this.provisionerResources,
               // hooks: {
               //   afterCreate: [(args) => console.dir(args, { depth: Infinity })],
               //   afterUpdate: [(args) => console.dir(args, { depth: Infinity })]

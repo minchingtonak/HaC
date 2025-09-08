@@ -1,11 +1,13 @@
 import * as pulumi from '@pulumi/pulumi';
 import { TemplateProcessor } from './template-processor';
 import { HandlebarsTemplateFile } from './handlebars-template-file';
+import { HostConfigToml } from '../proxmox/host-config-schema';
 
 export type HandlebarsTemplateDirectoryArgs = {
   templateDirectory: string;
   serviceName: string;
   recurse?: boolean;
+  hostConfig: HostConfigToml;
 };
 
 export class HandlebarsTemplateDirectory extends pulumi.ComponentResource {
@@ -33,6 +35,7 @@ export class HandlebarsTemplateDirectory extends pulumi.ComponentResource {
         {
           serviceName: args.serviceName,
           templatePath,
+          hostConfig: args.hostConfig
         },
         {
           parent: this,

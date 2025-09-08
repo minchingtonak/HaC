@@ -8,10 +8,18 @@ export class ComposeFileProcessor {
   static COMPOSE_FILE_FOR = (serviceName: string) =>
     `${ComposeFileProcessor.SERVICE_DIRECTORY_FOR(serviceName)}/compose.yaml`;
 
-  static getStringifiedEnvVarsForService(serviceName: string) {
-    const serviceConfig = new pulumi.Config(serviceName);
+  static getStringifiedEnvVarsForService(
+    serviceName: string,
+    hostname?: string,
+  ) {
+    const serviceConfig = new pulumi.Config(
+      hostname ? `${hostname}#${serviceName}` : serviceName,
+    );
     const composeFilePath = ComposeFileProcessor.COMPOSE_FILE_FOR(serviceName);
-    return EnvUtils.getStringifiedEnvVarsFromFile(composeFilePath, serviceConfig);
+    return EnvUtils.getStringifiedEnvVarsFromFile(
+      composeFilePath,
+      serviceConfig,
+    );
   }
 
   private static UNSET_VARIABLE_MARKER = 'variable is not set';

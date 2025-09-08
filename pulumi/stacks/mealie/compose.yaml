@@ -17,3 +17,17 @@ services:
       ALLOW_SIGNUP: "false"
       TZ: America/Los_Angeles
       BASE_URL: ${MEALIE_BASE_URL}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.mealie.rule=Host(`mealie.${TRAEFIK_SSL_DOMAIN_BASE}`)
+      - traefik.http.routers.mealie.entrypoints=https
+      - traefik.http.routers.mealie.tls=true
+      - traefik.http.routers.mealie.tls.certresolver=porkbun
+      - traefik.http.services.mealie.loadbalancer.server.port=9926
+      - traefik.http.routers.mealie.service=mealie
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

@@ -12,7 +12,7 @@ config:
   homelab-pve:lxcPrivateSshKey:
     secure: v1:Gvh1GdBO1YBpztNy:VFos5hyLijW3XoPXf/4+hqGBzRztgyz1uXCofM6WdUHi9yPXmmIlEdHcsm0W4w/B5ld5h+J7RFt/mDBSyMdipAuOspFQcGcXASSmVe+a/hJ0W/bQ1giwsN4PYw/E9hfiTez6SNtgAMHQOgG8UHvRjD+uZSr3PqsI3JZzIGan40yzVJxe5OTKkhcuTKbnJxIj1o1ljhoS8tF32sffz0HgWePvzusrpzOF8GSrTXfrWx3TBn7dE2HN9HbilWC90aaa52qasXDumMdFuJVikLVVIvMY1GZIKf0Yjan8J0riVChhwdcXk0xRMWquafqkAsgFajyLraol0gia9KXDGpzGMGp4mBvq+HNtWSceMdmp2OelD0YACpSnUJHsgNvr9dPqWDr5QtEKVguNOALI1YN3lR6VyCpujKUJIKd3lf53XatHWq8GmyYZdAXdP+g22Qc/b+hEF0x/7xiHP7QDRLVcgwaNwe2BM7okJ38qv7CTSKhCxU+8E8g3wEm4uBjUmGKJkvex1sUv8mIcZEjKiArxSfYZwAEajCiEQy+eYYkx
   homelab-pve:pveEndpoint: https://homelab.akmin.dev
-  homelab-pve:pveInsecure: "false"
+  homelab-pve:pveInsecure: 'false'
   homelab-pve:pveUsername:
     secure: v1:0Misa7AjGbv6pgG8:935A2yNp0Wg+8fhzurcPkVotrLLvO5N9
   homelab-pve:pvePassword:
@@ -21,37 +21,43 @@ config:
     secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
   homelab-pve:porkbunSecretKey:
     secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
-  mealie:MEALIE_BASE_URL: https://mealie.homelab.akmin.dev
-  mealie:MY_VARIABLE_ONE: foo
-  mealie:SECRET_MY_VARIABLE_TWO:
-    secure: v1:WpAl729dwuwlpOEi:PfxeAIukavUzz7l7QZ4fqWDOxw==
-  mealie:config_var_one: varOneValue
-  mealie:secret_config_var_two:
-    secure: v1:8EW+7R+Km+Cchov/:xH9eq2N2qsQBDWsWCin9+nl+8LlTxasc3ZL5Gw==
-  cronicle:SECRET_B2_ACCOUNT_ID:
-    secure: v1:NV+g80iUpRXDXKxH:wIKyVkc8oAelpyd/VJL1OniVzHB8EJ89PXusTdPVYj2gQFQ7PE7k+B0=
-  cronicle:SECRET_B2_ACCOUNT_KEY:
-    secure: v1:KizcajXuoIQS9RBs:xWhD7CtabpiC++zF38W8snyTLXkxTT+jeefzt5zupN+myMqMm1buxQ4zWTPQQVY=
-  cronicle:SECRET_B2_EU_ACCOUNT_ID:
-    secure: v1:SxP/vasdeAL6ipQS:1+LBAHcByyqi6tCzja4CMZ+RKekkORCgt4r2vhDkwqtgXkZLkmlHHdM=
-  cronicle:SECRET_B2_EU_ACCOUNT_KEY:
-    secure: v1:pBsI5ni0nPIeDKwO:Hhp06vRV3ZjpQaHR0T06+V9ypJGiVjwNnVAKz+6AqHeqihtxj5oro3Kw7WJ5kuE=
-  cronicle:SECRET_RESTIC_PASSWORD:
-    secure: v1:K5gnxDKtlcOHst6z:qsdkR4AOO+5As2VslPO6ERzlJlA01xcTglsp6Ct8i374V6G/TqwUifpw+8gKHiU30SPJMfsI3dF7xfFFAnAcPg==
-  cronicle:RESTIC_CHECK_PERCENTAGE: "5"
-  cronicle:SECRET_B2_HEALTHCHECK_URL:
-    secure: v1:+wCA5m2zsGeupOzU:0TqufLdbUSRVv6HMHfsCjYF5q/q6d8TWTGYmIbPDTAB4BjV/sq8uXJdZswAeIH1MzC7Bz418ppHq/1JrlyHPDvlm+Z0/GOvK
-  cronicle:CRONICLE_BASE_APP_URL: https://cronicle.homelab.akmin.dev
-  cronicle:SECRET_CRONICLE_UNIVERSAL_WEB_HOOK:
-    secure: v1:UiKAJNHijNn0sxiS:QWspnq95k6UcAZ6hxzMQw3LsE3JDfDdsjxx2gB0s2ChJ3nTj0LRmcuqTdF6PWCQrjlOhP5KOM2XFniDlF/4bOUpwOkioAdB+W3dwoepydWEpxk2poFWxZHEs0aznDstYeQ==
-  copyparty:SECRET_ACME_EMAIL:
-    secure: v1:m7HfBcH/6BQpNaVt:YiUVsRksYvTgMvzLqQRUHulFKOHOZXpLpZvM/So=
-  copyparty:SECRET_TRAEFIK_DASHBOARD_CREDENTIALS:
-    secure: v1:aa25tD89mZWe4xmC:2nwTF58I51T0oKH52cdWLcHfsrAW87XFdex9bCobX/hAoIKultlUwq6WB7odz82sr6j4zavf9zpztxzqx3ZNHJbX4iUnAeg7mrSyPOFSeIMSWg==
-  copyparty:APP_PROXY_DOMAIN: copyparty.copyparty-pulumi.pulumi.homelab.akmin.dev
-  copyparty:TRAEFIK_DASHBOARD_DOMAIN: traefik.copyparty-pulumi.pulumi.homelab.akmin.dev
-  copyparty:TRAEFIK_SSL_DOMAIN_BASE: copyparty-pulumi.pulumi.homelab.akmin.dev
-  copyparty:SECRET_PORKBUN_API_KEY:
+
+
+  # cronicle:SECRET_B2_ACCOUNT_ID:
+  #   secure: v1:NV+g80iUpRXDXKxH:wIKyVkc8oAelpyd/VJL1OniVzHB8EJ89PXusTdPVYj2gQFQ7PE7k+B0=
+  # cronicle:SECRET_B2_ACCOUNT_KEY:
+  #   secure: v1:KizcajXuoIQS9RBs:xWhD7CtabpiC++zF38W8snyTLXkxTT+jeefzt5zupN+myMqMm1buxQ4zWTPQQVY=
+  # cronicle:SECRET_B2_EU_ACCOUNT_ID:
+  #   secure: v1:SxP/vasdeAL6ipQS:1+LBAHcByyqi6tCzja4CMZ+RKekkORCgt4r2vhDkwqtgXkZLkmlHHdM=
+  # cronicle:SECRET_B2_EU_ACCOUNT_KEY:
+  #   secure: v1:pBsI5ni0nPIeDKwO:Hhp06vRV3ZjpQaHR0T06+V9ypJGiVjwNnVAKz+6AqHeqihtxj5oro3Kw7WJ5kuE=
+  # cronicle:SECRET_RESTIC_PASSWORD:
+  #   secure: v1:K5gnxDKtlcOHst6z:qsdkR4AOO+5As2VslPO6ERzlJlA01xcTglsp6Ct8i374V6G/TqwUifpw+8gKHiU30SPJMfsI3dF7xfFFAnAcPg==
+  # cronicle:RESTIC_CHECK_PERCENTAGE: '5'
+  # cronicle:SECRET_B2_HEALTHCHECK_URL:
+  #   secure: v1:+wCA5m2zsGeupOzU:0TqufLdbUSRVv6HMHfsCjYF5q/q6d8TWTGYmIbPDTAB4BjV/sq8uXJdZswAeIH1MzC7Bz418ppHq/1JrlyHPDvlm+Z0/GOvK
+  # cronicle:CRONICLE_BASE_APP_URL: https://cronicle.homelab.akmin.dev
+  # cronicle:SECRET_CRONICLE_UNIVERSAL_WEB_HOOK:
+  #   secure: v1:UiKAJNHijNn0sxiS:QWspnq95k6UcAZ6hxzMQw3LsE3JDfDdsjxx2gB0s2ChJ3nTj0LRmcuqTdF6PWCQrjlOhP5KOM2XFniDlF/4bOUpwOkioAdB+W3dwoepydWEpxk2poFWxZHEs0aznDstYeQ==
+
+  copyparty-pulumi#traefik:SECRET_PORKBUN_API_KEY:
     secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
-  copyparty:SECRET_PORKBUN_SECRET_API_KEY:
+  copyparty-pulumi#traefik:SECRET_PORKBUN_SECRET_API_KEY:
     secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
+  copyparty-pulumi#traefik:SECRET_ACME_EMAIL:
+    secure: v1:m7HfBcH/6BQpNaVt:YiUVsRksYvTgMvzLqQRUHulFKOHOZXpLpZvM/So=
+  copyparty-pulumi#traefik:SECRET_TRAEFIK_DASHBOARD_CREDENTIALS:
+    secure: v1:aa25tD89mZWe4xmC:2nwTF58I51T0oKH52cdWLcHfsrAW87XFdex9bCobX/hAoIKultlUwq6WB7odz82sr6j4zavf9zpztxzqx3ZNHJbX4iUnAeg7mrSyPOFSeIMSWg==
+  copyparty-pulumi#traefik:TRAEFIK_SSL_DOMAIN_BASE: copyparty-pulumi.pulumi.homelab.akmin.dev
+
+  copyparty-pulumi#copyparty:TRAEFIK_SSL_DOMAIN_BASE: copyparty-pulumi.pulumi.homelab.akmin.dev
+
+  copyparty-pulumi#mealie:TRAEFIK_SSL_DOMAIN_BASE: copyparty-pulumi.pulumi.homelab.akmin.dev
+  copyparty-pulumi#mealie:MEALIE_BASE_URL: https://mealie.homelab.akmin.dev
+
+  copyparty-pulumi#mealie:MY_VARIABLE_ONE: foo
+  copyparty-pulumi#mealie:SECRET_MY_VARIABLE_TWO:
+    secure: v1:WpAl729dwuwlpOEi:PfxeAIukavUzz7l7QZ4fqWDOxw==
+  copyparty-pulumi#mealie:config_var_one: varOneValue
+  copyparty-pulumi#mealie:secret_config_var_two:
+    secure: v1:8EW+7R+Km+Cchov/:xH9eq2N2qsQBDWsWCin9+nl+8LlTxasc3ZL5Gw==

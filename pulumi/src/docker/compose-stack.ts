@@ -3,12 +3,14 @@ import * as command from '@pulumi/command';
 import * as path from 'node:path';
 import { HandlebarsTemplateDirectory } from '../templates/handlebars-template-directory';
 import { ComposeFileProcessor } from './compose-file-processor';
+import { HostConfigToml } from '../proxmox/host-config-schema';
 
 export type ServiceName = string;
 
 export type ComposeStackArgs = {
   serviceName: ServiceName;
   connection: command.types.input.remote.ConnectionArgs;
+  hostConfig: HostConfigToml;
 };
 
 export class ComposeStack extends pulumi.ComponentResource {
@@ -64,6 +66,7 @@ export class ComposeStack extends pulumi.ComponentResource {
       {
         serviceName: args.serviceName,
         templateDirectory: serviceDir,
+        hostConfig: args.hostConfig,
       },
       {
         parent: this,
@@ -91,7 +94,10 @@ export class ComposeStack extends pulumi.ComponentResource {
     // handle compose stack environment variables
 
     const stringifiedEnv = pulumi.secret(
-      ComposeFileProcessor.getStringifiedEnvVarsForService(args.serviceName),
+      ComposeFileProcessor.getStringifiedEnvVarsForService(
+        args.serviceName,
+        args.hostConfig.hostname,
+      ),
     );
 
     this.deployService = new command.remote.Command(

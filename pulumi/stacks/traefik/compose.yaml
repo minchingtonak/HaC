@@ -1,0 +1,61 @@
+services:
+  traefik:
+    image: traefik:v3.5
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /docker/traefik/letsencrypt:/letsencrypt
+      - /docker/traefik:/etc/traefik
+    environment:
+      - PORKBUN_API_KEY=${SECRET_PORKBUN_API_KEY}
+      - PORKBUN_SECRET_API_KEY=${SECRET_PORKBUN_SECRET_API_KEY}
+    command: # traefik.yml (static) configuration goes below
+      - --api=true
+      - --api.dashboard=true
+      - --api.debug=true
+      - --log.level=debug
+      - --log.filePath=/etc/traefik/traefik.log
+      - --entrypoints.http.address=:80
+      - --entrypoints.http.http.redirections.entrypoint.to=https
+      - --entrypoints.http.http.redirections.entrypoint.scheme=https
+      - --entrypoints.https.address=:443
+      - --providers.docker.endpoint=unix:///var/run/docker.sock
+      - --providers.docker.exposedByDefault=false
+      - --certificatesresolvers.porkbun.acme.email=${SECRET_ACME_EMAIL}
+      - --certificatesresolvers.porkbun.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.porkbun.acme.caserver=https://acme-v02.api.letsencrypt.org/directory # prod
+      # - --certificatesresolvers.porkbun.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory # staging
+      - --certificatesresolvers.porkbun.acme.dnschallenge.provider=porkbun
+      - --certificatesresolvers.porkbun.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53 # use public DNS servers for the check to avoid having to wait for the records to propagate to your router
+      # - --certificatesresolvers.porkbun.acme.dnschallenge.disablepropagationcheck=true # uncomment this if you have issues pulling certificates through cloudflare, By setting this flag to true disables the need to wait for the propagation of the TXT record to all authoritative name servers.
+      # - --certificatesresolvers.porkbun.acme.dnschallenge.delayBeforeCheck=60s # uncomment along with disablePropagationCheck if needed to ensure the TXT record is ready before verification is attempted
+    labels: # dynamic configuration
+      - traefik.enable=true
+      # misc
+      # generate credentials: echo $(htpasswd -nB akmin <password>) (or input password via stdin)
+      - traefik.http.middlewares.traefik-auth.basicauth.users=${SECRET_TRAEFIK_DASHBOARD_CREDENTIALS}
+      - traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https
+      # http
+      - traefik.http.routers.traefik.entrypoints=http
+      - traefik.http.routers.traefik.middlewares=traefik-https-redirect
+      - traefik.http.routers.traefik.rule=Host(`traefik.${TRAEFIK_SSL_DOMAIN_BASE}`)
+      # https
+      - traefik.http.routers.traefik-secure.entrypoints=https
+      - traefik.http.routers.traefik-secure.middlewares=traefik-auth
+      - traefik.http.routers.traefik-secure.rule=Host(`traefik.${TRAEFIK_SSL_DOMAIN_BASE}`)
+      - traefik.http.routers.traefik-secure.tls=true
+      - traefik.http.routers.traefik-secure.tls.certresolver=porkbun
+      - traefik.http.routers.traefik-secure.tls.domains[0].main=${TRAEFIK_SSL_DOMAIN_BASE}
+      - traefik.http.routers.traefik-secure.tls.domains[0].sans=*.${TRAEFIK_SSL_DOMAIN_BASE}
+      - traefik.http.routers.traefik-secure.service=api@internal
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

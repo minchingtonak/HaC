@@ -65,13 +65,14 @@ export class TemplateProcessor {
   static processTemplate(
     templatePath: string,
     serviceName: string,
+    hostname?: string,
   ): RenderedTemplateFile {
     const templateContent = fs.readFileSync(templatePath, 'utf-8');
 
     const variables = TemplateProcessor.discoverVariables(templateContent);
 
     const context = TemplateProcessor.buildTemplateContext(
-      serviceName,
+      new pulumi.Config(hostname ? `${hostname}#${serviceName}` : serviceName),
       variables,
     );
 
@@ -209,10 +210,9 @@ export class TemplateProcessor {
   }
 
   private static buildTemplateContext(
-    serviceName: string,
+    serviceConfig: pulumi.Config,
     variables: string[],
   ): TemplateContext {
-    const serviceConfig = new pulumi.Config(serviceName);
     const context: TemplateContext = {};
 
     for (const varName of variables) {
