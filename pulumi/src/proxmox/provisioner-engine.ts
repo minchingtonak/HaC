@@ -216,7 +216,6 @@ export class ProvisionerEngine {
 
     this.validatePlaybookPath(playbookPath, provisioner.playbook);
 
-    // Check for requirements file and install collections if needed
     const requirementsCommand = this.createRequirementsInstallCommand(
       provisioner,
       commandName,

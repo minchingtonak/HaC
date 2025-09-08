@@ -105,13 +105,14 @@
           APT::Periodic::Update-Package-Lists "1";
           APT::Periodic::Unattended-Upgrade "1";
         create: true
-        mode: "0700"
+        mode: '0700'
       tags:
         - updates
 
     - name: Reboot the host
       ansible.builtin.reboot:
         reboot_timeout: 600
+        test_command: uptime
 
     # - name: Add new user to void-access group
     #   ansible.builtin.user:
