@@ -7,7 +7,7 @@ import {
   Provisioner,
   ScriptProvisioner,
   AnsibleProvisioner,
-} from './host-config-parser';
+} from './host-config-schema';
 import { EnvUtils } from '../utils/env-utils';
 
 export type ProvisionerResource = command.remote.Command | ansible.Playbook;
@@ -292,7 +292,7 @@ export class ProvisionerEngine {
     commandName: string,
     parent: pulumi.Resource,
     dependsOn?: ProvisionerResource,
-  ): command.local.Command | null {
+  ): command.local.Command {
     const playbookPath = path.resolve(
       this.args.projectRoot,
       provisioner.playbook,
@@ -307,20 +307,19 @@ export class ProvisionerEngine {
       `${playbookName}.requirements.yaml`,
     );
 
-    if (!fs.existsSync(requirementsPath)) {
-      return null;
-    }
-
     const requirementsCommandName = `${commandName}-requirements`;
+    const installCommand = `ansible-galaxy collection install -r "${requirementsPath}"`;
 
     return new command.local.Command(
       requirementsCommandName,
       {
-        create: `ansible-galaxy collection install -r "${requirementsPath}"`,
+        create: installCommand,
+        update: installCommand,
         environment: {
           ANSIBLE_COLLECTIONS_PATH:
             process.env.ANSIBLE_COLLECTIONS_PATH || '~/.ansible/collections',
         },
+        triggers: [new pulumi.asset.FileAsset(requirementsPath)], // rerun when file content changes
       },
       {
         parent,
