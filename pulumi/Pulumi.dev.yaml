@@ -17,6 +17,10 @@ config:
     secure: v1:0Misa7AjGbv6pgG8:935A2yNp0Wg+8fhzurcPkVotrLLvO5N9
   homelab-pve:pvePassword:
     secure: v1:GbPQcKh46iarDfCr:T4TFcWEZPQltXrTmcnfLm2q+0QKq78LPuYo=
+  homelab-pve:porkbunApiKey:
+    secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
+  homelab-pve:porkbunSecretKey:
+    secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
   mealie:MEALIE_BASE_URL: https://mealie.homelab.akmin.dev
   mealie:MY_VARIABLE_ONE: foo
   mealie:SECRET_MY_VARIABLE_TWO:
@@ -44,9 +48,9 @@ config:
     secure: v1:m7HfBcH/6BQpNaVt:YiUVsRksYvTgMvzLqQRUHulFKOHOZXpLpZvM/So=
   copyparty:SECRET_TRAEFIK_DASHBOARD_CREDENTIALS:
     secure: v1:aa25tD89mZWe4xmC:2nwTF58I51T0oKH52cdWLcHfsrAW87XFdex9bCobX/hAoIKultlUwq6WB7odz82sr6j4zavf9zpztxzqx3ZNHJbX4iUnAeg7mrSyPOFSeIMSWg==
-  copyparty:APP_PROXY_DOMAIN: app.copyparty.pulumi.homelab.akmin.dev
-  copyparty:TRAEFIK_DASHBOARD_DOMAIN: traefik.copyparty.pulumi.homelab.akmin.dev
-  copyparty:TRAEFIK_SSL_DOMAIN_BASE: copyparty.pulumi.homelab.akmin.dev
+  copyparty:APP_PROXY_DOMAIN: copyparty.copyparty-pulumi.pulumi.homelab.akmin.dev
+  copyparty:TRAEFIK_DASHBOARD_DOMAIN: traefik.copyparty-pulumi.pulumi.homelab.akmin.dev
+  copyparty:TRAEFIK_SSL_DOMAIN_BASE: copyparty-pulumi.pulumi.homelab.akmin.dev
   copyparty:SECRET_PORKBUN_API_KEY:
     secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
   copyparty:SECRET_PORKBUN_SECRET_API_KEY:
