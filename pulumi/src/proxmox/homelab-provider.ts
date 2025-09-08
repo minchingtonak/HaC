@@ -13,6 +13,8 @@ export interface HomelabProviderArgs {
   lxcPublicSshKey?: string;
   lxcPrivateSshKey?: string;
   imageTemplateDatastoreId?: string;
+  porkbunApiKey?: string;
+  porkbunSecretKey?: string;
 }
 
 export class HomelabProvider extends proxmox.Provider {
@@ -23,6 +25,8 @@ export class HomelabProvider extends proxmox.Provider {
   public readonly lxcPublicSshKey: pulumi.Output<string>;
   public readonly lxcPrivateSshKey: pulumi.Output<string>;
   public readonly imageTemplateDatastoreId: pulumi.Output<string>;
+  public readonly porkbunApiKey: pulumi.Output<string>;
+  public readonly porkbunSecretKey: pulumi.Output<string>;
 
   // Raw config values
   private readonly rawPveNodeName: string;
@@ -32,6 +36,8 @@ export class HomelabProvider extends proxmox.Provider {
   private readonly rawLxcPublicSshKey: string | pulumi.Output<string>;
   private readonly rawLxcPrivateSshKey: string | pulumi.Output<string>;
   private readonly rawImageTemplateDatastoreId: string;
+  private readonly rawPorkbunApiKey: string | pulumi.Output<string>;
+  private readonly rawPorkbunSecretKey: string | pulumi.Output<string>;
 
   constructor(
     name: string,
@@ -58,6 +64,8 @@ export class HomelabProvider extends proxmox.Provider {
     this.rawLxcPrivateSshKey = args?.lxcPrivateSshKey ?? homelabConfig.requireSecret('lxcPrivateSshKey');
     this.rawImageTemplateDatastoreId = args?.imageTemplateDatastoreId ??
       homelabConfig.require('imageTemplateDatastoreId');
+    this.rawPorkbunApiKey = args?.porkbunApiKey ?? homelabConfig.requireSecret('porkbunApiKey');
+    this.rawPorkbunSecretKey = args?.porkbunSecretKey ?? homelabConfig.requireSecret('porkbunSecretKey');
 
     // Create pulumi outputs from raw values
     this.pveNodeName = pulumi.output(this.rawPveNodeName);
@@ -67,5 +75,7 @@ export class HomelabProvider extends proxmox.Provider {
     this.lxcPublicSshKey = pulumi.output(this.rawLxcPublicSshKey);
     this.lxcPrivateSshKey = pulumi.output(this.rawLxcPrivateSshKey);
     this.imageTemplateDatastoreId = pulumi.output(this.rawImageTemplateDatastoreId);
+    this.porkbunApiKey = pulumi.output(this.rawPorkbunApiKey);
+    this.porkbunSecretKey = pulumi.output(this.rawPorkbunSecretKey);
   }
 }

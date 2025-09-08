@@ -1,6 +1,7 @@
 import * as pulumi from '@pulumi/pulumi';
 import * as command from '@pulumi/command';
 import * as proxmox from '@muhlba91/pulumi-proxmoxve';
+import * as porkbun from '@pulumi/porkbun';
 import * as path from 'path';
 import {
   CpuCores,
@@ -30,6 +31,10 @@ export class HomelabContainer extends pulumi.ComponentResource {
   services: ComposeStack[] = [];
 
   provisionerResources: ProvisionerResource[] = [];
+
+  baseDnsRecord: porkbun.DnsRecord;
+
+  wildcardDnsRecord: porkbun.DnsRecord;
 
   constructor(
     name: string,
@@ -161,6 +166,39 @@ export class HomelabContainer extends pulumi.ComponentResource {
         provider: args.provider,
         parent: this,
         dependsOn: this.container,
+      },
+    );
+
+    const porkbunProvider = new porkbun.Provider(`${args.hostname}-provider`, {
+      apiKey: args.provider.porkbunApiKey,
+      secretKey: args.provider.porkbunSecretKey,
+    });
+
+    this.baseDnsRecord = new porkbun.DnsRecord(
+      `${args.hostname}-base-dns-record`,
+      {
+        domain: `akmin.dev`,
+        subdomain: `${args.hostname}.pulumi.homelab`,
+        content: ctAddress,
+        type: 'A',
+      },
+      {
+        parent: this,
+        provider: porkbunProvider,
+      },
+    );
+
+    this.wildcardDnsRecord = new porkbun.DnsRecord(
+      `${args.hostname}-wildcard-dns-record`,
+      {
+        domain: `akmin.dev`,
+        subdomain: `*.${args.hostname}.pulumi.homelab`,
+        content: ctAddress,
+        type: 'A',
+      },
+      {
+        parent: this,
+        provider: porkbunProvider,
       },
     );
 
