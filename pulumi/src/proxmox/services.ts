@@ -23,19 +23,20 @@ export function deployContainers(provider: HomelabProvider) {
     { provider: provider, retainOnDelete: true },
   );
 
-  return hostConfigs
-    .filter((host) => host.enabled)
-    .map(
-      (host) =>
-        new HomelabContainer(
-          `${host.hostname}-homelab-container`,
-          {
-            ...host,
-            provider,
-          },
-          {
-            dependsOn: templateFile,
-          },
-        ),
+  for (const config of hostConfigs) {
+    if (!config.enabled) {
+      return;
+    }
+
+    new HomelabContainer(
+      `${config.hostname}-homelab-container`,
+      {
+        ...config,
+        provider,
+      },
+      {
+        dependsOn: templateFile,
+      },
     );
+  }
 }
