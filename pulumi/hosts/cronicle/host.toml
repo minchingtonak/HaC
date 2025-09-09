@@ -4,12 +4,13 @@ enabled = true
 
 description = "Cronicle backup worker container"
 tags = ["backup"]
-services = ["traefik", "mealie"]
+services = ["traefik", "cronicle", "mealie"]
 
 [[provisioners]]
 type = "ansible"
 name = "lxc-init"
 playbook = "provisioners/ansible/lxc-init.yaml"
+replayable = false
 
 [[provisioners]]
 type = "script"
