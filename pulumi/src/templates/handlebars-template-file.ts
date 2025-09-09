@@ -30,7 +30,7 @@ export class HandlebarsTemplateFile extends pulumi.ComponentResource {
     );
 
     this.asset = new CopyableAsset(
-      `${args.serviceName}-rendered-template-${this.processedTemplate.idSafeName}`,
+      `${args.hostConfig.hostname}-${args.serviceName}-rendered-template-${this.processedTemplate.idSafeName}`,
       {
         asset: pulumi.Output.isInstance(this.processedTemplate.content)
           ? this.processedTemplate.content.apply(

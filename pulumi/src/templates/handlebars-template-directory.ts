@@ -29,7 +29,7 @@ export class HandlebarsTemplateDirectory extends pulumi.ComponentResource {
 
     for (const templatePath of templateFilePaths) {
       this.templateFiles[templatePath] = new HandlebarsTemplateFile(
-        `handlebars-template-file-${TemplateProcessor.buildSanitizedNameForId(
+        `${args.hostConfig.hostname}-${args.serviceName}-handlebars-template-file-${TemplateProcessor.buildSanitizedNameForId(
           templatePath,
         )}`,
         {

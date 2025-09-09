@@ -48,7 +48,7 @@ export class ComposeStack extends pulumi.ComponentResource {
     );
 
     this.copyServiceToRemote = new command.remote.CopyToRemote(
-      `copy-${args.serviceName}-service-directory`,
+      `${args.hostConfig.hostname}-copy-${args.serviceName}-service-directory`,
       {
         source: this.serviceDirectory,
         remotePath: remoteServiceDirectoryBase,
@@ -62,7 +62,7 @@ export class ComposeStack extends pulumi.ComponentResource {
     // handle template files
 
     this.handlebarsTemplateDirectory = new HandlebarsTemplateDirectory(
-      `${args.serviceName}-handlebars-template-folder`,
+      `${args.hostConfig.hostname}-${args.serviceName}-handlebars-template-folder`,
       {
         serviceName: args.serviceName,
         templateDirectory: serviceDir,
@@ -78,7 +78,7 @@ export class ComposeStack extends pulumi.ComponentResource {
     )) {
       this.processedTemplateCopies[templatePath] =
         new command.remote.CopyToRemote(
-          `copy-${args.serviceName}-template-${templateFile.processedTemplate.idSafeName}`,
+          `${args.hostConfig.hostname}-copy-${args.serviceName}-template-${templateFile.processedTemplate.idSafeName}`,
           {
             source: templateFile.asset.copyableSource,
             remotePath: templateFile.processedTemplate.remoteOutputPath,
@@ -101,7 +101,7 @@ export class ComposeStack extends pulumi.ComponentResource {
     );
 
     this.deployService = new command.remote.Command(
-      `deploy-${args.serviceName}-service`,
+      `${args.hostConfig.hostname}-deploy-${args.serviceName}-service`,
       {
         create: pulumi.interpolate`cd ${remoteServiceDirectory} && ${stringifiedEnv} docker compose up -d --force-recreate`,
         delete: pulumi.interpolate`cd ${remoteServiceDirectory} && ${stringifiedEnv} docker compose down`,
