@@ -1,8 +1,8 @@
 services:
   ac:
     image: copyparty/ac
-    ports:
-      - '3939:3939'
+    # ports:
+    #   - '3939:3939'
     restart: unless-stopped
     user: '0:0'
     volumes:

@@ -3,8 +3,8 @@ services:
     image: ghcr.io/mealie-recipes/mealie:v2.8.0
     container_name: mealie
     restart: always
-    ports:
-        - "9926:9000"
+    # ports:
+    #   - "9926:9000"
     deploy:
       resources:
         limits:
@@ -14,7 +14,7 @@ services:
     environment:
       PUID: 0
       PGID: 0
-      ALLOW_SIGNUP: "false"
+      ALLOW_SIGNUP: 'false'
       TZ: America/Los_Angeles
       BASE_URL: ${MEALIE_BASE_URL}
     labels:
@@ -23,7 +23,7 @@ services:
       - traefik.http.routers.mealie.entrypoints=https
       - traefik.http.routers.mealie.tls=true
       - traefik.http.routers.mealie.tls.certresolver=porkbun
-      - traefik.http.services.mealie.loadbalancer.server.port=9926
+      - traefik.http.services.mealie.loadbalancer.server.port=9000
       - traefik.http.routers.mealie.service=mealie
     networks:
       - traefik

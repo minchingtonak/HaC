@@ -1,7 +1,17 @@
 id = 216
 hostname = "cronicle-pulumi"
-enabled = false
+enabled = true
 
 description = "Cronicle backup worker container"
 tags = ["backup"]
-services = ["cronicle"]
+services = ["traefik", "mealie"]
+
+[[provisioners]]
+type = "ansible"
+name = "lxc-init"
+playbook = "provisioners/ansible/lxc-init.yaml"
+
+[[provisioners]]
+type = "script"
+name = "install-docker"
+script = "provisioners/scripts/install-docker.sh"
