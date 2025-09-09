@@ -9,8 +9,8 @@ services:
       - CRONICLE_base_app_url=${CRONICLE_BASE_APP_URL}
       - CRONICLE_custom_live_log_socket_url=${CRONICLE_BASE_APP_URL}
       - CRONICLE_universal_web_hook=${SECRET_CRONICLE_UNIVERSAL_WEB_HOOK}
-    ports:
-      - "3012:3012"
+    # ports:
+    #   - "3012:3012"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /docker/cronicle/data:/opt/cronicle/data
@@ -28,3 +28,11 @@ services:
       options:
         max-size: "10m"
     restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.cronicle.rule=Host(`cronicle.${TRAEFIK_SSL_DOMAIN_BASE}`)
+      - traefik.http.routers.cronicle.entrypoints=https
+      - traefik.http.routers.cronicle.tls=true
+      - traefik.http.routers.cronicle.tls.certresolver=porkbun
+      - traefik.http.services.cronicle.loadbalancer.server.port=3012
+      - traefik.http.routers.cronicle.service=cronicle

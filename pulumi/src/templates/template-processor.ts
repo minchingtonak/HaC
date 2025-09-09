@@ -34,6 +34,7 @@ export type ASTNode =
 export class TemplateProcessor {
   private static readonly SECRET_VARIABLE_PREFIX = 'SECRET_';
   private static readonly TEMPLATE_EXTENSIONS = ['.hbs', '.handlebars'];
+  private static readonly TEMPLATE_PATTERN = () => /\.(hbs|handlebars)\..+$/;
 
   static discoverTemplateFiles(
     directory: string,
@@ -50,8 +51,7 @@ export class TemplateProcessor {
         if (entry.isDirectory() && recursive) {
           scanDirectory(fullPath);
         } else if (entry.isFile()) {
-          const ext = path.extname(entry.name);
-          if (TemplateProcessor.TEMPLATE_EXTENSIONS.includes(ext)) {
+          if (TemplateProcessor.isTemplateFile(entry.name)) {
             templateFiles.push(fullPath);
           }
         }
@@ -60,6 +60,15 @@ export class TemplateProcessor {
 
     scanDirectory(directory);
     return templateFiles;
+  }
+
+  private static isTemplateFile(filename: string): boolean {
+    const ext = path.extname(filename);
+    if (TemplateProcessor.TEMPLATE_EXTENSIONS.includes(ext)) {
+      return true;
+    }
+
+    return TemplateProcessor.TEMPLATE_PATTERN().test(filename);
   }
 
   static processTemplate(
@@ -230,12 +239,17 @@ export class TemplateProcessor {
     return context;
   }
 
+  private static readonly FILENAME_REPLACE_PATTERN = () =>
+    /\.(hbs|handlebars)/g;
+
   private static getRemoteOutputPath(
     templatePath: string,
     serviceName: string,
   ): string {
-    const ext = path.extname(templatePath);
-    const pathWithoutTemplateExt = templatePath.slice(0, -ext.length);
+    const pathWithoutTemplateExt = templatePath.replaceAll(
+      TemplateProcessor.FILENAME_REPLACE_PATTERN(),
+      '',
+    );
 
     const stackRelativePath = pathWithoutTemplateExt.slice(
       pathWithoutTemplateExt.indexOf(serviceName),
