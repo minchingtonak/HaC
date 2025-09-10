@@ -92,7 +92,7 @@ export class EnvUtils {
     return Array.from(varNames);
   }
 
-  private static readonly PARENT_NAMESPACE_PREFIX = 'PARENT_';
+  private static readonly PARENT_NAMESPACE_PREFIX = 'PARENT:';
 
   /**
    * Assembles a variable map from a Pulumi config for the given variable names
