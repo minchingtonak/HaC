@@ -4,6 +4,7 @@ import * as path from 'node:path';
 import { HandlebarsTemplateDirectory } from '../templates/handlebars-template-directory';
 import { ComposeFileUtils } from './compose-file-processor';
 import { HostConfigToml } from '../hosts/host-config-schema';
+import { TemplateProcessor } from '../templates/template-processor';
 
 export type ServiceName = string;
 
@@ -35,13 +36,11 @@ export class ComposeStack extends pulumi.ComponentResource {
   ) {
     super(ComposeStack.RESOURCE_TYPE, name, {}, opts);
 
-    const serviceDir = ComposeFileUtils.SERVICE_DIRECTORY_FOR(
-      args.serviceName,
-    );
+    const serviceDir = ComposeFileUtils.SERVICE_DIRECTORY_FOR(args.serviceName);
 
     this.serviceDirectory = new pulumi.asset.FileArchive(serviceDir);
 
-    const remoteServiceDirectoryBase = '/etc/pulumi'; // TODO make configurable?
+    const remoteServiceDirectoryBase = `${TemplateProcessor.REMOTE_OUTPUT_FOLDER_ROOT}/stacks`; // TODO make configurable?
     const remoteServiceDirectory = path.join(
       remoteServiceDirectoryBase,
       args.serviceName,

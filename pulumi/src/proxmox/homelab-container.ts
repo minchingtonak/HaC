@@ -15,6 +15,7 @@ import { HomelabProvider } from './homelab-provider';
 import { ComposeStack } from '../docker/compose-stack';
 import { ProvisionerEngine, ProvisionerResource } from './provisioner-engine';
 import { HostConfigToml } from '../hosts/host-config-schema';
+import { TemplateProcessor } from '../templates/template-processor';
 
 export type HomelabContainerArgs = HostConfigToml & {
   provider: HomelabProvider;
@@ -37,6 +38,8 @@ export class HomelabContainer extends pulumi.ComponentResource {
   provisionerResources: ProvisionerResource[] = [];
 
   proxyNetwork?: command.remote.Command;
+
+  createRemoteOutputRootDir?: command.remote.Command;
 
   services: ComposeStack[] = [];
 
@@ -279,6 +282,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
               'if ! docker network ls --format "{{.Name}}" | grep -q "^traefik$"; then docker network create traefik; fi',
             delete:
               'if docker network ls --format "{{.Name}}" | grep -q "^traefik$"; then docker network rm traefik; fi',
+            addPreviousOutputInEnv: false,
             connection,
           },
           {
@@ -287,6 +291,21 @@ export class HomelabContainer extends pulumi.ComponentResource {
           },
         );
       }
+
+      this.createRemoteOutputRootDir = new command.remote.Command(
+        `${args.hostname}-create-pulumi-root-output-dir`,
+        {
+          create: `mkdir -p ${TemplateProcessor.REMOTE_OUTPUT_FOLDER_ROOT}`,
+          delete: `rm -rf ${TemplateProcessor.REMOTE_OUTPUT_FOLDER_ROOT}`,
+          addPreviousOutputInEnv: false,
+          connection,
+        },
+        {
+          parent: this.container,
+          dependsOn: this.proxyNetwork ?? this.provisionerResources,
+          retainOnDelete: true,
+        },
+      );
 
       for (const name of args.services) {
         this.services.push(
@@ -299,7 +318,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
             },
             {
               parent: this.container,
-              dependsOn: this.proxyNetwork ?? this.provisionerResources,
+              dependsOn: this.createRemoteOutputRootDir,
               // hooks: {
               //   afterCreate: [(args) => console.dir(args, { depth: Infinity })],
               //   afterUpdate: [(args) => console.dir(args, { depth: Infinity })]

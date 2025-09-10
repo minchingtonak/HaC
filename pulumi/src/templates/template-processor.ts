@@ -235,9 +235,9 @@ export class TemplateProcessor {
     return Array.from(variables);
   }
 
+  public static readonly REMOTE_OUTPUT_FOLDER_ROOT = '/etc/pulumi';
   private static readonly FILENAME_REPLACE_PATTERN = () =>
     /\.(hbs|handlebars)/g;
-  private static readonly REMOTE_OUTPUT_FOLDER_ROOT = '/etc/pulumi';
 
   private static getRemoteOutputPath(templatePath: string): string {
     const pathWithoutTemplateExt = templatePath.replaceAll(

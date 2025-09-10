@@ -36,3 +36,9 @@ services:
       - traefik.http.routers.cronicle.tls.certresolver=porkbun
       - traefik.http.services.cronicle.loadbalancer.server.port=3012
       - traefik.http.routers.cronicle.service=cronicle
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
