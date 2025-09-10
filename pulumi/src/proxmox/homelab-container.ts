@@ -8,6 +8,7 @@ import {
   DiskSize,
   MemorySize,
   ProxmoxFirewallLogLevel,
+  ProxmoxFirewallMacro,
   ProxmoxFirewallPolicy,
 } from '../constants';
 import { HomelabProvider } from './homelab-provider';
@@ -30,6 +31,8 @@ export class HomelabContainer extends pulumi.ComponentResource {
   firewallOptions: proxmox.network.FirewallOptions;
 
   firewallAlias: proxmox.network.FirewallAlias;
+
+  firewallRules: proxmox.network.FirewallRules;
 
   provisionerResources: ProvisionerResource[] = [];
 
@@ -138,7 +141,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
       {
         nodeName: args.provider.pveNodeName,
         containerId: args.id,
-        enabled: false, // TODO configurable firewall rules
+        enabled: true,
         // copied values from the default firewall config for a new ct
         dhcp: true,
         ndp: true,
@@ -166,6 +169,39 @@ export class HomelabContainer extends pulumi.ComponentResource {
         name: fwAliasName,
         cidr: ctCidr,
         comment: 'created by pulumi',
+      },
+      {
+        provider: args.provider,
+        parent: this,
+        dependsOn: this.container,
+      },
+    );
+
+    this.firewallRules = new proxmox.network.FirewallRules(
+      `${ctName}-fw-rules`,
+      {
+        nodeName: args.provider.pveNodeName,
+        containerId: args.id,
+        rules: [
+          {
+            enabled: true,
+            type: 'in',
+            action: ProxmoxFirewallPolicy.ACCEPT,
+            macro: ProxmoxFirewallMacro.HTTP,
+          },
+          {
+            enabled: true,
+            type: 'in',
+            action: ProxmoxFirewallPolicy.ACCEPT,
+            macro: ProxmoxFirewallMacro.HTTPS,
+          },
+          {
+            enabled: true,
+            type: 'in',
+            action: ProxmoxFirewallPolicy.ACCEPT,
+            macro: ProxmoxFirewallMacro.SSH,
+          },
+        ],
       },
       {
         provider: args.provider,
