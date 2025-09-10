@@ -1,0 +1,28 @@
+id = 215
+hostname = "life-pulumi"
+enabled = false
+
+description = "life tracking apps"
+tags = ["tracking"]
+services = ["traefik", "dawarich", "fittrackee", "mealie", "memos", "wallos"]
+
+[cpu]
+cores = 4
+
+[memory]
+dedicated = 8192
+swap = 4096
+
+[disk]
+size = 32
+
+[[provisioners]]
+type = "ansible"
+name = "lxc-init"
+playbook = "provisioners/ansible/lxc-init.yaml"
+replayable = false
+
+[[provisioners]]
+type = "script"
+name = "install-docker"
+script = "provisioners/scripts/install-docker.sh"

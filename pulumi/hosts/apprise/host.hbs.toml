@@ -1,0 +1,28 @@
+id = 210
+hostname = "apprise-pulumi"
+enabled = false
+
+description = "lightweight file-based notifications server"
+tags = ["notifications"]
+services = ["traefik", "apprise"]
+
+[cpu]
+cores = 1
+
+[memory]
+dedicated = 2048
+swap = 1024
+
+[disk]
+size = 4
+
+[[provisioners]]
+type = "ansible"
+name = "lxc-init"
+playbook = "provisioners/ansible/lxc-init.yaml"
+replayable = false
+
+[[provisioners]]
+type = "script"
+name = "install-docker"
+script = "provisioners/scripts/install-docker.sh"

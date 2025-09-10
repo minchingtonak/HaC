@@ -22,23 +22,17 @@ config:
     secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
   homelab-pve:porkbunSecretKey:
     secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
-  copyparty-pulumi:DOCS_MOUNTPOINT: /mnt/documents
-  copyparty-pulumi:CONTAINER_DOMAIN: copyparty-pulumi.pulumi.homelab.akmin.dev
-  copyparty-pulumi#traefik:SECRET_PORKBUN_API_KEY:
+
+  archiver-pulumi:CONTAINER_DOMAIN: archiver-pulumi.pulumi.homelab.akmin.dev
+  archiver-pulumi#traefik:SECRET_PORKBUN_API_KEY:
     secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
-  copyparty-pulumi#traefik:SECRET_PORKBUN_SECRET_API_KEY:
+  archiver-pulumi#traefik:SECRET_PORKBUN_SECRET_API_KEY:
     secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
-  copyparty-pulumi#traefik:SECRET_ACME_EMAIL:
+  archiver-pulumi#traefik:SECRET_ACME_EMAIL:
     secure: v1:m7HfBcH/6BQpNaVt:YiUVsRksYvTgMvzLqQRUHulFKOHOZXpLpZvM/So=
-  copyparty-pulumi#traefik:SECRET_TRAEFIK_DASHBOARD_CREDENTIALS:
+  archiver-pulumi#traefik:SECRET_TRAEFIK_DASHBOARD_CREDENTIALS:
     secure: v1:aa25tD89mZWe4xmC:2nwTF58I51T0oKH52cdWLcHfsrAW87XFdex9bCobX/hAoIKultlUwq6WB7odz82sr6j4zavf9zpztxzqx3ZNHJbX4iUnAeg7mrSyPOFSeIMSWg==
-  copyparty-pulumi#mealie:MEALIE_BASE_URL: https://mealie.copyparty-pulumi.pulumi.homelab.akmin.dev/
-  copyparty-pulumi#mealie:MY_VARIABLE_ONE: foo
-  copyparty-pulumi#mealie:SECRET_MY_VARIABLE_TWO:
-    secure: v1:WpAl729dwuwlpOEi:PfxeAIukavUzz7l7QZ4fqWDOxw==
-  copyparty-pulumi#mealie:config_var_one: varOneValue
-  copyparty-pulumi#mealie:secret_config_var_two:
-    secure: v1:8EW+7R+Km+Cchov/:xH9eq2N2qsQBDWsWCin9+nl+8LlTxasc3ZL5Gw==
+
   cronicle-pulumi:CONTAINER_DOMAIN: cronicle-pulumi.pulumi.homelab.akmin.dev
   cronicle-pulumi#traefik:SECRET_PORKBUN_API_KEY:
     secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
@@ -65,9 +59,3 @@ config:
   cronicle-pulumi#cronicle:SECRET_CRONICLE_UNIVERSAL_WEB_HOOK:
     secure: v1:UiKAJNHijNn0sxiS:QWspnq95k6UcAZ6hxzMQw3LsE3JDfDdsjxx2gB0s2ChJ3nTj0LRmcuqTdF6PWCQrjlOhP5KOM2XFniDlF/4bOUpwOkioAdB+W3dwoepydWEpxk2poFWxZHEs0aznDstYeQ==
   cronicle-pulumi#mealie:MEALIE_BASE_URL: https://mealie.cronicle-pulumi.pulumi.homelab.akmin.dev/
-  cronicle-pulumi#mealie:MY_VARIABLE_ONE: foo
-  cronicle-pulumi#mealie:SECRET_MY_VARIABLE_TWO:
-    secure: v1:WpAl729dwuwlpOEi:PfxeAIukavUzz7l7QZ4fqWDOxw==
-  cronicle-pulumi#mealie:config_var_one: varOneValue
-  cronicle-pulumi#mealie:secret_config_var_two:
-    secure: v1:8EW+7R+Km+Cchov/:xH9eq2N2qsQBDWsWCin9+nl+8LlTxasc3ZL5Gw==

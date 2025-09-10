@@ -1,0 +1,32 @@
+id = 214
+hostname = "paperless-pulumi"
+enabled = false
+
+description = "copyparty lightweight fileserver container"
+tags = ["document-management"]
+services = ["traefik", "paperless-ngx"]
+
+[cpu]
+cores = 2
+
+[memory]
+dedicated = 4096
+swap = 2048
+
+[disk]
+size = 4
+
+[[mountPoints]]
+volume = "/void/documents"
+mountPoint = "/mnt/documents"
+
+[[provisioners]]
+type = "ansible"
+name = "lxc-init"
+playbook = "provisioners/ansible/lxc-init.yaml"
+replayable = false
+
+[[provisioners]]
+type = "script"
+name = "install-docker"
+script = "provisioners/scripts/install-docker.sh"

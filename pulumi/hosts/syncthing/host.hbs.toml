@@ -1,28 +1,20 @@
-id = 200
-hostname = "copyparty-pulumi"
+id = 212
+hostname = "syncthing-pulumi"
 enabled = false
 
-description = "copyparty lightweight fileserver container"
-tags = ["fileserver", "fileshare"]
-services = ["traefik", "copyparty"]
+description = "simple file syncing across devices"
+tags = ["sync", "fileshare"]
+services = ["traefik", "syncthing"]
 
 [cpu]
 cores = 2
 
 [memory]
 dedicated = 2048
-swap = 512
+swap = 1024
 
 [disk]
-size = 4
-
-[[mountPoints]]
-volume = "/void/audiobooks"
-mountPoint = "/mnt/audiobooks"
-
-[[mountPoints]]
-volume = "/void/backups"
-mountPoint = "/mnt/backups"
+size = 8
 
 [[mountPoints]]
 volume = "/void/documents"
@@ -39,14 +31,6 @@ mountPoint = "/mnt/media"
 [[mountPoints]]
 volume = "/void/photos"
 mountPoint = "/mnt/photos"
-
-[[mountPoints]]
-volume = "/void/podcasts"
-mountPoint = "/mnt/podcasts"
-
-[[mountPoints]]
-volume = "/void/restic"
-mountPoint = "/mnt/restic"
 
 [[provisioners]]
 type = "ansible"

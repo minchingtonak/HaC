@@ -1,0 +1,43 @@
+id = 203
+hostname = "jellyfin-pulumi"
+enabled = false
+
+description = "jellyfin media player server"
+tags = ["jellyfin"]
+
+[cpu]
+cores = 4
+
+[memory]
+dedicated = 4096
+swap = 2048
+
+[disk]
+size = 32
+
+[[devicePassthroughs]]
+path = "/dev/dri/card0"
+uid = 0
+gid = 44
+mode = "0660"
+
+[[devicePassthroughs]]
+path = "/dev/dri/renderD128"
+uid = 0
+gid = 104
+mode = "0660"
+
+[[mountPoints]]
+volume = "/void/media"
+mountPoint = "/mnt/media"
+
+[[provisioners]]
+type = "ansible"
+name = "lxc-init"
+playbook = "provisioners/ansible/lxc-init.yaml"
+replayable = false
+
+[[provisioners]]
+type = "ansible"
+name = "install-update-jellyfin"
+playbook = "provisioners/ansible/update-jellyfin.yaml"

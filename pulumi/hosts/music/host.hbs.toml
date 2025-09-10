@@ -1,0 +1,40 @@
+id = 216
+hostname = "music-pulumi"
+enabled = false
+
+description = "assorted audio management apps"
+tags = ["music", "download"]
+services = ["traefik", "audiobookshelf", "navidrome", "slskd", "your-spotify"]
+
+[cpu]
+cores = 2
+
+[memory]
+dedicated = 8192
+swap = 4096
+
+[disk]
+size = 16
+
+[[mountPoints]]
+volume = "/void/audiobooks"
+mountPoint = "/mnt/audiobooks"
+
+[[mountPoints]]
+volume = "/void/media"
+mountPoint = "/mnt/media"
+
+[[mountPoints]]
+volume = "/void/podcasts"
+mountPoint = "/mnt/podcasts"
+
+[[provisioners]]
+type = "ansible"
+name = "lxc-init"
+playbook = "provisioners/ansible/lxc-init.yaml"
+replayable = false
+
+[[provisioners]]
+type = "script"
+name = "install-docker"
+script = "provisioners/scripts/install-docker.sh"

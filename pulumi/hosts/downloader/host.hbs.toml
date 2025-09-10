@@ -1,0 +1,28 @@
+id = 218
+hostname = "downloader-pulumi"
+enabled = false
+
+description = "misc downloading tools"
+tags = ["tools", "download"]
+services = ["traefik", "ytptube"]
+
+[cpu]
+cores = 1
+
+[memory]
+dedicated = 4096
+swap = 2048
+
+[disk]
+size = 16
+
+[[provisioners]]
+type = "ansible"
+name = "lxc-init"
+playbook = "provisioners/ansible/lxc-init.yaml"
+replayable = false
+
+[[provisioners]]
+type = "script"
+name = "install-docker"
+script = "provisioners/scripts/install-docker.sh"

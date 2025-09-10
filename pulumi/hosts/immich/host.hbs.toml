@@ -1,0 +1,32 @@
+id = 207
+hostname = "immich-pulumi"
+enabled = false
+
+description = "private image server"
+tags = ["photo"]
+services = ["traefik", "immich"]
+
+[cpu]
+cores = 2
+
+[memory]
+dedicated = 4096
+swap = 2048
+
+[disk]
+size = 64
+
+[[mountPoints]]
+volume = "/void/photos"
+mountPoint = "/mnt/photos"
+
+[[provisioners]]
+type = "ansible"
+name = "lxc-init"
+playbook = "provisioners/ansible/lxc-init.yaml"
+replayable = false
+
+[[provisioners]]
+type = "script"
+name = "install-docker"
+script = "provisioners/scripts/install-docker.sh"

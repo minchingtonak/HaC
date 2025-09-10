@@ -1,10 +1,20 @@
-id = 216
-hostname = "cronicle-pulumi"
-enabled = true
+id = 205
+hostname = "dashboard-pulumi"
+enabled = false
 
-description = "Cronicle backup worker container"
-tags = ["backup"]
-services = ["traefik", "cronicle", "mealie"]
+description = "homelab dashboard"
+tags = ["dashboard"]
+services = ["traefik", "homarr"]
+
+[cpu]
+cores = 2
+
+[memory]
+dedicated = 4096
+swap = 2048
+
+[disk]
+size = 16
 
 [[provisioners]]
 type = "ansible"

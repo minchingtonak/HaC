@@ -1,0 +1,48 @@
+id = 202
+hostname = "backup-pulumi"
+enabled = false
+
+description = "various backup-related services"
+tags = ["backup", "cron"]
+services = ["traefik", "backrest", "cronicle"]
+
+[cpu]
+cores = 4
+
+[memory]
+dedicated = 8192
+swap = 4096
+
+[disk]
+size = 4
+
+[[mountPoints]]
+volume = "/void/backups"
+mountPoint = "/mnt/backup-data/backups"
+
+[[mountPoints]]
+volume = "/void/documents"
+mountPoint = "/mnt/backup-data/documents"
+
+[[mountPoints]]
+volume = "/void/drive"
+mountPoint = "/mnt/backup-data/drive"
+
+[[mountPoints]]
+volume = "/void/photos"
+mountPoint = "/mnt/backup-data/photos"
+
+[[mountPoints]]
+volume = "/void/restic/repos"
+mountPoint = "/mnt/repos"
+
+[[provisioners]]
+type = "ansible"
+name = "lxc-init"
+playbook = "provisioners/ansible/lxc-init.yaml"
+replayable = false
+
+[[provisioners]]
+type = "script"
+name = "install-docker"
+script = "provisioners/scripts/install-docker.sh"

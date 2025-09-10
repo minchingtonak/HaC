@@ -1,0 +1,79 @@
+---
+- name: Update Jellyfin to the latest version
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Check Jellyfin version
+      ansible.builtin.command: jellyfin --version
+      register: jellyfin_current_version
+      changed_when: false
+      failed_when: false
+
+    - name: Display Jellyfin version
+      ansible.builtin.debug:
+        var: jellyfin_current_version.stderr
+
+    - name: Remove existing Jellyfin installation
+      ansible.builtin.apt:
+        name:
+          - jellyfin
+          - jellyfin-server
+          - jellyfin-web
+        state: absent
+
+    - name: Remove existing Jellyfin repository source file
+      ansible.builtin.file:
+        path: /etc/apt/sources.list.d/jellyfin.sources
+        state: absent
+
+    - name: Install required dependencies
+      ansible.builtin.apt:
+        name:
+          - expect
+          - python3-pexpect
+          - curl
+        state: present
+
+    - name: Download and run the official Jellyfin installation script with auto-confirmation
+      ansible.builtin.expect:
+        command: bash -c "curl https://repo.jellyfin.org/install-debuntu.sh | bash"
+        responses:
+          'If this looks correct, press <Enter> now to continue installing Jellyfin': ''
+        timeout: 300 # 5 minutes
+      register: install_output
+
+    - name: Display installation output
+      ansible.builtin.debug:
+        var: install_output.stdout_lines
+
+    - name: Check Jellyfin version
+      ansible.builtin.command: jellyfin --version
+      register: jellyfin_version
+      changed_when: false
+      failed_when: false
+
+    - name: Display new Jellyfin version
+      ansible.builtin.debug:
+        var: jellyfin_version.stderr
+
+    - name: Check Jellyfin service status
+      ansible.builtin.command: systemctl status jellyfin.service
+      register: jellyfin_status
+      changed_when: false
+      failed_when: false # Don't fail if service is not running
+
+    - name: Display Jellyfin service status
+      ansible.builtin.debug:
+        var: jellyfin_status.stdout_lines
+
+    - name: Unmask Jellyfin service if masked
+      ansible.builtin.systemd:
+        name: jellyfin.service
+        masked: false
+
+    - name: Start Jellyfin service
+      ansible.builtin.systemd:
+        name: jellyfin.service
+        state: started
+        enabled: true

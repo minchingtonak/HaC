@@ -1,0 +1,28 @@
+id = 209
+hostname = "windmill-pulumi"
+enabled = false
+
+description = "windmill code-based automation platform, mostly used for spotify automation"
+tags = ["automation"]
+services = ["traefik", "windmill"]
+
+[cpu]
+cores = 2
+
+[memory]
+dedicated = 4096
+swap = 2048
+
+[disk]
+size = 64
+
+[[provisioners]]
+type = "ansible"
+name = "lxc-init"
+playbook = "provisioners/ansible/lxc-init.yaml"
+replayable = false
+
+[[provisioners]]
+type = "script"
+name = "install-docker"
+script = "provisioners/scripts/install-docker.sh"

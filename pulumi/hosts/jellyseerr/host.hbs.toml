@@ -1,0 +1,28 @@
+id = 204
+hostname = "jellyseerr-pulumi"
+enabled = false
+
+description = "easy to use media recommendation and request app"
+tags = ["recommendation", "media-requests"]
+services = ["traefik", "jellyseerr"]
+
+[cpu]
+cores = 2
+
+[memory]
+dedicated = 2048
+swap = 1024
+
+[disk]
+size = 8
+
+[[provisioners]]
+type = "ansible"
+name = "lxc-init"
+playbook = "provisioners/ansible/lxc-init.yaml"
+replayable = false
+
+[[provisioners]]
+type = "script"
+name = "install-docker"
+script = "provisioners/scripts/install-docker.sh"
