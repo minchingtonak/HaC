@@ -116,11 +116,18 @@
       delegate_to: localhost
       become: false
 
-    - name: Reboot the host
-      ansible.builtin.reboot:
-        reboot_timeout: 600
-        test_command: uptime
+    - name: Reboot with systemctl
+      ansible.builtin.systemd:
+        name: reboot.target
+        state: started
+      async: 1
+      poll: 0
+      failed_when: false
 
+    - name: Wait for system to come back
+      ansible.builtin.wait_for_connection:
+        delay: 20
+        timeout: 600
     # - name: Add new user to void-access group
     #   ansible.builtin.user:
     #     name: '{{ ssh_user }}'
