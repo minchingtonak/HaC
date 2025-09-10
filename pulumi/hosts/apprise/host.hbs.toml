@@ -1,6 +1,6 @@
 id = 210
 hostname = "apprise-pulumi"
-enabled = false
+enabled = true
 
 description = "lightweight file-based notifications server"
 tags = ["notifications"]

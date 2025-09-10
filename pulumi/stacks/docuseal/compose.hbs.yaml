@@ -9,7 +9,7 @@ services:
     volumes:
       - /docker/docuseal:/data/docuseal
     environment:
-      - FORCE_SSL=${DOCUSEAL_DOMAIN}
+      - FORCE_SSL=docuseal.{{{PARENT:CONTAINER_DOMAIN}}}
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/docuseal
     restart: unless-stopped
     labels:
@@ -21,6 +21,7 @@ services:
       - traefik.http.routers.docuseal.service=docuseal
       - traefik.http.services.docuseal.loadbalancer.server.port=3000
     networks:
+      - docuseal
       - traefik
 
   postgres:
@@ -31,12 +32,16 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: docuseal
+    restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - docuseal
 
 networks:
+  docuseal:
   traefik:
     external: true

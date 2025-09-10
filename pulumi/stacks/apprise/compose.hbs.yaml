@@ -6,12 +6,13 @@ services:
       - APPRISE_STATEFUL_MODE=simple
       - APPRISE_DEFAULT_THEME=dark
       - APPRISE_DEFAULT_CONFIG_ID=homelab
+      - APPRISE_CONFIG_LOCK=yes # should not be able to edit through UI
       - PGID=0
       - PUID=0
     volumes:
       - /docker/apprise/attach:/attach
       - /docker/apprise/plugin:/plugin
-      - /docker/apprise/config:/config
+      - ./config:/config
     restart: unless-stopped
     # ports:
     #   - 8000:8000

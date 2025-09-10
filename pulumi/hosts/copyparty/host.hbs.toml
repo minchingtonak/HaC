@@ -1,6 +1,6 @@
 id = 200
 hostname = "copyparty-pulumi"
-enabled = false
+enabled = true
 
 description = "copyparty lightweight fileserver container"
 tags = ["fileserver", "fileshare"]

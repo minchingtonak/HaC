@@ -1,6 +1,6 @@
 id = 208
 hostname = "tools-pulumi"
-enabled = false
+enabled = true
 
 description = "private image server"
 tags = ["tools"]

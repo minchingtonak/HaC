@@ -1,0 +1,6 @@
+tag:
+  - homelab
+
+urls:
+  - {{{SECRET_SERVARR_SLACK_WEBHOOK}}}:
+    - tag: servarrroot

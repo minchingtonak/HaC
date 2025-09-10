@@ -13,7 +13,7 @@ services:
       options:
         max-size: 50m
       driver: json-file
-    restart: on-failure
+    restart: unless-stopped
     labels:
       - traefik.enable=true
       - traefik.http.routers.archiveteamwarrior.rule=Host(`archiveteamwarrior.{{{PARENT:CONTAINER_DOMAIN}}}`)
