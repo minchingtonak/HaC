@@ -109,6 +109,13 @@
       tags:
         - updates
 
+    - name: Remove old host key
+      ansible.builtin.known_hosts:
+        name: "{{ ansible_host | default(inventory_hostname) }}"
+        state: absent
+      delegate_to: localhost
+      become: false
+
     - name: Reboot the host
       ansible.builtin.reboot:
         reboot_timeout: 600
