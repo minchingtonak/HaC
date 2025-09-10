@@ -86,6 +86,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
             'local:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst',
         },
         mountPoints: mountPoints,
+        devicePassthroughs: args.devicePassthroughs,
         initialization: {
           hostname: args.hostname,
           ipConfigs: [
@@ -303,7 +304,6 @@ export class HomelabContainer extends pulumi.ComponentResource {
         {
           parent: this.container,
           dependsOn: this.proxyNetwork ?? this.provisionerResources,
-          retainOnDelete: true,
         },
       );
 

@@ -17,7 +17,7 @@ const MemoryConfigSchema = z
 
 const DiskConfigSchema = z
   .object({
-    datastoreId: z.string().optional(),
+    datastoreId: z.string().default('fast'),
     size: z.number().positive().optional(),
   })
   .strict();
@@ -39,6 +39,16 @@ const MountPointSchema = z
     quota: z.boolean().optional(),
     replicate: z.boolean().optional(),
     shared: z.boolean().optional(),
+  })
+  .strict();
+
+const DevicePassthroughSchema = z
+  .object({
+    path: z.string().min(1),
+    denyWrite: z.boolean().optional(),
+    uid: z.number().optional(),
+    gid: z.number().optional(),
+    mode: z.string().length(4).optional(),
   })
   .strict();
 
@@ -102,6 +112,7 @@ export const HostConfigSchema = z
     disk: DiskConfigSchema.optional(),
     services: z.array(z.string()).optional(),
     mountPoints: z.array(MountPointSchema).optional(),
+    devicePassthroughs: z.array(DevicePassthroughSchema).optional(),
     provisioners: z.array(ProvisionerSchema).optional(),
   })
   .strict();
