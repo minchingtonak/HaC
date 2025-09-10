@@ -1,6 +1,6 @@
 id = 213
 hostname = "admin-pulumi"
-enabled = false
+enabled = true
 
 description = "homelab administration-related apps"
 services = ["traefik", "semaphore"]
