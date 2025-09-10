@@ -22,6 +22,9 @@ export type HomelabContainerArgs = HostConfigToml & {
 export class HomelabContainer extends pulumi.ComponentResource {
   public static RESOURCE_TYPE = 'HaC:proxmoxve:HomelabContainer';
 
+  private static CONTAINER_SUBDOMAIN = (hostname: string, nodeName: string) =>
+    `${hostname}.pulumi.${nodeName}`;
+
   container: proxmox.ct.Container;
 
   firewallOptions: proxmox.network.FirewallOptions;
@@ -179,8 +182,11 @@ export class HomelabContainer extends pulumi.ComponentResource {
     this.baseDnsRecord = new porkbun.DnsRecord(
       `${args.hostname}-base-dns-record`,
       {
-        domain: `akmin.dev`,
-        subdomain: `${args.hostname}.pulumi.homelab`,
+        domain: args.provider.baseContainerDomain,
+        subdomain: HomelabContainer.CONTAINER_SUBDOMAIN(
+          args.hostname,
+          args.provider.rawPveNodeName,
+        ),
         content: ctAddress,
         type: 'A',
       },
@@ -193,8 +199,13 @@ export class HomelabContainer extends pulumi.ComponentResource {
     this.wildcardDnsRecord = new porkbun.DnsRecord(
       `${args.hostname}-wildcard-dns-record`,
       {
-        domain: `akmin.dev`,
-        subdomain: `*.${args.hostname}.pulumi.homelab`,
+        domain: args.provider.baseContainerDomain,
+        subdomain:
+          '*.' +
+          HomelabContainer.CONTAINER_SUBDOMAIN(
+            args.hostname,
+            args.provider.rawPveNodeName,
+          ),
         content: ctAddress,
         type: 'A',
       },

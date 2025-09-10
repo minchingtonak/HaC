@@ -240,7 +240,7 @@ export class ProvisionerEngine {
           ansible_user: provisioner.user,
           // https://docs.ansible.com/ansible/2.9/plugins/connection/ssh.html#ssh-connection
           ansible_ssh_private_key_file: provisioner.privateKeyFile,
-          ansible_ssh_host_key_checking: 'false',
+          ansible_ssh_common_args: '-o StrictHostKeyChecking=no',
           ansible_ssh_retries: '3',
           // disable warning due to ansible automatically choosing the python version on the target
           ansible_python_interpreter: 'auto_silent',
