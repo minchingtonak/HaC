@@ -218,7 +218,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
     this.baseDnsRecord = new porkbun.DnsRecord(
       `${args.hostname}-base-dns-record`,
       {
-        domain: args.provider.baseContainerDomain,
+        domain: args.provider.rootContainerDomain,
         subdomain: HomelabContainer.CONTAINER_SUBDOMAIN(
           args.hostname,
           args.provider.rawPveNodeName,
@@ -235,7 +235,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
     this.wildcardDnsRecord = new porkbun.DnsRecord(
       `${args.hostname}-wildcard-dns-record`,
       {
-        domain: args.provider.baseContainerDomain,
+        domain: args.provider.rootContainerDomain,
         subdomain:
           '*.' +
           HomelabContainer.CONTAINER_SUBDOMAIN(

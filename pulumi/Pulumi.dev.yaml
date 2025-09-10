@@ -2,7 +2,7 @@ encryptionsalt: v1:La9ewCKaH1M=:v1:gGxhP+gJa+ava6K3:01DP1sSJVBgXXyvdrsmPjb+wDq7N
 config:
   homelab-pve:pveNodeName: homelab
   homelab-pve:imageTemplateDatastoreId: local
-  homelab-pve:baseContainerDomain: akmin.dev
+  homelab-pve:rootContainerDomain: akmin.dev
   homelab-pve:localIpPrefix: 192.168.0
   homelab-pve:gatewayIp: 192.168.0.1
   homelab-pve:lxcRootPassword:

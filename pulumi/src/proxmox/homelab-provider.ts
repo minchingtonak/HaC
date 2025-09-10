@@ -9,7 +9,7 @@ export interface HomelabProviderArgs {
   pveNodeName?: string;
   localIpPrefix?: string;
   gatewayIp?: string;
-  baseContainerDomain?: string;
+  rootContainerDomain?: string;
   lxcRootPassword?: string;
   lxcPublicSshKey?: string;
   lxcPrivateSshKey?: string;
@@ -23,7 +23,7 @@ export class HomelabProvider extends proxmox.Provider {
   public readonly pveNodeName: pulumi.Output<string>;
   public readonly localIpPrefix: pulumi.Output<string>;
   public readonly gatewayIp: pulumi.Output<string>;
-  public readonly baseContainerDomain: pulumi.Output<string>;
+  public readonly rootContainerDomain: pulumi.Output<string>;
   public readonly defaultRootPassword: pulumi.Output<string>;
   public readonly lxcPublicSshKey: pulumi.Output<string>;
   public readonly lxcPrivateSshKey: pulumi.Output<string>;
@@ -34,7 +34,7 @@ export class HomelabProvider extends proxmox.Provider {
   public readonly rawPveNodeName: string;
   public readonly rawLocalIpPrefix: string;
   public readonly rawGatewayIp: string;
-  public readonly rawBaseContainerDomain: string;
+  public readonly rawRootContainerDomain: string;
   public readonly rawDefaultRootPassword: pulumi.Output<string>;
   public readonly rawLxcPublicSshKey: pulumi.Output<string>;
   public readonly rawLxcPrivateSshKey: pulumi.Output<string>;
@@ -63,7 +63,7 @@ export class HomelabProvider extends proxmox.Provider {
     this.rawLocalIpPrefix =
       args?.localIpPrefix ?? homelabConfig.require('localIpPrefix');
     this.rawGatewayIp = args?.gatewayIp ?? homelabConfig.require('gatewayIp');
-    this.rawBaseContainerDomain = args?.baseContainerDomain ?? homelabConfig.require('baseContainerDomain');
+    this.rawRootContainerDomain = args?.rootContainerDomain ?? homelabConfig.require('rootContainerDomain');
     this.rawDefaultRootPassword =
       (args?.lxcRootPassword !== undefined &&
         pulumi.secret(args.lxcRootPassword)) ||
@@ -91,7 +91,7 @@ export class HomelabProvider extends proxmox.Provider {
     this.pveNodeName = pulumi.output(this.rawPveNodeName);
     this.localIpPrefix = pulumi.output(this.rawLocalIpPrefix);
     this.gatewayIp = pulumi.output(this.rawGatewayIp);
-    this.baseContainerDomain = pulumi.output(this.rawBaseContainerDomain);
+    this.rootContainerDomain = pulumi.output(this.rawRootContainerDomain);
     this.defaultRootPassword = pulumi.output(this.rawDefaultRootPassword);
     this.lxcPublicSshKey = pulumi.output(this.rawLxcPublicSshKey);
     this.lxcPrivateSshKey = pulumi.output(this.rawLxcPrivateSshKey);
