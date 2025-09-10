@@ -66,7 +66,9 @@ export class EnvUtils {
         Object.entries(envVarMap).map(
           ([name, value]) =>
             // process the env vars before the apply() call to avoid exposing secrets in resource outputs
-            pulumi.interpolate`export ${name}="${EnvUtils.escapeBashEnvValue(value)}"`,
+            pulumi.interpolate`export ${name}="${EnvUtils.escapeBashEnvValue(
+              value,
+            )}"`,
         ),
       )
       .apply((envArray) => envArray.join('\n'));
@@ -91,6 +93,8 @@ export class EnvUtils {
     return Array.from(varNames);
   }
 
+  private static readonly PARENT_NAMESPACE_PREFIX = 'PARENT_';
+
   /**
    * Assembles a variable map from a Pulumi config for the given variable names
    * @param config The Pulumi config instance to read from
@@ -104,14 +108,36 @@ export class EnvUtils {
     const envMap: Record<string, string | pulumi.Output<string>> = {};
 
     for (const varName of variableNames) {
+      let varNameToCheck = varName;
+      let configKey = varName;
+      let configToUse = config;
+
       if (
-        varName
+        varName.toLocaleUpperCase().startsWith(EnvUtils.PARENT_NAMESPACE_PREFIX)
+      ) {
+        const namespace = config.name;
+        if (!namespace.includes('#')) {
+          throw new Error(
+            `Tried to access parent of root namespace: '${namespace}'`,
+          );
+        }
+
+        varNameToCheck = configKey = varName.slice(
+          EnvUtils.PARENT_NAMESPACE_PREFIX.length,
+        );
+
+        const parentNamespace = namespace.slice(0, namespace.lastIndexOf('#'));
+        configToUse = new pulumi.Config(parentNamespace);
+      }
+
+      if (
+        varNameToCheck
           .toLocaleUpperCase()
           .startsWith(EnvUtils.SECRET_VARIABLE_PREFIX)
       ) {
-        envMap[varName] = config.requireSecret(varName);
+        envMap[varName] = configToUse.requireSecret(configKey);
       } else {
-        envMap[varName] = config.require(varName);
+        envMap[varName] = configToUse.require(configKey);
       }
     }
 

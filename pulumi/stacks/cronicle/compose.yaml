@@ -30,7 +30,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.cronicle.rule=Host(`cronicle.${CONTAINER_DOMAIN}`)
+      - traefik.http.routers.cronicle.rule=Host(`cronicle.${PARENT_CONTAINER_DOMAIN}`)
       - traefik.http.routers.cronicle.entrypoints=https
       - traefik.http.routers.cronicle.tls=true
       - traefik.http.routers.cronicle.tls.certresolver=porkbun

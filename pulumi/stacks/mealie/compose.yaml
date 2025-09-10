@@ -19,7 +19,7 @@ services:
       BASE_URL: ${MEALIE_BASE_URL}
     labels:
       - traefik.enable=true
-      - traefik.http.routers.mealie.rule=Host(`mealie.${CONTAINER_DOMAIN}`)
+      - traefik.http.routers.mealie.rule=Host(`mealie.${PARENT_CONTAINER_DOMAIN}`)
       - traefik.http.routers.mealie.entrypoints=https
       - traefik.http.routers.mealie.tls=true
       - traefik.http.routers.mealie.tls.certresolver=porkbun
