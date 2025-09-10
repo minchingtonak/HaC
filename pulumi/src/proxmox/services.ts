@@ -26,7 +26,7 @@ export function deployContainers(provider: HomelabProvider) {
   function processConfigs(hostConfigs: HostConfigToml[]) {
     for (const config of hostConfigs) {
       if (!config.enabled) {
-        return;
+        continue;
       }
 
       new HomelabContainer(
