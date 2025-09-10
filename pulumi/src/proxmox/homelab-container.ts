@@ -14,7 +14,7 @@ import {
 import { HomelabProvider } from './homelab-provider';
 import { ComposeStack } from '../docker/compose-stack';
 import { ProvisionerEngine, ProvisionerResource } from './provisioner-engine';
-import { HostConfigToml } from './host-config-schema';
+import { HostConfigToml } from '../hosts/host-config-schema';
 
 export type HomelabContainerArgs = HostConfigToml & {
   provider: HomelabProvider;

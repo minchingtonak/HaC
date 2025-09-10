@@ -1,7 +1,7 @@
 import * as pulumi from '@pulumi/pulumi';
 import { RenderedTemplateFile, TemplateProcessor } from './template-processor';
 import { CopyableAsset } from '@hanseltime/pulumi-file-utils';
-import { HostConfigToml } from '../proxmox/host-config-schema';
+import { HostConfigToml } from '../hosts/host-config-schema';
 
 export type HandlebarsTemplateFileArgs = {
   serviceName: string;
@@ -25,8 +25,7 @@ export class HandlebarsTemplateFile extends pulumi.ComponentResource {
 
     this.processedTemplate = TemplateProcessor.processTemplate(
       args.templatePath,
-      args.serviceName,
-      args.hostConfig.hostname,
+      new pulumi.Config(`${args.hostConfig.hostname}#${args.serviceName}`),
     );
 
     this.asset = new CopyableAsset(

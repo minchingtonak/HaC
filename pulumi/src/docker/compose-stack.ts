@@ -3,7 +3,7 @@ import * as command from '@pulumi/command';
 import * as path from 'node:path';
 import { HandlebarsTemplateDirectory } from '../templates/handlebars-template-directory';
 import { ComposeFileUtils } from './compose-file-processor';
-import { HostConfigToml } from '../proxmox/host-config-schema';
+import { HostConfigToml } from '../hosts/host-config-schema';
 
 export type ServiceName = string;
 
@@ -41,7 +41,7 @@ export class ComposeStack extends pulumi.ComponentResource {
 
     this.serviceDirectory = new pulumi.asset.FileArchive(serviceDir);
 
-    const remoteServiceDirectoryBase = '/etc/pulumi';
+    const remoteServiceDirectoryBase = '/etc/pulumi'; // TODO make configurable?
     const remoteServiceDirectory = path.join(
       remoteServiceDirectoryBase,
       args.serviceName,

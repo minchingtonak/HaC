@@ -1,7 +1,7 @@
 import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { z } from 'zod';
-import { HostConfigSchema } from '../src/proxmox/host-config-parser';
+import { HostConfigSchema } from '../src/hosts/host-config-parser';
 
 function generateHostConfigJsonSchema() {
   try {

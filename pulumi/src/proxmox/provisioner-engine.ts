@@ -7,7 +7,7 @@ import {
   Provisioner,
   ScriptProvisioner,
   AnsibleProvisioner,
-} from './host-config-schema';
+} from '../hosts/host-config-schema';
 import { EnvUtils } from '../utils/env-utils';
 
 export type ProvisionerResource = command.remote.Command | ansible.Playbook;

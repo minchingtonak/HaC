@@ -1,7 +1,7 @@
 import * as pulumi from '@pulumi/pulumi';
 import { TemplateProcessor } from './template-processor';
 import { HandlebarsTemplateFile } from './handlebars-template-file';
-import { HostConfigToml } from '../proxmox/host-config-schema';
+import { HostConfigToml } from '../hosts/host-config-schema';
 
 export type HandlebarsTemplateDirectoryArgs = {
   templateDirectory: string;
@@ -24,18 +24,22 @@ export class HandlebarsTemplateDirectory extends pulumi.ComponentResource {
 
     const templateFilePaths = TemplateProcessor.discoverTemplateFiles(
       args.templateDirectory,
-      args.recurse,
+      {
+        recursive: args.recurse,
+      },
     );
 
     for (const templatePath of templateFilePaths) {
       this.templateFiles[templatePath] = new HandlebarsTemplateFile(
-        `${args.hostConfig.hostname}-${args.serviceName}-handlebars-template-file-${TemplateProcessor.buildSanitizedNameForId(
+        `${args.hostConfig.hostname}-${
+          args.serviceName
+        }-handlebars-template-file-${TemplateProcessor.buildSanitizedNameForId(
           templatePath,
         )}`,
         {
           serviceName: args.serviceName,
           templatePath,
-          hostConfig: args.hostConfig
+          hostConfig: args.hostConfig,
         },
         {
           parent: this,

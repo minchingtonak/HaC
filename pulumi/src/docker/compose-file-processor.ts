@@ -13,9 +13,7 @@ export class ComposeFileUtils {
 
     const missingVars = outputs.stderr
       .split('\n')
-      .filter((line) =>
-        line.includes(ComposeFileUtils.UNSET_VARIABLE_MARKER),
-      );
+      .filter((line) => line.includes(ComposeFileUtils.UNSET_VARIABLE_MARKER));
 
     if (missingVars.length) {
       throw new Error('\n' + missingVars.join('\n'));

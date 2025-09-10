@@ -12,7 +12,7 @@ export interface RenderedTemplateFile {
   idSafeName: string;
   templatePath: string;
   remoteOutputPath: string;
-  content: string | pulumi.Output<string>;
+  content: pulumi.Output<string>;
 }
 
 export type ASTNode =
@@ -33,15 +33,33 @@ export type ASTNode =
   | hbs.AST.HashPair;
 
 export class TemplateProcessor {
-  private static readonly SECRET_VARIABLE_PREFIX = 'SECRET_';
   private static readonly TEMPLATE_EXTENSIONS = ['.hbs', '.handlebars'];
   private static readonly TEMPLATE_PATTERN = () => /\.(hbs|handlebars)\..+$/;
 
+  /**
+   * Discover and return a list containing the paths of all template files in
+   * the given directory.
+   *
+   * @param directory relative path to the directory containing template files
+   * @param options
+   * @returns list of paths of all template files in the given directory
+   */
   static discoverTemplateFiles(
     directory: string,
-    recursive: boolean = true,
+    options?: {
+      recursive?: boolean;
+      isTemplateOverride?: (filePath: string, filename: string) => boolean;
+    },
   ): string[] {
+    if (path.isAbsolute(directory)) {
+      throw new Error(`Directory must be relative, was given: '${directory}'`);
+    }
+
     const templateFiles: string[] = [];
+
+    const isTemplate = options?.isTemplateOverride
+      ? options.isTemplateOverride
+      : TemplateProcessor.isTemplateFile;
 
     function scanDirectory(dir: string) {
       const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -49,10 +67,13 @@ export class TemplateProcessor {
       for (const entry of entries) {
         const fullPath = path.join(dir, entry.name);
 
-        if (entry.isDirectory() && recursive) {
+        if (
+          entry.isDirectory() &&
+          (options?.recursive === undefined || options.recursive)
+        ) {
           scanDirectory(fullPath);
         } else if (entry.isFile()) {
-          if (TemplateProcessor.isTemplateFile(entry.name)) {
+          if (isTemplate(fullPath, entry.name)) {
             templateFiles.push(fullPath);
           }
         }
@@ -74,32 +95,28 @@ export class TemplateProcessor {
 
   static processTemplate(
     templatePath: string,
-    serviceName: string,
-    hostname?: string,
+    config: pulumi.Config,
   ): RenderedTemplateFile {
     const templateContent = fs.readFileSync(templatePath, 'utf-8');
 
     const variables = TemplateProcessor.discoverVariables(templateContent);
 
-    const context = EnvUtils.assembleVariableMapFromConfig(
-      new pulumi.Config(hostname ? `${hostname}#${serviceName}` : serviceName),
-      variables,
-    );
+    const context = EnvUtils.assembleVariableMapFromConfig(config, variables);
+
+    const idSafeName = TemplateProcessor.buildSanitizedNameForId(templatePath);
 
     const template =
       Handlebars.compile<Record<string, string>>(templateContent);
-    const renderedContent = pulumi.all(context).apply(template);
+    const content = pulumi.all(context).apply(template);
 
-    const finalOutputPath = TemplateProcessor.getRemoteOutputPath(
-      templatePath,
-      serviceName,
-    );
+    const remoteOutputPath =
+      TemplateProcessor.getRemoteOutputPath(templatePath);
 
     return {
-      idSafeName: TemplateProcessor.buildSanitizedNameForId(templatePath),
+      content,
+      idSafeName,
       templatePath,
-      remoteOutputPath: finalOutputPath,
-      content: renderedContent,
+      remoteOutputPath,
     };
   }
 
@@ -220,21 +237,18 @@ export class TemplateProcessor {
 
   private static readonly FILENAME_REPLACE_PATTERN = () =>
     /\.(hbs|handlebars)/g;
+  private static readonly REMOTE_OUTPUT_FOLDER_ROOT = '/etc/pulumi';
 
-  private static getRemoteOutputPath(
-    templatePath: string,
-    serviceName: string,
-  ): string {
+  private static getRemoteOutputPath(templatePath: string): string {
     const pathWithoutTemplateExt = templatePath.replaceAll(
       TemplateProcessor.FILENAME_REPLACE_PATTERN(),
       '',
     );
 
-    const stackRelativePath = pathWithoutTemplateExt.slice(
-      pathWithoutTemplateExt.indexOf(serviceName),
+    return path.join(
+      TemplateProcessor.REMOTE_OUTPUT_FOLDER_ROOT,
+      pathWithoutTemplateExt,
     );
-
-    return `/etc/pulumi/${stackRelativePath}`;
   }
 
   static buildSanitizedNameForId(templatePath: string): string {

@@ -1,12 +1,12 @@
-import * as path from 'node:path';
 import * as proxmox from '@muhlba91/pulumi-proxmoxve';
+import * as pulumi from '@pulumi/pulumi';
 import { HomelabContainer } from './homelab-container';
-import { HostConfigParser } from './host-config-parser';
+import { HostConfigParser } from '../hosts/host-config-parser';
 import { HomelabProvider } from './homelab-provider';
+import { HostConfigToml } from '../hosts/host-config-schema';
 
 export function deployContainers(provider: HomelabProvider) {
-  const hostsDir = path.join(__dirname, '../../hosts');
-  const hostConfigs = HostConfigParser.loadAllHostConfigs(hostsDir);
+  const hostConfigs = HostConfigParser.loadAllHostConfigs('./hosts');
 
   const templateFile = new proxmox.download.File(
     'debian-12-template',
@@ -23,20 +23,24 @@ export function deployContainers(provider: HomelabProvider) {
     { provider: provider, retainOnDelete: true },
   );
 
-  for (const config of hostConfigs) {
-    if (!config.enabled) {
-      return;
-    }
+  function processConfigs(hostConfigs: HostConfigToml[]) {
+    for (const config of hostConfigs) {
+      if (!config.enabled) {
+        return;
+      }
 
-    new HomelabContainer(
-      `${config.hostname}-homelab-container`,
-      {
-        ...config,
-        provider,
-      },
-      {
-        dependsOn: templateFile,
-      },
-    );
+      new HomelabContainer(
+        `${config.hostname}-homelab-container`,
+        {
+          ...config,
+          provider,
+        },
+        {
+          dependsOn: templateFile,
+        },
+      );
+    }
   }
+
+  pulumi.all(hostConfigs).apply(processConfigs);
 }

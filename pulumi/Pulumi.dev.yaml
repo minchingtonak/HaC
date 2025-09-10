@@ -22,7 +22,7 @@ config:
     secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
   homelab-pve:porkbunSecretKey:
     secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
-
+  copyparty-pulumi:DOCS_MOUNTPOINT: /mnt/documents
   copyparty-pulumi:CONTAINER_DOMAIN: copyparty-pulumi.pulumi.homelab.akmin.dev
   copyparty-pulumi#traefik:SECRET_PORKBUN_API_KEY:
     secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
@@ -39,7 +39,6 @@ config:
   copyparty-pulumi#mealie:config_var_one: varOneValue
   copyparty-pulumi#mealie:secret_config_var_two:
     secure: v1:8EW+7R+Km+Cchov/:xH9eq2N2qsQBDWsWCin9+nl+8LlTxasc3ZL5Gw==
-
   cronicle-pulumi:CONTAINER_DOMAIN: cronicle-pulumi.pulumi.homelab.akmin.dev
   cronicle-pulumi#traefik:SECRET_PORKBUN_API_KEY:
     secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
