@@ -1,0 +1,50 @@
+services:
+  app:
+    container_name: sysh-server
+    image: barmiro/sysh-server:latest
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB:${POSTGRES_DB}
+      - POSTGRES_USER:${POSTGRES_USER}
+      - POSTGRES_PASSWORD:${POSTGRES_PASSWORD}
+      - SPOTIFY_CLIENT_ID:${SPOTIFY_CLIENT_ID}
+      - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET}
+      - TZ=${SYSH_TZ:-UTC}
+      - SYSH_SERVER_PORT=${SYSH_SERVER_PORT:-5754}
+      - SYSH_RESTRICTED_MODE=true
+    # ports:
+    #   - '${SYSH_SERVER_PORT:-5754}:${SYSH_SERVER_PORT:-5754}'
+    volumes:
+      - /docker/sysh/keys:/keys
+    depends_on:
+      - postgres
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.sysh.rule=Host(`sysh.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.sysh.entrypoints=https
+      - traefik.http.routers.sysh.tls=true
+      - traefik.http.routers.sysh.tls.certresolver=porkbun
+      - traefik.http.routers.sysh.service=sysh
+      - traefik.http.services.sysh.loadbalancer.server.port=5754
+    networks:
+      - traefik
+
+  postgres:
+    container_name: sysh-postgres
+    image: barmiro/sysh-postgres:latest
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB:${POSTGRES_DB}
+      - POSTGRES_USER:${POSTGRES_USER}
+      - POSTGRES_PASSWORD:${POSTGRES_PASSWORD}
+    volumes:
+      - /docker/sysh/db:/var/lib/postgresql/data
+    ports: []
+    restart: always
+
+networks:
+  traefik:
+    external: true

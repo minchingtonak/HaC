@@ -23,6 +23,10 @@ services:
       - --entrypoints.http.http.redirections.entrypoint.to=https
       - --entrypoints.http.http.redirections.entrypoint.scheme=https
       - --entrypoints.https.address=:443
+      - --entrypoints.ssh.address=:222
+      - --entrypoints.syncthing-sync.address=:22000
+      - --entrypoints.syncthing-sync-quic.address=:22000/udp
+      - --entrypoints.syncthing-local-discovery.address=:21027/udp
       - --entrypoints.slskd-listen.address=:50300
       - --providers.docker.endpoint=unix:///var/run/docker.sock
       - --providers.docker.exposedByDefault=false

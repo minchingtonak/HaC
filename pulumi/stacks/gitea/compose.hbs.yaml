@@ -1,0 +1,36 @@
+services:
+  server:
+    image: docker.gitea.com/gitea:latest
+    container_name: gitea
+    environment:
+      - USER_UID=1000 # make sure to set up a gitea user with UID/GID=1000
+      - USER_GID=1000
+    restart: always
+    volumes:
+      - /docker/gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    # ports:
+    #   - "3000:3000"
+    #   - "222:22"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.gitea.rule=Host(`gitea.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.gitea.entrypoints=https
+      - traefik.http.routers.gitea.tls=true
+      - traefik.http.routers.gitea.tls.certresolver=porkbun
+      - traefik.http.routers.gitea.service=gitea
+      - traefik.http.services.gitea.loadbalancer.server.port=3000
+      - traefik.tcp.routers.gitea-ssh.rule=HostSNI(`*`)
+      - traefik.tcp.routers.gitea-ssh.entrypoints=ssh
+      - traefik.tcp.routers.gitea-ssh.service=gitea-ssh
+      - traefik.tcp.services.gitea-ssh-service.loadbalancer.server.port=22
+    networks:
+      - gitea
+      - traefik
+
+networks:
+  gitea:
+    external: false
+  traefik:
+    external: true

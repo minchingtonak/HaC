@@ -1,0 +1,42 @@
+services:
+  syncthing:
+    image: lscr.io/linuxserver/syncthing:latest
+    container_name: syncthing
+    hostname: syncthing
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/Los_Angeles
+    volumes:
+      - /docker/syncthing:/config # ensure syncthing folder is owned by lxc-root
+      - /mnt:/mnt
+    # ports:
+    #   - 8384:8384
+    #   - 22000:22000/tcp
+    #   - 22000:22000/udp
+    #   - 21027:21027/udp
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.syncthing.rule=Host(`syncthing.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.syncthing.entrypoints=https
+      - traefik.http.routers.syncthing.tls=true
+      - traefik.http.routers.syncthing.tls.certresolver=porkbun
+      - traefik.http.services.syncthing.loadbalancer.server.port=8384
+      - traefik.http.routers.syncthing.service=syncthing
+      - traefik.tcp.routers.syncthing-sync.rule=HostSNI(`*`)
+      - traefik.tcp.routers.syncthing-sync.entrypoints=syncthing-sync
+      - traefik.tcp.routers.syncthing-sync.service=syncthing-sync
+      - traefik.tcp.services.syncthing-sync.loadbalancer.server.port=22000
+      - traefik.udp.routers.syncthing-sync-quic.entrypoints=udp-service
+      - traefik.udp.routers.syncthing-sync-quic.service=syncthing-sync-quic
+      - traefik.udp.services.syncthing-sync-quic.loadbalancer.server.port=22000
+      - traefik.udp.routers.syncthing-local-discovery.entrypoints=udp-service
+      - traefik.udp.routers.syncthing-local-discovery.service=syncthing-local-discovery
+      - traefik.udp.services.syncthing-local-discovery.loadbalancer.server.port=21027
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

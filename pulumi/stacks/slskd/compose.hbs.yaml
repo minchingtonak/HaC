@@ -26,8 +26,6 @@ services:
       # https://doc.traefik.io/traefik/reference/routing-configuration/tcp/router/rules-and-priority/#hostsni-and-hostsniregexp
       - traefik.tcp.routers.slskd-listen.rule=HostSNI('*')
       - traefik.tcp.routers.slskd-listen.entrypoints=slskd-listen
-      - traefik.tcp.routers.slskd-listen.tls=true
-      - traefik.tcp.routers.slskd-listen.tls.certresolver=porkbun
       - traefik.tcp.routers.slskd-listen.service=slskd-listen
       - traefik.tcp.services.slskd-listen.loadbalancer.server.port=50300
     networks:
