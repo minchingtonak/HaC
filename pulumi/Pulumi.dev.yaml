@@ -22,7 +22,6 @@ config:
     secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
   homelab-pve:porkbunSecretKey:
     secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
-
   archiver-pulumi:CONTAINER_DOMAIN: archiver-pulumi.pulumi.homelab.akmin.dev
   archiver-pulumi#traefik:SECRET_PORKBUN_API_KEY:
     secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
@@ -32,7 +31,33 @@ config:
     secure: v1:m7HfBcH/6BQpNaVt:YiUVsRksYvTgMvzLqQRUHulFKOHOZXpLpZvM/So=
   archiver-pulumi#traefik:SECRET_TRAEFIK_DASHBOARD_CREDENTIALS:
     secure: v1:aa25tD89mZWe4xmC:2nwTF58I51T0oKH52cdWLcHfsrAW87XFdex9bCobX/hAoIKultlUwq6WB7odz82sr6j4zavf9zpztxzqx3ZNHJbX4iUnAeg7mrSyPOFSeIMSWg==
-
+  copyparty-pulumi:CONTAINER_DOMAIN: copyparty-pulumi.pulumi.homelab.akmin.dev
+  copyparty-pulumi#traefik:SECRET_PORKBUN_API_KEY:
+    secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
+  copyparty-pulumi#traefik:SECRET_PORKBUN_SECRET_API_KEY:
+    secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
+  copyparty-pulumi#traefik:SECRET_ACME_EMAIL:
+    secure: v1:m7HfBcH/6BQpNaVt:YiUVsRksYvTgMvzLqQRUHulFKOHOZXpLpZvM/So=
+  copyparty-pulumi#traefik:SECRET_TRAEFIK_DASHBOARD_CREDENTIALS:
+    secure: v1:aa25tD89mZWe4xmC:2nwTF58I51T0oKH52cdWLcHfsrAW87XFdex9bCobX/hAoIKultlUwq6WB7odz82sr6j4zavf9zpztxzqx3ZNHJbX4iUnAeg7mrSyPOFSeIMSWg==
+  tools-pulumi:CONTAINER_DOMAIN: tools-pulumi.pulumi.homelab.akmin.dev
+  tools-pulumi#traefik:SECRET_PORKBUN_API_KEY:
+    secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
+  tools-pulumi#traefik:SECRET_PORKBUN_SECRET_API_KEY:
+    secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
+  tools-pulumi#traefik:SECRET_ACME_EMAIL:
+    secure: v1:m7HfBcH/6BQpNaVt:YiUVsRksYvTgMvzLqQRUHulFKOHOZXpLpZvM/So=
+  tools-pulumi#traefik:SECRET_TRAEFIK_DASHBOARD_CREDENTIALS:
+    secure: v1:aa25tD89mZWe4xmC:2nwTF58I51T0oKH52cdWLcHfsrAW87XFdex9bCobX/hAoIKultlUwq6WB7odz82sr6j4zavf9zpztxzqx3ZNHJbX4iUnAeg7mrSyPOFSeIMSWg==
+  apprise-pulumi:CONTAINER_DOMAIN: apprise-pulumi.pulumi.homelab.akmin.dev
+  apprise-pulumi#traefik:SECRET_PORKBUN_API_KEY:
+    secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
+  apprise-pulumi#traefik:SECRET_PORKBUN_SECRET_API_KEY:
+    secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
+  apprise-pulumi#traefik:SECRET_ACME_EMAIL:
+    secure: v1:m7HfBcH/6BQpNaVt:YiUVsRksYvTgMvzLqQRUHulFKOHOZXpLpZvM/So=
+  apprise-pulumi#traefik:SECRET_TRAEFIK_DASHBOARD_CREDENTIALS:
+    secure: v1:aa25tD89mZWe4xmC:2nwTF58I51T0oKH52cdWLcHfsrAW87XFdex9bCobX/hAoIKultlUwq6WB7odz82sr6j4zavf9zpztxzqx3ZNHJbX4iUnAeg7mrSyPOFSeIMSWg==
   cronicle-pulumi:CONTAINER_DOMAIN: cronicle-pulumi.pulumi.homelab.akmin.dev
   cronicle-pulumi#traefik:SECRET_PORKBUN_API_KEY:
     secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
@@ -59,3 +84,5 @@ config:
   cronicle-pulumi#cronicle:SECRET_CRONICLE_UNIVERSAL_WEB_HOOK:
     secure: v1:UiKAJNHijNn0sxiS:QWspnq95k6UcAZ6hxzMQw3LsE3JDfDdsjxx2gB0s2ChJ3nTj0LRmcuqTdF6PWCQrjlOhP5KOM2XFniDlF/4bOUpwOkioAdB+W3dwoepydWEpxk2poFWxZHEs0aznDstYeQ==
   cronicle-pulumi#mealie:MEALIE_BASE_URL: https://mealie.cronicle-pulumi.pulumi.homelab.akmin.dev/
+  apprise-pulumi#apprise:SECRET_SERVARR_SLACK_WEBHOOK:
+    secure: v1:WsS7ZU2EH2dvJwmu:nrRyndrzO45Te8/ARtzdo3bDzdc3jRDoZNWUNyO7qWcV/AFTRVhO+bNRMoc3VWyTz2e8abYC3aUYy474nnzTpUgs62S/SMI0cBLagEDf/YExO/QvpZ/KXTC6cca4ea8jsw==
