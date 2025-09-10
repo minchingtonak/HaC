@@ -1,0 +1,26 @@
+services:
+  memos:
+    image: neosmemo/memos:stable
+    container_name: memos
+    # ports:
+    #   - "5230:5230"
+    volumes:
+      - /docker/memos:/var/opt/memos
+    environment:
+      - MEMOS_MODE=prod
+      - MEMOS_PORT=5230
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.memos.rule=Host(`memos.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.memos.entrypoints=https
+      - traefik.http.routers.memos.tls=true
+      - traefik.http.routers.memos.tls.certresolver=porkbun
+      - traefik.http.routers.memos.service=memos
+      - traefik.http.services.memos.loadbalancer.server.port=5230
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

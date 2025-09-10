@@ -1,0 +1,38 @@
+services:
+  slskd:
+    image: slskd/slskd:latest
+    container_name: slskd
+    # ports:
+    #   # - "5030:5030" # HTTP
+    #   - "5031:5031" # HTTPS
+    #   - "50300:50300" # Soulseek
+    environment:
+      - SLSKD_REMOTE_CONFIGURATION=true
+    volumes:
+      - /docker/slskd/data:/app/data
+      - /mnt/media/music:/app/downloads
+      - /docker/slskd/incomplete:/app/incomplete
+      - /docker/slskd/scripts:/app/scripts
+      - /docker/slskd/slskd.yml:/app/data/slskd.yml
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.slskd.rule=Host(`slskd.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.slskd.entrypoints=https
+      - traefik.http.routers.slskd.tls=true
+      - traefik.http.routers.slskd.tls.certresolver=porkbun
+      - traefik.http.routers.slskd.service=slskd
+      - traefik.http.services.slskd.loadbalancer.server.port=5031
+      # https://doc.traefik.io/traefik/reference/routing-configuration/tcp/router/rules-and-priority/#hostsni-and-hostsniregexp
+      - traefik.tcp.routers.slskd-listen.rule=HostSNI('*')
+      - traefik.tcp.routers.slskd-listen.entrypoints=slskd-listen
+      - traefik.tcp.routers.slskd-listen.tls=true
+      - traefik.tcp.routers.slskd-listen.tls.certresolver=porkbun
+      - traefik.tcp.routers.slskd-listen.service=slskd-listen
+      - traefik.tcp.services.slskd-listen.loadbalancer.server.port=50300
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

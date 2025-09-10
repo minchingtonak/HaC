@@ -1,0 +1,36 @@
+services:
+  backrest:
+    image: garethgeorge/backrest:latest
+    container_name: backrest
+    hostname: backrest
+    user: "0:10000"
+    volumes:
+      - /docker/backrest/data:/data
+      - /docker/backrest/config:/config
+      - /docker/backrest/cache:/cache
+      - /docker/backrest/tmp:/tmp
+      - /mnt/backup-data:/userdata  # Mount local paths to backup
+      - /mnt/repos:/repos     # Mount local repos (optional for remote storage)
+    environment:
+      - BACKREST_DATA=/data
+      - BACKREST_CONFIG=/config/config.json
+      - XDG_CACHE_HOME=/cache
+      - TMPDIR=/tmp
+      - TZ=America/Los_Angeles
+    # ports:
+    #   - "9898:9898"
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.backrest.rule=Host(`backrest.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.backrest.entrypoints=https
+      - traefik.http.routers.backrest.tls=true
+      - traefik.http.routers.backrest.tls.certresolver=porkbun
+      - traefik.http.routers.backrest.service=backrest
+      - traefik.http.services.backrest.loadbalancer.server.port=9898
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

@@ -1,0 +1,66 @@
+services:
+  endurain:
+    container_name: endurain
+    image: ghcr.io/joaovitoriasilva/endurain:latest
+    environment:
+      - TZ=America/Los_Angeles
+      - DB_TYPE=postgres
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_PASSWORD={{{SECRET_DB_PASSWORD}}}
+      - SECRET_KEY={{{SECRET_SECRET_KEY}}} # openssl rand -hex 32
+      - GEOCODES_MAPS_API={{{SECRET_GEOCODES_API_KEY}}}
+      - ENDURAIN_HOST={{{HOST}}}
+      - BEHIND_PROXY=true
+    volumes:
+      - /docker/endurain/backend/user_images:/app/backend/user_images # necessary for user image persistence on container image updates
+      - /docker/endurain/backend/files/bulk_import:/app/backend/files/bulk_import # necessary to enable bulk import of activities. Place here your activities files
+      - /docker/endurain/backend/files/processed:/app/backend/files/processed # necessary for processed original files persistence on container image updates
+      - /docker/endurain/backend/logs:/app/backend/logs # log files for the backend
+    # ports:
+    #   - '8080:8080'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.endurain.rule=Host(`endurain.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.endurain.entrypoints=https
+      - traefik.http.routers.endurain.tls=true
+      - traefik.http.routers.endurain.tls.certresolver=porkbun
+      - traefik.http.routers.endurain.service=endurain
+      - traefik.http.services.endurain.loadbalancer.server.port=8080
+    networks:
+      - endurain
+      - traefik
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      - POSTGRES_PASSWORD=${ENDURAIN_DB_PASSWORD}
+      - POSTGRES_DB=endurain
+      - POSTGRES_USER=endurain
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    # ports:
+    #   - "5432:5432"
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U endurain']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - /docker/endurain/postgres:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - endurain
+
+networks:
+  endurain:
+  traefik:
+    external: true
+# networks:
+#   default:
+#     external: true
+#     name: endurain_network

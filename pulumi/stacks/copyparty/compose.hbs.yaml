@@ -15,8 +15,8 @@ services:
       - traefik.http.routers.copyparty.entrypoints=https
       - traefik.http.routers.copyparty.tls=true
       - traefik.http.routers.copyparty.tls.certresolver=porkbun
-      - traefik.http.services.copyparty.loadbalancer.server.port=3939
       - traefik.http.routers.copyparty.service=copyparty
+      - traefik.http.services.copyparty.loadbalancer.server.port=3939
     networks:
       - traefik
 

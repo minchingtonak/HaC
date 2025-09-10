@@ -1,0 +1,39 @@
+services:
+  your_spotify:
+    image: lscr.io/linuxserver/your_spotify:latest
+    container_name: your_spotify
+    environment:
+      # cannot use root user for this image
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+      - APP_URL={{{APP_URL}}}
+      - SPOTIFY_PUBLIC={{{SECRET_SPOTIFY_CLIENT_ID}}}
+      - SPOTIFY_SECRET={{{SECRET_SPOTIFY_CLIENT_SECRET}}}
+      - CORS=all # {{{APP_URL}}}:80,{{{APP_URL}}}:443 # all
+      - MONGO_ENDPOINT=mongodb://mongo:27017/your_spotify
+    # ports:
+    #   - 80:80
+    #   - 443:443
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.yourspotify.rule=Host(`yourspotify.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.yourspotify.entrypoints=https
+      - traefik.http.routers.yourspotify.tls=true
+      - traefik.http.routers.yourspotify.tls.certresolver=porkbun
+      - traefik.http.routers.yourspotify.service=yourspotify
+      - traefik.http.services.yourspotify.loadbalancer.server.port=443
+    networks:
+      - traefik
+
+  mongo:
+    container_name: mongo
+    image: mongo:6
+    volumes:
+      - /docker/your_spotify/db:/data/db
+    restart: unless-stopped
+
+networks:
+  traefik:
+    external: true

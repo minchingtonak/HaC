@@ -1,0 +1,69 @@
+# docker compose for production
+# (minimal version: Docker Compose version 2.30.0)
+#
+# minimal application (for single user) only needs fittrackee and fittrackee-db containers.
+#
+# for multi-users application, uncomment the following containers:
+# - fittrackee-workers for email sending and user data export (EMAIL_URL must be set in .env to enable emails)
+# - fittrackee-redis container for API rate limits, user data export and email sending
+
+services:
+  fittrackee-db:
+    container_name: fittrackee-db
+    image: postgres:17-alpine
+    volumes:
+      - /docker/fittrackee/db:/var/lib/postgresql/data
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 15s
+      retries: 3
+    networks:
+      - internal_network
+    restart: unless-stopped
+
+  fittrackee:
+    container_name: fittrackee
+    image: fittrackee/fittrackee:latest
+    volumes:
+      - /docker/fittrackee/uploads:/usr/src/app/uploads
+      - /docker/fittrackee/logs:/usr/src/app/logs
+      - /docker/fittrackee/staticmap_cache:/usr/src/app/.staticmap_cache
+    env_file:
+      - .env
+    post_start:
+      - command: chown -R fittrackee:fittrackee /usr/src/app/uploads /usr/src/app/logs /usr/src/app/.staticmap_cache
+        user: root
+    # ports:
+    #   - "5000:5000"
+    command: 'sh docker-entrypoint.sh'
+    depends_on:
+      fittrackee-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider http://127.0.0.1:5000/api/ping || exit 1"]
+      interval: 5s
+      timeout: 15s
+      retries: 3
+    networks:
+      - external_network
+      - internal_network
+      - traefik
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.fittrackee.rule=Host(`fittrackee.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.fittrackee.entrypoints=https
+      - traefik.http.routers.fittrackee.tls=true
+      - traefik.http.routers.fittrackee.tls.certresolver=porkbun
+      - traefik.http.routers.fittrackee.service=fittrackee
+      - traefik.http.services.fittrackee.loadbalancer.server.port=5000
+
+networks:
+  external_network:
+  internal_network:
+    internal: true
+  traefik:
+    external: true

@@ -1,0 +1,37 @@
+services:
+  semaphore:
+    image: semaphoreui/semaphore:latest
+    container_name: semaphore
+    user: "0:0"
+    # ports:
+    #   - 3000:3000
+    environment:
+      SEMAPHORE_SCHEDULE_TIMEZONE: "America/Los_Angeles"
+      SEMAPHORE_DB_DIALECT: bolt
+      SEMAPHORE_ADMIN: "{{{SECRET_ADMIN_USERNAME}}}"
+      SEMAPHORE_ADMIN_PASSWORD: "{{{SECRET_ADMIN_PASSWORD}}}"
+      SEMAPHORE_ADMIN_NAME: "{{{SECRET_ADMIN_USERNAME}}}"
+      SEMAPHORE_ADMIN_EMAIL: "{{{SECRET_ADMIN_EMAIL}}}"
+      SEMAPHORE_SLACK_ALERT: "True"
+      SEMAPHORE_SLACK_URL: "{{{SLACK_WEBHOOK_URL}}}"
+    volumes:
+      - /docker/semaphore/data:/var/lib/semaphore
+      - /docker/semaphore/config:/etc/semaphore
+      - /docker/semaphore/tmp:/tmp/semaphore
+      # https://github.com/semaphoreui/semaphore/issues/2657#issuecomment-2799052323
+      - ../../tools/ansible/requirements.txt:/etc/semaphore/requirements.txt
+    restart: always
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.semaphore.rule=Host(`semaphore.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.semaphore.entrypoints=https
+      - traefik.http.routers.semaphore.tls=true
+      - traefik.http.routers.semaphore.tls.certresolver=porkbun
+      - traefik.http.routers.semaphore.service=semaphore
+      - traefik.http.services.semaphore.loadbalancer.server.port=3000
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

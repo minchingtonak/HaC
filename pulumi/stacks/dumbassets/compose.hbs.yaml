@@ -1,0 +1,31 @@
+services:
+  dumbassets:
+    container_name: dumbassets
+    image: dumbwareio/dumbassets:latest
+    restart: unless-stopped
+    # ports:
+    #   - ${DUMBASSETS_PORT:-3002}:3000
+    volumes:
+      - /docker/dumbassets:/app/data
+    environment:
+      NODE_ENV: ${DUMBASSETS_NODE_ENV:-production}
+      DEBUG: ${DUMBASSETS_DEBUG:-false}
+      SITE_TITLE: ${DUMBASSETS_SITE_TITLE:-DumbAssets}
+      BASE_URL: '{{{APP_URL}}}'
+      DUMBASSETS_PIN: ${DUMBASSETS_PIN:-1234}
+      ALLOWED_ORIGINS: ${DUMBASSETS_ALLOWED_ORIGINS:-*}
+      APPRISE_URL: ${DUMBASSETS_APPRISE_URL:-}
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dumbassets.rule=Host(`dumbassets.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.dumbassets.entrypoints=https
+      - traefik.http.routers.dumbassets.tls=true
+      - traefik.http.routers.dumbassets.tls.certresolver=porkbun
+      - traefik.http.routers.dumbassets.service=dumbassets
+      - traefik.http.services.dumbassets.loadbalancer.server.port=3000
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

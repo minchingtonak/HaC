@@ -1,0 +1,29 @@
+services:
+  stirling-pdf:
+    image: docker.stirlingpdf.com/stirlingtools/stirling-pdf:latest
+    # ports:
+    #   - '8080:8080'
+    volumes:
+      - /docker/stirling-pdf/trainingData:/usr/share/tessdata # Required for extra OCR languages
+      - /docker/stirling-pdf/extraConfigs:/configs
+      - /docker/stirling-pdf/customFiles:/customFiles/
+      - /docker/stirling-pdf/logs:/logs/
+      - /docker/stirling-pdf/pipeline:/pipeline/
+    environment:
+      - DOCKER_ENABLE_SECURITY=false
+      - LANGS=en_US
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.stirlingpdf.rule=Host(`stirlingpdf.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.stirlingpdf.entrypoints=https
+      - traefik.http.routers.stirlingpdf.tls=true
+      - traefik.http.routers.stirlingpdf.tls.certresolver=porkbun
+      - traefik.http.routers.stirlingpdf.service=stirlingpdf
+      - traefik.http.services.stirlingpdf.loadbalancer.server.port=8080
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

@@ -1,0 +1,27 @@
+services:
+  epub_to_audiobook:
+    image: ghcr.io/p0n1/epub_to_audiobook:latest
+    environment:
+      # for custom OpenAI-compatible endpoints
+      # OPENAI_BASE_URL: <your_openai_base_url>
+      OPENAI_API_KEY: "{{{OPENAI_API_KEY}}}"
+    # ports:
+    #   - "7860:7860"
+    volumes:
+      - /docker/epub-to-audiobook:/app
+    command: 'python3 /app_src/main_ui.py --host 0.0.0.0 --port 7860'
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.epubtoaudiobook.rule=Host(`epubtoaudiobook.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.epubtoaudiobook.entrypoints=https
+      - traefik.http.routers.epubtoaudiobook.tls=true
+      - traefik.http.routers.epubtoaudiobook.tls.certresolver=porkbun
+      - traefik.http.routers.epubtoaudiobook.service=epubtoaudiobook
+      - traefik.http.services.epubtoaudiobook.loadbalancer.server.port=7860
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

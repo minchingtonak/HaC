@@ -1,0 +1,94 @@
+services:
+  broker:
+    image: docker.io/library/redis:7
+    restart: unless-stopped
+    volumes:
+      - /docker/paperless-ngx/redisdata:/data
+
+  db:
+    image: docker.io/library/postgres:16
+    restart: unless-stopped
+    volumes:
+      - /docker/paperless-ngx/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: paperless
+      POSTGRES_USER: paperless
+      POSTGRES_PASSWORD: paperless
+
+  webserver:
+    image: ghcr.io/paperless-ngx/paperless-ngx:latest
+    restart: unless-stopped
+    depends_on:
+      - db
+      - broker
+    # ports:
+    #   - "8000:8000"
+    volumes:
+      - /mnt/documents/intake:/usr/src/paperless/consume
+      - /docker/paperless-ngx/data:/usr/src/paperless/data
+      - /docker/paperless-ngx/export:/usr/src/paperless/export
+      - /mnt/documents/paperless:/usr/src/paperless/media
+    user: 0:0
+    # https://docs.paperless-ngx.com/configuration
+    environment:
+      USERMAP_UID: 0
+      USERMAP_GID: 0
+      PAPERLESS_APP_TITLE: paperless-ngx
+      PAPERLESS_URL: '{{{APP_URL}}}'
+      PAPERLESS_REDIS: redis://broker:6379
+      PAPERLESS_DBHOST: db
+      PAPERLESS_TIME_ZONE: America/Los_Angeles
+      PAPERLESS_CONSUMPTION_DIR: /usr/src/paperless/consume
+      PAPERLESS_CONSUMER_RECURSIVE: true
+      PAPERLESS_DATA_DIR: /usr/src/paperless/data
+      PAPERLESS_EMPTY_TRASH_DIR: /usr/src/paperless/media/trash
+      PAPERLESS_EMPTY_TRASH_DELAY: 7
+      PAPERLESS_MEDIA_ROOT: /usr/src/paperless/media
+      # https://docs.paperless-ngx.com/advanced_usage/#file-name-handling
+      # use the following to migrate files after changing filename format: https://docs.paperless-ngx.com/administration/#renamer
+      # remove spaces from file/folder names
+      PAPERLESS_FILENAME_FORMAT: '{% filter replace(" ", "") %}{{ custom_fields.Category.value }}/{{ correspondent }}/{{ created }}_{{ title }}{% endfilter %}'
+      PAPERLESS_FILENAME_FORMAT_REMOVE_NONE: false
+      PAPERLESS_FILENAME_DATE_ORDER: YMD # check document filenames for dates in ISO-8601 format
+      PAPERLESS_LOGGING_DIR: /usr/src/paperless/data/log
+      PAPERLESS_OCR_CLEAN: clean
+      PAPERLESS_OCR_DESKEW: true
+      PAPERLESS_OCR_ROTATE_PAGES: true
+      PAPERLESS_OCR_OUTPUT_TYPE: pdfa
+      PAPERLESS_DATE_ORDER: MDY # check document content for dates in US format
+      # admin user credential config seems to have no effect
+      PAPERLESS_ADMIN_USER: '{{{SECRET_ADMIN_USERNAME}}}'
+      PAPERLESS_ADMIN_PASSWORD: '{{{SECRET_ADMIN_PASSWORD}}}'
+      PAPERLESS_WEBSERVER_WORKERS: 2
+      PAPERLESS_TIKA_ENABLED: 1
+      PAPERLESS_TIKA_GOTENBERG_ENDPOINT: http://gotenberg:3000
+      PAPERLESS_TIKA_ENDPOINT: http://tika:9998
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.paperlessngx.rule=Host(`paperless.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.paperlessngx.entrypoints=https
+      - traefik.http.routers.paperlessngx.tls=true
+      - traefik.http.routers.paperlessngx.tls.certresolver=porkbun
+      - traefik.http.routers.paperlessngx.service=paperlessngx
+      - traefik.http.services.paperlessngx.loadbalancer.server.port=8000
+    networks:
+      - traefik
+
+  gotenberg:
+    image: docker.io/gotenberg/gotenberg:8.20
+    restart: unless-stopped
+    # The gotenberg chromium route is used to convert .eml files. We do not
+    # want to allow external content like tracking pixels or even javascript.
+    command:
+      - 'gotenberg'
+      - '--api-timeout=600s'
+      - '--chromium-disable-javascript=true'
+      - '--chromium-allow-list=file:///tmp/.*'
+
+  tika:
+    image: docker.io/apache/tika:latest
+    restart: unless-stopped
+
+networks:
+  traefik:
+    external: true

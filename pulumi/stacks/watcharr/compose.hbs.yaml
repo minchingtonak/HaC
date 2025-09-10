@@ -1,0 +1,24 @@
+services:
+  watcharr:
+    image: ghcr.io/sbondco/watcharr:latest
+    container_name: watcharr
+    # ports:
+    #   - 3080:3080
+    volumes:
+      # Contains all of watcharr data (database & cache)
+      - /docker/watcharr:/data
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.watcharr.rule=Host(`watcharr.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.watcharr.entrypoints=https
+      - traefik.http.routers.watcharr.tls=true
+      - traefik.http.routers.watcharr.tls.certresolver=porkbun
+      - traefik.http.routers.watcharr.service=watcharr
+      - traefik.http.services.watcharr.loadbalancer.server.port=3080
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

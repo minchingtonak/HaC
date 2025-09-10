@@ -1,0 +1,27 @@
+services:
+  jellyseerr:
+    image: ghcr.io/fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    environment:
+      - LOG_LEVEL=debug
+      - TZ=America/Los_Angeles
+      - PORT=5055
+    # ports:
+    #   - 5055:5055
+    volumes:
+      - /docker/jellyseerr:/app/config
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.jellyseerr.rule=Host(`jellyseerr.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.jellyseerr.entrypoints=https
+      - traefik.http.routers.jellyseerr.tls=true
+      - traefik.http.routers.jellyseerr.tls.certresolver=porkbun
+      - traefik.http.routers.jellyseerr.service=jellyseerr
+      - traefik.http.services.jellyseerr.loadbalancer.server.port=5055
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

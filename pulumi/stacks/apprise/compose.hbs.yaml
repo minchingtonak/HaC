@@ -1,0 +1,32 @@
+services:
+  apprise:
+    image: caronc/apprise:latest
+    environment:
+      - APPRISE_WORKER_COUNT=1
+      - APPRISE_STATEFUL_MODE=simple
+      - APPRISE_DEFAULT_THEME=dark
+      - APPRISE_DEFAULT_CONFIG_ID=homelab
+      - PGID=0
+      - PUID=0
+    volumes:
+      - /docker/apprise/attach:/attach
+      - /docker/apprise/plugin:/plugin
+      - /docker/apprise/config:/config
+    restart: unless-stopped
+    # ports:
+    #   - 8000:8000
+    container_name: apprise
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.apprise.rule=Host(`apprise.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.apprise.entrypoints=https
+      - traefik.http.routers.apprise.tls=true
+      - traefik.http.routers.apprise.tls.certresolver=porkbun
+      - traefik.http.routers.apprise.service=apprise
+      - traefik.http.services.apprise.loadbalancer.server.port=8000
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

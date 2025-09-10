@@ -1,0 +1,30 @@
+services:
+  navidrome:
+    image: deluan/navidrome:latest
+    user: 0:0
+    # ports:
+    #   - "4533:4533"
+    restart: unless-stopped
+    environment:
+      ND_LASTFM_APIKEY: ${{{SECRET_LASTFM_APIKEY}}}
+      ND_LASTFM_SECRET: ${{{SECRET_LASTFM_SECRET}}}
+      # https://www.navidrome.org/docs/usage/configuration-options/#environment-variables
+      ND_DEFAULTTHEME: "Spotify-ish"
+      ND_DEFAULTUIVOLUME: 50
+    volumes:
+      - /docker/navidrome:/data
+      - /mnt/media/music:/music:ro
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.navidrome.rule=Host(`navidrome.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.navidrome.entrypoints=https
+      - traefik.http.routers.navidrome.tls=true
+      - traefik.http.routers.navidrome.tls.certresolver=porkbun
+      - traefik.http.routers.navidrome.service=navidrome
+      - traefik.http.services.navidrome.loadbalancer.server.port=4533
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

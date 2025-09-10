@@ -1,0 +1,37 @@
+services:
+  handbrake-server:
+    image: ghcr.io/thenickoftime/handbrake-web-server:latest
+    container_name: handbrake-web-server
+    user: 0:0
+    # ports:
+    #   - 9999:9999
+    volumes:
+      - /docker/handbrake-web/server:/data
+      - /mnt/media:/video # ensure this path is the same across all containers
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.handbrake.rule=Host(`handbrake.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.handbrake.entrypoints=https
+      - traefik.http.routers.handbrake.tls=true
+      - traefik.http.routers.handbrake.tls.certresolver=porkbun
+      - traefik.http.routers.handbrake.service=handbrake
+      - traefik.http.services.handbrake.loadbalancer.server.port=9999
+    networks:
+      - traefik
+
+  handbrake-worker:
+    image: ghcr.io/thenickoftime/handbrake-web-worker:latest
+    container_name: handbrake-web-worker
+    user: 0:0
+    environment:
+      - WORKER_ID=handbrake-worker # give your worker a unique name
+      - SERVER_URL=handbrake-server # change if setting up a standalone worker, prefix with http(s):// if necessary
+      - SERVER_PORT=9999 # change if using a reverse proxy or the port is otherwise different than above
+    volumes:
+      - /mnt/media:/video # ensure this path is the same across all containers
+    depends_on:
+      - handbrake-server
+
+networks:
+  traefik:
+    external: true

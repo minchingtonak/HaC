@@ -1,0 +1,23 @@
+services:
+  movie-roulette:
+    image: ghcr.io/sahara101/movie-roulette:latest
+    container_name: movie-roulette
+    # ports:
+    #   - "4000:4000"
+    volumes:
+      - /docker/movie-roulette:/app/data
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.movieroulette.rule=Host(`movieroulette.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.movieroulette.entrypoints=https
+      - traefik.http.routers.movieroulette.tls=true
+      - traefik.http.routers.movieroulette.tls.certresolver=porkbun
+      - traefik.http.routers.movieroulette.service=movieroulette
+      - traefik.http.services.movieroulette.loadbalancer.server.port=4000
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

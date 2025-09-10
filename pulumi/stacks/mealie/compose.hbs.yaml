@@ -23,8 +23,8 @@ services:
       - traefik.http.routers.mealie.entrypoints=https
       - traefik.http.routers.mealie.tls=true
       - traefik.http.routers.mealie.tls.certresolver=porkbun
-      - traefik.http.services.mealie.loadbalancer.server.port=9000
       - traefik.http.routers.mealie.service=mealie
+      - traefik.http.services.mealie.loadbalancer.server.port=9000
     networks:
       - traefik
 

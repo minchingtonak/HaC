@@ -1,0 +1,34 @@
+services:
+  code-server:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: code-server
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/Los_Angeles
+      # - PASSWORD=password #optional
+      # - HASHED_PASSWORD= #optional
+      - SUDO_PASSWORD=password #optional
+      # - SUDO_PASSWORD_HASH= #optional
+      - PROXY_DOMAIN=vibes.homelab.akmin.dev #optional
+      - DEFAULT_WORKSPACE=/config/workspace #optional
+      - PWA_APPNAME=vibes-code-server #optional
+    volumes:
+      - /docker/code-server/config:/config
+    # ports:
+    #   - 8443:8443
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.codeserver.rule=Host(`codeserver.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.codeserver.entrypoints=https
+      - traefik.http.routers.codeserver.tls=true
+      - traefik.http.routers.codeserver.tls.certresolver=porkbun
+      - traefik.http.routers.codeserver.service=codeserver
+      - traefik.http.services.codeserver.loadbalancer.server.port=8443
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

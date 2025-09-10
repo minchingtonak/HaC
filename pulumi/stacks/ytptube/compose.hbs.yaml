@@ -1,0 +1,27 @@
+services:
+  ytptube:
+    user: 0:0
+    image: ghcr.io/arabcoders/ytptube:latest
+    container_name: ytptube
+    restart: unless-stopped
+    # ports:
+    #   - "8081:8081"
+    volumes:
+      - /docker/ytptube/config:/config:rw
+      - /mnt/podcasts:/downloads:rw
+    tmpfs:
+      - /tmp
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.ytptube.rule=Host(`ytptube.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.ytptube.entrypoints=https
+      - traefik.http.routers.ytptube.tls=true
+      - traefik.http.routers.ytptube.tls.certresolver=porkbun
+      - traefik.http.routers.ytptube.service=ytptube
+      - traefik.http.services.ytptube.loadbalancer.server.port=8081
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

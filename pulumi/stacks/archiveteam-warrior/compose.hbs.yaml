@@ -1,0 +1,30 @@
+services:
+  archiveteam:
+    image: atdr.meo.ws/archiveteam/warrior-dockerfile
+    container_name: archiveteam-warrior
+    # ports:
+    #   - '8001:8001'
+    # https://wiki.archiveteam.org/index.php/ArchiveTeam_Warrior/Docker_environment_variables
+    environment:
+      - DOWNLOADER=akmin
+      - SELECTED_PROJECT=auto
+      - CONCURRENT_ITEMS=2
+    logging:
+      options:
+        max-size: 50m
+      driver: json-file
+    restart: on-failure
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.archiveteamwarrior.rule=Host(`archiveteamwarrior.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.archiveteamwarrior.entrypoints=https
+      - traefik.http.routers.archiveteamwarrior.tls=true
+      - traefik.http.routers.archiveteamwarrior.tls.certresolver=porkbun
+      - traefik.http.routers.archiveteamwarrior.service=archiveteamwarrior
+      - traefik.http.services.archiveteamwarrior.loadbalancer.server.port=8001
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

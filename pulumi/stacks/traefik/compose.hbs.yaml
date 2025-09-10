@@ -23,6 +23,7 @@ services:
       - --entrypoints.http.http.redirections.entrypoint.to=https
       - --entrypoints.http.http.redirections.entrypoint.scheme=https
       - --entrypoints.https.address=:443
+      - --entrypoints.slskd-listen.address=:50300
       - --providers.docker.endpoint=unix:///var/run/docker.sock
       - --providers.docker.exposedByDefault=false
       - --certificatesresolvers.porkbun.acme.email={{{SECRET_ACME_EMAIL}}}

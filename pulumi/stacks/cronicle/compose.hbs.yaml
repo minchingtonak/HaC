@@ -34,8 +34,8 @@ services:
       - traefik.http.routers.cronicle.entrypoints=https
       - traefik.http.routers.cronicle.tls=true
       - traefik.http.routers.cronicle.tls.certresolver=porkbun
-      - traefik.http.services.cronicle.loadbalancer.server.port=3012
       - traefik.http.routers.cronicle.service=cronicle
+      - traefik.http.services.cronicle.loadbalancer.server.port=3012
     networks:
       - traefik
 
