@@ -6,9 +6,9 @@ services:
     user: "0:10000"
     environment:
       - TZ=America/Los_Angeles
-      - CRONICLE_base_app_url=${CRONICLE_BASE_APP_URL}
-      - CRONICLE_custom_live_log_socket_url=${CRONICLE_BASE_APP_URL}
-      - CRONICLE_universal_web_hook=${SECRET_CRONICLE_UNIVERSAL_WEB_HOOK}
+      - CRONICLE_base_app_url={{{CRONICLE_BASE_APP_URL}}}
+      - CRONICLE_custom_live_log_socket_url={{{CRONICLE_BASE_APP_URL}}}
+      - CRONICLE_universal_web_hook={{{SECRET_CRONICLE_UNIVERSAL_WEB_HOOK}}}
     # ports:
     #   - "3012:3012"
     volumes:
@@ -30,7 +30,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.cronicle.rule=Host(`cronicle.${PARENT_CONTAINER_DOMAIN}`)
+      - traefik.http.routers.cronicle.rule=Host(`cronicle.{{{PARENT_CONTAINER_DOMAIN}}}`)
       - traefik.http.routers.cronicle.entrypoints=https
       - traefik.http.routers.cronicle.tls=true
       - traefik.http.routers.cronicle.tls.certresolver=porkbun

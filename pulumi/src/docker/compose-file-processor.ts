@@ -1,26 +1,8 @@
 import * as pulumi from '@pulumi/pulumi';
-import { EnvUtils } from '../utils/env-utils';
 
-export class ComposeFileProcessor {
+export class ComposeFileUtils {
   static SERVICE_DIRECTORY_FOR = (serviceName: string) =>
     `./stacks/${serviceName}`;
-
-  static COMPOSE_FILE_FOR = (serviceName: string) =>
-    `${ComposeFileProcessor.SERVICE_DIRECTORY_FOR(serviceName)}/compose.yaml`;
-
-  static getStringifiedEnvVarsForService(
-    serviceName: string,
-    hostname?: string,
-  ) {
-    const serviceConfig = new pulumi.Config(
-      hostname ? `${hostname}#${serviceName}` : serviceName,
-    );
-    const composeFilePath = ComposeFileProcessor.COMPOSE_FILE_FOR(serviceName);
-    return EnvUtils.getStringifiedEnvVarsFromFile(
-      composeFilePath,
-      serviceConfig,
-    );
-  }
 
   private static UNSET_VARIABLE_MARKER = 'variable is not set';
 
@@ -32,7 +14,7 @@ export class ComposeFileProcessor {
     const missingVars = outputs.stderr
       .split('\n')
       .filter((line) =>
-        line.includes(ComposeFileProcessor.UNSET_VARIABLE_MARKER),
+        line.includes(ComposeFileUtils.UNSET_VARIABLE_MARKER),
       );
 
     if (missingVars.length) {

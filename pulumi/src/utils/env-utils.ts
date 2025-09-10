@@ -1,5 +1,4 @@
 import * as pulumi from '@pulumi/pulumi';
-import * as fs from 'node:fs';
 
 /**
  * Utility functions for handling environment variables in various contexts
@@ -142,34 +141,5 @@ export class EnvUtils {
     }
 
     return envMap;
-  }
-
-  /**
-   * Assembles a variable map from a file template and Pulumi config
-   * @param filePath Path to the template file
-   * @param config The Pulumi config instance to read from
-   * @returns Map of variable names to their values
-   */
-  static assembleVariableMapFromFile(
-    filePath: string,
-    config: pulumi.Config,
-  ): Record<string, string | pulumi.Output<string>> {
-    const fileContent = fs.readFileSync(filePath, { encoding: 'utf-8' });
-    const variableNames = EnvUtils.extractVariableNames(fileContent);
-    return EnvUtils.assembleVariableMapFromConfig(config, variableNames);
-  }
-
-  /**
-   * Convenience method to get stringified environment variables from a file template
-   * @param filePath Path to the template file
-   * @param config The Pulumi config instance to read from
-   * @returns A Pulumi Output containing the stringified environment variables
-   */
-  static getStringifiedEnvVarsFromFile(
-    filePath: string,
-    config: pulumi.Config,
-  ): pulumi.Output<string> {
-    const envMap = EnvUtils.assembleVariableMapFromFile(filePath, config);
-    return EnvUtils.stringifyEnvForCommand(envMap);
   }
 }

@@ -2,7 +2,7 @@ import * as pulumi from '@pulumi/pulumi';
 import * as command from '@pulumi/command';
 import * as path from 'node:path';
 import { HandlebarsTemplateDirectory } from '../templates/handlebars-template-directory';
-import { ComposeFileProcessor } from './compose-file-processor';
+import { ComposeFileUtils } from './compose-file-processor';
 import { HostConfigToml } from '../proxmox/host-config-schema';
 
 export type ServiceName = string;
@@ -35,7 +35,7 @@ export class ComposeStack extends pulumi.ComponentResource {
   ) {
     super(ComposeStack.RESOURCE_TYPE, name, {}, opts);
 
-    const serviceDir = ComposeFileProcessor.SERVICE_DIRECTORY_FOR(
+    const serviceDir = ComposeFileUtils.SERVICE_DIRECTORY_FOR(
       args.serviceName,
     );
 
@@ -58,8 +58,6 @@ export class ComposeStack extends pulumi.ComponentResource {
         parent: this,
       },
     );
-
-    // handle template files
 
     this.handlebarsTemplateDirectory = new HandlebarsTemplateDirectory(
       `${args.hostConfig.hostname}-${args.serviceName}-handlebars-template-folder`,
@@ -91,20 +89,11 @@ export class ComposeStack extends pulumi.ComponentResource {
         );
     }
 
-    // handle compose stack environment variables
-
-    const stringifiedEnv = pulumi.secret(
-      ComposeFileProcessor.getStringifiedEnvVarsForService(
-        args.serviceName,
-        args.hostConfig.hostname,
-      ),
-    );
-
     this.deployService = new command.remote.Command(
       `${args.hostConfig.hostname}-deploy-${args.serviceName}-service`,
       {
-        create: pulumi.interpolate`cd ${remoteServiceDirectory} && ${stringifiedEnv} docker compose up -d --force-recreate`,
-        delete: pulumi.interpolate`cd ${remoteServiceDirectory} && ${stringifiedEnv} docker compose down`,
+        create: `cd ${remoteServiceDirectory} && docker compose up -d --force-recreate`,
+        delete: `cd ${remoteServiceDirectory} && docker compose down`,
         addPreviousOutputInEnv: false,
         triggers: [this.serviceDirectory],
         connection: args.connection,
@@ -113,8 +102,8 @@ export class ComposeStack extends pulumi.ComponentResource {
         parent: this,
         dependsOn: this.copyServiceToRemote,
         hooks: {
-          afterCreate: [ComposeFileProcessor.checkForMissingVariables],
-          afterUpdate: [ComposeFileProcessor.checkForMissingVariables],
+          afterCreate: [ComposeFileUtils.checkForMissingVariables],
+          afterUpdate: [ComposeFileUtils.checkForMissingVariables],
         },
         deleteBeforeReplace: true,
         additionalSecretOutputs: ['stdout', 'stderr'],

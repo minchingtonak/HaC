@@ -11,8 +11,8 @@ services:
       - /docker/traefik/letsencrypt:/letsencrypt
       - /docker/traefik:/etc/traefik
     environment:
-      - PORKBUN_API_KEY=${SECRET_PORKBUN_API_KEY}
-      - PORKBUN_SECRET_API_KEY=${SECRET_PORKBUN_SECRET_API_KEY}
+      - PORKBUN_API_KEY={{{SECRET_PORKBUN_API_KEY}}}
+      - PORKBUN_SECRET_API_KEY={{{SECRET_PORKBUN_SECRET_API_KEY}}}
     command: # traefik.yml (static) configuration goes below
       - --api=true
       - --api.dashboard=true
@@ -25,7 +25,7 @@ services:
       - --entrypoints.https.address=:443
       - --providers.docker.endpoint=unix:///var/run/docker.sock
       - --providers.docker.exposedByDefault=false
-      - --certificatesresolvers.porkbun.acme.email=${SECRET_ACME_EMAIL}
+      - --certificatesresolvers.porkbun.acme.email={{{SECRET_ACME_EMAIL}}}
       - --certificatesresolvers.porkbun.acme.storage=/letsencrypt/acme.json
       - --certificatesresolvers.porkbun.acme.caserver=https://acme-v02.api.letsencrypt.org/directory # prod
       # - --certificatesresolvers.porkbun.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory # staging
@@ -37,21 +37,21 @@ services:
       - traefik.enable=true
       # misc
       # generate credentials: echo $(htpasswd -nB akmin <password>) (or input password via stdin)
-      - traefik.http.middlewares.traefik-auth.basicauth.users=${SECRET_TRAEFIK_DASHBOARD_CREDENTIALS}
+      - traefik.http.middlewares.traefik-auth.basicauth.users={{{SECRET_TRAEFIK_DASHBOARD_CREDENTIALS}}}
       - traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https
       - traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https
       # http
       - traefik.http.routers.traefik.entrypoints=http
       - traefik.http.routers.traefik.middlewares=traefik-https-redirect
-      - traefik.http.routers.traefik.rule=Host(`traefik.${PARENT_CONTAINER_DOMAIN}`)
+      - traefik.http.routers.traefik.rule=Host(`traefik.{{{PARENT_CONTAINER_DOMAIN}}}`)
       # https
       - traefik.http.routers.traefik-secure.entrypoints=https
       - traefik.http.routers.traefik-secure.middlewares=traefik-auth
-      - traefik.http.routers.traefik-secure.rule=Host(`traefik.${PARENT_CONTAINER_DOMAIN}`)
+      - traefik.http.routers.traefik-secure.rule=Host(`traefik.{{{PARENT_CONTAINER_DOMAIN}}}`)
       - traefik.http.routers.traefik-secure.tls=true
       - traefik.http.routers.traefik-secure.tls.certresolver=porkbun
-      - traefik.http.routers.traefik-secure.tls.domains[0].main=${PARENT_CONTAINER_DOMAIN}
-      - traefik.http.routers.traefik-secure.tls.domains[0].sans=*.${PARENT_CONTAINER_DOMAIN}
+      - traefik.http.routers.traefik-secure.tls.domains[0].main={{{PARENT_CONTAINER_DOMAIN}}}
+      - traefik.http.routers.traefik-secure.tls.domains[0].sans=*.{{{PARENT_CONTAINER_DOMAIN}}}
       - traefik.http.routers.traefik-secure.service=api@internal
     networks:
       - traefik

@@ -2,6 +2,7 @@ import * as pulumi from '@pulumi/pulumi';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as Handlebars from 'handlebars';
+import { EnvUtils } from '../utils/env-utils';
 
 export interface TemplateContext {
   [key: string]: string | pulumi.Output<string>;
@@ -80,15 +81,14 @@ export class TemplateProcessor {
 
     const variables = TemplateProcessor.discoverVariables(templateContent);
 
-    const context = TemplateProcessor.buildTemplateContext(
+    const context = EnvUtils.assembleVariableMapFromConfig(
       new pulumi.Config(hostname ? `${hostname}#${serviceName}` : serviceName),
       variables,
     );
 
-    const template = Handlebars.compile(templateContent);
-    const renderedContent = pulumi.all(context).apply((resolvedContext) => {
-      return template(resolvedContext);
-    });
+    const template =
+      Handlebars.compile<Record<string, string>>(templateContent);
+    const renderedContent = pulumi.all(context).apply(template);
 
     const finalOutputPath = TemplateProcessor.getRemoteOutputPath(
       templatePath,
@@ -216,27 +216,6 @@ export class TemplateProcessor {
     walkAST(ast.body);
 
     return Array.from(variables);
-  }
-
-  private static buildTemplateContext(
-    serviceConfig: pulumi.Config,
-    variables: string[],
-  ): TemplateContext {
-    const context: TemplateContext = {};
-
-    for (const varName of variables) {
-      if (
-        varName
-          .toLocaleUpperCase()
-          .startsWith(TemplateProcessor.SECRET_VARIABLE_PREFIX)
-      ) {
-        context[varName] = serviceConfig.requireSecret(varName);
-      } else {
-        context[varName] = serviceConfig.require(varName);
-      }
-    }
-
-    return context;
   }
 
   private static readonly FILENAME_REPLACE_PATTERN = () =>
