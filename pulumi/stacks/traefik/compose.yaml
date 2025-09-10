@@ -43,15 +43,15 @@ services:
       # http
       - traefik.http.routers.traefik.entrypoints=http
       - traefik.http.routers.traefik.middlewares=traefik-https-redirect
-      - traefik.http.routers.traefik.rule=Host(`traefik.${TRAEFIK_SSL_DOMAIN_BASE}`)
+      - traefik.http.routers.traefik.rule=Host(`traefik.${CONTAINER_DOMAIN}`)
       # https
       - traefik.http.routers.traefik-secure.entrypoints=https
       - traefik.http.routers.traefik-secure.middlewares=traefik-auth
-      - traefik.http.routers.traefik-secure.rule=Host(`traefik.${TRAEFIK_SSL_DOMAIN_BASE}`)
+      - traefik.http.routers.traefik-secure.rule=Host(`traefik.${CONTAINER_DOMAIN}`)
       - traefik.http.routers.traefik-secure.tls=true
       - traefik.http.routers.traefik-secure.tls.certresolver=porkbun
-      - traefik.http.routers.traefik-secure.tls.domains[0].main=${TRAEFIK_SSL_DOMAIN_BASE}
-      - traefik.http.routers.traefik-secure.tls.domains[0].sans=*.${TRAEFIK_SSL_DOMAIN_BASE}
+      - traefik.http.routers.traefik-secure.tls.domains[0].main=${CONTAINER_DOMAIN}
+      - traefik.http.routers.traefik-secure.tls.domains[0].sans=*.${CONTAINER_DOMAIN}
       - traefik.http.routers.traefik-secure.service=api@internal
     networks:
       - traefik

@@ -11,7 +11,7 @@ services:
       - /mnt:/void
     labels:
       - traefik.enable=true
-      - traefik.http.routers.copyparty.rule=Host(`copyparty.${TRAEFIK_SSL_DOMAIN_BASE}`)
+      - traefik.http.routers.copyparty.rule=Host(`copyparty.${CONTAINER_DOMAIN}`)
       - traefik.http.routers.copyparty.entrypoints=https
       - traefik.http.routers.copyparty.tls=true
       - traefik.http.routers.copyparty.tls.certresolver=porkbun
