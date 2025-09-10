@@ -3,7 +3,6 @@ hostname = "apprise-pulumi"
 enabled = true
 
 description = "lightweight file-based notifications server"
-tags = ["notifications"]
 services = ["traefik", "apprise"]
 
 [cpu]

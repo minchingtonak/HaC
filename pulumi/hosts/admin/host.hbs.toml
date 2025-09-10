@@ -3,7 +3,6 @@ hostname = "admin-pulumi"
 enabled = false
 
 description = "homelab administration-related apps"
-tags = ["administration", "ansible"]
 services = ["traefik", "semaphore"]
 
 [cpu]

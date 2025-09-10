@@ -3,7 +3,6 @@ hostname = "music-pulumi"
 enabled = false
 
 description = "assorted audio management apps"
-tags = ["music", "download"]
 services = ["traefik", "audiobookshelf", "navidrome", "slskd", "your-spotify"]
 
 [cpu]

@@ -76,7 +76,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
         nodeName: args.provider.pveNodeName,
         vmId: args.id,
         description: args.description ?? 'managed by pulumi',
-        tags: ['pulumi', ...(args.tags ?? [])],
+        tags: [...(args.services ?? []), ...(args.tags ?? [])],
         unprivileged: true,
         startOnBoot: true,
         protection: false,

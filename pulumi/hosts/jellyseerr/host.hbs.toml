@@ -3,7 +3,6 @@ hostname = "jellyseerr-pulumi"
 enabled = false
 
 description = "easy to use media recommendation and request app"
-tags = ["recommendation", "media-requests"]
 services = ["traefik", "jellyseerr"]
 
 [cpu]

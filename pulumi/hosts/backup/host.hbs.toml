@@ -3,7 +3,6 @@ hostname = "backup-pulumi"
 enabled = false
 
 description = "various backup-related services"
-tags = ["backup", "cron"]
 services = ["traefik", "backrest", "cronicle"]
 
 [cpu]

@@ -3,7 +3,6 @@ hostname = "copyparty-pulumi"
 enabled = true
 
 description = "copyparty lightweight fileserver container"
-tags = ["fileserver", "fileshare"]
 services = ["traefik", "copyparty"]
 
 [cpu]

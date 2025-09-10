@@ -3,7 +3,6 @@ hostname = "archiver-pulumi"
 enabled = true
 
 description = "worker for archive team warrior"
-tags = ["archive"]
 services = ["traefik", "archiveteam-warrior"]
 
 [cpu]

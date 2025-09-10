@@ -3,7 +3,6 @@ hostname = "immich-pulumi"
 enabled = false
 
 description = "private image server"
-tags = ["photo"]
 services = ["traefik", "immich"]
 
 [cpu]

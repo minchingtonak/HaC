@@ -2,8 +2,7 @@ id = 208
 hostname = "tools-pulumi"
 enabled = true
 
-description = "private image server"
-tags = ["tools"]
+description = "swiss army knife array of utility tools"
 services = [
     "traefik",
     "cyberchef",

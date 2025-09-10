@@ -3,7 +3,6 @@ hostname = "life-pulumi"
 enabled = false
 
 description = "life tracking apps"
-tags = ["tracking"]
 services = ["traefik", "dawarich", "fittrackee", "mealie", "memos", "wallos"]
 
 [cpu]

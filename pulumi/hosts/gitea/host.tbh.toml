@@ -3,7 +3,6 @@ hostname = "gitea-pulumi"
 enabled = false
 
 description = "lightweight private git server and github mirror"
-tags = ["git", "mirror"]
 services = ["traefik", "gitea"]
 
 [cpu]

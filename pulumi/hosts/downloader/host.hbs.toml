@@ -3,7 +3,6 @@ hostname = "downloader-pulumi"
 enabled = false
 
 description = "misc downloading tools"
-tags = ["tools", "download"]
 services = ["traefik", "ytptube"]
 
 [cpu]

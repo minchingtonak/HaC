@@ -3,7 +3,6 @@ hostname = "dashboard-pulumi"
 enabled = false
 
 description = "homelab dashboard"
-tags = ["dashboard"]
 services = ["traefik", "homarr"]
 
 [cpu]
