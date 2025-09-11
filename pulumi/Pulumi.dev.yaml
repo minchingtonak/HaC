@@ -1,5 +1,6 @@
 encryptionsalt: v1:La9ewCKaH1M=:v1:gGxhP+gJa+ava6K3:01DP1sSJVBgXXyvdrsmPjb+wDq7NTw==
 config:
+  # homelab
   homelab-pve:pveNodeName: homelab
   homelab-pve:imageTemplateDatastoreId: local
   homelab-pve:rootContainerDomain: akmin.dev
@@ -22,6 +23,7 @@ config:
     secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
   homelab-pve:porkbunSecretKey:
     secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
+  # archiver
   archiver-pulumi:CONTAINER_DOMAIN: archiver-pulumi.pulumi.homelab.akmin.dev
   archiver-pulumi#traefik:SECRET_PORKBUN_API_KEY:
     secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
@@ -29,8 +31,13 @@ config:
     secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
   archiver-pulumi#traefik:SECRET_ACME_EMAIL:
     secure: v1:m7HfBcH/6BQpNaVt:YiUVsRksYvTgMvzLqQRUHulFKOHOZXpLpZvM/So=
-  archiver-pulumi#traefik:SECRET_TRAEFIK_DASHBOARD_CREDENTIALS:
+  archiver-pulumi#traefik:SECRET_DASHBOARD_CREDENTIALS:
     secure: v1:aa25tD89mZWe4xmC:2nwTF58I51T0oKH52cdWLcHfsrAW87XFdex9bCobX/hAoIKultlUwq6WB7odz82sr6j4zavf9zpztxzqx3ZNHJbX4iUnAeg7mrSyPOFSeIMSWg==
+  archiver-pulumi#traefik:SECRET_DASHBOARD_USER:
+    secure: v1:V/ERb4TyyAilmkjJ:Ec6Fkpgs67GCQAgLbPi+C20M6uik
+  archiver-pulumi#traefik:SECRET_DASHBOARD_PASSWORD:
+    secure: v1:15u5yAK/12mA8U/T:XXP6k8FP7xZPVzVP4os1n6m40D+6PLoYL3e1+hnejmQGkhOu
+  # copyparty
   copyparty-pulumi:CONTAINER_DOMAIN: copyparty-pulumi.pulumi.homelab.akmin.dev
   copyparty-pulumi#traefik:SECRET_PORKBUN_API_KEY:
     secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
@@ -38,8 +45,13 @@ config:
     secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
   copyparty-pulumi#traefik:SECRET_ACME_EMAIL:
     secure: v1:m7HfBcH/6BQpNaVt:YiUVsRksYvTgMvzLqQRUHulFKOHOZXpLpZvM/So=
-  copyparty-pulumi#traefik:SECRET_TRAEFIK_DASHBOARD_CREDENTIALS:
+  copyparty-pulumi#traefik:SECRET_DASHBOARD_CREDENTIALS:
     secure: v1:aa25tD89mZWe4xmC:2nwTF58I51T0oKH52cdWLcHfsrAW87XFdex9bCobX/hAoIKultlUwq6WB7odz82sr6j4zavf9zpztxzqx3ZNHJbX4iUnAeg7mrSyPOFSeIMSWg==
+  copyparty-pulumi#traefik:SECRET_DASHBOARD_USER:
+    secure: v1:V/ERb4TyyAilmkjJ:Ec6Fkpgs67GCQAgLbPi+C20M6uik
+  copyparty-pulumi#traefik:SECRET_DASHBOARD_PASSWORD:
+    secure: v1:15u5yAK/12mA8U/T:XXP6k8FP7xZPVzVP4os1n6m40D+6PLoYL3e1+hnejmQGkhOu
+  # tools
   tools-pulumi:CONTAINER_DOMAIN: tools-pulumi.pulumi.homelab.akmin.dev
   tools-pulumi#traefik:SECRET_PORKBUN_API_KEY:
     secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
@@ -47,8 +59,13 @@ config:
     secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
   tools-pulumi#traefik:SECRET_ACME_EMAIL:
     secure: v1:m7HfBcH/6BQpNaVt:YiUVsRksYvTgMvzLqQRUHulFKOHOZXpLpZvM/So=
-  tools-pulumi#traefik:SECRET_TRAEFIK_DASHBOARD_CREDENTIALS:
+  tools-pulumi#traefik:SECRET_DASHBOARD_CREDENTIALS:
     secure: v1:aa25tD89mZWe4xmC:2nwTF58I51T0oKH52cdWLcHfsrAW87XFdex9bCobX/hAoIKultlUwq6WB7odz82sr6j4zavf9zpztxzqx3ZNHJbX4iUnAeg7mrSyPOFSeIMSWg==
+  tools-pulumi#traefik:SECRET_DASHBOARD_USER:
+    secure: v1:V/ERb4TyyAilmkjJ:Ec6Fkpgs67GCQAgLbPi+C20M6uik
+  tools-pulumi#traefik:SECRET_DASHBOARD_PASSWORD:
+    secure: v1:15u5yAK/12mA8U/T:XXP6k8FP7xZPVzVP4os1n6m40D+6PLoYL3e1+hnejmQGkhOu
+  # apprise
   apprise-pulumi:CONTAINER_DOMAIN: apprise-pulumi.pulumi.homelab.akmin.dev
   apprise-pulumi#traefik:SECRET_PORKBUN_API_KEY:
     secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
@@ -56,33 +73,78 @@ config:
     secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
   apprise-pulumi#traefik:SECRET_ACME_EMAIL:
     secure: v1:m7HfBcH/6BQpNaVt:YiUVsRksYvTgMvzLqQRUHulFKOHOZXpLpZvM/So=
-  apprise-pulumi#traefik:SECRET_TRAEFIK_DASHBOARD_CREDENTIALS:
+  apprise-pulumi#traefik:SECRET_DASHBOARD_CREDENTIALS:
     secure: v1:aa25tD89mZWe4xmC:2nwTF58I51T0oKH52cdWLcHfsrAW87XFdex9bCobX/hAoIKultlUwq6WB7odz82sr6j4zavf9zpztxzqx3ZNHJbX4iUnAeg7mrSyPOFSeIMSWg==
-  cronicle-pulumi:CONTAINER_DOMAIN: cronicle-pulumi.pulumi.homelab.akmin.dev
-  cronicle-pulumi#traefik:SECRET_PORKBUN_API_KEY:
-    secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
-  cronicle-pulumi#traefik:SECRET_PORKBUN_SECRET_API_KEY:
-    secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
-  cronicle-pulumi#traefik:SECRET_ACME_EMAIL:
-    secure: v1:m7HfBcH/6BQpNaVt:YiUVsRksYvTgMvzLqQRUHulFKOHOZXpLpZvM/So=
-  cronicle-pulumi#traefik:SECRET_TRAEFIK_DASHBOARD_CREDENTIALS:
-    secure: v1:aa25tD89mZWe4xmC:2nwTF58I51T0oKH52cdWLcHfsrAW87XFdex9bCobX/hAoIKultlUwq6WB7odz82sr6j4zavf9zpztxzqx3ZNHJbX4iUnAeg7mrSyPOFSeIMSWg==
-  cronicle-pulumi#cronicle:SECRET_B2_ACCOUNT_ID:
-    secure: v1:NV+g80iUpRXDXKxH:wIKyVkc8oAelpyd/VJL1OniVzHB8EJ89PXusTdPVYj2gQFQ7PE7k+B0=
-  cronicle-pulumi#cronicle:SECRET_B2_ACCOUNT_KEY:
-    secure: v1:KizcajXuoIQS9RBs:xWhD7CtabpiC++zF38W8snyTLXkxTT+jeefzt5zupN+myMqMm1buxQ4zWTPQQVY=
-  cronicle-pulumi#cronicle:SECRET_B2_EU_ACCOUNT_ID:
-    secure: v1:SxP/vasdeAL6ipQS:1+LBAHcByyqi6tCzja4CMZ+RKekkORCgt4r2vhDkwqtgXkZLkmlHHdM=
-  cronicle-pulumi#cronicle:SECRET_B2_EU_ACCOUNT_KEY:
-    secure: v1:pBsI5ni0nPIeDKwO:Hhp06vRV3ZjpQaHR0T06+V9ypJGiVjwNnVAKz+6AqHeqihtxj5oro3Kw7WJ5kuE=
-  cronicle-pulumi#cronicle:SECRET_RESTIC_PASSWORD:
-    secure: v1:K5gnxDKtlcOHst6z:qsdkR4AOO+5As2VslPO6ERzlJlA01xcTglsp6Ct8i374V6G/TqwUifpw+8gKHiU30SPJMfsI3dF7xfFFAnAcPg==
-  cronicle-pulumi#cronicle:RESTIC_CHECK_PERCENTAGE: '5'
-  cronicle-pulumi#cronicle:SECRET_B2_HEALTHCHECK_URL:
-    secure: v1:+wCA5m2zsGeupOzU:0TqufLdbUSRVv6HMHfsCjYF5q/q6d8TWTGYmIbPDTAB4BjV/sq8uXJdZswAeIH1MzC7Bz418ppHq/1JrlyHPDvlm+Z0/GOvK
-  cronicle-pulumi#cronicle:CRONICLE_BASE_APP_URL: https://cronicle.cronicle-pulumi.pulumi.homelab.akmin.dev
-  cronicle-pulumi#cronicle:SECRET_CRONICLE_UNIVERSAL_WEB_HOOK:
-    secure: v1:UiKAJNHijNn0sxiS:QWspnq95k6UcAZ6hxzMQw3LsE3JDfDdsjxx2gB0s2ChJ3nTj0LRmcuqTdF6PWCQrjlOhP5KOM2XFniDlF/4bOUpwOkioAdB+W3dwoepydWEpxk2poFWxZHEs0aznDstYeQ==
-  cronicle-pulumi#mealie:MEALIE_BASE_URL: https://mealie.cronicle-pulumi.pulumi.homelab.akmin.dev/
+  apprise-pulumi#traefik:SECRET_DASHBOARD_USER:
+    secure: v1:V/ERb4TyyAilmkjJ:Ec6Fkpgs67GCQAgLbPi+C20M6uik
+  apprise-pulumi#traefik:SECRET_DASHBOARD_PASSWORD:
+    secure: v1:15u5yAK/12mA8U/T:XXP6k8FP7xZPVzVP4os1n6m40D+6PLoYL3e1+hnejmQGkhOu
   apprise-pulumi#apprise:SECRET_SERVARR_SLACK_WEBHOOK:
     secure: v1:WsS7ZU2EH2dvJwmu:nrRyndrzO45Te8/ARtzdo3bDzdc3jRDoZNWUNyO7qWcV/AFTRVhO+bNRMoc3VWyTz2e8abYC3aUYy474nnzTpUgs62S/SMI0cBLagEDf/YExO/QvpZ/KXTC6cca4ea8jsw==
+  # admin
+  admin-pulumi:CONTAINER_DOMAIN: admin-pulumi.pulumi.homelab.akmin.dev
+  admin-pulumi#traefik:SECRET_PORKBUN_API_KEY:
+    secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
+  admin-pulumi#traefik:SECRET_PORKBUN_SECRET_API_KEY:
+    secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
+  admin-pulumi#traefik:SECRET_ACME_EMAIL:
+    secure: v1:m7HfBcH/6BQpNaVt:YiUVsRksYvTgMvzLqQRUHulFKOHOZXpLpZvM/So=
+  admin-pulumi#traefik:SECRET_DASHBOARD_CREDENTIALS:
+    secure: v1:aa25tD89mZWe4xmC:2nwTF58I51T0oKH52cdWLcHfsrAW87XFdex9bCobX/hAoIKultlUwq6WB7odz82sr6j4zavf9zpztxzqx3ZNHJbX4iUnAeg7mrSyPOFSeIMSWg==
+  admin-pulumi#traefik:SECRET_DASHBOARD_USER:
+    secure: v1:V/ERb4TyyAilmkjJ:Ec6Fkpgs67GCQAgLbPi+C20M6uik
+  admin-pulumi#traefik:SECRET_DASHBOARD_PASSWORD:
+    secure: v1:15u5yAK/12mA8U/T:XXP6k8FP7xZPVzVP4os1n6m40D+6PLoYL3e1+hnejmQGkhOu
+  # gitea
+  gitea-pulumi:CONTAINER_DOMAIN: gitea-pulumi.pulumi.homelab.akmin.dev
+  gitea-pulumi#traefik:SECRET_PORKBUN_API_KEY:
+    secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
+  gitea-pulumi#traefik:SECRET_PORKBUN_SECRET_API_KEY:
+    secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
+  gitea-pulumi#traefik:SECRET_ACME_EMAIL:
+    secure: v1:m7HfBcH/6BQpNaVt:YiUVsRksYvTgMvzLqQRUHulFKOHOZXpLpZvM/So=
+  gitea-pulumi#traefik:SECRET_DASHBOARD_CREDENTIALS:
+    secure: v1:aa25tD89mZWe4xmC:2nwTF58I51T0oKH52cdWLcHfsrAW87XFdex9bCobX/hAoIKultlUwq6WB7odz82sr6j4zavf9zpztxzqx3ZNHJbX4iUnAeg7mrSyPOFSeIMSWg==
+  gitea-pulumi#traefik:SECRET_DASHBOARD_USER:
+    secure: v1:V/ERb4TyyAilmkjJ:Ec6Fkpgs67GCQAgLbPi+C20M6uik
+  gitea-pulumi#traefik:SECRET_DASHBOARD_PASSWORD:
+    secure: v1:15u5yAK/12mA8U/T:XXP6k8FP7xZPVzVP4os1n6m40D+6PLoYL3e1+hnejmQGkhOu
+  # cronicle-pulumi:CONTAINER_DOMAIN: cronicle-pulumi.pulumi.homelab.akmin.dev
+  # cronicle-pulumi#traefik:SECRET_PORKBUN_API_KEY:
+  #   secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
+  # cronicle-pulumi#traefik:SECRET_PORKBUN_SECRET_API_KEY:
+  #   secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
+  # cronicle-pulumi#traefik:SECRET_ACME_EMAIL:
+  #   secure: v1:m7HfBcH/6BQpNaVt:YiUVsRksYvTgMvzLqQRUHulFKOHOZXpLpZvM/So=
+  # cronicle-pulumi#traefik:SECRET_DASHBOARD_CREDENTIALS:
+  #   secure: v1:aa25tD89mZWe4xmC:2nwTF58I51T0oKH52cdWLcHfsrAW87XFdex9bCobX/hAoIKultlUwq6WB7odz82sr6j4zavf9zpztxzqx3ZNHJbX4iUnAeg7mrSyPOFSeIMSWg==
+  # cronicle-pulumi#traefik:SECRET_DASHBOARD_USER:
+  #   secure: v1:V/ERb4TyyAilmkjJ:Ec6Fkpgs67GCQAgLbPi+C20M6uik
+  # cronicle-pulumi#traefik:SECRET_DASHBOARD_PASSWORD:
+  #   secure: v1:15u5yAK/12mA8U/T:XXP6k8FP7xZPVzVP4os1n6m40D+6PLoYL3e1+hnejmQGkhOu
+  # cronicle-pulumi#cronicle:SECRET_B2_ACCOUNT_ID:
+  #   secure: v1:NV+g80iUpRXDXKxH:wIKyVkc8oAelpyd/VJL1OniVzHB8EJ89PXusTdPVYj2gQFQ7PE7k+B0=
+  # cronicle-pulumi#cronicle:SECRET_B2_ACCOUNT_KEY:
+  #   secure: v1:KizcajXuoIQS9RBs:xWhD7CtabpiC++zF38W8snyTLXkxTT+jeefzt5zupN+myMqMm1buxQ4zWTPQQVY=
+  # cronicle-pulumi#cronicle:SECRET_B2_EU_ACCOUNT_ID:
+  #   secure: v1:SxP/vasdeAL6ipQS:1+LBAHcByyqi6tCzja4CMZ+RKekkORCgt4r2vhDkwqtgXkZLkmlHHdM=
+  # cronicle-pulumi#cronicle:SECRET_B2_EU_ACCOUNT_KEY:
+  #   secure: v1:pBsI5ni0nPIeDKwO:Hhp06vRV3ZjpQaHR0T06+V9ypJGiVjwNnVAKz+6AqHeqihtxj5oro3Kw7WJ5kuE=
+  # cronicle-pulumi#cronicle:SECRET_RESTIC_PASSWORD:
+  #   secure: v1:K5gnxDKtlcOHst6z:qsdkR4AOO+5As2VslPO6ERzlJlA01xcTglsp6Ct8i374V6G/TqwUifpw+8gKHiU30SPJMfsI3dF7xfFFAnAcPg==
+  # cronicle-pulumi#cronicle:RESTIC_CHECK_PERCENTAGE: '5'
+  # cronicle-pulumi#cronicle:SECRET_B2_HEALTHCHECK_URL:
+  #   secure: v1:+wCA5m2zsGeupOzU:0TqufLdbUSRVv6HMHfsCjYF5q/q6d8TWTGYmIbPDTAB4BjV/sq8uXJdZswAeIH1MzC7Bz418ppHq/1JrlyHPDvlm+Z0/GOvK
+  # cronicle-pulumi#cronicle:CRONICLE_BASE_APP_URL: https://cronicle.cronicle-pulumi.pulumi.homelab.akmin.dev
+  # cronicle-pulumi#cronicle:SECRET_CRONICLE_UNIVERSAL_WEB_HOOK:
+  #   secure: v1:UiKAJNHijNn0sxiS:QWspnq95k6UcAZ6hxzMQw3LsE3JDfDdsjxx2gB0s2ChJ3nTj0LRmcuqTdF6PWCQrjlOhP5KOM2XFniDlF/4bOUpwOkioAdB+W3dwoepydWEpxk2poFWxZHEs0aznDstYeQ==
+  # cronicle-pulumi#mealie:MEALIE_BASE_URL: https://mealie.cronicle-pulumi.pulumi.homelab.akmin.dev/
+
+  admin-pulumi#semaphore:SECRET_ADMIN_USERNAME:
+    secure: v1:hfzh9QFJQ1EIzwfo:YvPybPDxT0B3iA1b8GstY1jk7Xnv
+  admin-pulumi#semaphore:SECRET_ADMIN_PASSWORD:
+    secure: v1:plRgEnlEJqjTfGNG:gY1Dwltn/5FV+MVjoo0KCIVpqNM/GyDUzpWJM8i1SOyKgOIH
+  admin-pulumi#semaphore:SECRET_ADMIN_EMAIL:
+    secure: v1:Ioz4e16dxqVtKDDV:1wWrm9MhEPGtfApKyGSQQFWBJMM+JWyqUAU1jU423dk1ZA==
+  admin-pulumi#semaphore:SECRET_SLACK_WEBHOOK_URL:
+    secure: v1:TssVt21kCosYCKbY:vFlhMwP39dCP7Uf8R87YdMM88+lXSDYL1nyGb8KTgpwY/N9Pu6lDPPfuajwhCycV1wf9PxxBscwbkPc3nCHA8+Vgnhc9fHSw+Q1a8RgApZTCAZksNuGLKMZjDaS0ZZMY/A==
