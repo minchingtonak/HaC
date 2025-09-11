@@ -7,7 +7,6 @@ import {
   CpuCores,
   DiskSize,
   MemorySize,
-  ProxmoxFirewallLogLevel,
   ProxmoxFirewallMacro,
   ProxmoxFirewallPolicy,
 } from '../constants';
@@ -145,17 +144,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
       {
         nodeName: args.provider.pveNodeName,
         containerId: args.id,
-        enabled: true,
-        // copied values from the default firewall config for a new ct
-        dhcp: true,
-        ndp: true,
-        radv: false,
-        macfilter: true,
-        ipfilter: false,
-        logLevelIn: ProxmoxFirewallLogLevel.nolog,
-        logLevelOut: ProxmoxFirewallLogLevel.nolog,
-        inputPolicy: ProxmoxFirewallPolicy.DROP,
-        outputPolicy: ProxmoxFirewallPolicy.ACCEPT,
+        ...args.firewallOptions,
       },
       {
         provider: args.provider,
@@ -187,6 +176,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
         nodeName: args.provider.pveNodeName,
         containerId: args.id,
         rules: [
+          // FIXME should this always be included? how to make configurable without including in every host toml?
           {
             enabled: true,
             type: 'in',
@@ -205,6 +195,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
             action: ProxmoxFirewallPolicy.ACCEPT,
             macro: ProxmoxFirewallMacro.SSH,
           },
+          ...(args.firewallRules ?? []),
         ],
       },
       {

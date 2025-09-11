@@ -40,6 +40,11 @@ export enum CommonPorts {
   DOCKER = 2376,
 }
 
+export enum ProxmoxFirewallDirection {
+  in = 'in',
+  out = 'out'
+}
+
 export enum ProxmoxFirewallPolicy {
   ACCEPT = 'ACCEPT',
   REJECT = 'REJECT',

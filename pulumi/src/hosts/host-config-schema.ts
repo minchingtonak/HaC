@@ -1,4 +1,10 @@
 import { z } from 'zod';
+import {
+  ProxmoxFirewallDirection,
+  ProxmoxFirewallLogLevel,
+  ProxmoxFirewallMacro,
+  ProxmoxFirewallPolicy,
+} from '../constants';
 
 const CpuConfigSchema = z
   .object({
@@ -61,6 +67,125 @@ const ConnectionOverrideSchema = z
   })
   .strict();
 
+const FirewallOptionsSchema = z
+  .object({
+    containerId: z.number().optional(),
+    enabled: z.boolean().default(true).optional(),
+
+    dhcp: z.boolean().default(true).optional(),
+    /**
+     * Enable NDP (Neighbor Discovery Protocol).
+     */
+    ndp: z.boolean().default(true).optional(),
+    /**
+     * Enable Router Advertisement.
+     */
+    radv: z.boolean().default(false).optional(),
+    /**
+     * Enable/disable MAC address filter.
+     */
+    macfilter: z.boolean().default(true).optional(),
+    /**
+     * Enable default IP filters. This is equivalent to
+     * adding an empty `ipfilter-net<id>` ipset for every interface. Such ipsets
+     * implicitly contain sane default restrictions such as restricting IPv6 link
+     * local addresses to the one derived from the interface's MAC address. For
+     * containers the configured IP addresses will be implicitly added.
+     */
+    ipfilter: z.boolean().default(false).optional(),
+    logLevelIn: z
+      .enum(ProxmoxFirewallLogLevel)
+      .default(ProxmoxFirewallLogLevel.nolog)
+      .optional(),
+    logLevelOut: z
+      .enum(ProxmoxFirewallLogLevel)
+      .default(ProxmoxFirewallLogLevel.nolog)
+      .optional(),
+    inputPolicy: z
+      .enum(ProxmoxFirewallPolicy)
+      .default(ProxmoxFirewallPolicy.DROP)
+      .optional(),
+    outputPolicy: z
+      .enum(ProxmoxFirewallPolicy)
+      .default(ProxmoxFirewallPolicy.ACCEPT)
+      .optional(),
+  })
+  .strict();
+
+const DEFAULT_FIREWALL_OPTIONS: FirewallOptions = {
+  enabled: true,
+  dhcp: true,
+  ndp: true,
+  radv: false,
+  macfilter: true,
+  ipfilter: false,
+  inputPolicy: ProxmoxFirewallPolicy.DROP,
+  outputPolicy: ProxmoxFirewallPolicy.ACCEPT,
+  logLevelIn: ProxmoxFirewallLogLevel.nolog,
+  logLevelOut: ProxmoxFirewallLogLevel.nolog,
+};
+
+const FirewallRuleSchema = z
+  .object({
+    enabled: z.boolean().default(true).optional(),
+    type: z.enum(ProxmoxFirewallDirection).optional(),
+    action: z.enum(ProxmoxFirewallPolicy).optional(),
+    comment: z.string().optional(),
+    /**
+     * Restrict packet source address. This can refer
+     * to a single IP address, an IP set ('+ipsetname') or an IP alias
+     * definition. You can also specify an address range
+     * like `20.34.101.207-201.3.9.99`, or a list of IP addresses and
+     * networks (entries are separated by comma). Please do not mix IPv4
+     * and IPv6 addresses inside such lists.
+     */
+    source: z.string().optional(),
+    /**
+     * Restrict TCP/UDP source port. You can use
+     * service names or simple numbers (0-65535), as defined
+     * in `/etc/services`. Port ranges can be specified with '\d+:\d+', for
+     * example `80:85`, and you can use comma separated list to match
+     * several ports or ranges.
+     */
+    sport: z.string().optional(),
+    /**
+     * Restrict packet destination address. This can
+     * refer to a single IP address, an IP set ('+ipsetname') or an IP
+     * alias definition. You can also specify an address range
+     * like `20.34.101.207-201.3.9.99`, or a list of IP addresses and
+     * networks (entries are separated by comma). Please do not mix IPv4
+     * and IPv6 addresses inside such lists.
+     */
+    dest: z.string().optional(),
+    /**
+     * Restrict TCP/UDP destination port. You can use
+     * service names or simple numbers (0-65535), as defined
+     * in `/etc/services`. Port ranges can be specified with '\d+:\d+', for
+     * example `80:85`, and you can use comma separated list to match
+     * several ports or ranges.
+     */
+    dport: z.string().optional(),
+    /**
+     * Network interface name. You have to use network
+     * configuration key names for VMs and containers ('net\d+'). Host
+     * related rules can use arbitrary strings.
+     */
+    iface: z.string().optional(),
+    log: z.enum(ProxmoxFirewallLogLevel).optional(),
+    macro: z.enum(ProxmoxFirewallMacro).optional(),
+    /**
+     * Position of the rule in the list.
+     */
+    pos: z.number().optional(),
+    /**
+     * Restrict packet protocol. You can use protocol
+     * names as defined in '/etc/protocols'.
+     */
+    proto: z.string().optional(),
+    securityGroup: z.string().optional(),
+  })
+  .strict();
+
 const ScriptProvisionerSchema = z
   .object({
     type: z.literal('script'),
@@ -113,6 +238,8 @@ export const HostConfigSchema = z
     services: z.array(z.string()).optional(),
     mountPoints: z.array(MountPointSchema).optional(),
     devicePassthroughs: z.array(DevicePassthroughSchema).optional(),
+    firewallOptions: FirewallOptionsSchema.default(DEFAULT_FIREWALL_OPTIONS),
+    firewallRules: z.array(FirewallRuleSchema).optional(),
     provisioners: z.array(ProvisionerSchema).optional(),
   })
   .strict();
@@ -121,6 +248,7 @@ export type HostConfigToml = z.infer<typeof HostConfigSchema>;
 export type Provisioner = z.infer<typeof ProvisionerSchema>;
 export type ScriptProvisioner = z.infer<typeof ScriptProvisionerSchema>;
 export type AnsibleProvisioner = z.infer<typeof AnsibleProvisionerSchema>;
+export type FirewallOptions = z.infer<typeof FirewallOptionsSchema>;
 
 export const HostnameSchema = z.object({
   hostname: z.string().min(1),
