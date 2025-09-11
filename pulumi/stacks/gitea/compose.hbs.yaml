@@ -22,15 +22,12 @@ services:
       - traefik.http.routers.gitea.service=gitea
       - traefik.http.services.gitea.loadbalancer.server.port=3000
       - traefik.tcp.routers.gitea-ssh.rule=HostSNI(`*`)
-      - traefik.tcp.routers.gitea-ssh.entrypoints=ssh
+      - traefik.tcp.routers.gitea-ssh.entrypoints=ssh-222-tcp
       - traefik.tcp.routers.gitea-ssh.service=gitea-ssh
-      - traefik.tcp.services.gitea-ssh-service.loadbalancer.server.port=22
+      - traefik.tcp.services.gitea-ssh.loadbalancer.server.port=22
     networks:
-      - gitea
       - traefik
 
 networks:
-  gitea:
-    external: false
   traefik:
     external: true

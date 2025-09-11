@@ -1,6 +1,6 @@
 id = 206
 hostname = "gitea-pulumi"
-enabled = false
+enabled = true
 
 description = "lightweight private git server and github mirror"
 services = ["traefik", "gitea"]
@@ -15,11 +15,24 @@ swap = 1024
 [disk]
 size = 16
 
+[[firewallRules]]
+type = "in"
+action = "ACCEPT"
+dport = "222"
+proto = "tcp"
+comment = "gitea ssh"
+
 [[provisioners]]
 type = "ansible"
 name = "lxc-init"
 playbook = "provisioners/ansible/lxc-init.yaml"
 replayable = false
+
+[[provisioners]]
+type = "ansible"
+name = "gitea-setup"
+playbook = "provisioners/ansible/gitea-setup.yaml"
+replayable = true
 
 [[provisioners]]
 type = "script"
