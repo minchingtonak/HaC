@@ -17,7 +17,7 @@ export type ComposeStackArgs = {
 export class ComposeStack extends pulumi.ComponentResource {
   public static RESOURCE_TYPE = 'HaC:docker:ComposeStack';
 
-  serviceDirectory: pulumi.asset.FileAsset;
+  serviceDirectoryAsset: pulumi.asset.FileAsset;
 
   copyServiceToRemote: command.remote.CopyToRemote;
 
@@ -36,9 +36,11 @@ export class ComposeStack extends pulumi.ComponentResource {
   ) {
     super(ComposeStack.RESOURCE_TYPE, name, {}, opts);
 
-    const serviceDir = ComposeFileUtils.SERVICE_DIRECTORY_FOR(args.serviceName);
+    const serviceDirectory = ComposeFileUtils.SERVICE_DIRECTORY_FOR(
+      args.serviceName,
+    );
 
-    this.serviceDirectory = new pulumi.asset.FileArchive(serviceDir);
+    this.serviceDirectoryAsset = new pulumi.asset.FileArchive(serviceDirectory);
 
     const remoteServiceDirectoryBase = `${TemplateProcessor.REMOTE_OUTPUT_FOLDER_ROOT}/stacks`; // TODO make configurable?
     const remoteServiceDirectory = path.join(
@@ -46,10 +48,11 @@ export class ComposeStack extends pulumi.ComponentResource {
       args.serviceName,
     );
 
+    // copy static files in service directory, including unrendered templates
     this.copyServiceToRemote = new command.remote.CopyToRemote(
       `${args.hostConfig.hostname}-copy-${args.serviceName}-service-directory`,
       {
-        source: this.serviceDirectory,
+        source: this.serviceDirectoryAsset,
         remotePath: remoteServiceDirectoryBase,
         connection: args.connection,
       },
@@ -70,6 +73,7 @@ export class ComposeStack extends pulumi.ComponentResource {
       },
     );
 
+    // copy rendered template files
     for (const [templatePath, templateFile] of Object.entries(
       this.handlebarsTemplateDirectory.templateFiles,
     )) {
@@ -94,7 +98,7 @@ export class ComposeStack extends pulumi.ComponentResource {
         create: `cd ${remoteServiceDirectory} && docker compose up -d --force-recreate`,
         delete: `cd ${remoteServiceDirectory} && docker compose down`,
         addPreviousOutputInEnv: false,
-        triggers: [this.serviceDirectory],
+        triggers: [this.serviceDirectoryAsset],
         connection: args.connection,
       },
       {
