@@ -4,7 +4,7 @@ hostname = "immich-pulumi"
 enabled = false
 
 description = "private image server"
-services = ["traefik", "immich"]
+stacks = ["traefik", "immich"]
 
 [cpu]
 cores = 2

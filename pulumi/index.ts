@@ -1,10 +1,7 @@
 import * as proxmox from '@muhlba91/pulumi-proxmoxve';
 import { HomelabProvider } from './src/proxmox/homelab-provider';
-import { deployContainers } from './src/proxmox/services';
-import {
-  ProxmoxFirewallLogLevel,
-  ProxmoxFirewallPolicy,
-} from './src/constants';
+import { deployContainers } from './src/proxmox/containers';
+import { ProxmoxFirewallPolicy } from './src/constants';
 
 function main() {
   const homelabProvider = new HomelabProvider('homelab-pve');

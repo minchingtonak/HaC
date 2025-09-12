@@ -4,7 +4,7 @@ hostname = "jellyfin-pulumi"
 enabled = false
 
 description = "jellyfin media player server"
-services = ["traefik", "jellyfin"]
+stacks = ["traefik", "jellyfin"]
 
 [cpu]
 cores = 4

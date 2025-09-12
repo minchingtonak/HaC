@@ -4,7 +4,7 @@ hostname = "downloader-pulumi"
 enabled = false
 
 description = "misc downloading tools"
-services = ["traefik", "ytptube"]
+stacks = ["traefik", "ytptube"]
 
 [cpu]
 cores = 1

@@ -235,7 +235,7 @@ export const HostConfigSchema = z
     cpu: CpuConfigSchema.optional(),
     memory: MemoryConfigSchema.optional(),
     disk: DiskConfigSchema.optional(),
-    services: z.array(z.string()).optional(),
+    stacks: z.array(z.string()).optional(),
     mountPoints: z.array(MountPointSchema).optional(),
     devicePassthroughs: z.array(DevicePassthroughSchema).optional(),
     firewallOptions: FirewallOptionsSchema.default(DEFAULT_FIREWALL_OPTIONS),

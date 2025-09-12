@@ -4,7 +4,7 @@ hostname = "copyparty-pulumi"
 enabled = false
 
 description = "copyparty lightweight fileserver container"
-services = ["traefik", "copyparty"]
+stacks = ["traefik", "copyparty"]
 
 [cpu]
 cores = 2

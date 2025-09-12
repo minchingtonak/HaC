@@ -2,14 +2,14 @@ import * as pulumi from '@pulumi/pulumi';
 import * as command from '@pulumi/command';
 import * as path from 'node:path';
 import { HandlebarsTemplateDirectory } from '../templates/handlebars-template-directory';
-import { ComposeFileUtils } from './compose-file-processor';
+import { ComposeStackUtils } from './compose-file-processor';
 import { HostConfigToml } from '../hosts/host-config-schema';
 import { TemplateProcessor } from '../templates/template-processor';
 
-export type ServiceName = string;
+export type StackName = string;
 
 export type ComposeStackArgs = {
-  serviceName: ServiceName;
+  stackName: StackName;
   connection: command.types.input.remote.ConnectionArgs;
   hostConfig: HostConfigToml;
 };
@@ -17,9 +17,9 @@ export type ComposeStackArgs = {
 export class ComposeStack extends pulumi.ComponentResource {
   public static RESOURCE_TYPE = 'HaC:docker:ComposeStack';
 
-  serviceDirectoryAsset: pulumi.asset.FileAsset;
+  stackDirectoryAsset: pulumi.asset.FileAsset;
 
-  copyServiceToRemote: command.remote.CopyToRemote;
+  copyStackToRemote: command.remote.CopyToRemote;
 
   handlebarsTemplateDirectory: HandlebarsTemplateDirectory;
 
@@ -27,7 +27,7 @@ export class ComposeStack extends pulumi.ComponentResource {
     [templatePath: string]: command.remote.CopyToRemote;
   } = {};
 
-  deployService: command.remote.Command;
+  deployStack: command.remote.Command;
 
   constructor(
     name: string,
@@ -36,24 +36,24 @@ export class ComposeStack extends pulumi.ComponentResource {
   ) {
     super(ComposeStack.RESOURCE_TYPE, name, {}, opts);
 
-    const serviceDirectory = ComposeFileUtils.SERVICE_DIRECTORY_FOR(
-      args.serviceName,
+    const stackDirectory = ComposeStackUtils.STACK_DIRECTORY_FOR(
+      args.stackName,
     );
 
-    this.serviceDirectoryAsset = new pulumi.asset.FileArchive(serviceDirectory);
+    this.stackDirectoryAsset = new pulumi.asset.FileArchive(stackDirectory);
 
-    const remoteServiceDirectoryBase = `${TemplateProcessor.REMOTE_OUTPUT_FOLDER_ROOT}/stacks`; // TODO make configurable?
-    const remoteServiceDirectory = path.join(
-      remoteServiceDirectoryBase,
-      args.serviceName,
+    const remoteStackDirectoryBase = `${TemplateProcessor.REMOTE_OUTPUT_FOLDER_ROOT}/stacks`; // TODO make configurable?
+    const remoteStackDirectory = path.join(
+      remoteStackDirectoryBase,
+      args.stackName,
     );
 
-    // copy static files in service directory, including unrendered templates
-    this.copyServiceToRemote = new command.remote.CopyToRemote(
-      `${args.hostConfig.hostname}-copy-${args.serviceName}-service-directory`,
+    // copy static files in stack directory, including unrendered templates
+    this.copyStackToRemote = new command.remote.CopyToRemote(
+      `${args.hostConfig.hostname}-copy-${args.stackName}-stack-directory`,
       {
-        source: this.serviceDirectoryAsset,
-        remotePath: remoteServiceDirectoryBase,
+        source: this.stackDirectoryAsset,
+        remotePath: remoteStackDirectoryBase,
         connection: args.connection,
       },
       {
@@ -62,10 +62,10 @@ export class ComposeStack extends pulumi.ComponentResource {
     );
 
     this.handlebarsTemplateDirectory = new HandlebarsTemplateDirectory(
-      `${args.hostConfig.hostname}-${args.serviceName}-handlebars-template-folder`,
+      `${args.hostConfig.hostname}-${args.stackName}-handlebars-template-folder`,
       {
-        serviceName: args.serviceName,
-        templateDirectory: serviceDir,
+        stackName: args.stackName,
+        templateDirectory: stackDirectory,
         hostConfig: args.hostConfig,
       },
       {
@@ -79,7 +79,7 @@ export class ComposeStack extends pulumi.ComponentResource {
     )) {
       this.processedTemplateCopies[templatePath] =
         new command.remote.CopyToRemote(
-          `${args.hostConfig.hostname}-copy-${args.serviceName}-template-${templateFile.processedTemplate.idSafeName}`,
+          `${args.hostConfig.hostname}-copy-${args.stackName}-template-${templateFile.processedTemplate.idSafeName}`,
           {
             source: templateFile.asset.copyableSource,
             remotePath: templateFile.processedTemplate.remoteOutputPath,
@@ -87,26 +87,26 @@ export class ComposeStack extends pulumi.ComponentResource {
           },
           {
             parent: this,
-            dependsOn: this.copyServiceToRemote,
+            dependsOn: this.copyStackToRemote,
           },
         );
     }
 
-    this.deployService = new command.remote.Command(
-      `${args.hostConfig.hostname}-deploy-${args.serviceName}-service`,
+    this.deployStack = new command.remote.Command(
+      `${args.hostConfig.hostname}-deploy-${args.stackName}-stack`,
       {
-        create: `cd ${remoteServiceDirectory} && docker compose up -d --force-recreate`,
-        delete: `cd ${remoteServiceDirectory} && docker compose down`,
+        create: `cd ${remoteStackDirectory} && docker compose up -d --force-recreate`,
+        delete: `cd ${remoteStackDirectory} && docker compose down`,
         addPreviousOutputInEnv: false,
-        triggers: [this.serviceDirectoryAsset],
+        triggers: [this.stackDirectoryAsset],
         connection: args.connection,
       },
       {
         parent: this,
-        dependsOn: this.copyServiceToRemote,
+        dependsOn: this.copyStackToRemote,
         hooks: {
-          afterCreate: [ComposeFileUtils.checkForMissingVariables],
-          afterUpdate: [ComposeFileUtils.checkForMissingVariables],
+          afterCreate: [ComposeStackUtils.checkForMissingVariables],
+          afterUpdate: [ComposeStackUtils.checkForMissingVariables],
         },
         deleteBeforeReplace: true,
         additionalSecretOutputs: ['stdout', 'stderr'],
@@ -114,10 +114,10 @@ export class ComposeStack extends pulumi.ComponentResource {
     );
 
     this.registerOutputs({
-      deployCommand: this.deployService.create,
-      destroyCommand: this.deployService.delete,
-      deployCommandStdout: this.deployService.stdout,
-      deployCommandStderr: this.deployService.stderr,
+      deployCommand: this.deployStack.create,
+      destroyCommand: this.deployStack.delete,
+      deployCommandStdout: this.deployStack.stdout,
+      deployCommandStderr: this.deployStack.stderr,
       processedTemplates: this.prepareProcessedTemplateOutputs(),
     });
   }

@@ -5,7 +5,7 @@ import { HostConfigToml } from '../hosts/host-config-schema';
 
 export type HandlebarsTemplateDirectoryArgs = {
   templateDirectory: string;
-  serviceName: string;
+  stackName: string;
   recurse?: boolean;
   hostConfig: HostConfigToml;
 };
@@ -32,12 +32,12 @@ export class HandlebarsTemplateDirectory extends pulumi.ComponentResource {
     for (const templatePath of templateFilePaths) {
       this.templateFiles[templatePath] = new HandlebarsTemplateFile(
         `${args.hostConfig.hostname}-${
-          args.serviceName
+          args.stackName
         }-handlebars-template-file-${TemplateProcessor.buildSanitizedNameForId(
           templatePath,
         )}`,
         {
-          serviceName: args.serviceName,
+          stackName: args.stackName,
           templatePath,
           hostConfig: args.hostConfig,
         },

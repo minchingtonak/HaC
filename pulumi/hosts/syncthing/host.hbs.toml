@@ -3,7 +3,7 @@ hostname = "syncthing-pulumi"
 enabled = false
 
 description = "simple file syncing across devices"
-services = ["traefik", "syncthing"]
+stacks = ["traefik", "syncthing"]
 
 [cpu]
 cores = 2

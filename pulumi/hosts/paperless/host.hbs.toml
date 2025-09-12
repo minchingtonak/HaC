@@ -3,7 +3,7 @@ hostname = "paperless-pulumi"
 enabled = false
 
 description = "copyparty lightweight fileserver container"
-services = ["traefik", "paperless-ngx"]
+stacks = ["traefik", "paperless-ngx"]
 
 [cpu]
 cores = 2

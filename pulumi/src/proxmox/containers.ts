@@ -6,8 +6,6 @@ import { HomelabProvider } from './homelab-provider';
 import { HostConfigToml } from '../hosts/host-config-schema';
 
 export function deployContainers(provider: HomelabProvider) {
-  const hostConfigs = HostConfigParser.loadAllHostConfigs('./hosts');
-
   const templateFile = new proxmox.download.File(
     'debian-12-template',
     {
@@ -22,6 +20,8 @@ export function deployContainers(provider: HomelabProvider) {
     },
     { provider: provider, retainOnDelete: true },
   );
+
+  const hostConfigs = HostConfigParser.loadAllHostConfigs('./hosts');
 
   function processConfigs(hostConfigs: HostConfigToml[]) {
     for (const config of hostConfigs) {

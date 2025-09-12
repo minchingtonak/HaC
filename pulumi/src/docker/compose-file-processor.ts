@@ -1,8 +1,8 @@
 import * as pulumi from '@pulumi/pulumi';
 
-export class ComposeFileUtils {
-  static SERVICE_DIRECTORY_FOR = (serviceName: string) =>
-    `./stacks/${serviceName}`;
+export class ComposeStackUtils {
+  static STACK_DIRECTORY_FOR = (stackName: string) =>
+    `./stacks/${stackName}`;
 
   private static UNSET_VARIABLE_MARKER = 'variable is not set';
 
@@ -13,7 +13,7 @@ export class ComposeFileUtils {
 
     const missingVars = outputs.stderr
       .split('\n')
-      .filter((line) => line.includes(ComposeFileUtils.UNSET_VARIABLE_MARKER));
+      .filter((line) => line.includes(ComposeStackUtils.UNSET_VARIABLE_MARKER));
 
     if (missingVars.length) {
       throw new Error('\n' + missingVars.join('\n'));

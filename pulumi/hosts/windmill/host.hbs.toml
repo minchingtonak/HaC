@@ -3,7 +3,7 @@ hostname = "windmill-pulumi"
 enabled = false
 
 description = "windmill code-based automation platform, mostly used for spotify automation"
-services = ["traefik", "windmill"]
+stacks = ["traefik", "windmill"]
 
 [cpu]
 cores = 2

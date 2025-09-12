@@ -1,10 +1,10 @@
 # verified
 id = 208
 hostname = "tools-pulumi"
-enabled = false
+enabled = true
 
 description = "swiss army knife array of utility tools"
-services = [
+stacks = [
     "traefik",
     "cyberchef",
     "docuseal",

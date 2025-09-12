@@ -3,7 +3,7 @@ hostname = "tailscale-pulumi"
 enabled = false
 
 description = "tailscale subnet router to enable easy remote access"
-services = ["traefik", "tailscale"]
+stacks = ["traefik", "tailscale"]
 
 [cpu]
 cores = 2

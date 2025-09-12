@@ -3,7 +3,7 @@ hostname = "servarr-pulumi"
 enabled = false
 
 description = "servarr media stack"
-services = ["traefik"]              # TODO enable servarr
+stacks = ["traefik"]              # TODO enable servarr
 
 [cpu]
 cores = 2

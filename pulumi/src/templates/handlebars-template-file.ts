@@ -4,7 +4,7 @@ import { CopyableAsset } from '@hanseltime/pulumi-file-utils';
 import { HostConfigToml } from '../hosts/host-config-schema';
 
 export type HandlebarsTemplateFileArgs = {
-  serviceName: string;
+  stackName: string;
   templatePath: string;
   hostConfig: HostConfigToml;
 };
@@ -25,11 +25,11 @@ export class HandlebarsTemplateFile extends pulumi.ComponentResource {
 
     this.processedTemplate = TemplateProcessor.processTemplate(
       args.templatePath,
-      new pulumi.Config(`${args.hostConfig.hostname}#${args.serviceName}`),
+      new pulumi.Config(`${args.hostConfig.hostname}#${args.stackName}`),
     );
 
     this.asset = new CopyableAsset(
-      `${args.hostConfig.hostname}-${args.serviceName}-rendered-template-${this.processedTemplate.idSafeName}`,
+      `${args.hostConfig.hostname}-${args.stackName}-rendered-template-${this.processedTemplate.idSafeName}`,
       {
         asset: pulumi.Output.isInstance(this.processedTemplate.content)
           ? this.processedTemplate.content.apply(

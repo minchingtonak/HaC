@@ -3,7 +3,7 @@ hostname = "life-pulumi"
 enabled = false
 
 description = "life tracking apps"
-services = ["traefik", "dawarich", "fittrackee", "mealie", "memos", "wallos"]
+stacks = ["traefik", "dawarich", "fittrackee", "mealie", "memos", "wallos"]
 
 [cpu]
 cores = 4

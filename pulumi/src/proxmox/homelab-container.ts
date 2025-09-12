@@ -12,7 +12,10 @@ import {
 } from '../constants';
 import { HomelabProvider } from './homelab-provider';
 import { ComposeStack } from '../docker/compose-stack';
-import { ProvisionerEngine, ProvisionerResource } from './provisioner-engine';
+import {
+  ProvisionerEngine,
+  ProvisionerResource,
+} from '../hosts/provisioner-engine';
 import { HostConfigToml } from '../hosts/host-config-schema';
 import { TemplateProcessor } from '../templates/template-processor';
 
@@ -25,6 +28,8 @@ export class HomelabContainer extends pulumi.ComponentResource {
 
   private static CONTAINER_SUBDOMAIN = (hostname: string, nodeName: string) =>
     `${hostname}.pulumi.${nodeName}`;
+
+  private static PROXY_STACK_NAME = 'traefik';
 
   container: proxmox.ct.Container;
 
@@ -40,7 +45,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
 
   createRemoteOutputRootDir?: command.remote.Command;
 
-  services: ComposeStack[] = [];
+  stacks: ComposeStack[] = [];
 
   baseDnsRecord: porkbun.DnsRecord;
 
@@ -75,7 +80,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
         nodeName: args.provider.pveNodeName,
         vmId: args.id,
         description: args.description ?? 'managed by pulumi',
-        tags: [...(args.services ?? []), ...(args.tags ?? [])],
+        tags: [...(args.stacks ?? []), ...(args.tags ?? [])],
         unprivileged: true,
         startOnBoot: true,
         protection: false,
@@ -265,15 +270,13 @@ export class HomelabContainer extends pulumi.ComponentResource {
       );
     }
 
-    if (args.services) {
-      if (args.services.includes('traefik')) {
+    if (args.stacks) {
+      if (args.stacks.includes(HomelabContainer.PROXY_STACK_NAME)) {
         this.proxyNetwork = new command.remote.Command(
-          `${args.hostname}-create-traefik-network`,
+          `${args.hostname}-create-${HomelabContainer.PROXY_STACK_NAME}-network`,
           {
-            create:
-              'if ! docker network ls --format "{{.Name}}" | grep -q "^traefik$"; then docker network create traefik; fi',
-            delete:
-              'if docker network ls --format "{{.Name}}" | grep -q "^traefik$"; then docker network rm traefik; fi',
+            create: `if ! docker network ls --format "{{.Name}}" | grep -q "^${HomelabContainer.PROXY_STACK_NAME}$"; then docker network create '${HomelabContainer.PROXY_STACK_NAME}''; fi`,
+            delete: `if docker network ls --format "{{.Name}}" | grep -q "^${HomelabContainer.PROXY_STACK_NAME}$"; then docker network rm '${HomelabContainer.PROXY_STACK_NAME}'; fi`,
             addPreviousOutputInEnv: false,
             connection,
           },
@@ -298,12 +301,12 @@ export class HomelabContainer extends pulumi.ComponentResource {
         },
       );
 
-      for (const name of args.services) {
-        this.services.push(
+      for (const name of args.stacks) {
+        this.stacks.push(
           new ComposeStack(
-            `${args.hostname}-${name}-compose-service`,
+            `${args.hostname}-${name}-compose-stack`,
             {
-              serviceName: name,
+              stackName: name,
               connection,
               hostConfig: args,
             },
