@@ -65,7 +65,7 @@ services:
       PAPERLESS_TIKA_ENDPOINT: http://tika:9998
     labels:
       - traefik.enable=true
-      - traefik.http.routers.paperlessngx.rule=Host(`paperless.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.paperlessngx.rule=Host(`{{{APP_DOMAIN}}}`)
       - traefik.http.routers.paperlessngx.entrypoints=https
       - traefik.http.routers.paperlessngx.tls=true
       - traefik.http.routers.paperlessngx.tls.certresolver=porkbun

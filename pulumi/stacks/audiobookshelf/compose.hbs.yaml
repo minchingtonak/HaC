@@ -13,7 +13,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.audiobookshelf.rule=Host(`audiobookshelf.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.audiobookshelf.rule=Host(`{{{APP_DOMAIN}}}`)
       - traefik.http.routers.audiobookshelf.entrypoints=https
       - traefik.http.routers.audiobookshelf.tls=true
       - traefik.http.routers.audiobookshelf.tls.certresolver=porkbun

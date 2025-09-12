@@ -15,7 +15,7 @@ services:
     #   - "222:22"
     labels:
       - traefik.enable=true
-      - traefik.http.routers.gitea.rule=Host(`gitea.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.gitea.rule=Host(`{{{APP_DOMAIN}}}`)
       - traefik.http.routers.gitea.entrypoints=https
       - traefik.http.routers.gitea.tls=true
       - traefik.http.routers.gitea.tls.certresolver=porkbun

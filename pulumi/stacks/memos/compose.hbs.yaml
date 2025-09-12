@@ -12,7 +12,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.memos.rule=Host(`memos.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.memos.rule=Host(`{{{APP_DOMAIN}}}`)
       - traefik.http.routers.memos.entrypoints=https
       - traefik.http.routers.memos.tls=true
       - traefik.http.routers.memos.tls.certresolver=porkbun

@@ -26,7 +26,7 @@ services:
       - redis
     labels:
       - traefik.enable=true
-      - traefik.http.routers.spotizerr.rule=Host(`spotizerr.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.spotizerr.rule=Host(`{{{APP_DOMAIN}}}`)
       - traefik.http.routers.spotizerr.entrypoints=https
       - traefik.http.routers.spotizerr.tls=true
       - traefik.http.routers.spotizerr.tls.certresolver=porkbun

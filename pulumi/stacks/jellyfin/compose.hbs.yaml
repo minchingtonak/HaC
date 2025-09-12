@@ -6,7 +6,7 @@ services:
       - PUID=0
       - PGID=0
       - TZ=America/Los_Angeles
-      - JELLYFIN_PublishedServerUrl=https://jellyfin.{{{PARENT:CONTAINER_DOMAIN}}}
+      - JELLYFIN_PublishedServerUrl=https://{{{APP_DOMAIN}}}
     volumes:
       - /docker/jellyfin:/config
       - /mnt/media:/mnt/media
@@ -23,7 +23,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.jellyfin.rule=Host(`jellyfin.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.jellyfin.rule=Host(`{{{APP_DOMAIN}}}`)
       - traefik.http.routers.jellyfin.entrypoints=https
       - traefik.http.routers.jellyfin.tls=true
       - traefik.http.routers.jellyfin.tls.certresolver=porkbun

@@ -18,7 +18,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.syncthing.rule=Host(`syncthing.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.syncthing.rule=Host(`{{{APP_DOMAIN}}}`)
       - traefik.http.routers.syncthing.entrypoints=https
       - traefik.http.routers.syncthing.tls=true
       - traefik.http.routers.syncthing.tls.certresolver=porkbun

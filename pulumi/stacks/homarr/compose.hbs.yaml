@@ -11,7 +11,7 @@ services:
     #   - '7575:7575'
     labels:
       - traefik.enable=true
-      - traefik.http.routers.homarr.rule=Host(`homarr.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.homarr.rule=Host(`{{{APP_DOMAIN}}}`)
       - traefik.http.routers.homarr.entrypoints=https
       - traefik.http.routers.homarr.tls=true
       - traefik.http.routers.homarr.tls.certresolver=porkbun

@@ -1,0 +1,439 @@
+services:
+  gluetun:
+    image: qmcgaw/gluetun
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      - 8081:8081 # qbittorrent web interface
+      - 6881:6881 # qbittorrent torrent port
+      - 8080:8080 # sabnzbd
+    volumes:
+      - /docker/gluetun:/gluetun
+    environment:
+      - VPN_SERVICE_PROVIDER=airvpn
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=${GLUETUN_WIREGUARD_PRIVATE_KEY}
+      - WIREGUARD_PRESHARED_KEY=${GLUETUN_WIREGUARD_PRESHARED_KEY}
+      - WIREGUARD_ADDRESSES=${GLUETUN_WIREGUARD_ADDRESSES}
+      - FIREWALL_VPN_INPUT_PORTS=29730
+      - SERVER_COUNTRIES=United States
+      - HEALTH_VPN_DURATION_INITIAL=120s
+    depends_on:
+      deunhealth:
+        condition: service_started
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+    healthcheck:
+      test: ping -c 1 www.google.com || exit 1
+      interval: 60s
+      timeout: 20s
+      retries: 5
+    restart: unless-stopped
+
+  deunhealth:
+    image: qmcgaw/deunhealth
+    container_name: deunhealth
+    network_mode: 'none'
+    environment:
+      - LOG_LEVEL=info
+      - HEALTH_SERVER_ADDRESS=127.0.0.1:9999
+      - TZ=America/Los_Angeles
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    restart: unless-stopped
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+    depends_on:
+      gluetun:
+        condition: service_healthy
+        restart: true
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/Los_Angeles
+      - WEBUI_PORT=8081
+      - TORRENTING_PORT=29730
+    volumes:
+      - /docker/qbittorrent:/config
+      - /mnt/media:/data
+    network_mode: service:gluetun
+    healthcheck:
+      test: ping -c 1 www.google.com || exit 1
+      interval: 60s
+      retries: 3
+      start_period: 20s
+      timeout: 10s
+
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/Los_Angeles
+    volumes:
+      - /docker/sabnzbd:/config
+      - /mnt/media:/data
+    restart: unless-stopped
+    network_mode: service:gluetun
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+    depends_on:
+      gluetun:
+        condition: service_healthy
+        restart: true
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --quiet
+        - --timeout=3
+        - --tries=1
+        - --spider
+        - http://localhost:8080/
+      interval: 10s
+      timeout: 5s
+      retries: 8
+      start_period: 15s
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/Los_Angeles
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /docker/prowlarr:/config
+    restart: unless-stopped
+    ports:
+      - 9696:9696
+    depends_on:
+      gluetun:
+        condition: service_healthy
+        restart: true
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --quiet
+        - --timeout=3
+        - --tries=1
+        - --spider
+        - http://localhost:9696/ping
+      interval: 10s
+      timeout: 5s
+      retries: 8
+      start_period: 15s
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: unless-stopped
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/Los_Angeles
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /docker/sonarr:/config
+      - /mnt/media:/data
+    ports:
+      - 8989:8989
+    depends_on:
+      qbittorrent:
+        condition: service_healthy
+        restart: true
+      sabnzbd:
+        condition: service_healthy
+        restart: true
+      prowlarr:
+        condition: service_healthy
+        restart: true
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --quiet
+        - --timeout=3
+        - --tries=1
+        - --spider
+        - http://localhost:8989/ping
+      interval: 5s
+      timeout: 4s
+      retries: 4
+      start_period: 5s
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/Los_Angeles
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /docker/radarr:/config
+      - /mnt/media:/data
+    ports:
+      - 7878:7878
+    depends_on:
+      qbittorrent:
+        condition: service_healthy
+        restart: true
+      sabnzbd:
+        condition: service_healthy
+        restart: true
+      prowlarr:
+        condition: service_healthy
+        restart: true
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --quiet
+        - --timeout=3
+        - --tries=1
+        - --spider
+        - http://localhost:7878/ping
+      interval: 5s
+      timeout: 4s
+      retries: 4
+      start_period: 5s
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    restart: unless-stopped
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/Los_Angeles
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /docker/bazarr:/config
+      - /mnt/media:/data
+    ports:
+      - 6767:6767
+    depends_on:
+      sonarr:
+        condition: service_healthy
+        restart: true
+      radarr:
+        condition: service_healthy
+        restart: true
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --quiet
+        - --timeout=3
+        - --tries=1
+        - --spider
+        - http://127.0.0.1:6767
+      interval: 5s
+      timeout: 4s
+      retries: 4
+      start_period: 5s
+
+  subsyncarr:
+    image: mrorbitman/subsyncarr:latest
+    container_name: subsyncarr
+    user: 0:0
+    volumes:
+      - /mnt/media/movies:/movies
+      - /mnt/media/tv:/tv
+    restart: unless-stopped
+    environment:
+      - TZ=America/Los_Angeles
+      - CRON_SCHEDULE=0 0 * * *
+      - SCAN_PATHS=/movies,/tv # Remember to mount these as volumes. Must begin with /. Default value is '/scan_dir'
+      # - EXCLUDE_PATHS=/movies/temp,/tv/downloads # Exclude certain sub-directories from the scan
+      - MAX_CONCURRENT_SYNC_TASKS=1 # Defaults to 1 if not set. Higher number will consume more CPU but sync your library faster
+      - INCLUDE_ENGINES=ffsubsync,autosubsync # If not set, all engines are used by default
+
+  profilarr:
+    image: santiagosayshey/profilarr:latest
+    container_name: profilarr
+    user: 0:0
+    ports:
+      - 6868:6868
+    volumes:
+      - /docker/profilarr:/config
+    environment:
+      - TZ=America/Los_Angeles
+    restart: unless-stopped
+    depends_on:
+      sonarr:
+        condition: service_healthy
+        restart: true
+      radarr:
+        condition: service_healthy
+        restart: true
+    # labels:
+    #   - deunhealth.restart.on.unhealthy=true
+    # healthcheck:
+    #   test:
+    #     - CMD
+    #     - wget
+    #     - --quiet
+    #     - --timeout=3
+    #     - --tries=1
+    #     - --spider
+    #     - http://127.0.0.1:6868
+    #   interval: 5s
+    #   timeout: 4s
+    #   retries: 4
+    #   start_period: 5s
+
+  cleanuparr:
+    image: ghcr.io/cleanuparr/cleanuparr:latest
+    container_name: cleanuparr
+    restart: unless-stopped
+    depends_on:
+      sonarr:
+        condition: service_healthy
+        restart: true
+      radarr:
+        condition: service_healthy
+        restart: true
+      lidarr:
+        condition: service_healthy
+        restart: true
+      qbittorrent:
+        condition: service_healthy
+        restart: true
+      sabnzbd:
+        condition: service_healthy
+        restart: true
+    ports:
+      - 11011:11011
+    volumes:
+      - /docker/cleanuparr:/config
+      - /mnt/media:/data
+    # https://cleanuparr.github.io/Cleanuparr/docs/installation/detailed#environment-variables
+    environment:
+      - PORT=11011
+      - BASE_PATH=
+      - PUID=0
+      - PGID=0
+      - UMASK=022
+      - TZ=America/Los_Angeles
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11011/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 30s
+      retries: 3
+
+  huntarr:
+    image: huntarr/huntarr:latest
+    container_name: huntarr
+    restart: unless-stopped
+    ports:
+      - "9705:9705"
+    depends_on:
+      sonarr:
+        condition: service_healthy
+        restart: true
+      radarr:
+        condition: service_healthy
+        restart: true
+      lidarr:
+        condition: service_healthy
+        restart: true
+      qbittorrent:
+        condition: service_healthy
+        restart: true
+      sabnzbd:
+        condition: service_healthy
+        restart: true
+    volumes:
+      - /docker/huntarr:/config
+    environment:
+      - TZ=America/Los_Angeles
+
+  lidarr:
+    container_name: lidarr
+    # image: lscr.io/linuxserver/lidarr:latest
+    image: blampe/lidarr:latest
+    restart: unless-stopped
+    depends_on:
+      qbittorrent:
+        condition: service_healthy
+        restart: true
+      sabnzbd:
+        condition: service_healthy
+        restart: true
+      prowlarr:
+        condition: service_healthy
+        restart: true
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/Los_Angeles
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /docker/lidarr:/config
+      - /mnt/media:/data
+    ports:
+      - 8686:8686
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --quiet
+        - --timeout=3
+        - --tries=1
+        - --spider
+        - http://localhost:8686/ping
+      interval: 5s
+      timeout: 4s
+      retries: 4
+      start_period: 5s
+
+  # readarr:
+  #   image: lscr.io/linuxserver/readarr:develop
+  #   container_name: readarr
+  #   environment:
+  #     - PUID=0
+  #     - PGID=0
+  #     - TZ=America/Los_Angeles
+  #   volumes:
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - /docker/readarr:/config
+  #     - /mnt/media:/data
+  #   ports:
+  #     - 8787:8787
+  #   restart: unless-stopped
+  # healthcheck:
+  #   test:
+  #     - CMD
+  #     - wget
+  #     - --quiet
+  #     - --timeout=3
+  #     - --tries=1
+  #     - --spider
+  #     - http://localhost:8787/ping
+  #   interval: 5s
+  #   timeout: 4s
+  #   retries: 4
+  #   start_period: 5s

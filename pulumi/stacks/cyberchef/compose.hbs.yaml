@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.cyberchef.rule=Host(`cyberchef.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.cyberchef.rule=Host(`{{{APP_DOMAIN}}}`)
       - traefik.http.routers.cyberchef.entrypoints=https
       - traefik.http.routers.cyberchef.tls=true
       - traefik.http.routers.cyberchef.tls.certresolver=porkbun

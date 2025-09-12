@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.watcharr.rule=Host(`watcharr.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.watcharr.rule=Host(`{{{APP_DOMAIN}}}`)
       - traefik.http.routers.watcharr.entrypoints=https
       - traefik.http.routers.watcharr.tls=true
       - traefik.http.routers.watcharr.tls.certresolver=porkbun

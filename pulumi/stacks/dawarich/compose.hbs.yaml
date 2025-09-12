@@ -95,7 +95,7 @@ services:
           memory: '4G'    # Limit memory usage to 4GB
     labels:
       - traefik.enable=true
-      - traefik.http.routers.dawarich.rule=Host(`dawarich.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.dawarich.rule=Host(`{{{APP_DOMAIN}}}`)
       - traefik.http.routers.dawarich.entrypoints=https
       - traefik.http.routers.dawarich.tls=true
       - traefik.http.routers.dawarich.tls.certresolver=porkbun

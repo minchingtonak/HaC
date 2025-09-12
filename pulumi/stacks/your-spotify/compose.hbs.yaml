@@ -18,7 +18,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.yourspotify.rule=Host(`yourspotify.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.yourspotify.rule=Host(`{{{APP_DOMAIN}}}`)
       - traefik.http.routers.yourspotify.entrypoints=https
       - traefik.http.routers.yourspotify.tls=true
       - traefik.http.routers.yourspotify.tls.certresolver=porkbun

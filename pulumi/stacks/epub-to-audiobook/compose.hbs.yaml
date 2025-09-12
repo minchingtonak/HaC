@@ -13,7 +13,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.epubtoaudiobook.rule=Host(`epubtoaudiobook.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.epubtoaudiobook.rule=Host(`{{{APP_DOMAIN}}}`)
       - traefik.http.routers.epubtoaudiobook.entrypoints=https
       - traefik.http.routers.epubtoaudiobook.tls=true
       - traefik.http.routers.epubtoaudiobook.tls.certresolver=porkbun

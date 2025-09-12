@@ -20,7 +20,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.codeserver.rule=Host(`codeserver.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.codeserver.rule=Host(`{{{APP_DOMAIN}}}`)
       - traefik.http.routers.codeserver.entrypoints=https
       - traefik.http.routers.codeserver.tls=true
       - traefik.http.routers.codeserver.tls.certresolver=porkbun
