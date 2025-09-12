@@ -1,6 +1,7 @@
+# verified
 id = 200
 hostname = "copyparty-pulumi"
-enabled = true
+enabled = false
 
 description = "copyparty lightweight fileserver container"
 services = ["traefik", "copyparty"]

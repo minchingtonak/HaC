@@ -24,9 +24,11 @@ services:
       - --entrypoints.http.http.redirections.entrypoint.scheme=https
       - --entrypoints.https.address=:443
       - --entrypoints.ssh-222-tcp.address=:222
+      - --entrypoints.jellyfin-service-discovery-1900-udp.address=:1900/udp
+      - --entrypoints.jellyfin-auto-discovery-7359-udp.address=:7359/udp
+      - --entrypoints.syncthing-local-discovery-21027-udp.address=:21027/udp
       - --entrypoints.syncthing-sync-22000-tcp.address=:22000
       - --entrypoints.syncthing-sync-quic-22000-udp.address=:22000/udp
-      - --entrypoints.syncthing-local-discovery-21027-udp.address=:21027/udp
       - --entrypoints.slskd-listen-50300-tcp.address=:50300
       - --providers.docker.endpoint=unix:///var/run/docker.sock
       - --providers.docker.exposedByDefault=false

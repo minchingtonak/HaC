@@ -1,9 +1,10 @@
+# verified
 id = 203
 hostname = "jellyfin-pulumi"
 enabled = false
 
 description = "jellyfin media player server"
-tags = ["jellyfin"]
+services = ["traefik", "jellyfin"]
 
 [cpu]
 cores = 4
@@ -13,7 +14,21 @@ dedicated = 4096
 swap = 2048
 
 [disk]
-size = 32
+size = 16
+
+[[firewallRules]]
+type = "in"
+action = "ACCEPT"
+dport = "1900"
+proto = "udp"
+comment = "jellyfin service discovery"
+
+[[firewallRules]]
+type = "in"
+action = "ACCEPT"
+dport = "7369"
+proto = "udp"
+comment = "jellyfin auto discovery"
 
 [[devicePassthroughs]]
 path = "/dev/dri/card0"
@@ -38,6 +53,6 @@ playbook = "provisioners/ansible/lxc-init.yaml"
 replayable = false
 
 [[provisioners]]
-type = "ansible"
-name = "install-update-jellyfin"
-playbook = "provisioners/ansible/update-jellyfin.yaml"
+type = "script"
+name = "install-docker"
+script = "provisioners/scripts/install-docker.sh"

@@ -1,6 +1,7 @@
+# verified
 id = 210
 hostname = "apprise-pulumi"
-enabled = true
+enabled = false
 
 description = "lightweight file-based notifications server"
 services = ["traefik", "apprise"]

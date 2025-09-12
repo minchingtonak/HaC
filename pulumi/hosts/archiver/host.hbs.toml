@@ -1,6 +1,7 @@
+# verified
 id = 217
 hostname = "archiver-pulumi"
-enabled = true
+enabled = false
 
 description = "worker for archive team warrior"
 services = ["traefik", "archiveteam-warrior"]

@@ -13,14 +13,14 @@ services:
       SEMAPHORE_ADMIN_NAME: "{{{SECRET_ADMIN_USERNAME}}}"
       SEMAPHORE_ADMIN_EMAIL: "{{{SECRET_ADMIN_EMAIL}}}"
       SEMAPHORE_SLACK_ALERT: "True"
-      SEMAPHORE_SLACK_URL: "{{{SLACK_WEBHOOK_URL}}}"
+      SEMAPHORE_SLACK_URL: "{{{SECRET_SLACK_WEBHOOK_URL}}}"
     volumes:
       - /docker/semaphore/data:/var/lib/semaphore
       - /docker/semaphore/config:/etc/semaphore
       - /docker/semaphore/tmp:/tmp/semaphore
       # https://github.com/semaphoreui/semaphore/issues/2657#issuecomment-2799052323
-      - ../../tools/ansible/requirements.txt:/etc/semaphore/requirements.txt
-    restart: always
+      - ./requirements.txt:/etc/semaphore/requirements.txt
+    restart: unless-stopped
     labels:
       - traefik.enable=true
       - traefik.http.routers.semaphore.rule=Host(`semaphore.{{{PARENT:CONTAINER_DOMAIN}}}`)

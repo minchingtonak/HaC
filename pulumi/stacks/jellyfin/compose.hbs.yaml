@@ -1,0 +1,45 @@
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=America/Los_Angeles
+      - JELLYFIN_PublishedServerUrl=https://jellyfin.{{{PARENT:CONTAINER_DOMAIN}}}
+    volumes:
+      - /docker/jellyfin:/config
+      - /mnt/media:/mnt/media
+    # ports:
+    #   - 8096:8096 # http
+    #   - 8920:8920 # https
+    #   - 7359:7359/udp # optional - auto-discovery
+    #   - 1900:1900/udp # optional - service discovery
+    devices:
+      # select VAAPI acceleration in Dashboard > Playback > Transcoding
+      # device: /dev/dri/renderD128
+      # use 'radeontop' to measure gpu usage
+      - /dev/dri:/dev/dri # renderD128, card0
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.jellyfin.rule=Host(`jellyfin.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.jellyfin.entrypoints=https
+      - traefik.http.routers.jellyfin.tls=true
+      - traefik.http.routers.jellyfin.tls.certresolver=porkbun
+      - traefik.http.routers.jellyfin.service=jellyfin
+      - traefik.http.services.jellyfin.loadbalancer.server.port=8096
+      #
+      - traefik.udp.routers.jellyfin-service-discovery.entrypoints=jellyfin-service-discovery-1900-udp
+      - traefik.udp.routers.jellyfin-service-discovery.service=jellyfin-service-discovery
+      - traefik.udp.services.jellyfin-service-discovery.loadbalancer.server.port=1900
+      #
+      - traefik.udp.routers.jellyfin-auto-discovery.entrypoints=jellyfin-auto-discovery-7359-udp
+      - traefik.udp.routers.jellyfin-auto-discovery.service=jellyfin-auto-discovery
+      - traefik.udp.services.jellyfin-auto-discovery.loadbalancer.server.port=7359
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

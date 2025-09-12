@@ -1,6 +1,7 @@
+# verified
 id = 206
 hostname = "gitea-pulumi"
-enabled = true
+enabled = false
 
 description = "lightweight private git server and github mirror"
 services = ["traefik", "gitea"]

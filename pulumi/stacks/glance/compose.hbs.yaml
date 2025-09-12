@@ -1,0 +1,24 @@
+services:
+  glance:
+    container_name: glance
+    image: glanceapp/glance
+    restart: unless-stopped
+    volumes:
+      - /docker/glance/config:/app/config
+      - ./config/glance.yml:/app/config/glance.yml
+    # ports:
+    #   - 8080:8080
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.glance.rule=Host(`glance.{{{PARENT:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.glance.entrypoints=https
+      - traefik.http.routers.glance.tls=true
+      - traefik.http.routers.glance.tls.certresolver=porkbun
+      - traefik.http.routers.glance.service=glance
+      - traefik.http.services.glance.loadbalancer.server.port=8080
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

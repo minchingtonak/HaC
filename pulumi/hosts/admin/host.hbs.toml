@@ -1,9 +1,10 @@
+# verified
 id = 213
 hostname = "admin-pulumi"
-enabled = true
+enabled = false
 
 description = "homelab administration-related apps"
-services = ["traefik", "semaphore"]
+services = ["traefik", "semaphore", "glance"]
 
 [cpu]
 cores = 2
