@@ -101,16 +101,87 @@ export class TemplateProcessor {
 
     const variables = TemplateProcessor.discoverVariables(templateContent);
 
-    const context = EnvUtils.assembleVariableMapFromConfig(config, variables);
-
     const idSafeName = TemplateProcessor.buildSanitizedNameForId(templatePath);
+    const remoteOutputPath =
+      TemplateProcessor.getRemoteOutputPath(templatePath);
+
+    if (variables.length === 0) {
+      return {
+        content: pulumi.output(templateContent),
+        idSafeName,
+        templatePath,
+        remoteOutputPath,
+      };
+    }
+
+    const initialVarValueMap = EnvUtils.assembleVariableMapFromConfig(
+      config,
+      variables,
+    );
+
+    let maxVariableDepth = 1;
+    // process variables referenced within other variables
+    function processRecursiveVariables(
+      varValues: string[],
+    ): pulumi.Output<Record<string, string | pulumi.Output<string>>> {
+      const discoveredVars = TemplateProcessor.discoverVariables(
+        varValues.join('\n'),
+      );
+
+      if (discoveredVars.length === 0) {
+        return pulumi.output({} as Record<string, string>);
+      }
+
+      // increment variable depth only if we've discovered any variables
+      maxVariableDepth++;
+
+      const varMap = EnvUtils.assembleVariableMapFromConfig(
+        config,
+        discoveredVars,
+      );
+
+      return pulumi
+        .all(Object.values(varMap))
+        .apply(processRecursiveVariables)
+        .apply((processedVars) => ({ ...processedVars, ...varMap }));
+    }
+
+    const recursiveVariableValueMap = pulumi
+      .all(Object.values(initialVarValueMap))
+      .apply(processRecursiveVariables);
+
+    // iterate over the map of merged variables. compile each value as a template and set the value of the rendered template to the variable in the map
+    // after this process all variables in the map will have been expanded
+    const mergedVariables = pulumi
+      .all(initialVarValueMap)
+      .apply((initialVars) =>
+        pulumi
+          .all(recursiveVariableValueMap)
+          .apply((recursiveVars) => ({ ...initialVars, ...recursiveVars })),
+      );
+
+    const resolvedVariables = mergedVariables.apply((merged) => {
+      const result = structuredClone(merged);
+
+      // only need maxDepth - 1 iterations since top-level vars are handled
+      // in the final template render below
+      for (let i = 0; i < maxVariableDepth - 1; ++i) {
+        for (const [varName, varValue] of Object.entries(merged)) {
+          const template = Handlebars.compile<Record<string, string>>(varValue);
+
+          const newVariableValue = template(result);
+
+          result[varName] = newVariableValue;
+        }
+      }
+
+      return result;
+    });
 
     const template =
       Handlebars.compile<Record<string, string>>(templateContent);
-    const content = pulumi.all(context).apply(template);
 
-    const remoteOutputPath =
-      TemplateProcessor.getRemoteOutputPath(templatePath);
+    const content = resolvedVariables.apply(template);
 
     return {
       content,
