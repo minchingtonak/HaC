@@ -3,6 +3,7 @@ import * as command from '@pulumi/command';
 import * as ansible from '@pulumi/ansible';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as crypto from 'crypto';
 import {
   Provisioner,
   ScriptProvisioner,
@@ -216,6 +217,12 @@ export class ProvisionerEngine {
 
     this.validatePlaybookPath(playbookPath, provisioner.playbook);
 
+    const playbookContent = fs.readFileSync(playbookPath, 'utf-8');
+    const playbookHash = crypto
+      .createHash('sha256')
+      .update(playbookContent)
+      .digest('hex');
+
     const requirementsCommand = this.createRequirementsInstallCommand(
       provisioner,
       commandName,
@@ -250,6 +257,7 @@ export class ProvisionerEngine {
                 return acc;
               }, {} as Record<string, string>)
             : {}),
+          pulumi_playbook_hash: playbookHash,
         },
       },
       {
