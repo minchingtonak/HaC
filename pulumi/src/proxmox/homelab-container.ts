@@ -275,7 +275,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
         this.proxyNetwork = new command.remote.Command(
           `${args.hostname}-create-${HomelabContainer.PROXY_STACK_NAME}-network`,
           {
-            create: `if ! docker network ls --format "{{.Name}}" | grep -q "^${HomelabContainer.PROXY_STACK_NAME}$"; then docker network create '${HomelabContainer.PROXY_STACK_NAME}''; fi`,
+            create: `if ! docker network ls --format "{{.Name}}" | grep -q "^${HomelabContainer.PROXY_STACK_NAME}$"; then docker network create '${HomelabContainer.PROXY_STACK_NAME}'; fi`,
             delete: `if docker network ls --format "{{.Name}}" | grep -q "^${HomelabContainer.PROXY_STACK_NAME}$"; then docker network rm '${HomelabContainer.PROXY_STACK_NAME}'; fi`,
             addPreviousOutputInEnv: false,
             connection,
