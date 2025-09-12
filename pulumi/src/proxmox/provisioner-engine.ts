@@ -291,7 +291,7 @@ export class ProvisionerEngine {
     commandName: string,
     parent: pulumi.Resource,
     dependsOn?: ProvisionerResource,
-  ): command.local.Command {
+  ): command.local.Command | undefined {
     const playbookPath = path.resolve(
       this.args.projectRoot,
       provisioner.playbook,
@@ -305,6 +305,10 @@ export class ProvisionerEngine {
       playbookDir,
       `${playbookName}.requirements.yaml`,
     );
+
+    if (!fs.existsSync(requirementsPath)) {
+      return;
+    }
 
     const requirementsCommandName = `${commandName}-requirements`;
     const installCommand = `ansible-galaxy collection install -r "${requirementsPath}"`;
