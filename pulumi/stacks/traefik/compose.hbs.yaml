@@ -11,8 +11,8 @@ services:
       - /docker/traefik/letsencrypt:/letsencrypt
       - /docker/traefik:/etc/traefik
     environment:
-      - PORKBUN_API_KEY={{{SECRET_PORKBUN_API_KEY}}}
-      - PORKBUN_SECRET_API_KEY={{{SECRET_PORKBUN_SECRET_API_KEY}}}
+      - PORKBUN_API_KEY={{{traefik:SECRET_PORKBUN_API_KEY}}}
+      - PORKBUN_SECRET_API_KEY={{{traefik:SECRET_PORKBUN_SECRET_API_KEY}}}
     command: # traefik.yml (static) configuration goes below
       - --api=true
       - --api.dashboard=true
@@ -32,7 +32,7 @@ services:
       - --entrypoints.slskd-listen-50300-tcp.address=:50300
       - --providers.docker.endpoint=unix:///var/run/docker.sock
       - --providers.docker.exposedByDefault=false
-      - --certificatesresolvers.porkbun.acme.email={{{SECRET_ACME_EMAIL}}}
+      - --certificatesresolvers.porkbun.acme.email={{{traefik:SECRET_ACME_EMAIL}}}
       - --certificatesresolvers.porkbun.acme.storage=/letsencrypt/acme.json
       - --certificatesresolvers.porkbun.acme.caserver=https://acme-v02.api.letsencrypt.org/directory # prod
       # - --certificatesresolvers.porkbun.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory # staging
@@ -44,7 +44,7 @@ services:
       - traefik.enable=true
       # misc
       # generate credentials: echo $(htpasswd -nB akmin <password>) (or input password via stdin)
-      - traefik.http.middlewares.traefik-auth.basicauth.users={{{SECRET_DASHBOARD_CREDENTIALS}}}
+      - traefik.http.middlewares.traefik-auth.basicauth.users={{{traefik:SECRET_DASHBOARD_CREDENTIALS}}}
       - traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https
       - traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https
       # http

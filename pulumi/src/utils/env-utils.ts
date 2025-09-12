@@ -92,8 +92,6 @@ export class EnvUtils {
     return Array.from(varNames);
   }
 
-  private static readonly PARENT_NAMESPACE_PREFIX = 'PARENT:';
-
   /**
    * Assembles a variable map from a Pulumi config for the given variable names
    * @param config The Pulumi config instance to read from
@@ -107,39 +105,53 @@ export class EnvUtils {
     const envMap: Record<string, string | pulumi.Output<string>> = {};
 
     for (const varName of variableNames) {
-      let varNameToCheck = varName;
-      let configKey = varName;
-      let configToUse = config;
-
-      if (
-        varName.toLocaleUpperCase().startsWith(EnvUtils.PARENT_NAMESPACE_PREFIX)
-      ) {
-        const namespace = config.name;
-        if (!namespace.includes('#')) {
-          throw new Error(
-            `Tried to access parent of root namespace: '${namespace}'`,
-          );
-        }
-
-        varNameToCheck = configKey = varName.slice(
-          EnvUtils.PARENT_NAMESPACE_PREFIX.length,
-        );
-
-        const parentNamespace = namespace.slice(0, namespace.lastIndexOf('#'));
-        configToUse = new pulumi.Config(parentNamespace);
-      }
-
-      if (
-        varNameToCheck
-          .toLocaleUpperCase()
-          .startsWith(EnvUtils.SECRET_VARIABLE_PREFIX)
-      ) {
-        envMap[varName] = configToUse.requireSecret(configKey);
-      } else {
-        envMap[varName] = configToUse.require(configKey);
-      }
+      const { getConfigValue } = EnvUtils.resolveVariable(varName, config);
+      envMap[varName] = getConfigValue();
     }
 
     return envMap;
+  }
+
+  private static readonly PARENT_NAMESPACE_PREFIX = 'PARENT:';
+
+  private static resolveVariable(varName: string, config: pulumi.Config) {
+    let resolvedConfig = config;
+    let resolvedConfigKey = varName;
+
+    if (
+      varName.toLocaleUpperCase().startsWith(EnvUtils.PARENT_NAMESPACE_PREFIX)
+    ) {
+      const namespace = config.name;
+      if (!namespace.includes('#')) {
+        throw new Error(
+          `Tried to access parent of root namespace: '${namespace}'`,
+        );
+      }
+
+      // remove parent: from the variable name so it can be used for config lookup
+      resolvedConfigKey = varName.slice(
+        EnvUtils.PARENT_NAMESPACE_PREFIX.length,
+      );
+      const parentNamespace = namespace.slice(0, namespace.lastIndexOf('#'));
+      resolvedConfig = new pulumi.Config(parentNamespace);
+    } else if (varName.includes(':')) {
+      const [namespace, configVarName] = varName.split(':');
+      resolvedConfig = new pulumi.Config(namespace);
+      resolvedConfigKey = configVarName;
+    }
+
+    const isSecret = resolvedConfigKey
+      .toLocaleUpperCase()
+      .startsWith(EnvUtils.SECRET_VARIABLE_PREFIX);
+
+    const getConfigValue = isSecret
+      ? () => resolvedConfig.requireSecret(resolvedConfigKey)
+      : () => resolvedConfig.require(resolvedConfigKey);
+
+    return {
+      getConfigValue,
+      resolvedConfigKey,
+      resolvedConfig,
+    };
   }
 }
