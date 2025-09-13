@@ -9,7 +9,7 @@ services:
     volumes:
       - /docker/docuseal:/data/docuseal
     environment:
-      - FORCE_SSL=docuseal.{{{PARENT:CONTAINER_DOMAIN}}}
+      - FORCE_SSL={{{APP_DOMAIN}}}
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/docuseal
     restart: unless-stopped
     labels:

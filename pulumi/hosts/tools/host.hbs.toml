@@ -1,7 +1,7 @@
 # verified
 id = 208
 hostname = "tools-pulumi"
-enabled = true
+enabled = false
 
 description = "swiss army knife array of utility tools"
 stacks = [
