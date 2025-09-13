@@ -34,27 +34,27 @@ config:
     secure: v1:aa25tD89mZWe4xmC:2nwTF58I51T0oKH52cdWLcHfsrAW87XFdex9bCobX/hAoIKultlUwq6WB7odz82sr6j4zavf9zpztxzqx3ZNHJbX4iUnAeg7mrSyPOFSeIMSWg==
   # archiver
   archiver-pulumi:CONTAINER_DOMAIN: archiver-pulumi.pulumi.homelab.akmin.dev
-  archiver-pulumi#archiveteam-warrior:APP_DOMAIN: archiveteam-warrior.{{{PARENT:CONTAINER_DOMAIN}}}
+  archiver-pulumi#archiveteam-warrior:APP_DOMAIN: archiveteam-warrior.{{{parent:CONTAINER_DOMAIN}}}
   # copyparty
   copyparty-pulumi:CONTAINER_DOMAIN: copyparty-pulumi.pulumi.homelab.akmin.dev
-  copyparty-pulumi#copyparty:APP_DOMAIN: copyparty.{{{PARENT:CONTAINER_DOMAIN}}}
+  copyparty-pulumi#copyparty:APP_DOMAIN: copyparty.{{{parent:CONTAINER_DOMAIN}}}
   # tools
   tools-pulumi:CONTAINER_DOMAIN: tools-pulumi.pulumi.homelab.akmin.dev
-  tools-pulumi#cyberchef:APP_DOMAIN: cyberchef.{{{PARENT:CONTAINER_DOMAIN}}}
-  tools-pulumi#docuseal:APP_DOMAIN: docuseal.{{{PARENT:CONTAINER_DOMAIN}}}
-  tools-pulumi#it-tools:APP_DOMAIN: ittools.{{{PARENT:CONTAINER_DOMAIN}}}
-  tools-pulumi#mazanoke:APP_DOMAIN: mazanoke.{{{PARENT:CONTAINER_DOMAIN}}}
-  tools-pulumi#omni-tools:APP_DOMAIN: omnitools.{{{PARENT:CONTAINER_DOMAIN}}}
-  tools-pulumi#stirling-pdf:APP_DOMAIN: stirlingpdf.{{{PARENT:CONTAINER_DOMAIN}}}
+  tools-pulumi#cyberchef:APP_DOMAIN: cyberchef.{{{parent:CONTAINER_DOMAIN}}}
+  tools-pulumi#docuseal:APP_DOMAIN: docuseal.{{{parent:CONTAINER_DOMAIN}}}
+  tools-pulumi#it-tools:APP_DOMAIN: ittools.{{{parent:CONTAINER_DOMAIN}}}
+  tools-pulumi#mazanoke:APP_DOMAIN: mazanoke.{{{parent:CONTAINER_DOMAIN}}}
+  tools-pulumi#omni-tools:APP_DOMAIN: omnitools.{{{parent:CONTAINER_DOMAIN}}}
+  tools-pulumi#stirling-pdf:APP_DOMAIN: stirlingpdf.{{{parent:CONTAINER_DOMAIN}}}
   # apprise
   apprise-pulumi:CONTAINER_DOMAIN: apprise-pulumi.pulumi.homelab.akmin.dev
-  apprise-pulumi#apprise:APP_DOMAIN: apprise.{{{PARENT:CONTAINER_DOMAIN}}}
+  apprise-pulumi#apprise:APP_DOMAIN: apprise.{{{parent:CONTAINER_DOMAIN}}}
   apprise-pulumi#apprise:SECRET_SERVARR_SLACK_WEBHOOK:
     secure: v1:WsS7ZU2EH2dvJwmu:nrRyndrzO45Te8/ARtzdo3bDzdc3jRDoZNWUNyO7qWcV/AFTRVhO+bNRMoc3VWyTz2e8abYC3aUYy474nnzTpUgs62S/SMI0cBLagEDf/YExO/QvpZ/KXTC6cca4ea8jsw==
   # admin
   admin-pulumi:CONTAINER_DOMAIN: admin-pulumi.pulumi.homelab.akmin.dev
-  admin-pulumi#glance:APP_DOMAIN: glance.{{{PARENT:CONTAINER_DOMAIN}}}
-  admin-pulumi#semaphore:APP_DOMAIN: semaphore.{{{PARENT:CONTAINER_DOMAIN}}}
+  admin-pulumi#glance:APP_DOMAIN: glance.{{{parent:CONTAINER_DOMAIN}}}
+  admin-pulumi#semaphore:APP_DOMAIN: semaphore.{{{parent:CONTAINER_DOMAIN}}}
   admin-pulumi#semaphore:SECRET_ADMIN_USERNAME:
     secure: v1:hfzh9QFJQ1EIzwfo:YvPybPDxT0B3iA1b8GstY1jk7Xnv
   admin-pulumi#semaphore:SECRET_ADMIN_PASSWORD:
@@ -65,19 +65,19 @@ config:
     secure: v1:TssVt21kCosYCKbY:vFlhMwP39dCP7Uf8R87YdMM88+lXSDYL1nyGb8KTgpwY/N9Pu6lDPPfuajwhCycV1wf9PxxBscwbkPc3nCHA8+Vgnhc9fHSw+Q1a8RgApZTCAZksNuGLKMZjDaS0ZZMY/A==
   # gitea
   gitea-pulumi:CONTAINER_DOMAIN: gitea-pulumi.pulumi.homelab.akmin.dev
-  gitea-pulumi#gitea:APP_DOMAIN: gitea.{{{PARENT:CONTAINER_DOMAIN}}}
+  gitea-pulumi#gitea:APP_DOMAIN: gitea.{{{parent:CONTAINER_DOMAIN}}}
   # downloader
   downloader-pulumi:CONTAINER_DOMAIN: downloader-pulumi.pulumi.homelab.akmin.dev
-  downloader-pulumi#ytptube:APP_DOMAIN: ytptube.{{{PARENT:CONTAINER_DOMAIN}}}
+  downloader-pulumi#ytptube:APP_DOMAIN: ytptube.{{{parent:CONTAINER_DOMAIN}}}
   # immich
   immich-pulumi:CONTAINER_DOMAIN: immich-pulumi.pulumi.homelab.akmin.dev
-  immich-pulumi#immich:APP_DOMAIN: immich.{{{PARENT:CONTAINER_DOMAIN}}}
+  immich-pulumi#immich:APP_DOMAIN: immich.{{{parent:CONTAINER_DOMAIN}}}
   immich-pulumi#immich:SECRET_DB_PASSWORD:
     secure: v1:ECc5/vJz6VnDlxsj:xgdWvCAj0NxBmWNBrAg4cP+l8j7DAk9cij/mO/JSNm+S8zVq
   # backup
   backup-pulumi:CONTAINER_DOMAIN: backup-pulumi.pulumi.homelab.akmin.dev
-  backup-pulumi#backrest:APP_DOMAIN: backrest.{{{PARENT:CONTAINER_DOMAIN}}}
-  backup-pulumi#cronicle:APP_DOMAIN: cronicle.{{{PARENT:CONTAINER_DOMAIN}}}
+  backup-pulumi#backrest:APP_DOMAIN: backrest.{{{parent:CONTAINER_DOMAIN}}}
+  backup-pulumi#cronicle:APP_DOMAIN: cronicle.{{{parent:CONTAINER_DOMAIN}}}
   backup-pulumi#cronicle:CRONICLE_BASE_APP_URL: https://cronicle.backup-pulumi.pulumi.homelab.akmin.dev
   backup-pulumi#cronicle:SECRET_CRONICLE_UNIVERSAL_WEB_HOOK:
     secure: v1:UiKAJNHijNn0sxiS:QWspnq95k6UcAZ6hxzMQw3LsE3JDfDdsjxx2gB0s2ChJ3nTj0LRmcuqTdF6PWCQrjlOhP5KOM2XFniDlF/4bOUpwOkioAdB+W3dwoepydWEpxk2poFWxZHEs0aznDstYeQ==
@@ -96,8 +96,8 @@ config:
     secure: v1:+wCA5m2zsGeupOzU:0TqufLdbUSRVv6HMHfsCjYF5q/q6d8TWTGYmIbPDTAB4BjV/sq8uXJdZswAeIH1MzC7Bz418ppHq/1JrlyHPDvlm+Z0/GOvK
   # jellyfin
   jellyfin-pulumi:CONTAINER_DOMAIN: jellyfin-pulumi.pulumi.homelab.akmin.dev
-  jellyfin-pulumi#jellyfin:APP_DOMAIN: jellyfin.{{{PARENT:CONTAINER_DOMAIN}}}
+  jellyfin-pulumi#jellyfin:APP_DOMAIN: jellyfin.{{{parent:CONTAINER_DOMAIN}}}
   # jellyseerr
   jellyseerr-pulumi:CONTAINER_DOMAIN: jellyseerr-pulumi.pulumi.homelab.akmin.dev
-  jellyseerr-pulumi#jellyseerr:APP_DOMAIN: jellyseerr.{{{PARENT:CONTAINER_DOMAIN}}}
+  jellyseerr-pulumi#jellyseerr:APP_DOMAIN: jellyseerr.{{{parent:CONTAINER_DOMAIN}}}
 
