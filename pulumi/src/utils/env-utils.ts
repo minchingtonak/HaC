@@ -18,7 +18,9 @@ export class EnvUtils {
 
     for (const varName of variableNames) {
       const { getConfigValue } = EnvUtils.resolveVariable(varName, config);
-      envMap[varName] = getConfigValue();
+      if (getConfigValue) {
+        envMap[varName] = getConfigValue();
+      }
     }
 
     return envMap;
@@ -32,7 +34,10 @@ export class EnvUtils {
     let resolvedConfig = config;
     let resolvedConfigKey = varName;
 
-    if (varName.startsWith(EnvUtils.PARENT_NAMESPACE_PREFIX)) {
+    // data variable, do not fetch from config
+    if (varName.startsWith('@')) {
+      return {};
+    } else if (varName.startsWith(EnvUtils.PARENT_NAMESPACE_PREFIX)) {
       const namespace = config.name;
       if (!namespace.includes('#')) {
         throw new Error(

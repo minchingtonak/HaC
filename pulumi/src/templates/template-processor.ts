@@ -96,6 +96,7 @@ export class TemplateProcessor {
   static processTemplate(
     templatePath: string,
     config: pulumi.Config,
+    dataVariables?: unknown,
   ): RenderedTemplateFile {
     const templateContent = fs.readFileSync(templatePath, 'utf-8');
 
@@ -150,8 +151,6 @@ export class TemplateProcessor {
       .all(Object.values(initialVarValueMap))
       .apply(processRecursiveVariables);
 
-    // iterate over the map of merged variables. compile each value as a template and set the value of the rendered template to the variable in the map
-    // after this process all variables in the map will have been expanded
     const mergedVariables = pulumi
       .all(initialVarValueMap)
       .apply((initialVars) =>
@@ -160,6 +159,8 @@ export class TemplateProcessor {
           .apply((recursiveVars) => ({ ...initialVars, ...recursiveVars })),
       );
 
+    // iterate over the map of merged variables. compile each value as a template and set the value of the rendered template to the variable in the map
+    // after this process all variables in the map will have been expanded
     const resolvedVariables = mergedVariables.apply((merged) => {
       const result = structuredClone(merged);
 
@@ -169,7 +170,9 @@ export class TemplateProcessor {
         for (const [varName, varValue] of Object.entries(merged)) {
           const template = Handlebars.compile<Record<string, string>>(varValue);
 
-          const newVariableValue = template(result);
+          const newVariableValue = template(result, {
+            data: dataVariables,
+          });
 
           result[varName] = newVariableValue;
         }
@@ -181,7 +184,9 @@ export class TemplateProcessor {
     const template =
       Handlebars.compile<Record<string, string>>(templateContent);
 
-    const content = resolvedVariables.apply(template);
+    const content = resolvedVariables.apply((vars) =>
+      template(vars, { data: dataVariables }),
+    );
 
     return {
       content,

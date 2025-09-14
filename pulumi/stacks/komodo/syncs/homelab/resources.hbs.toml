@@ -46,13 +46,13 @@ alert_types = [
   "RepoBuildFailed",
   "ScheduleRun",
   "ActionFailed",
-  "ProcedureFailed"
+  "ProcedureFailed",
 ]
 
 ##
 
 [[server]]
-name = "{{{parent:SERVER_NAME}}}"
+name = "{{{@host.hostname}}}"
 [server.config]
 address = "https://host.docker.internal:8120"
 # address = "https://periphery:8120"

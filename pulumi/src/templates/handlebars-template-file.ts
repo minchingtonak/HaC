@@ -26,6 +26,9 @@ export class HandlebarsTemplateFile extends pulumi.ComponentResource {
     this.processedTemplate = TemplateProcessor.processTemplate(
       args.templatePath,
       new pulumi.Config(`${args.hostConfig.hostname}#${args.stackName}`),
+      {
+        host: args.hostConfig
+      }
     );
 
     this.asset = new CopyableAsset(
