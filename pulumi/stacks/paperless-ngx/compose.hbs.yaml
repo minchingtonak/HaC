@@ -4,6 +4,8 @@ services:
     restart: unless-stopped
     volumes:
       - /docker/paperless-ngx/redisdata:/data
+    networks:
+      - paperless
 
   db:
     image: docker.io/library/postgres:16
@@ -14,6 +16,8 @@ services:
       POSTGRES_DB: paperless
       POSTGRES_USER: paperless
       POSTGRES_PASSWORD: paperless
+    networks:
+      - paperless
 
   webserver:
     image: ghcr.io/paperless-ngx/paperless-ngx:latest
@@ -34,20 +38,20 @@ services:
       USERMAP_UID: 0
       USERMAP_GID: 0
       PAPERLESS_APP_TITLE: paperless-ngx
-      PAPERLESS_URL: '{{{APP_URL}}}'
+      PAPERLESS_URL: https://{{{APP_DOMAIN}}}
       PAPERLESS_REDIS: redis://broker:6379
       PAPERLESS_DBHOST: db
       PAPERLESS_TIME_ZONE: America/Los_Angeles
       PAPERLESS_CONSUMPTION_DIR: /usr/src/paperless/consume
       PAPERLESS_CONSUMER_RECURSIVE: true
       PAPERLESS_DATA_DIR: /usr/src/paperless/data
-      PAPERLESS_EMPTY_TRASH_DIR: /usr/src/paperless/media/trash
+      # PAPERLESS_EMPTY_TRASH_DIR: /usr/src/paperless/media/trash
       PAPERLESS_EMPTY_TRASH_DELAY: 7
       PAPERLESS_MEDIA_ROOT: /usr/src/paperless/media
       # https://docs.paperless-ngx.com/advanced_usage/#file-name-handling
       # use the following to migrate files after changing filename format: https://docs.paperless-ngx.com/administration/#renamer
       # remove spaces from file/folder names
-      PAPERLESS_FILENAME_FORMAT: '{% filter replace(" ", "") %}{{ custom_fields.Category.value }}/{{ correspondent }}/{{ created }}_{{ title }}{% endfilter %}'
+      PAPERLESS_FILENAME_FORMAT: '{{{{raw}}}}{% filter replace(" ", "") %}{{ custom_fields.Category.value }}/{{ correspondent }}/{{ created }}_{{ title }}{% endfilter %}{{{{/raw}}}}'
       PAPERLESS_FILENAME_FORMAT_REMOVE_NONE: false
       PAPERLESS_FILENAME_DATE_ORDER: YMD # check document filenames for dates in ISO-8601 format
       PAPERLESS_LOGGING_DIR: /usr/src/paperless/data/log
@@ -65,6 +69,7 @@ services:
       PAPERLESS_TIKA_ENDPOINT: http://tika:9998
     labels:
       - traefik.enable=true
+      - traefik.docker.network=traefik
       - traefik.http.routers.paperlessngx.rule=Host(`{{{APP_DOMAIN}}}`)
       - traefik.http.routers.paperlessngx.entrypoints=https
       - traefik.http.routers.paperlessngx.tls=true
@@ -72,6 +77,7 @@ services:
       - traefik.http.routers.paperlessngx.service=paperlessngx
       - traefik.http.services.paperlessngx.loadbalancer.server.port=8000
     networks:
+      - paperless
       - traefik
 
   gotenberg:
@@ -84,11 +90,16 @@ services:
       - '--api-timeout=600s'
       - '--chromium-disable-javascript=true'
       - '--chromium-allow-list=file:///tmp/.*'
+    networks:
+      - paperless
 
   tika:
     image: docker.io/apache/tika:latest
     restart: unless-stopped
+    networks:
+      - paperless
 
 networks:
+  paperless:
   traefik:
     external: true

@@ -1,9 +1,10 @@
+# verified
 id = 214
 hostname = "paperless-pulumi"
 enabled = false
 
-description = "copyparty lightweight fileserver container"
-stacks = ["traefik", "paperless-ngx"]
+description = "paperless document management systems"
+stacks = ["traefik", "loggifly", "komodo", "dozzle", "paperless-ngx"]
 
 [cpu]
 cores = 2
