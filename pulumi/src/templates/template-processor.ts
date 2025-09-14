@@ -323,8 +323,17 @@ export class TemplateProcessor {
   }
 
   static buildSanitizedNameForId(templatePath: string): string {
-    const filename = path.basename(templatePath);
-    return filename.replaceAll('.', '-').replaceAll(/[^a-zA-Z0-9_-]/g, '');
+    let filename = path.basename(templatePath);
+
+    if (filename.startsWith('.')) {
+      filename = `dot-${filename.substring(1)}`;
+      templatePath = path.join(path.dirname(templatePath), filename);
+    }
+
+    return templatePath
+      .replaceAll('.', '-')
+      .replaceAll(path.sep, '-')
+      .replaceAll(/[^a-zA-Z0-9_-]/g, '');
   }
 }
 
