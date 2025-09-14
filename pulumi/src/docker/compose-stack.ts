@@ -86,7 +86,7 @@ export class ComposeStack extends pulumi.ComponentResource {
             connection: args.connection,
           },
           {
-            parent: this,
+            parent: this.handlebarsTemplateDirectory,
             dependsOn: this.copyStackToRemote,
           },
         );
