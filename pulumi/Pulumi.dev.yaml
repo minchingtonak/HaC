@@ -125,4 +125,24 @@ config:
   # jellyseerr
   jellyseerr-pulumi:CONTAINER_DOMAIN: jellyseerr-pulumi.pulumi.homelab.akmin.dev
   jellyseerr-pulumi#jellyseerr:APP_DOMAIN: jellyseerr.{{{parent:CONTAINER_DOMAIN}}}
-
+  # life
+  life-pulumi:SERVER_NAME: life-pulumi
+  life-pulumi:CONTAINER_DOMAIN: life-pulumi.pulumi.homelab.akmin.dev
+  life-pulumi#fittrackee:APP_DOMAIN: fittrackee.{{{parent:CONTAINER_DOMAIN}}}
+  life-pulumi#memos:APP_DOMAIN: memos.{{{parent:CONTAINER_DOMAIN}}}
+  life-pulumi#wallos:APP_DOMAIN: wallos.{{{parent:CONTAINER_DOMAIN}}}
+  life-pulumi#mealie:APP_DOMAIN: mealie.{{{parent:CONTAINER_DOMAIN}}}
+  life-pulumi#mealie:MEALIE_BASE_URL: '{{{APP_DOMAIN}}}'
+  life-pulumi#dawarich:APP_DOMAIN: dawarich.{{{parent:CONTAINER_DOMAIN}}}
+  life-pulumi#dawarich:SECRET_DB_PASSWORD:
+    secure: v1:xEWsp+rmkp0ekfX0:fDOUcy1psCZEQPCgfxHGBMzi0oTNJdmNENQTIYNNxjQoc3Mt
+  life-pulumi#mealie:config_var_one: foo
+  life-pulumi#mealie:secret_config_var_two:
+    secure: v1:LX2BPUzsuoCbyNOC:urnuGx5snWwD2LsGaSxCm0ZVZQ==
+  life-pulumi#mealie:MY_VARIABLE_ONE: baz
+  life-pulumi#mealie:SECRET_MY_VARIABLE_TWO:
+    secure: v1:U0uk56thP2731+fx:NmCpYhX2FJu/cH+zqJGwxt81+bE=
+  life-pulumi#fittrackee:SECRET_SECRET_KEY:
+    secure: v1:ifCk9F9zZ+3sHV+R:05/13+YnJnaBGpU131t0FIplYRNxyXT/0StRQu+VGe1uIcp3ppDY0lJxTCV3Gg==
+  life-pulumi#fittrackee:SECRET_DB_PASSWORD:
+    secure: v1:2SC5AIdLdytL3l7R:CJhjXr0pdvtwClww4/fnwDjZHKE8F4Cxs4SxPW5wNIItrxTfXwtMAdzmkiE=
