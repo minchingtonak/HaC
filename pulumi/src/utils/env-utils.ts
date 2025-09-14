@@ -1,4 +1,5 @@
 import * as pulumi from '@pulumi/pulumi';
+import * as Handlebars from 'handlebars';
 
 /**
  * Utility functions for handling environment variables in various contexts
@@ -31,13 +32,19 @@ export class EnvUtils {
   private static readonly PARENT_NAMESPACE_PREFIX = 'parent:';
 
   private static resolveVariable(varName: string, config: pulumi.Config) {
-    let resolvedConfig = config;
-    let resolvedConfigKey = varName;
-
     // data variable, do not fetch from config
     if (varName.startsWith('@')) {
       return {};
-    } else if (varName.startsWith(EnvUtils.PARENT_NAMESPACE_PREFIX)) {
+    }
+
+    if (EnvUtils.IGNORED_VARIABLES.has(varName)) {
+      return {};
+    }
+
+    let resolvedConfig = config;
+    let resolvedConfigKey = varName;
+
+    if (varName.startsWith(EnvUtils.PARENT_NAMESPACE_PREFIX)) {
       const namespace = config.name;
       if (!namespace.includes('#')) {
         throw new Error(
@@ -70,6 +77,13 @@ export class EnvUtils {
       resolvedConfigKey,
       resolvedConfig,
     };
+  }
+
+  private static IGNORED_VARIABLES = new Set<string>();
+
+  static registerTemplateHelper(name: string, fn: Handlebars.HelperDelegate) {
+    Handlebars.registerHelper(name, fn);
+    EnvUtils.IGNORED_VARIABLES.add(name);
   }
 
   /**
@@ -158,3 +172,18 @@ export class EnvUtils {
     return Array.from(varNames);
   }
 }
+
+EnvUtils.registerTemplateHelper('raw', (options: Handlebars.HelperOptions) => {
+  return options.fn({});
+});
+
+EnvUtils.registerTemplateHelper(
+  'helperMissing',
+  function (/* dynamic arguments */) {
+    const options = arguments[arguments.length - 1];
+    const args = Array.prototype.slice.call(arguments, 0, arguments.length - 1);
+    return new Handlebars.SafeString(
+      'helperMissing: ' + options.name + '(' + args + ')',
+    );
+  },
+);

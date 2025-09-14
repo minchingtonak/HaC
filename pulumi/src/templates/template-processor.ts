@@ -341,11 +341,3 @@ export class TemplateProcessor {
       .replaceAll(/[^a-zA-Z0-9_-]/g, '');
   }
 }
-
-Handlebars.registerHelper('helperMissing', function (/* dynamic arguments */) {
-  const options = arguments[arguments.length - 1];
-  const args = Array.prototype.slice.call(arguments, 0, arguments.length - 1);
-  return new Handlebars.SafeString(
-    'helperMissing: ' + options.name + '(' + args + ')',
-  );
-});
