@@ -1,0 +1,15 @@
+services:
+  loggifly:
+    image: ghcr.io/clemcer/loggifly:latest
+    container_name: loggifly
+    # It is recommended to run the container as the same UID/GID as the owner of your docker socket to avoid running as root.
+    # But you can also just comment out the user line and run as root.
+    # You can check the socket permissions with `ls -n /var/run/docker.sock`
+    # user: "0:996"
+    read_only: true
+    environment:
+      TZ: America/Los_Angeles
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./config:/config
+    restart: unless-stopped

@@ -57,6 +57,9 @@ config:
   # beszel global
   beszel:SECRET_TOKEN:
     secure: v1:IIUwxsr3I1KdxI6k:Kk9/1n7AwS3llWL1tas9iCdjMqzU6gJlQH/+5nNEq6hjg+FZH9Gk3EIK/Mj6i2Ctnsb6jA==
+  # loggifly global
+  loggifly:SECRET_SLACK_WEBHOOK:
+    secure: v1:np+7j9i6PPh2CQsD:4ULi1u2NrP9UTiL6cFk8m5aptFzs3GZbAQjg+r+hQ5edgw6YAdM3xlXHlqhqL0WR6io79S8DSwV44yI1CNffgSQlmz6Z8aQb0eUxHNyuhx01jwXIDn/HCDggN4mKZAdISA==
   # archiver
   archiver-pulumi:CONTAINER_DOMAIN: archiver-pulumi.pulumi.homelab.akmin.dev
   archiver-pulumi#archiveteam-warrior:APP_DOMAIN: archiveteam-warrior.{{{parent:CONTAINER_DOMAIN}}}

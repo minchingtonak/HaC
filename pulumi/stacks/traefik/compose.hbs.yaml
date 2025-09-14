@@ -18,7 +18,7 @@ services:
       - --api.dashboard=true
       - --api.debug=true
       - --log.level=info
-      - --log.filePath=/etc/traefik/traefik.log
+      # - --log.filePath=/etc/traefik/traefik.log
       - --entrypoints.http.address=:80
       - --entrypoints.http.http.redirections.entrypoint.to=https
       - --entrypoints.http.http.redirections.entrypoint.scheme=https
@@ -60,6 +60,13 @@ services:
       - traefik.http.routers.traefik-secure.tls.domains[0].main={{{parent:CONTAINER_DOMAIN}}}
       - traefik.http.routers.traefik-secure.tls.domains[0].sans=*.{{{parent:CONTAINER_DOMAIN}}}
       - traefik.http.routers.traefik-secure.service=api@internal
+      #
+      - "loggifly.monitor=true"
+      - "loggifly.attach_logfile=true"
+      - "loggifly.keywords.0.regex= ERR "
+      - "loggifly.keywords.0.notification_title={container} - error"
+      - "loggifly.keywords.0.action=restart"
+      - "loggifly.keywords.0.action_cooldown=300"
     networks:
       - traefik
 
