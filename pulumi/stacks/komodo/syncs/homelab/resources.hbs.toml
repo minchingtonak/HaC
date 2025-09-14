@@ -1,0 +1,59 @@
+# warning: you must update this manually in the UI since the sync cannot update itself
+[[resource_sync]]
+name = "homelab"
+[resource_sync.config]
+files_on_host = true
+resource_path = ["resources.toml"]
+pending_alert = false
+delete = true
+
+##
+
+# warning: you must manually execute a sync since the action cannot update itself
+[[action]]
+name = "sync-homelab-resources"
+[action.config]
+# komodo is restarted whenever files are changed, so this is sufficient to maintain sync
+run_at_startup = true
+schedule_alert = false
+file_contents = """
+await komodo.execute('RunSync', {
+  sync: 'homelab' // resource sync name
+});
+"""
+
+##
+
+[[alerter]]
+name = "slack"
+[alerter.config]
+enabled = true
+endpoint.type = "Slack"
+endpoint.params.url = "{{{komodo:SECRET_SLACK_WEBHOOK}}}"
+alert_types = [
+  "ServerUnreachable",
+  "ServerCpu",
+  "ServerMem",
+  "ServerDisk",
+  "StackStateChange",
+  "StackAutoUpdated",
+  "ContainerStateChange",
+  "DeploymentImageUpdateAvailable",
+  "DeploymentAutoUpdated",
+  "AwsBuilderTerminationFailed",
+  "ResourceSyncPendingUpdates",
+  "BuildFailed",
+  "RepoBuildFailed",
+  "ScheduleRun",
+  "ActionFailed",
+  "ProcedureFailed"
+]
+
+##
+
+[[server]]
+name = "{{{parent:SERVER_NAME}}}"
+[server.config]
+address = "https://host.docker.internal:8120"
+# address = "https://periphery:8120"
+enabled = true

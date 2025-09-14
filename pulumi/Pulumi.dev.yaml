@@ -32,6 +32,21 @@ config:
     secure: v1:m7HfBcH/6BQpNaVt:YiUVsRksYvTgMvzLqQRUHulFKOHOZXpLpZvM/So=
   traefik:SECRET_DASHBOARD_CREDENTIALS:
     secure: v1:aa25tD89mZWe4xmC:2nwTF58I51T0oKH52cdWLcHfsrAW87XFdex9bCobX/hAoIKultlUwq6WB7odz82sr6j4zavf9zpztxzqx3ZNHJbX4iUnAeg7mrSyPOFSeIMSWg==
+  # komodo global
+  komodo:SECRET_DB_PASSWORD:
+    secure: v1:8mSv1bssR+dsJZed:gp9dM48zcgnbK6KOWO+ITbIsqw1Of6UpD9rFYwdarfTXqP+OpQ==
+  komodo:SECRET_PASSKEY:
+    secure: v1:FHrL0nB5OM/4fJm2:DchBowFw98LiIr6ky2FXFSmq7i3XJmsXYWf4DoAADWvNym+qp+akp33yBsQ9rXw=
+  komodo:SECRET_WEBHOOK_SECRET:
+    secure: v1:cT6hMe+16mKMOR1D:U/vKdAqEkDP8eZiP8rcOfMMnVSOp1OOEP4QgEokkGFJGxqM0gdwEQ0FSZTdHQrAU
+  komodo:SECRET_JWT_SECRET:
+    secure: v1:BN93OGgecVHWkzWv:edyepO2dIenDfeAEYzjHlsPzl5Qpzc/QVCwZD0hdP3syQ33ZOIEouBJDMiwqXw==
+  komodo:SECRET_ADMIN_USERNAME:
+    secure: v1:Hpo/vpPMRkgofDd2:338xTSbTmwQIUxmIyls/jK5IV6HC
+  komodo:SECRET_ADMIN_PASSWORD:
+    secure: v1:MJgjUhdcYZG/Afnk:C+duYylljKZE2k1C0JZnpBkmsqcI8XZ5oH7JpZTfBzTTx1jg
+  komodo:SECRET_SLACK_WEBHOOK:
+    secure: v1:aF0/x9eDUoulzWyT:VxLAQPL64UO/x/J5BegvI+AE9RIbXLUBozakOYNYx+BMOxjbr8DXHDIoi2S072Y0itowK49HeKcZp/GVtlEEvFaLlnfRfIBTMKBM58mzXnl3ar0uHd5hq/SMc1jkwiguXg==
   # archiver
   archiver-pulumi:CONTAINER_DOMAIN: archiver-pulumi.pulumi.homelab.akmin.dev
   archiver-pulumi#archiveteam-warrior:APP_DOMAIN: archiveteam-warrior.{{{parent:CONTAINER_DOMAIN}}}
