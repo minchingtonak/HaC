@@ -1,0 +1,7 @@
+# Values for port, users, and token are optional.
+# Defaults are port 45876, the first created user, and a generated UUID token.
+
+systems:
+  - name: local
+    host: /beszel_socket/beszel.sock
+    token: '{{{beszel:SECRET_TOKEN}}}'

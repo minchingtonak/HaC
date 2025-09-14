@@ -47,6 +47,9 @@ config:
     secure: v1:MJgjUhdcYZG/Afnk:C+duYylljKZE2k1C0JZnpBkmsqcI8XZ5oH7JpZTfBzTTx1jg
   komodo:SECRET_SLACK_WEBHOOK:
     secure: v1:aF0/x9eDUoulzWyT:VxLAQPL64UO/x/J5BegvI+AE9RIbXLUBozakOYNYx+BMOxjbr8DXHDIoi2S072Y0itowK49HeKcZp/GVtlEEvFaLlnfRfIBTMKBM58mzXnl3ar0uHd5hq/SMc1jkwiguXg==
+  # beszel global
+  beszel:SECRET_TOKEN:
+    secure: v1:IIUwxsr3I1KdxI6k:Kk9/1n7AwS3llWL1tas9iCdjMqzU6gJlQH/+5nNEq6hjg+FZH9Gk3EIK/Mj6i2Ctnsb6jA==
   # archiver
   archiver-pulumi:CONTAINER_DOMAIN: archiver-pulumi.pulumi.homelab.akmin.dev
   archiver-pulumi#archiveteam-warrior:APP_DOMAIN: archiveteam-warrior.{{{parent:CONTAINER_DOMAIN}}}
