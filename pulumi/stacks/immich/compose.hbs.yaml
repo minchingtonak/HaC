@@ -33,6 +33,7 @@ services:
       disable: false
     labels:
       - traefik.enable=true
+      - traefik.docker.network=traefik
       - traefik.http.routers.immich.rule=Host(`{{{APP_DOMAIN}}}`)
       - traefik.http.routers.immich.entrypoints=https
       - traefik.http.routers.immich.tls=true

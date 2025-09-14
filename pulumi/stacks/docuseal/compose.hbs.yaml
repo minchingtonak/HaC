@@ -14,6 +14,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
+      - traefik.docker.network=traefik
       - traefik.http.routers.docuseal.rule=Host(`{{{APP_DOMAIN}}}`)
       - traefik.http.routers.docuseal.entrypoints=https
       - traefik.http.routers.docuseal.tls=true
