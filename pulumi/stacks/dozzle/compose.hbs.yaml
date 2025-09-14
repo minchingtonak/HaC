@@ -1,0 +1,28 @@
+# Run with docker compose up -d
+services:
+  dozzle:
+    image: amir20/dozzle:latest
+    volumes:
+      - ./users.yaml:/data/users.yaml
+      - /var/run/docker.sock:/var/run/docker.sock
+    # ports:
+    #   - 8080:8080
+    environment:
+      - DOZZLE_ENABLE_ACTIONS=true
+      - DOZZLE_ENABLE_SHELL=true
+      - DOZZLE_AUTH_PROVIDER=simple
+      - DOZZLE_NO_ANALYTICS
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dozzle.rule=Host(`dozzle.{{{parent:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.dozzle.entrypoints=https
+      - traefik.http.routers.dozzle.tls=true
+      - traefik.http.routers.dozzle.tls.certresolver=porkbun
+      - traefik.http.routers.dozzle.service=dozzle
+      - traefik.http.services.dozzle.loadbalancer.server.port=8080
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

@@ -47,6 +47,13 @@ config:
     secure: v1:MJgjUhdcYZG/Afnk:C+duYylljKZE2k1C0JZnpBkmsqcI8XZ5oH7JpZTfBzTTx1jg
   komodo:SECRET_SLACK_WEBHOOK:
     secure: v1:aF0/x9eDUoulzWyT:VxLAQPL64UO/x/J5BegvI+AE9RIbXLUBozakOYNYx+BMOxjbr8DXHDIoi2S072Y0itowK49HeKcZp/GVtlEEvFaLlnfRfIBTMKBM58mzXnl3ar0uHd5hq/SMc1jkwiguXg==
+  # dozzle global
+  dozzle:SECRET_ADMIN_EMAIL:
+    secure: v1:3tBP2U6rb5s5dFxt:PtbIK5ixChRsG5TJIXzuYdDhoiGgJiuDjZCg9Zbvcw==
+  dozzle:SECRET_ADMIN_NAME:
+    secure: v1:tMQPJSabwVBN5e5D:MnlzNXOPWw5tpsyVJTlmfN5Xs0Jk
+  dozzle:SECRET_ADMIN_PASSWORD:
+    secure: v1:IiZyTmntx50ts2Zv:2pIeeVPS++VrnTz+mlG6Ok2ecjv0JnGaSYJRMdtxUWGA4g87c8U9tqmWXSfigkVozoX1bRrm0MPXFJv1ZA3smbhyEJaJ2liTRvCCSA==
   # beszel global
   beszel:SECRET_TOKEN:
     secure: v1:IIUwxsr3I1KdxI6k:Kk9/1n7AwS3llWL1tas9iCdjMqzU6gJlQH/+5nNEq6hjg+FZH9Gk3EIK/Mj6i2Ctnsb6jA==
