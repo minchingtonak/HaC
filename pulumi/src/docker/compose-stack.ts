@@ -21,6 +21,8 @@ export class ComposeStack extends pulumi.ComponentResource {
 
   copyStackToRemote: command.remote.CopyToRemote;
 
+  deleteStackFolder: command.remote.Command;
+
   handlebarsTemplateDirectory: HandlebarsTemplateDirectory;
 
   processedTemplateCopies: {
@@ -92,6 +94,13 @@ export class ComposeStack extends pulumi.ComponentResource {
         );
     }
 
+    // delete stack folder when removing this resource
+    this.deleteStackFolder = new command.remote.Command(
+      `${args.hostConfig.hostname}-delete-${args.stackName}-stack-directory`,
+      { delete: `rm -rf ${remoteStackDirectory}`, connection: args.connection },
+      { parent: this, dependsOn: this.copyStackToRemote },
+    );
+
     this.deployStack = new command.remote.Command(
       `${args.hostConfig.hostname}-deploy-${args.stackName}-stack`,
       {
@@ -103,7 +112,7 @@ export class ComposeStack extends pulumi.ComponentResource {
       },
       {
         parent: this,
-        dependsOn: this.copyStackToRemote,
+        dependsOn: this.deleteStackFolder,
         hooks: {
           afterCreate: [ComposeStackUtils.checkForMissingVariables],
           afterUpdate: [ComposeStackUtils.checkForMissingVariables],
@@ -112,6 +121,7 @@ export class ComposeStack extends pulumi.ComponentResource {
         additionalSecretOutputs: ['stdout', 'stderr'],
       },
     );
+
 
     this.registerOutputs({
       deployCommand: this.deployStack.create,
