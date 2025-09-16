@@ -54,7 +54,6 @@ export class ProvisionerEngine {
     dependsOn?: ProvisionerResource,
     index?: number,
   ): ProvisionerResource {
-    const connection = this.buildConnection(provisioner);
     const commandName = `${this.args.hostname}-provisioner-${index}-${provisioner.name}`;
 
     switch (provisioner.type) {
@@ -62,7 +61,7 @@ export class ProvisionerEngine {
         return this.createScriptCommand(
           provisioner,
           commandName,
-          connection,
+          this.buildScriptConnection(provisioner),
           parent,
           dependsOn,
         );
@@ -70,20 +69,20 @@ export class ProvisionerEngine {
         return this.createAnsiblePlaybook(
           provisioner,
           commandName,
-          connection,
+          this.buildAnsibleConnection(provisioner),
           parent,
           dependsOn,
         );
     }
   }
 
-  private buildConnection(
-    provisioner: Provisioner,
+  private buildScriptConnection(
+    provisioner: ScriptProvisioner,
   ): command.types.input.remote.ConnectionArgs {
     const baseConnection = this.args.connection;
     const override = provisioner.connection;
 
-    if (!override) return baseConnection;
+    if (!override) return { ...baseConnection };
 
     return {
       ...baseConnection,
@@ -91,6 +90,25 @@ export class ProvisionerEngine {
       ...(override.user && { user: override.user }),
       ...(override.port && { port: override.port }),
       ...(override.privateKey && { privateKey: override.privateKey }),
+    };
+  }
+
+  private buildAnsibleConnection(
+    provisioner: AnsibleProvisioner,
+  ): command.types.input.remote.ConnectionArgs & { privateKeyFile: string } {
+    const baseConnection = this.args.connection;
+    const override = provisioner.connection;
+
+    if (!override)
+      return { ...baseConnection, privateKeyFile: '~/.ssh/lxc_ed25519' };
+
+    return {
+      ...baseConnection,
+      privateKeyFile: '~/.ssh/lxc_ed25519',
+      ...(override.host && { host: override.host }),
+      ...(override.user && { user: override.user }),
+      ...(override.port && { port: override.port }),
+      ...(override.privateKeyFile && { privateKey: override.privateKeyFile }),
     };
   }
 
@@ -206,7 +224,7 @@ export class ProvisionerEngine {
   private createAnsiblePlaybook(
     provisioner: AnsibleProvisioner,
     commandName: string,
-    connection: command.types.input.remote.ConnectionArgs,
+    connection: ReturnType<typeof this.buildAnsibleConnection>,
     parent: pulumi.Resource,
     dependsOn?: ProvisionerResource,
   ): ansible.Playbook {
@@ -244,9 +262,10 @@ export class ProvisionerEngine {
         extraVars: {
           // https://docs.ansible.com/ansible/latest/reference_appendices/special_variables.html#connection-variables
           ansible_host: connection.host,
-          ansible_user: provisioner.user,
+          ansible_user: connection.user!,
           // https://docs.ansible.com/ansible/2.9/plugins/connection/ssh.html#ssh-connection
-          ansible_ssh_private_key_file: provisioner.privateKeyFile,
+          ansible_ssh_private_key_file: connection.privateKeyFile,
+          // ansible_ssh_port: String(connection.port),
           ansible_ssh_common_args: '-o StrictHostKeyChecking=no',
           ansible_ssh_retries: '3',
           // disable warning due to ansible automatically choosing the python version on the target

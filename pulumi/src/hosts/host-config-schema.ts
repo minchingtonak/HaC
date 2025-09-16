@@ -58,11 +58,20 @@ const DevicePassthroughSchema = z
   })
   .strict();
 
-const ConnectionOverrideSchema = z
+const AnsibleConnectionOverrideSchema = z
   .object({
     host: z.string().optional(),
-    user: z.string().optional(),
-    port: z.number().positive().optional(),
+    user: z.string().optional().default('root'),
+    port: z.number().positive().optional().default(22),
+    privateKeyFile: z.string().optional().default('~/.ssh/lxc_ed25519'),
+  })
+  .strict();
+
+const ScriptConnectionOverrideSchema = z
+  .object({
+    host: z.string().optional(),
+    user: z.string().optional().default('root'),
+    port: z.number().positive().optional().default(22),
     privateKey: z.string().optional(),
   })
   .strict();
@@ -195,7 +204,7 @@ const ScriptProvisionerSchema = z
     runAs: z.string().default('root'),
     environment: z.record(z.string(), z.string()).optional(),
     timeout: z.number().positive().default(600),
-    connection: ConnectionOverrideSchema.optional(),
+    connection: ScriptConnectionOverrideSchema.optional(),
     runOn: z
       .array(z.enum(['create', 'update', 'delete']))
       .optional()
@@ -209,13 +218,11 @@ const AnsibleProvisionerSchema = z
     name: z.string().min(1),
     playbook: z.string().min(1),
     variables: z.record(z.string(), z.unknown()).optional(),
-    user: z.string().default('root'),
-    privateKeyFile: z.string().default('~/.ssh/lxc_ed25519'),
     tags: z.array(z.string()).optional(),
     limit: z.string().optional(),
     timeout: z.number().positive().default(600),
     replayable: z.boolean().default(true),
-    connection: ConnectionOverrideSchema.optional(),
+    connection: AnsibleConnectionOverrideSchema.optional(),
   })
   .strict();
 
@@ -248,6 +255,7 @@ export type HostConfigToml = z.infer<typeof HostConfigSchema>;
 export type Provisioner = z.infer<typeof ProvisionerSchema>;
 export type ScriptProvisioner = z.infer<typeof ScriptProvisionerSchema>;
 export type AnsibleProvisioner = z.infer<typeof AnsibleProvisionerSchema>;
+export type ConnectionOverride = z.infer<typeof AnsibleConnectionOverrideSchema>;
 export type FirewallOptions = z.infer<typeof FirewallOptionsSchema>;
 
 export const HostnameSchema = z.object({
