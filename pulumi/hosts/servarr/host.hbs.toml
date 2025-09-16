@@ -1,9 +1,9 @@
 id = 201
 hostname = "servarr-pulumi"
-enabled = false
+enabled = true
 
 description = "servarr media stack"
-stacks = ["traefik"]              # TODO enable servarr
+stacks = ["traefik", "dozzle", "komodo", "servarr"]
 
 [cpu]
 cores = 2
@@ -14,6 +14,14 @@ swap = 4096
 
 [disk]
 size = 64
+
+[[firewallRules]]
+enabled = true
+type = "in"
+action = "ACCEPT"
+proto = "tcp"
+comment = "qbittorrent bittorrent"
+dport = "6881"
 
 [[mountPoints]]
 volume = "/void/media"
@@ -29,3 +37,20 @@ replayable = false
 type = "script"
 name = "install-docker"
 script = "provisioners/scripts/install-docker.sh"
+
+[[provisioners]]
+type = "script"
+name = "install-periphery"
+script = "provisioners/scripts/install-periphery.sh"
+
+[[provisioners]]
+type = "ansible"
+name = "configure-vpn"
+playbook = "provisioners/ansible/configure-tun-access.yaml"
+replayable = false
+
+[provisioners.variables]
+lxc_id = 201
+
+[provisioners.connection]
+host = "{{{homelab-pve:HOMELAB_DOMAIN}}}"

@@ -6,32 +6,54 @@ services:
       - NET_ADMIN
     devices:
       - /dev/net/tun:/dev/net/tun
-    ports:
-      - 8081:8081 # qbittorrent web interface
-      - 6881:6881 # qbittorrent torrent port
-      - 8080:8080 # sabnzbd
+    # ports:
+    #   - 8081:8081 # qbittorrent web interface
+    #   - 6881:6881 # qbittorrent torrent port
+    #   - 8080:8080 # sabnzbd
     volumes:
       - /docker/gluetun:/gluetun
     environment:
       - VPN_SERVICE_PROVIDER=airvpn
       - VPN_TYPE=wireguard
-      - WIREGUARD_PRIVATE_KEY=${GLUETUN_WIREGUARD_PRIVATE_KEY}
-      - WIREGUARD_PRESHARED_KEY=${GLUETUN_WIREGUARD_PRESHARED_KEY}
-      - WIREGUARD_ADDRESSES=${GLUETUN_WIREGUARD_ADDRESSES}
+      - WIREGUARD_PRIVATE_KEY={{{SECRET_WIREGUARD_PRIVATE_KEY}}}
+      - WIREGUARD_PRESHARED_KEY={{{SECRET_WIREGUARD_PRESHARED_KEY}}}
+      - WIREGUARD_ADDRESSES={{{SECRET_WIREGUARD_ADDRESSES}}}
       - FIREWALL_VPN_INPUT_PORTS=29730
       - SERVER_COUNTRIES=United States
       - HEALTH_VPN_DURATION_INITIAL=120s
     depends_on:
       deunhealth:
         condition: service_started
-    labels:
-      - deunhealth.restart.on.unhealthy=true
     healthcheck:
       test: ping -c 1 www.google.com || exit 1
       interval: 60s
       timeout: 20s
       retries: 5
     restart: unless-stopped
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.qbittorrent.rule=Host(`{{{QBITTORRENT_APP_DOMAIN}}}`)
+      - traefik.http.routers.qbittorrent.entrypoints=https
+      - traefik.http.routers.qbittorrent.tls=true
+      - traefik.http.routers.qbittorrent.tls.certresolver=porkbun
+      - traefik.http.routers.qbittorrent.service=qbittorrent
+      - traefik.http.services.qbittorrent.loadbalancer.server.port=8081
+      #
+      - traefik.tcp.routers.qbittorrent-bittorrent.rule=HostSNI(`*`)
+      - traefik.tcp.routers.qbittorrent-bittorrent.entrypoints=qbittorrent-6881-tcp
+      - traefik.tcp.routers.qbittorrent-bittorrent.service=qbittorrent-bittorrent
+      - traefik.tcp.services.qbittorrent-bittorrent.loadbalancer.server.port=6881
+      #
+      - traefik.http.routers.sabnzbd.rule=Host(`{{{SABNZBD_APP_DOMAIN}}}`)
+      - traefik.http.routers.sabnzbd.entrypoints=https
+      - traefik.http.routers.sabnzbd.tls=true
+      - traefik.http.routers.sabnzbd.tls.certresolver=porkbun
+      - traefik.http.routers.sabnzbd.service=sabnzbd
+      - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
+    networks:
+      - traefik
 
   deunhealth:
     image: qmcgaw/deunhealth
@@ -115,14 +137,12 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /docker/prowlarr:/config
     restart: unless-stopped
-    ports:
-      - 9696:9696
+    # ports:
+    #   - 9696:9696
     depends_on:
       gluetun:
         condition: service_healthy
         restart: true
-    labels:
-      - deunhealth.restart.on.unhealthy=true
     healthcheck:
       test:
         - CMD
@@ -136,6 +156,18 @@ services:
       timeout: 5s
       retries: 8
       start_period: 15s
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.prowlarr.rule=Host(`{{{PROWLARR_APP_DOMAIN}}}`)
+      - traefik.http.routers.prowlarr.entrypoints=https
+      - traefik.http.routers.prowlarr.tls=true
+      - traefik.http.routers.prowlarr.tls.certresolver=porkbun
+      - traefik.http.routers.prowlarr.service=prowlarr
+      - traefik.http.services.prowlarr.loadbalancer.server.port=9696
+    networks:
+      - traefik
 
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
@@ -149,8 +181,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /docker/sonarr:/config
       - /mnt/media:/data
-    ports:
-      - 8989:8989
+    # ports:
+    #   - 8989:8989
     depends_on:
       qbittorrent:
         condition: service_healthy
@@ -161,8 +193,6 @@ services:
       prowlarr:
         condition: service_healthy
         restart: true
-    labels:
-      - deunhealth.restart.on.unhealthy=true
     healthcheck:
       test:
         - CMD
@@ -176,6 +206,18 @@ services:
       timeout: 4s
       retries: 4
       start_period: 5s
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.sonarr.rule=Host(`{{{SONARR_APP_DOMAIN}}}`)
+      - traefik.http.routers.sonarr.entrypoints=https
+      - traefik.http.routers.sonarr.tls=true
+      - traefik.http.routers.sonarr.tls.certresolver=porkbun
+      - traefik.http.routers.sonarr.service=sonarr
+      - traefik.http.services.sonarr.loadbalancer.server.port=8989
+    networks:
+      - traefik
 
   radarr:
     image: lscr.io/linuxserver/radarr:latest
@@ -189,8 +231,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /docker/radarr:/config
       - /mnt/media:/data
-    ports:
-      - 7878:7878
+    # ports:
+    #   - 7878:7878
     depends_on:
       qbittorrent:
         condition: service_healthy
@@ -201,8 +243,6 @@ services:
       prowlarr:
         condition: service_healthy
         restart: true
-    labels:
-      - deunhealth.restart.on.unhealthy=true
     healthcheck:
       test:
         - CMD
@@ -216,6 +256,18 @@ services:
       timeout: 4s
       retries: 4
       start_period: 5s
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.radarr.rule=Host(`{{{RADARR_APP_DOMAIN}}}`)
+      - traefik.http.routers.radarr.entrypoints=https
+      - traefik.http.routers.radarr.tls=true
+      - traefik.http.routers.radarr.tls.certresolver=porkbun
+      - traefik.http.routers.radarr.service=radarr
+      - traefik.http.services.radarr.loadbalancer.server.port=7878
+    networks:
+      - traefik
 
   bazarr:
     image: lscr.io/linuxserver/bazarr:latest
@@ -229,8 +281,8 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /docker/bazarr:/config
       - /mnt/media:/data
-    ports:
-      - 6767:6767
+    # ports:
+    #   - 6767:6767
     depends_on:
       sonarr:
         condition: service_healthy
@@ -238,8 +290,6 @@ services:
       radarr:
         condition: service_healthy
         restart: true
-    labels:
-      - deunhealth.restart.on.unhealthy=true
     healthcheck:
       test:
         - CMD
@@ -253,6 +303,18 @@ services:
       timeout: 4s
       retries: 4
       start_period: 5s
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.bazarr.rule=Host(`{{{BAZARR_APP_DOMAIN}}}`)
+      - traefik.http.routers.bazarr.entrypoints=https
+      - traefik.http.routers.bazarr.tls=true
+      - traefik.http.routers.bazarr.tls.certresolver=porkbun
+      - traefik.http.routers.bazarr.service=bazarr
+      - traefik.http.services.bazarr.loadbalancer.server.port=6767
+    networks:
+      - traefik
 
   subsyncarr:
     image: mrorbitman/subsyncarr:latest
@@ -274,8 +336,8 @@ services:
     image: santiagosayshey/profilarr:latest
     container_name: profilarr
     user: 0:0
-    ports:
-      - 6868:6868
+    # ports:
+    #   - 6868:6868
     volumes:
       - /docker/profilarr:/config
     environment:
@@ -288,8 +350,18 @@ services:
       radarr:
         condition: service_healthy
         restart: true
-    # labels:
-    #   - deunhealth.restart.on.unhealthy=true
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.profilarr.rule=Host(`{{{PROFILARR_APP_DOMAIN}}}`)
+      - traefik.http.routers.profilarr.entrypoints=https
+      - traefik.http.routers.profilarr.tls=true
+      - traefik.http.routers.profilarr.tls.certresolver=porkbun
+      - traefik.http.routers.profilarr.service=profilarr
+      - traefik.http.services.profilarr.loadbalancer.server.port=6868
+    networks:
+      - traefik
     # healthcheck:
     #   test:
     #     - CMD
@@ -315,17 +387,17 @@ services:
       radarr:
         condition: service_healthy
         restart: true
-      lidarr:
-        condition: service_healthy
-        restart: true
+      # lidarr:
+      #   condition: service_healthy
+      #   restart: true
       qbittorrent:
         condition: service_healthy
         restart: true
       sabnzbd:
         condition: service_healthy
         restart: true
-    ports:
-      - 11011:11011
+    # ports:
+    #   - 11011:11011
     volumes:
       - /docker/cleanuparr:/config
       - /mnt/media:/data
@@ -343,13 +415,25 @@ services:
       timeout: 10s
       start_period: 30s
       retries: 3
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.cleanuparr.rule=Host(`{{{CLEANUPARR_APP_DOMAIN}}}`)
+      - traefik.http.routers.cleanuparr.entrypoints=https
+      - traefik.http.routers.cleanuparr.tls=true
+      - traefik.http.routers.cleanuparr.tls.certresolver=porkbun
+      - traefik.http.routers.cleanuparr.service=cleanuparr
+      - traefik.http.services.cleanuparr.loadbalancer.server.port=11011
+    networks:
+      - traefik
 
   huntarr:
     image: huntarr/huntarr:latest
     container_name: huntarr
     restart: unless-stopped
-    ports:
-      - "9705:9705"
+    # ports:
+    #   - "9705:9705"
     depends_on:
       sonarr:
         condition: service_healthy
@@ -357,9 +441,9 @@ services:
       radarr:
         condition: service_healthy
         restart: true
-      lidarr:
-        condition: service_healthy
-        restart: true
+      # lidarr:
+      #   condition: service_healthy
+      #   restart: true
       qbittorrent:
         condition: service_healthy
         restart: true
@@ -370,70 +454,70 @@ services:
       - /docker/huntarr:/config
     environment:
       - TZ=America/Los_Angeles
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.huntarr.rule=Host(`{{{HUNTARR_APP_DOMAIN}}}`)
+      - traefik.http.routers.huntarr.entrypoints=https
+      - traefik.http.routers.huntarr.tls=true
+      - traefik.http.routers.huntarr.tls.certresolver=porkbun
+      - traefik.http.routers.huntarr.service=huntarr
+      - traefik.http.services.huntarr.loadbalancer.server.port=9705
+    networks:
+      - traefik
 
-  lidarr:
-    container_name: lidarr
-    # image: lscr.io/linuxserver/lidarr:latest
-    image: blampe/lidarr:latest
-    restart: unless-stopped
-    depends_on:
-      qbittorrent:
-        condition: service_healthy
-        restart: true
-      sabnzbd:
-        condition: service_healthy
-        restart: true
-      prowlarr:
-        condition: service_healthy
-        restart: true
-    environment:
-      - PUID=0
-      - PGID=0
-      - TZ=America/Los_Angeles
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /docker/lidarr:/config
-      - /mnt/media:/data
-    ports:
-      - 8686:8686
-    healthcheck:
-      test:
-        - CMD
-        - wget
-        - --quiet
-        - --timeout=3
-        - --tries=1
-        - --spider
-        - http://localhost:8686/ping
-      interval: 5s
-      timeout: 4s
-      retries: 4
-      start_period: 5s
-
-  # readarr:
-  #   image: lscr.io/linuxserver/readarr:develop
-  #   container_name: readarr
+  # lidarr:
+  #   container_name: lidarr
+  #   # image: lscr.io/linuxserver/lidarr:latest
+  #   image: blampe/lidarr:latest
+  #   restart: unless-stopped
+  #   depends_on:
+  #     qbittorrent:
+  #       condition: service_healthy
+  #       restart: true
+  #     sabnzbd:
+  #       condition: service_healthy
+  #       restart: true
+  #     prowlarr:
+  #       condition: service_healthy
+  #       restart: true
   #   environment:
   #     - PUID=0
   #     - PGID=0
   #     - TZ=America/Los_Angeles
   #   volumes:
   #     - /etc/localtime:/etc/localtime:ro
-  #     - /docker/readarr:/config
+  #     - /docker/lidarr:/config
   #     - /mnt/media:/data
-  #   ports:
-  #     - 8787:8787
-  #   restart: unless-stopped
-  # healthcheck:
-  #   test:
-  #     - CMD
-  #     - wget
-  #     - --quiet
-  #     - --timeout=3
-  #     - --tries=1
-  #     - --spider
-  #     - http://localhost:8787/ping
-  #   interval: 5s
-  #   timeout: 4s
-  #   retries: 4
-  #   start_period: 5s
+  #   # ports:
+  #   #   - 8686:8686
+  #   healthcheck:
+  #     test:
+  #       - CMD
+  #       - wget
+  #       - --quiet
+  #       - --timeout=3
+  #       - --tries=1
+  #       - --spider
+  #       - http://localhost:8686/ping
+  #     interval: 5s
+  #     timeout: 4s
+  #     retries: 4
+  #     start_period: 5s
+  #   labels:
+  #     - deunhealth.restart.on.unhealthy=true
+  #     - traefik.enable=true
+  #     - traefik.docker.network=traefik
+  #     - traefik.http.routers.lidarr.rule=Host(`{{{LIDARR_APP_DOMAIN}}}`)
+  #     - traefik.http.routers.lidarr.entrypoints=https
+  #     - traefik.http.routers.lidarr.tls=true
+  #     - traefik.http.routers.lidarr.tls.certresolver=porkbun
+  #     - traefik.http.routers.lidarr.service=lidarr
+  #     - traefik.http.services.lidarr.loadbalancer.server.port=8686
+  #   networks:
+  #     - traefik
+
+networks:
+  traefik:
+    external: true

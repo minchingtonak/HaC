@@ -24,6 +24,7 @@ services:
       - --entrypoints.http.http.redirections.entrypoint.scheme=https
       - --entrypoints.https.address=:443
       - --entrypoints.ssh-222-tcp.address=:222
+      - --entrypoints.qbittorrent-6881-tcp.address=:6881
       - --entrypoints.jellyfin-service-discovery-1900-udp.address=:1900/udp
       - --entrypoints.jellyfin-auto-discovery-7359-udp.address=:7359/udp
       - --entrypoints.syncthing-local-discovery-21027-udp.address=:21027/udp
