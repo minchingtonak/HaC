@@ -6,6 +6,7 @@ config:
   homelab-pve:rootContainerDomain: akmin.dev
   homelab-pve:localIpPrefix: 192.168.0
   homelab-pve:gatewayIp: 192.168.0.1
+  homelab-pve:homelabDomain: 192.168.0.89
   homelab-pve:lxcRootPassword:
     secure: v1:ZJ92yyCqUP+gpGJe:ddDt5e1UcePAFSUNGp7oJjlqK4to
   homelab-pve:lxcPublicSshKey:
@@ -156,3 +157,21 @@ config:
     secure: v1:ZN1VLNMSu60BAhxf:okOhImt9d3D9NVlmztIPHDRv9noH
   paperless-pulumi#paperless-ngx:SECRET_ADMIN_PASSWORD:
     secure: v1:0NpMQ0oelz/GSKbW:LNPX/H4nomIsrwR7uH0med0p02S2vEf7VPfOZaqiTe441JqS
+  # servarr
+  servarr-pulumi:CONTAINER_DOMAIN: servarr-pulumi.pulumi.homelab.akmin.dev
+  servarr-pulumi#servarr:QBITTORRENT_APP_DOMAIN: qbittorrent.{{{parent:CONTAINER_DOMAIN}}}
+  servarr-pulumi#servarr:SABNZBD_APP_DOMAIN: sabnzbd.{{{parent:CONTAINER_DOMAIN}}}
+  servarr-pulumi#servarr:PROWLARR_APP_DOMAIN: prowlarr.{{{parent:CONTAINER_DOMAIN}}}
+  servarr-pulumi#servarr:SONARR_APP_DOMAIN: sonarr.{{{parent:CONTAINER_DOMAIN}}}
+  servarr-pulumi#servarr:RADARR_APP_DOMAIN: radarr.{{{parent:CONTAINER_DOMAIN}}}
+  servarr-pulumi#servarr:BAZARR_APP_DOMAIN: bazarr.{{{parent:CONTAINER_DOMAIN}}}
+  servarr-pulumi#servarr:PROFILARR_APP_DOMAIN: profilarr.{{{parent:CONTAINER_DOMAIN}}}
+  servarr-pulumi#servarr:CLEANUPARR_APP_DOMAIN: cleanuparr.{{{parent:CONTAINER_DOMAIN}}}
+  servarr-pulumi#servarr:HUNTARR_APP_DOMAIN: huntarr.{{{parent:CONTAINER_DOMAIN}}}
+  servarr-pulumi#servarr:LIDARR_APP_DOMAIN: lidarr.{{{parent:CONTAINER_DOMAIN}}}
+  servarr-pulumi#servarr:SECRET_WIREGUARD_PRIVATE_KEY:
+    secure: v1:UpuGbhyPZJ7MMwcf:YwNSmcYTs321qZW3Bh0Oh0WRvthVuZ4A0jkqd5pV2w53RZEE5ReQ5WXkF4+EWy/RIy5vWv8tnV+TKcZi
+  servarr-pulumi#servarr:SECRET_WIREGUARD_PRESHARED_KEY:
+    secure: v1:CmV+NG1VGxbL5T/i:m1wYPbD7ZB+8Qx3WH++xmSK4X+/hV0rMulX8LygT3j8amy9TRJVhAYSTz9w9DwCvL+ppRJahFuNLyGU0
+  servarr-pulumi#servarr:SECRET_WIREGUARD_ADDRESSES:
+    secure: v1:rj2ol6IXhUc4+sPx:1Adqh3BT4b1YL28YBXYS1OUDmohdq6woRcU2CxemVCMd

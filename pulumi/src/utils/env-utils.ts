@@ -84,6 +84,8 @@ export class EnvUtils {
   static registerTemplateHelper(name: string, fn: Handlebars.HelperDelegate) {
     Handlebars.registerHelper(name, fn);
     EnvUtils.IGNORED_VARIABLES.add(name);
+
+    return () => Handlebars.unregisterHelper(name);
   }
 
   /**

@@ -53,4 +53,4 @@ replayable = false
 lxc_id = 201
 
 [provisioners.connection]
-host = "{{{homelab-pve:HOMELAB_DOMAIN}}}"
+host = "{{{homelab-pve:homelabDomain}}}"
