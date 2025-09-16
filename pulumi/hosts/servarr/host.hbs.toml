@@ -1,6 +1,7 @@
+# verified
 id = 201
 hostname = "servarr-pulumi"
-enabled = true
+enabled = false
 
 description = "servarr media stack"
 stacks = ["traefik", "dozzle", "komodo", "servarr"]
