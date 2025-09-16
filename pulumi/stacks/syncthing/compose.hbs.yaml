@@ -24,13 +24,16 @@ services:
       - traefik.http.routers.syncthing.tls.certresolver=porkbun
       - traefik.http.services.syncthing.loadbalancer.server.port=8384
       - traefik.http.routers.syncthing.service=syncthing
+      #
       - traefik.tcp.routers.syncthing-sync.rule=HostSNI(`*`)
       - traefik.tcp.routers.syncthing-sync.entrypoints=syncthing-sync-22000-tcp
       - traefik.tcp.routers.syncthing-sync.service=syncthing-sync
       - traefik.tcp.services.syncthing-sync.loadbalancer.server.port=22000
+      #
       - traefik.udp.routers.syncthing-sync-quic.entrypoints=syncthing-sync-quic-22000-udp
       - traefik.udp.routers.syncthing-sync-quic.service=syncthing-sync-quic
       - traefik.udp.services.syncthing-sync-quic.loadbalancer.server.port=22000
+      #
       - traefik.udp.routers.syncthing-local-discovery.entrypoints=syncthing-local-discovery-21027-udp
       - traefik.udp.routers.syncthing-local-discovery.service=syncthing-local-discovery
       - traefik.udp.services.syncthing-local-discovery.loadbalancer.server.port=21027
