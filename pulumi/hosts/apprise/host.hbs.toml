@@ -4,7 +4,7 @@ hostname = "apprise-pulumi"
 enabled = false
 
 description = "lightweight file-based notifications server"
-stacks = ["traefik", "apprise"]
+# stacks = ["traefik", "apprise"]
 
 [cpu]
 cores = 1

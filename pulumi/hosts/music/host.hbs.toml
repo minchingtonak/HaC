@@ -3,7 +3,7 @@ hostname = "music-pulumi"
 enabled = false
 
 description = "assorted audio management apps"
-stacks = ["traefik", "audiobookshelf", "navidrome", "slskd", "your-spotify"]
+# stacks = ["traefik", "audiobookshelf", "navidrome", "slskd", "your-spotify"]
 
 [cpu]
 cores = 2

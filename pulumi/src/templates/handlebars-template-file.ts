@@ -1,12 +1,11 @@
 import * as pulumi from '@pulumi/pulumi';
 import { RenderedTemplateFile, TemplateProcessor } from './template-processor';
 import { CopyableAsset } from '@hanseltime/pulumi-file-utils';
-import { HostConfigToml } from '../hosts/host-config-schema';
 
 export type HandlebarsTemplateFileArgs = {
-  stackName: string;
   templatePath: string;
-  hostConfig: HostConfigToml;
+  configNamespace: string;
+  templateContext: Record<string, unknown>;
 };
 
 export class HandlebarsTemplateFile extends pulumi.ComponentResource {
@@ -25,14 +24,12 @@ export class HandlebarsTemplateFile extends pulumi.ComponentResource {
 
     this.processedTemplate = TemplateProcessor.processTemplate(
       args.templatePath,
-      new pulumi.Config(`${args.hostConfig.hostname}#${args.stackName}`),
-      {
-        host: args.hostConfig
-      }
+      new pulumi.Config(args.configNamespace),
+      args.templateContext,
     );
 
     this.asset = new CopyableAsset(
-      `${args.hostConfig.hostname}-${args.stackName}-rendered-template-${this.processedTemplate.idSafeName}`,
+      `${name}-rendered-template-${this.processedTemplate.idSafeName}`,
       {
         asset: pulumi.Output.isInstance(this.processedTemplate.content)
           ? this.processedTemplate.content.apply(

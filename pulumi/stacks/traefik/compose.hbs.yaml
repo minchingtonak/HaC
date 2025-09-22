@@ -51,15 +51,15 @@ services:
       # http
       - traefik.http.routers.traefik.entrypoints=http
       - traefik.http.routers.traefik.middlewares=traefik-https-redirect
-      - traefik.http.routers.traefik.rule=Host(`traefik.{{{parent:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.traefik.rule=Host(`{{{domainForApp "traefik"}}}`)
       # https
       - traefik.http.routers.traefik-secure.entrypoints=https
       - traefik.http.routers.traefik-secure.middlewares=traefik-auth
-      - traefik.http.routers.traefik-secure.rule=Host(`traefik.{{{parent:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.traefik-secure.rule=Host(`{{{domainForApp "traefik"}}}`)
       - traefik.http.routers.traefik-secure.tls=true
       - traefik.http.routers.traefik-secure.tls.certresolver=porkbun
-      - traefik.http.routers.traefik-secure.tls.domains[0].main={{{parent:CONTAINER_DOMAIN}}}
-      - traefik.http.routers.traefik-secure.tls.domains[0].sans=*.{{{parent:CONTAINER_DOMAIN}}}
+      - traefik.http.routers.traefik-secure.tls.domains[0].main={{{domainForContainer}}}
+      - traefik.http.routers.traefik-secure.tls.domains[0].sans=*.{{{domainForContainer}}}
       - traefik.http.routers.traefik-secure.service=api@internal
       #
       - "loggifly.monitor=true"
@@ -73,7 +73,7 @@ services:
 
   loggifly:
     image: ghcr.io/clemcer/loggifly:latest
-    container_name: loggifly
+    container_name: traefik-loggifly
     # It is recommended to run the container as the same UID/GID as the owner of your docker socket to avoid running as root.
     # But you can also just comment out the user line and run as root.
     # You can check the socket permissions with `ls -n /var/run/docker.sock`

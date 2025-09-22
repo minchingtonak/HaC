@@ -3,6 +3,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as Handlebars from 'handlebars';
 import { EnvUtils } from '../utils/env-utils';
+import { HostConfigToml } from '../hosts/host-config-schema';
 
 export interface TemplateContext {
   [key: string]: string | pulumi.Output<string>;
@@ -340,4 +341,66 @@ export class TemplateProcessor {
       .replaceAll(path.sep, '-')
       .replaceAll(/[^a-zA-Z0-9_-]/g, '');
   }
+
+  static registerTemplateHelper(name: string, fn: Handlebars.HelperDelegate) {
+    Handlebars.registerHelper(name, fn);
+    EnvUtils.addIgnoredVariable(name);
+
+    return () => {
+      EnvUtils.removeIgnoredVariable(name);
+      Handlebars.unregisterHelper(name);
+    };
+  }
 }
+
+TemplateProcessor.registerTemplateHelper(
+  'raw',
+  (options: Handlebars.HelperOptions) => {
+    return options.fn({});
+  },
+);
+
+type ComposeStackTemplateContext = {
+  host: HostConfigToml;
+  node: Record<string, string>;
+  stackName: string;
+  root: Record<string, string>; // resolved template variables
+};
+
+TemplateProcessor.registerTemplateHelper(
+  'domainForApp',
+  (appName: string, options: Handlebars.HelperOptions) => {
+    const context = options.data as ComposeStackTemplateContext;
+    const subdomainPrefix =
+      context.host.stacks?.[context.stackName].domainPrefixes?.[appName] ??
+      appName;
+    // console.log('GRAVY template-processor.ts:382 -', context);
+
+    console.log(
+      'GRAVY template-processor.ts:379 -',
+      `${subdomainPrefix}.${context.host.hostname}.pulumi.${context.node.pveNodeName}.${context.node.rootContainerDomain}`,
+    );
+    return `${subdomainPrefix}.${context.host.hostname}.pulumi.${context.node.pveNodeName}.${context.node.rootContainerDomain}`;
+  },
+);
+
+TemplateProcessor.registerTemplateHelper(
+  'domainForContainer',
+  (options: Handlebars.HelperOptions) => {
+    const context = options.data as ComposeStackTemplateContext;
+
+    console.log('GRAVY template-processor.ts:392 -', `${context.host.hostname}.pulumi.${context.node.pveNodeName}.${context.node.rootContainerDomain}`);
+    return `${context.host.hostname}.pulumi.${context.node.pveNodeName}.${context.node.rootContainerDomain}`;
+  },
+);
+
+TemplateProcessor.registerTemplateHelper(
+  'helperMissing',
+  function (/* dynamic arguments */) {
+    const options = arguments[arguments.length - 1];
+    const args = Array.prototype.slice.call(arguments, 0, arguments.length - 1);
+    return new Handlebars.SafeString(
+      'helperMissing: ' + options.name + '(' + args + ')',
+    );
+  },
+);

@@ -4,7 +4,7 @@ hostname = "archiver-pulumi"
 enabled = false
 
 description = "worker for archive team warrior"
-stacks = ["traefik", "archiveteam-warrior"]
+# stacks = ["traefik", "archiveteam-warrior"]
 
 [cpu]
 cores = 2

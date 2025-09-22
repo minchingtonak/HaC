@@ -12,6 +12,7 @@ export type ComposeStackArgs = {
   stackName: StackName;
   connection: command.types.input.remote.ConnectionArgs;
   hostConfig: HostConfigToml;
+  pveConfig: Record<string, string>; // TODO strong typing
 };
 
 export class ComposeStack extends pulumi.ComponentResource {
@@ -66,9 +67,14 @@ export class ComposeStack extends pulumi.ComponentResource {
     this.handlebarsTemplateDirectory = new HandlebarsTemplateDirectory(
       `${args.hostConfig.hostname}-${args.stackName}-handlebars-template-folder`,
       {
-        stackName: args.stackName,
         templateDirectory: stackDirectory,
-        hostConfig: args.hostConfig,
+        configNamespace: `${args.hostConfig.hostname}#${args.stackName}`,
+        templateContext: {
+          host: args.hostConfig,
+          node: args.pveConfig,
+          stackName: args.stackName,
+          templateDirectory: stackDirectory,
+        },
       },
       {
         parent: this,
@@ -121,7 +127,6 @@ export class ComposeStack extends pulumi.ComponentResource {
         additionalSecretOutputs: ['stdout', 'stderr'],
       },
     );
-
 
     this.registerOutputs({
       deployCommand: this.deployStack.create,

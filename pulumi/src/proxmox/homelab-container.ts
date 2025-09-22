@@ -75,13 +75,15 @@ export class HomelabContainer extends pulumi.ComponentResource {
         shared: mp.shared,
       })) ?? [];
 
+    const stackNames = Object.keys(args.stacks ?? {});
+
     this.container = new proxmox.ct.Container(
       ctName,
       {
         nodeName: args.provider.pveNodeName,
         vmId: args.id,
         description: args.description ?? 'managed by pulumi',
-        tags: [...(args.stacks ?? []), ...(args.tags ?? [])],
+        tags: [...stackNames, ...(args.tags ?? [])],
         unprivileged: true,
         startOnBoot: true,
         protection: false,
@@ -176,6 +178,8 @@ export class HomelabContainer extends pulumi.ComponentResource {
       },
     );
 
+    const hasProxy = stackNames.includes(HomelabContainer.PROXY_STACK_NAME);
+
     this.firewallRules = new proxmox.network.FirewallRules(
       `${ctName}-fw-rules`,
       {
@@ -188,7 +192,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
             action: ProxmoxFirewallPolicy.ACCEPT,
             macro: ProxmoxFirewallMacro.SSH,
           },
-          ...(args.stacks?.includes(HomelabContainer.PROXY_STACK_NAME)
+          ...(hasProxy
             ? [
                 {
                   enabled: true,
@@ -275,7 +279,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
     }
 
     if (args.stacks) {
-      if (args.stacks.includes(HomelabContainer.PROXY_STACK_NAME)) {
+      if (hasProxy) {
         this.proxyNetwork = new command.remote.Command(
           `${args.hostname}-create-${HomelabContainer.PROXY_STACK_NAME}-network`,
           {
@@ -305,26 +309,30 @@ export class HomelabContainer extends pulumi.ComponentResource {
         },
       );
 
-      for (const name of args.stacks) {
-        this.stacks.push(
-          new ComposeStack(
-            `${args.hostname}-${name}-compose-stack`,
-            {
-              stackName: name,
-              connection,
-              hostConfig: args,
-            },
-            {
-              parent: this.container,
-              dependsOn: this.createRemoteOutputRootDir,
-              // hooks: {
-              //   afterCreate: [(args) => console.dir(args, { depth: Infinity })],
-              //   afterUpdate: [(args) => console.dir(args, { depth: Infinity })]
-              // }
-            },
-          ),
-        );
-      }
+      const { provider, ...hostConfig } = args;
+      provider.toObject().apply((pveConfig) => {
+        for (const name of stackNames) {
+          this.stacks.push(
+            new ComposeStack(
+              `${args.hostname}-${name}-compose-stack`,
+              {
+                stackName: name,
+                connection,
+                hostConfig,
+                pveConfig,
+              },
+              {
+                parent: this.container,
+                dependsOn: this.createRemoteOutputRootDir,
+                // hooks: {
+                //   afterCreate: [(args) => console.dir(args, { depth: Infinity })],
+                //   afterUpdate: [(args) => console.dir(args, { depth: Infinity })]
+                // }
+              },
+            ),
+          );
+        }
+      });
     }
 
     this.registerOutputs();

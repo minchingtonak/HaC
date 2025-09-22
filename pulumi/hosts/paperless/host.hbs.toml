@@ -4,7 +4,7 @@ hostname = "paperless-pulumi"
 enabled = false
 
 description = "paperless document management systems"
-stacks = ["traefik", "komodo", "dozzle", "paperless-ngx"]
+# stacks = ["traefik", "komodo", "dozzle", "paperless-ngx"]
 
 [cpu]
 cores = 2

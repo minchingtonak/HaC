@@ -14,7 +14,7 @@ config:
   # pulumi config set --secret homelab-pve:lxcPrivateSshKey -- '-----BEGIN OPENSSH PRIVATE KEY-----....'
   homelab-pve:lxcPrivateSshKey:
     secure: v1:Gvh1GdBO1YBpztNy:VFos5hyLijW3XoPXf/4+hqGBzRztgyz1uXCofM6WdUHi9yPXmmIlEdHcsm0W4w/B5ld5h+J7RFt/mDBSyMdipAuOspFQcGcXASSmVe+a/hJ0W/bQ1giwsN4PYw/E9hfiTez6SNtgAMHQOgG8UHvRjD+uZSr3PqsI3JZzIGan40yzVJxe5OTKkhcuTKbnJxIj1o1ljhoS8tF32sffz0HgWePvzusrpzOF8GSrTXfrWx3TBn7dE2HN9HbilWC90aaa52qasXDumMdFuJVikLVVIvMY1GZIKf0Yjan8J0riVChhwdcXk0xRMWquafqkAsgFajyLraol0gia9KXDGpzGMGp4mBvq+HNtWSceMdmp2OelD0YACpSnUJHsgNvr9dPqWDr5QtEKVguNOALI1YN3lR6VyCpujKUJIKd3lf53XatHWq8GmyYZdAXdP+g22Qc/b+hEF0x/7xiHP7QDRLVcgwaNwe2BM7okJ38qv7CTSKhCxU+8E8g3wEm4uBjUmGKJkvex1sUv8mIcZEjKiArxSfYZwAEajCiEQy+eYYkx
-  homelab-pve:pveEndpoint: https://homelab.akmin.dev
+  homelab-pve:pveEndpoint: https://homelab.akmin.dev # TODO define in terms of nodenade and root domain
   homelab-pve:pveInsecure: 'false'
   homelab-pve:pveUsername:
     secure: v1:0Misa7AjGbv6pgG8:935A2yNp0Wg+8fhzurcPkVotrLLvO5N9
@@ -152,26 +152,30 @@ config:
     secure: v1:2SC5AIdLdytL3l7R:CJhjXr0pdvtwClww4/fnwDjZHKE8F4Cxs4SxPW5wNIItrxTfXwtMAdzmkiE=
   # paperless
   paperless-pulumi:CONTAINER_DOMAIN: paperless-pulumi.pulumi.homelab.akmin.dev
-  paperless-pulumi#paperless-ngx:APP_DOMAIN: paperless.paperless-pulumi.pulumi.homelab.akmin.dev
+  paperless-pulumi#paperless-ngx:APP_DOMAIN: paperless.{{{parent:CONTAINER_DOMAIN}}}
   paperless-pulumi#paperless-ngx:SECRET_ADMIN_USERNAME:
     secure: v1:ZN1VLNMSu60BAhxf:okOhImt9d3D9NVlmztIPHDRv9noH
   paperless-pulumi#paperless-ngx:SECRET_ADMIN_PASSWORD:
     secure: v1:0NpMQ0oelz/GSKbW:LNPX/H4nomIsrwR7uH0med0p02S2vEf7VPfOZaqiTe441JqS
   # servarr
   servarr-pulumi:CONTAINER_DOMAIN: servarr-pulumi.pulumi.homelab.akmin.dev
-  servarr-pulumi#servarr:QBITTORRENT_APP_DOMAIN: qbittorrent.{{{parent:CONTAINER_DOMAIN}}}
-  servarr-pulumi#servarr:SABNZBD_APP_DOMAIN: sabnzbd.{{{parent:CONTAINER_DOMAIN}}}
-  servarr-pulumi#servarr:PROWLARR_APP_DOMAIN: prowlarr.{{{parent:CONTAINER_DOMAIN}}}
-  servarr-pulumi#servarr:SONARR_APP_DOMAIN: sonarr.{{{parent:CONTAINER_DOMAIN}}}
-  servarr-pulumi#servarr:RADARR_APP_DOMAIN: radarr.{{{parent:CONTAINER_DOMAIN}}}
-  servarr-pulumi#servarr:BAZARR_APP_DOMAIN: bazarr.{{{parent:CONTAINER_DOMAIN}}}
-  servarr-pulumi#servarr:PROFILARR_APP_DOMAIN: profilarr.{{{parent:CONTAINER_DOMAIN}}}
-  servarr-pulumi#servarr:CLEANUPARR_APP_DOMAIN: cleanuparr.{{{parent:CONTAINER_DOMAIN}}}
-  servarr-pulumi#servarr:HUNTARR_APP_DOMAIN: huntarr.{{{parent:CONTAINER_DOMAIN}}}
-  servarr-pulumi#servarr:LIDARR_APP_DOMAIN: lidarr.{{{parent:CONTAINER_DOMAIN}}}
+  # servarr-pulumi#servarr:QBITTORRENT_APP_DOMAIN: qbittorrent.{{{parent:CONTAINER_DOMAIN}}}
+  # servarr-pulumi#servarr:SABNZBD_APP_DOMAIN: sabnzbd.{{{parent:CONTAINER_DOMAIN}}}
+  # servarr-pulumi#servarr:PROWLARR_APP_DOMAIN: prowlarr.{{{parent:CONTAINER_DOMAIN}}}
+  # servarr-pulumi#servarr:SONARR_APP_DOMAIN: sonarr.{{{parent:CONTAINER_DOMAIN}}}
+  # servarr-pulumi#servarr:RADARR_APP_DOMAIN: radarr.{{{parent:CONTAINER_DOMAIN}}}
+  # servarr-pulumi#servarr:BAZARR_APP_DOMAIN: bazarr.{{{parent:CONTAINER_DOMAIN}}}
+  # servarr-pulumi#servarr:PROFILARR_APP_DOMAIN: profilarr.{{{parent:CONTAINER_DOMAIN}}}
+  # servarr-pulumi#servarr:CLEANUPARR_APP_DOMAIN: cleanuparr.{{{parent:CONTAINER_DOMAIN}}}
+  # servarr-pulumi#servarr:HUNTARR_APP_DOMAIN: huntarr.{{{parent:CONTAINER_DOMAIN}}}
+  # servarr-pulumi#servarr:LIDARR_APP_DOMAIN: lidarr.{{{parent:CONTAINER_DOMAIN}}}
   servarr-pulumi#servarr:SECRET_WIREGUARD_PRIVATE_KEY:
     secure: v1:UpuGbhyPZJ7MMwcf:YwNSmcYTs321qZW3Bh0Oh0WRvthVuZ4A0jkqd5pV2w53RZEE5ReQ5WXkF4+EWy/RIy5vWv8tnV+TKcZi
   servarr-pulumi#servarr:SECRET_WIREGUARD_PRESHARED_KEY:
     secure: v1:CmV+NG1VGxbL5T/i:m1wYPbD7ZB+8Qx3WH++xmSK4X+/hV0rMulX8LygT3j8amy9TRJVhAYSTz9w9DwCvL+ppRJahFuNLyGU0
   servarr-pulumi#servarr:SECRET_WIREGUARD_ADDRESSES:
     secure: v1:rj2ol6IXhUc4+sPx:1Adqh3BT4b1YL28YBXYS1OUDmohdq6woRcU2CxemVCMd
+  # tailscale
+  tailscale-pulumi#tailscale:SECRET_TAILSCALE_AUTHKEY:
+    secure: v1:WzqZRv9cGYpzab5r:QmAK2vrwxNtPNZwMv0k/uWlnHT/nqKb+yGXPiRdSl83AhTm2SusJhSf03MEDGUIxZFe+9oF7R5POga0vC8k2JiRSvcmlVjRSTHlWkYae
+  tailscale-pulumi#tailscale:TAILSCALE_SUBNET_ROUTES: 192.168.0.0/24

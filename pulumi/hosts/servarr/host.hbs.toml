@@ -4,7 +4,21 @@ hostname = "servarr-pulumi"
 enabled = false
 
 description = "servarr media stack"
-stacks = ["traefik", "dozzle", "komodo", "servarr"]
+# stacks = ["traefik", "dozzle", "komodo", "servarr"]
+
+[stacks.dozzle]
+
+[stacks.servarr]
+
+# basically nothing actually needs to be define
+# in the host config in terms of domain
+# since the scheme is
+# appName.hostname.pulumi.pveNodeName.rootDomain
+
+# can automatically find hostname from this config
+# need to supply appname as helper arg
+
+# add optional param to supply hostname for cross-stack domain references
 
 [cpu]
 cores = 2

@@ -1,9 +1,10 @@
+# verified
 id = 211
 hostname = "tailscale-pulumi"
 enabled = false
 
 description = "tailscale subnet router to enable easy remote access"
-stacks = ["traefik", "tailscale"]
+# stacks = ["tailscale"]
 
 [cpu]
 cores = 2

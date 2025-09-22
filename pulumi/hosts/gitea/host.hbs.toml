@@ -4,7 +4,7 @@ hostname = "gitea-pulumi"
 enabled = false
 
 description = "lightweight private git server and github mirror"
-stacks = ["traefik", "gitea"]
+# stacks = ["traefik", "gitea"]
 
 [cpu]
 cores = 1

@@ -1,13 +1,12 @@
 import * as pulumi from '@pulumi/pulumi';
 import { TemplateProcessor } from './template-processor';
 import { HandlebarsTemplateFile } from './handlebars-template-file';
-import { HostConfigToml } from '../hosts/host-config-schema';
 
 export type HandlebarsTemplateDirectoryArgs = {
   templateDirectory: string;
-  stackName: string;
+  configNamespace: string;
+  templateContext: Record<string, unknown>;
   recurse?: boolean;
-  hostConfig: HostConfigToml;
 };
 
 export class HandlebarsTemplateDirectory extends pulumi.ComponentResource {
@@ -31,15 +30,13 @@ export class HandlebarsTemplateDirectory extends pulumi.ComponentResource {
 
     for (const templatePath of templateFilePaths) {
       this.templateFiles[templatePath] = new HandlebarsTemplateFile(
-        `${args.hostConfig.hostname}-${
-          args.stackName
-        }-handlebars-template-file-${TemplateProcessor.buildSanitizedNameForId(
+        `${name}-file-${TemplateProcessor.buildSanitizedNameForId(
           templatePath,
         )}`,
         {
-          stackName: args.stackName,
           templatePath,
-          hostConfig: args.hostConfig,
+          configNamespace: args.configNamespace,
+          templateContext: { ...args.templateContext, templatePath },
         },
         {
           parent: this,

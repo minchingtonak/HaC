@@ -4,15 +4,15 @@ hostname = "tools-pulumi"
 enabled = false
 
 description = "swiss army knife array of utility tools"
-stacks = [
-    "traefik",
-    "cyberchef",
-    "docuseal",
-    "it-tools",
-    "mazanoke",
-    "omni-tools",
-    "stirling-pdf",
-]
+# stacks = [
+#     "traefik",
+#     "cyberchef",
+#     "docuseal",
+#     "it-tools",
+#     "mazanoke",
+#     "omni-tools",
+#     "stirling-pdf",
+# ]
 
 [cpu]
 cores = 4
