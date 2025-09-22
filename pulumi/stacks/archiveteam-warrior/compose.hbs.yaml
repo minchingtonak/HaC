@@ -16,7 +16,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.archiveteamwarrior.rule=Host(`{{{APP_DOMAIN}}}`)
+      - traefik.http.routers.archiveteamwarrior.rule=Host(`{{{domainForApp "archiveteam-warrior"}}}`)
       - traefik.http.routers.archiveteamwarrior.entrypoints=https
       - traefik.http.routers.archiveteamwarrior.tls=true
       - traefik.http.routers.archiveteamwarrior.tls.certresolver=porkbun

@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.mazanoke.rule=Host(`{{{APP_DOMAIN}}}`)
+      - traefik.http.routers.mazanoke.rule=Host(`{{{domainForApp "mazanoke"}}}`)
       - traefik.http.routers.mazanoke.entrypoints=https
       - traefik.http.routers.mazanoke.tls=true
       - traefik.http.routers.mazanoke.tls.certresolver=porkbun

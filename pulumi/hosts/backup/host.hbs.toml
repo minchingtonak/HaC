@@ -4,7 +4,11 @@ hostname = "backup-pulumi"
 enabled = false
 
 description = "various backup-related services"
-stacks = ["traefik", "backrest", "cronicle"]
+
+[stacks]
+traefik = {}
+backrest = {}
+cronicle = {}
 
 [cpu]
 cores = 4

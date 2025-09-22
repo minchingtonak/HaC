@@ -26,7 +26,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - traefik.http.routers.endurain.rule=Host(`{{{APP_DOMAIN}}}`)
+      - traefik.http.routers.endurain.rule=Host(`{{{domainForApp "endurain"}}}`)
       - traefik.http.routers.endurain.entrypoints=https
       - traefik.http.routers.endurain.tls=true
       - traefik.http.routers.endurain.tls.certresolver=porkbun

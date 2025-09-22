@@ -4,7 +4,13 @@ hostname = "admin-pulumi"
 enabled = false
 
 description = "homelab administration-related apps"
-stacks = ["traefik", "semaphore", "glance"]
+
+[stacks]
+traefik = {}
+dozzle = {}
+komodo = {}
+semaphore = {}
+glance = {}
 
 [cpu]
 cores = 2

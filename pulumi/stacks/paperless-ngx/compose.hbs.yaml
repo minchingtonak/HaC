@@ -38,7 +38,7 @@ services:
       USERMAP_UID: 0
       USERMAP_GID: 0
       PAPERLESS_APP_TITLE: paperless-ngx
-      PAPERLESS_URL: https://{{{APP_DOMAIN}}}
+      PAPERLESS_URL: https://{{{domainForApp "paperless-ngx"}}}
       PAPERLESS_REDIS: redis://broker:6379
       PAPERLESS_DBHOST: db
       PAPERLESS_TIME_ZONE: America/Los_Angeles
@@ -70,7 +70,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - traefik.http.routers.paperlessngx.rule=Host(`{{{APP_DOMAIN}}}`)
+      - traefik.http.routers.paperlessngx.rule=Host(`{{{domainForApp "paperless-ngx"}}}`)
       - traefik.http.routers.paperlessngx.entrypoints=https
       - traefik.http.routers.paperlessngx.tls=true
       - traefik.http.routers.paperlessngx.tls.certresolver=porkbun

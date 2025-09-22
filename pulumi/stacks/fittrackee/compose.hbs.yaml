@@ -55,7 +55,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - traefik.http.routers.fittrackee.rule=Host(`{{{APP_DOMAIN}}}`)
+      - traefik.http.routers.fittrackee.rule=Host(`{{{domainForApp "fittrackee"}}}`)
       - traefik.http.routers.fittrackee.entrypoints=https
       - traefik.http.routers.fittrackee.tls=true
       - traefik.http.routers.fittrackee.tls.certresolver=porkbun

@@ -19,7 +19,7 @@ services:
     container_name: apprise
     labels:
       - traefik.enable=true
-      - traefik.http.routers.apprise.rule=Host(`{{{APP_DOMAIN}}}`)
+      - traefik.http.routers.apprise.rule=Host(`{{{domainForApp "apprise"}}}`)
       - traefik.http.routers.apprise.entrypoints=https
       - traefik.http.routers.apprise.tls=true
       - traefik.http.routers.apprise.tls.certresolver=porkbun

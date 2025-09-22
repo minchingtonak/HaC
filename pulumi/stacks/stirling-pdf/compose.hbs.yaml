@@ -15,7 +15,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.stirlingpdf.rule=Host(`{{{APP_DOMAIN}}}`)
+      - traefik.http.routers.stirlingpdf.rule=Host(`{{{domainForApp "stirling-pdf"}}}`)
       - traefik.http.routers.stirlingpdf.entrypoints=https
       - traefik.http.routers.stirlingpdf.tls=true
       - traefik.http.routers.stirlingpdf.tls.certresolver=porkbun

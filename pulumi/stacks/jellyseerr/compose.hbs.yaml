@@ -13,7 +13,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.jellyseerr.rule=Host(`{{{APP_DOMAIN}}}`)
+      - traefik.http.routers.jellyseerr.rule=Host(`{{{domainForApp "jellyseerr"}}}`)
       - traefik.http.routers.jellyseerr.entrypoints=https
       - traefik.http.routers.jellyseerr.tls=true
       - traefik.http.routers.jellyseerr.tls.certresolver=porkbun

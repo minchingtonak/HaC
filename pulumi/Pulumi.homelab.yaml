@@ -14,7 +14,7 @@ config:
   # pulumi config set --secret homelab-pve:lxcPrivateSshKey -- '-----BEGIN OPENSSH PRIVATE KEY-----....'
   homelab-pve:lxcPrivateSshKey:
     secure: v1:Gvh1GdBO1YBpztNy:VFos5hyLijW3XoPXf/4+hqGBzRztgyz1uXCofM6WdUHi9yPXmmIlEdHcsm0W4w/B5ld5h+J7RFt/mDBSyMdipAuOspFQcGcXASSmVe+a/hJ0W/bQ1giwsN4PYw/E9hfiTez6SNtgAMHQOgG8UHvRjD+uZSr3PqsI3JZzIGan40yzVJxe5OTKkhcuTKbnJxIj1o1ljhoS8tF32sffz0HgWePvzusrpzOF8GSrTXfrWx3TBn7dE2HN9HbilWC90aaa52qasXDumMdFuJVikLVVIvMY1GZIKf0Yjan8J0riVChhwdcXk0xRMWquafqkAsgFajyLraol0gia9KXDGpzGMGp4mBvq+HNtWSceMdmp2OelD0YACpSnUJHsgNvr9dPqWDr5QtEKVguNOALI1YN3lR6VyCpujKUJIKd3lf53XatHWq8GmyYZdAXdP+g22Qc/b+hEF0x/7xiHP7QDRLVcgwaNwe2BM7okJ38qv7CTSKhCxU+8E8g3wEm4uBjUmGKJkvex1sUv8mIcZEjKiArxSfYZwAEajCiEQy+eYYkx
-  homelab-pve:pveEndpoint: https://homelab.akmin.dev
+  homelab-pve:pveEndpoint: https://homelab.akmin.dev # TODO define in terms of nodenade and root domain
   homelab-pve:pveInsecure: 'false'
   homelab-pve:pveUsername:
     secure: v1:0Misa7AjGbv6pgG8:935A2yNp0Wg+8fhzurcPkVotrLLvO5N9
@@ -62,28 +62,12 @@ config:
   loggifly:SECRET_SLACK_WEBHOOK:
     secure: v1:np+7j9i6PPh2CQsD:4ULi1u2NrP9UTiL6cFk8m5aptFzs3GZbAQjg+r+hQ5edgw6YAdM3xlXHlqhqL0WR6io79S8DSwV44yI1CNffgSQlmz6Z8aQb0eUxHNyuhx01jwXIDn/HCDggN4mKZAdISA==
   # archiver
-  archiver-pulumi:CONTAINER_DOMAIN: archiver-pulumi.pulumi.homelab.akmin.dev
-  archiver-pulumi#archiveteam-warrior:APP_DOMAIN: archiveteam-warrior.{{{parent:CONTAINER_DOMAIN}}}
   # copyparty
-  copyparty-pulumi:CONTAINER_DOMAIN: copyparty-pulumi.pulumi.homelab.akmin.dev
-  copyparty-pulumi#copyparty:APP_DOMAIN: copyparty.{{{parent:CONTAINER_DOMAIN}}}
   # tools
-  tools-pulumi:CONTAINER_DOMAIN: tools-pulumi.pulumi.homelab.akmin.dev
-  tools-pulumi#cyberchef:APP_DOMAIN: cyberchef.{{{parent:CONTAINER_DOMAIN}}}
-  tools-pulumi#docuseal:APP_DOMAIN: docuseal.{{{parent:CONTAINER_DOMAIN}}}
-  tools-pulumi#it-tools:APP_DOMAIN: ittools.{{{parent:CONTAINER_DOMAIN}}}
-  tools-pulumi#mazanoke:APP_DOMAIN: mazanoke.{{{parent:CONTAINER_DOMAIN}}}
-  tools-pulumi#omni-tools:APP_DOMAIN: omnitools.{{{parent:CONTAINER_DOMAIN}}}
-  tools-pulumi#stirling-pdf:APP_DOMAIN: stirlingpdf.{{{parent:CONTAINER_DOMAIN}}}
   # apprise
-  apprise-pulumi:CONTAINER_DOMAIN: apprise-pulumi.pulumi.homelab.akmin.dev
-  apprise-pulumi#apprise:APP_DOMAIN: apprise.{{{parent:CONTAINER_DOMAIN}}}
   apprise-pulumi#apprise:SECRET_SERVARR_SLACK_WEBHOOK:
     secure: v1:WsS7ZU2EH2dvJwmu:nrRyndrzO45Te8/ARtzdo3bDzdc3jRDoZNWUNyO7qWcV/AFTRVhO+bNRMoc3VWyTz2e8abYC3aUYy474nnzTpUgs62S/SMI0cBLagEDf/YExO/QvpZ/KXTC6cca4ea8jsw==
   # admin
-  admin-pulumi:CONTAINER_DOMAIN: admin-pulumi.pulumi.homelab.akmin.dev
-  admin-pulumi#glance:APP_DOMAIN: glance.{{{parent:CONTAINER_DOMAIN}}}
-  admin-pulumi#semaphore:APP_DOMAIN: semaphore.{{{parent:CONTAINER_DOMAIN}}}
   admin-pulumi#semaphore:SECRET_ADMIN_USERNAME:
     secure: v1:hfzh9QFJQ1EIzwfo:YvPybPDxT0B3iA1b8GstY1jk7Xnv
   admin-pulumi#semaphore:SECRET_ADMIN_PASSWORD:
@@ -93,20 +77,11 @@ config:
   admin-pulumi#semaphore:SECRET_SLACK_WEBHOOK_URL:
     secure: v1:TssVt21kCosYCKbY:vFlhMwP39dCP7Uf8R87YdMM88+lXSDYL1nyGb8KTgpwY/N9Pu6lDPPfuajwhCycV1wf9PxxBscwbkPc3nCHA8+Vgnhc9fHSw+Q1a8RgApZTCAZksNuGLKMZjDaS0ZZMY/A==
   # gitea
-  gitea-pulumi:CONTAINER_DOMAIN: gitea-pulumi.pulumi.homelab.akmin.dev
-  gitea-pulumi#gitea:APP_DOMAIN: gitea.{{{parent:CONTAINER_DOMAIN}}}
   # downloader
-  downloader-pulumi:CONTAINER_DOMAIN: downloader-pulumi.pulumi.homelab.akmin.dev
-  downloader-pulumi#ytptube:APP_DOMAIN: ytptube.{{{parent:CONTAINER_DOMAIN}}}
   # immich
-  immich-pulumi:CONTAINER_DOMAIN: immich-pulumi.pulumi.homelab.akmin.dev
-  immich-pulumi#immich:APP_DOMAIN: immich.{{{parent:CONTAINER_DOMAIN}}}
   immich-pulumi#immich:SECRET_DB_PASSWORD:
     secure: v1:ECc5/vJz6VnDlxsj:xgdWvCAj0NxBmWNBrAg4cP+l8j7DAk9cij/mO/JSNm+S8zVq
   # backup
-  backup-pulumi:CONTAINER_DOMAIN: backup-pulumi.pulumi.homelab.akmin.dev
-  backup-pulumi#backrest:APP_DOMAIN: backrest.{{{parent:CONTAINER_DOMAIN}}}
-  backup-pulumi#cronicle:APP_DOMAIN: cronicle.{{{parent:CONTAINER_DOMAIN}}}
   backup-pulumi#cronicle:CRONICLE_BASE_APP_URL: https://cronicle.backup-pulumi.pulumi.homelab.akmin.dev
   backup-pulumi#cronicle:SECRET_CRONICLE_UNIVERSAL_WEB_HOOK:
     secure: v1:UiKAJNHijNn0sxiS:QWspnq95k6UcAZ6hxzMQw3LsE3JDfDdsjxx2gB0s2ChJ3nTj0LRmcuqTdF6PWCQrjlOhP5KOM2XFniDlF/4bOUpwOkioAdB+W3dwoepydWEpxk2poFWxZHEs0aznDstYeQ==
@@ -124,20 +99,10 @@ config:
   backup-pulumi#cronicle:SECRET_B2_HEALTHCHECK_URL:
     secure: v1:+wCA5m2zsGeupOzU:0TqufLdbUSRVv6HMHfsCjYF5q/q6d8TWTGYmIbPDTAB4BjV/sq8uXJdZswAeIH1MzC7Bz418ppHq/1JrlyHPDvlm+Z0/GOvK
   # jellyfin
-  jellyfin-pulumi:CONTAINER_DOMAIN: jellyfin-pulumi.pulumi.homelab.akmin.dev
-  jellyfin-pulumi#jellyfin:APP_DOMAIN: jellyfin.{{{parent:CONTAINER_DOMAIN}}}
   # jellyseerr
-  jellyseerr-pulumi:CONTAINER_DOMAIN: jellyseerr-pulumi.pulumi.homelab.akmin.dev
-  jellyseerr-pulumi#jellyseerr:APP_DOMAIN: jellyseerr.{{{parent:CONTAINER_DOMAIN}}}
   # life
   life-pulumi:SERVER_NAME: life-pulumi
-  life-pulumi:CONTAINER_DOMAIN: life-pulumi.pulumi.homelab.akmin.dev
-  life-pulumi#fittrackee:APP_DOMAIN: fittrackee.{{{parent:CONTAINER_DOMAIN}}}
-  life-pulumi#memos:APP_DOMAIN: memos.{{{parent:CONTAINER_DOMAIN}}}
-  life-pulumi#wallos:APP_DOMAIN: wallos.{{{parent:CONTAINER_DOMAIN}}}
-  life-pulumi#mealie:APP_DOMAIN: mealie.{{{parent:CONTAINER_DOMAIN}}}
-  life-pulumi#mealie:MEALIE_BASE_URL: '{{{APP_DOMAIN}}}'
-  life-pulumi#dawarich:APP_DOMAIN: dawarich.{{{parent:CONTAINER_DOMAIN}}}
+  life-pulumi#mealie:MEALIE_BASE_URL: '{{{domainForApp "mealie"}}}'
   life-pulumi#dawarich:SECRET_DB_PASSWORD:
     secure: v1:xEWsp+rmkp0ekfX0:fDOUcy1psCZEQPCgfxHGBMzi0oTNJdmNENQTIYNNxjQoc3Mt
   life-pulumi#mealie:config_var_one: foo
@@ -151,27 +116,18 @@ config:
   life-pulumi#fittrackee:SECRET_DB_PASSWORD:
     secure: v1:2SC5AIdLdytL3l7R:CJhjXr0pdvtwClww4/fnwDjZHKE8F4Cxs4SxPW5wNIItrxTfXwtMAdzmkiE=
   # paperless
-  paperless-pulumi:CONTAINER_DOMAIN: paperless-pulumi.pulumi.homelab.akmin.dev
-  paperless-pulumi#paperless-ngx:APP_DOMAIN: paperless.paperless-pulumi.pulumi.homelab.akmin.dev
   paperless-pulumi#paperless-ngx:SECRET_ADMIN_USERNAME:
     secure: v1:ZN1VLNMSu60BAhxf:okOhImt9d3D9NVlmztIPHDRv9noH
   paperless-pulumi#paperless-ngx:SECRET_ADMIN_PASSWORD:
     secure: v1:0NpMQ0oelz/GSKbW:LNPX/H4nomIsrwR7uH0med0p02S2vEf7VPfOZaqiTe441JqS
   # servarr
-  servarr-pulumi:CONTAINER_DOMAIN: servarr-pulumi.pulumi.homelab.akmin.dev
-  servarr-pulumi#servarr:QBITTORRENT_APP_DOMAIN: qbittorrent.{{{parent:CONTAINER_DOMAIN}}}
-  servarr-pulumi#servarr:SABNZBD_APP_DOMAIN: sabnzbd.{{{parent:CONTAINER_DOMAIN}}}
-  servarr-pulumi#servarr:PROWLARR_APP_DOMAIN: prowlarr.{{{parent:CONTAINER_DOMAIN}}}
-  servarr-pulumi#servarr:SONARR_APP_DOMAIN: sonarr.{{{parent:CONTAINER_DOMAIN}}}
-  servarr-pulumi#servarr:RADARR_APP_DOMAIN: radarr.{{{parent:CONTAINER_DOMAIN}}}
-  servarr-pulumi#servarr:BAZARR_APP_DOMAIN: bazarr.{{{parent:CONTAINER_DOMAIN}}}
-  servarr-pulumi#servarr:PROFILARR_APP_DOMAIN: profilarr.{{{parent:CONTAINER_DOMAIN}}}
-  servarr-pulumi#servarr:CLEANUPARR_APP_DOMAIN: cleanuparr.{{{parent:CONTAINER_DOMAIN}}}
-  servarr-pulumi#servarr:HUNTARR_APP_DOMAIN: huntarr.{{{parent:CONTAINER_DOMAIN}}}
-  servarr-pulumi#servarr:LIDARR_APP_DOMAIN: lidarr.{{{parent:CONTAINER_DOMAIN}}}
   servarr-pulumi#servarr:SECRET_WIREGUARD_PRIVATE_KEY:
     secure: v1:UpuGbhyPZJ7MMwcf:YwNSmcYTs321qZW3Bh0Oh0WRvthVuZ4A0jkqd5pV2w53RZEE5ReQ5WXkF4+EWy/RIy5vWv8tnV+TKcZi
   servarr-pulumi#servarr:SECRET_WIREGUARD_PRESHARED_KEY:
     secure: v1:CmV+NG1VGxbL5T/i:m1wYPbD7ZB+8Qx3WH++xmSK4X+/hV0rMulX8LygT3j8amy9TRJVhAYSTz9w9DwCvL+ppRJahFuNLyGU0
   servarr-pulumi#servarr:SECRET_WIREGUARD_ADDRESSES:
     secure: v1:rj2ol6IXhUc4+sPx:1Adqh3BT4b1YL28YBXYS1OUDmohdq6woRcU2CxemVCMd
+  # tailscale
+  tailscale-pulumi#tailscale:SECRET_TAILSCALE_AUTHKEY:
+    secure: v1:WzqZRv9cGYpzab5r:QmAK2vrwxNtPNZwMv0k/uWlnHT/nqKb+yGXPiRdSl83AhTm2SusJhSf03MEDGUIxZFe+9oF7R5POga0vC8k2JiRSvcmlVjRSTHlWkYae
+  tailscale-pulumi#tailscale:TAILSCALE_SUBNET_ROUTES: 192.168.0.0/24

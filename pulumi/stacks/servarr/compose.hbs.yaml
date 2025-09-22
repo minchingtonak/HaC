@@ -34,7 +34,7 @@ services:
       - deunhealth.restart.on.unhealthy=true
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - traefik.http.routers.qbittorrent.rule=Host(`{{{QBITTORRENT_APP_DOMAIN}}}`)
+      - traefik.http.routers.qbittorrent.rule=Host(`{{{domainForApp "qbittorrent"}}}`)
       - traefik.http.routers.qbittorrent.entrypoints=https
       - traefik.http.routers.qbittorrent.tls=true
       - traefik.http.routers.qbittorrent.tls.certresolver=porkbun
@@ -467,56 +467,6 @@ services:
     networks:
       - traefik
 
-  # lidarr:
-  #   container_name: lidarr
-  #   # image: lscr.io/linuxserver/lidarr:latest
-  #   image: blampe/lidarr:latest
-  #   restart: unless-stopped
-  #   depends_on:
-  #     qbittorrent:
-  #       condition: service_healthy
-  #       restart: true
-  #     sabnzbd:
-  #       condition: service_healthy
-  #       restart: true
-  #     prowlarr:
-  #       condition: service_healthy
-  #       restart: true
-  #   environment:
-  #     - PUID=0
-  #     - PGID=0
-  #     - TZ=America/Los_Angeles
-  #   volumes:
-  #     - /etc/localtime:/etc/localtime:ro
-  #     - /docker/lidarr:/config
-  #     - /mnt/media:/data
-  #   # ports:
-  #   #   - 8686:8686
-  #   healthcheck:
-  #     test:
-  #       - CMD
-  #       - wget
-  #       - --quiet
-  #       - --timeout=3
-  #       - --tries=1
-  #       - --spider
-  #       - http://localhost:8686/ping
-  #     interval: 5s
-  #     timeout: 4s
-  #     retries: 4
-  #     start_period: 5s
-  #   labels:
-  #     - deunhealth.restart.on.unhealthy=true
-  #     - traefik.enable=true
-  #     - traefik.docker.network=traefik
-  #     - traefik.http.routers.lidarr.rule=Host(`{{{LIDARR_APP_DOMAIN}}}`)
-  #     - traefik.http.routers.lidarr.entrypoints=https
-  #     - traefik.http.routers.lidarr.tls=true
-  #     - traefik.http.routers.lidarr.tls.certresolver=porkbun
-  #     - traefik.http.routers.lidarr.service=lidarr
-  #     - traefik.http.services.lidarr.loadbalancer.server.port=8686
-  #   networks:
-  #     - traefik
 
 networks:
   traefik:

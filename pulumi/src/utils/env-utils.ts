@@ -81,11 +81,12 @@ export class EnvUtils {
 
   private static IGNORED_VARIABLES = new Set<string>();
 
-  static registerTemplateHelper(name: string, fn: Handlebars.HelperDelegate) {
-    Handlebars.registerHelper(name, fn);
-    EnvUtils.IGNORED_VARIABLES.add(name);
+  static addIgnoredVariable(name: string) {
+    this.IGNORED_VARIABLES.add(name);
+  }
 
-    return () => Handlebars.unregisterHelper(name);
+  static removeIgnoredVariable(name: string) {
+    return this.IGNORED_VARIABLES.delete(name);
   }
 
   /**
@@ -174,18 +175,3 @@ export class EnvUtils {
     return Array.from(varNames);
   }
 }
-
-EnvUtils.registerTemplateHelper('raw', (options: Handlebars.HelperOptions) => {
-  return options.fn({});
-});
-
-EnvUtils.registerTemplateHelper(
-  'helperMissing',
-  function (/* dynamic arguments */) {
-    const options = arguments[arguments.length - 1];
-    const args = Array.prototype.slice.call(arguments, 0, arguments.length - 1);
-    return new Handlebars.SafeString(
-      'helperMissing: ' + options.name + '(' + args + ')',
-    );
-  },
-);

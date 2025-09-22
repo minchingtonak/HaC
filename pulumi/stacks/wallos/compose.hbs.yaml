@@ -12,7 +12,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.wallos.rule=Host(`{{{APP_DOMAIN}}}`)
+      - traefik.http.routers.wallos.rule=Host(`{{{domainForApp "wallos"}}}`)
       - traefik.http.routers.wallos.entrypoints=https
       - traefik.http.routers.wallos.tls=true
       - traefik.http.routers.wallos.tls.certresolver=porkbun

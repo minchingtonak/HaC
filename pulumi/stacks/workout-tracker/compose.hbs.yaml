@@ -11,7 +11,7 @@ services:
       - WT_JWT_ENCRYPTION_KEY={{{SECRET_JWT_KEY}}}
     labels:
       - traefik.enable=true
-      - traefik.http.routers.workouttracker.rule=Host(`{{{APP_DOMAIN}}}`)
+      - traefik.http.routers.workouttracker.rule=Host(`{{{domainForApp "workout-tracker"}}}`)
       - traefik.http.routers.workouttracker.entrypoints=https
       - traefik.http.routers.workouttracker.tls=true
       - traefik.http.routers.workouttracker.tls.certresolver=porkbun

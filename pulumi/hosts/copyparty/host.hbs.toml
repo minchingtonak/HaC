@@ -1,10 +1,13 @@
 # verified
 id = 200
 hostname = "copyparty-pulumi"
-enabled = false
+enabled = true
 
 description = "copyparty lightweight fileserver container"
-stacks = ["traefik", "copyparty"]
+
+[stacks]
+traefik = {}
+copyparty = {}
 
 [cpu]
 cores = 2

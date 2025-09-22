@@ -4,7 +4,11 @@ hostname = "archiver-pulumi"
 enabled = false
 
 description = "worker for archive team warrior"
-stacks = ["traefik", "archiveteam-warrior"]
+
+[stacks]
+traefik = {}
+archiveteam-warrior = {}
+ytptube = {}
 
 [cpu]
 cores = 2
@@ -15,6 +19,10 @@ swap = 2048
 
 [disk]
 size = 8
+
+[[mountPoints]]
+volume = "/void/podcasts"
+mountPoint = "/mnt/podcasts"
 
 [[provisioners]]
 type = "ansible"

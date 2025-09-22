@@ -22,7 +22,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.backrest.rule=Host(`{{{APP_DOMAIN}}}`)
+      - traefik.http.routers.backrest.rule=Host(`{{{domainForApp "backrest"}}}`)
       - traefik.http.routers.backrest.entrypoints=https
       - traefik.http.routers.backrest.tls=true
       - traefik.http.routers.backrest.tls.certresolver=porkbun

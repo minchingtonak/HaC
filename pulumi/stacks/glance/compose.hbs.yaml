@@ -10,7 +10,7 @@ services:
     #   - 8080:8080
     labels:
       - traefik.enable=true
-      - traefik.http.routers.glance.rule=Host(`{{{APP_DOMAIN}}}`)
+      - traefik.http.routers.glance.rule=Host(`{{{domainForApp "glance"}}}`)
       - traefik.http.routers.glance.entrypoints=https
       - traefik.http.routers.glance.tls=true
       - traefik.http.routers.glance.tls.certresolver=porkbun

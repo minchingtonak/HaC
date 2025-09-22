@@ -7,7 +7,7 @@ services:
     #   - "8080:80"
     labels:
       - traefik.enable=true
-      - traefik.http.routers.omnitools.rule=Host(`{{{APP_DOMAIN}}}`)
+      - traefik.http.routers.omnitools.rule=Host(`{{{domainForApp "omni-tools"}}}`)
       - traefik.http.routers.omnitools.entrypoints=https
       - traefik.http.routers.omnitools.tls=true
       - traefik.http.routers.omnitools.tls.certresolver=porkbun

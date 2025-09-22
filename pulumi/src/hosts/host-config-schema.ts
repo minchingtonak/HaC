@@ -231,6 +231,14 @@ const ProvisionerSchema = z.discriminatedUnion('type', [
   AnsibleProvisionerSchema,
 ]);
 
+const StackSchema = z
+  .object({
+    domainPrefixes: z.record(z.string(), z.string()).optional(),
+  })
+  .strict();
+
+const StackSchemaMap = z.record(z.string(), StackSchema);
+
 export const HostConfigSchema = z
   .object({
     id: z.number().positive().int(),
@@ -242,7 +250,7 @@ export const HostConfigSchema = z
     cpu: CpuConfigSchema.optional(),
     memory: MemoryConfigSchema.optional(),
     disk: DiskConfigSchema.optional(),
-    stacks: z.array(z.string()).optional(),
+    stacks: StackSchemaMap.optional(),
     mountPoints: z.array(MountPointSchema).optional(),
     devicePassthroughs: z.array(DevicePassthroughSchema).optional(),
     firewallOptions: FirewallOptionsSchema.default(DEFAULT_FIREWALL_OPTIONS),
@@ -255,7 +263,9 @@ export type HostConfigToml = z.infer<typeof HostConfigSchema>;
 export type Provisioner = z.infer<typeof ProvisionerSchema>;
 export type ScriptProvisioner = z.infer<typeof ScriptProvisionerSchema>;
 export type AnsibleProvisioner = z.infer<typeof AnsibleProvisionerSchema>;
-export type ConnectionOverride = z.infer<typeof AnsibleConnectionOverrideSchema>;
+export type ConnectionOverride = z.infer<
+  typeof AnsibleConnectionOverrideSchema
+>;
 export type FirewallOptions = z.infer<typeof FirewallOptionsSchema>;
 
 export const HostnameSchema = z.object({

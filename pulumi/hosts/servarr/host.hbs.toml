@@ -4,7 +4,12 @@ hostname = "servarr-pulumi"
 enabled = false
 
 description = "servarr media stack"
-stacks = ["traefik", "dozzle", "komodo", "servarr"]
+
+[stacks]
+traefik = {}
+dozzle = {}
+komodo = {}
+servarr = {}
 
 [cpu]
 cores = 2

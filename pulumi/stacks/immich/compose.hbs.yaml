@@ -34,7 +34,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - traefik.http.routers.immich.rule=Host(`{{{APP_DOMAIN}}}`)
+      - traefik.http.routers.immich.rule=Host(`{{{domainForApp "immich"}}}`)
       - traefik.http.routers.immich.entrypoints=https
       - traefik.http.routers.immich.tls=true
       - traefik.http.routers.immich.tls.certresolver=porkbun

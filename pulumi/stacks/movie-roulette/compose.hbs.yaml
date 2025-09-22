@@ -9,7 +9,7 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.movieroulette.rule=Host(`{{{APP_DOMAIN}}}`)
+      - traefik.http.routers.movieroulette.rule=Host(`{{{domainForApp "movie-roulette"}}}`)
       - traefik.http.routers.movieroulette.entrypoints=https
       - traefik.http.routers.movieroulette.tls=true
       - traefik.http.routers.movieroulette.tls.certresolver=porkbun

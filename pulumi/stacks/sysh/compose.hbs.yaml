@@ -22,7 +22,7 @@ services:
     restart: always
     labels:
       - traefik.enable=true
-      - traefik.http.routers.sysh.rule=Host(`{{{APP_DOMAIN}}}`)
+      - traefik.http.routers.sysh.rule=Host(`{{{domainForApp "sysh"}}}`)
       - traefik.http.routers.sysh.entrypoints=https
       - traefik.http.routers.sysh.tls=true
       - traefik.http.routers.sysh.tls.certresolver=porkbun

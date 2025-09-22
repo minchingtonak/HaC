@@ -11,7 +11,7 @@ services:
       - /docker/beszel/socket:/beszel_socket
     labels:
       - traefik.enable=true
-      - traefik.http.routers.beszel.rule=Host(`beszel.{{{parent:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.beszel.rule=Host(`{{{domainForApp "beszel"}}}`)
       - traefik.http.routers.beszel.entrypoints=https
       - traefik.http.routers.beszel.tls=true
       - traefik.http.routers.beszel.tls.certresolver=porkbun
@@ -34,7 +34,7 @@ services:
     environment:
       # use socket to communicate with hub because agent uses network_mode: host
       LISTEN: /beszel_socket/beszel.sock
-      HUB_URL: 'https://beszel.{{{parent:CONTAINER_DOMAIN}}}'
+      HUB_URL: 'https://{{{domainForApp "beszel"}}}'
       KEY: '{{{SECRET_KEY}}}' # grab this from the deployed instance's 'Add System' modal
       TOKEN: '{{{beszel:SECRET_TOKEN}}}'
 

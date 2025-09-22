@@ -6,7 +6,8 @@ description = "managed by pulumi"
 enabled = true  # set to false to disable container creation
 tags = ["pulumi"]
 
-stacks = ["stack-name"] # see folders in pulumi/stacks for stack names
+[stacks]
+stack-name = {}  # see folders in pulumi/stacks for stack names
 
 [os]
 templateFileId = "local:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst"

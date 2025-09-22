@@ -17,7 +17,7 @@ services:
     restart: always
     labels:
       - traefik.enable=true
-      - traefik.http.routers.slskd.rule=Host(`{{{APP_DOMAIN}}}`)
+      - traefik.http.routers.slskd.rule=Host(`{{{domainForApp "slskd"}}}`)
       - traefik.http.routers.slskd.entrypoints=https
       - traefik.http.routers.slskd.tls=true
       - traefik.http.routers.slskd.tls.certresolver=porkbun

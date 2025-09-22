@@ -62,7 +62,7 @@ services:
       DATABASE_PASSWORD: "{{{SECRET_DB_PASSWORD}}}"
       DATABASE_NAME: dawarich_development
       MIN_MINUTES_SPENT_IN_CITY: 60
-      APPLICATION_HOSTS: "{{{APP_DOMAIN}}}"
+      APPLICATION_HOSTS: "{{{domainForApp 'dawarich'}}}"
       TIME_ZONE: America/Los_Angeles
       APPLICATION_PROTOCOL: http
       PROMETHEUS_EXPORTER_ENABLED: "false"
@@ -96,7 +96,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - traefik.http.routers.dawarich.rule=Host(`{{{APP_DOMAIN}}}`)
+      - traefik.http.routers.dawarich.rule=Host(`{{{domainForApp "dawarich"}}}`)
       - traefik.http.routers.dawarich.entrypoints=https
       - traefik.http.routers.dawarich.tls=true
       - traefik.http.routers.dawarich.tls.certresolver=porkbun
@@ -127,7 +127,7 @@ services:
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: "{{{SECRET_DB_PASSWORD}}}"
       DATABASE_NAME: dawarich_development
-      APPLICATION_HOSTS: "{{{APP_DOMAIN}}}"
+      APPLICATION_HOSTS: "{{{domainForApp 'dawarich'}}}"
       BACKGROUND_PROCESSING_CONCURRENCY: 10
       APPLICATION_PROTOCOL: http
       PROMETHEUS_EXPORTER_ENABLED: "false"

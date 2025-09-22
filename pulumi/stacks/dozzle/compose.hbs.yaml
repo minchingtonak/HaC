@@ -16,7 +16,7 @@ services:
       - DOZZLE_NO_ANALYTICS
     labels:
       - traefik.enable=true
-      - traefik.http.routers.dozzle.rule=Host(`dozzle.{{{parent:CONTAINER_DOMAIN}}}`)
+      - traefik.http.routers.dozzle.rule=Host(`{{{domainForApp "dozzle"}}}`)
       - traefik.http.routers.dozzle.entrypoints=https
       - traefik.http.routers.dozzle.tls=true
       - traefik.http.routers.dozzle.tls.certresolver=porkbun

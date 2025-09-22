@@ -63,7 +63,8 @@ export class HomelabProvider extends proxmox.Provider {
     this.rawLocalIpPrefix =
       args?.localIpPrefix ?? homelabConfig.require('localIpPrefix');
     this.rawGatewayIp = args?.gatewayIp ?? homelabConfig.require('gatewayIp');
-    this.rawRootContainerDomain = args?.rootContainerDomain ?? homelabConfig.require('rootContainerDomain');
+    this.rawRootContainerDomain =
+      args?.rootContainerDomain ?? homelabConfig.require('rootContainerDomain');
     this.rawDefaultRootPassword =
       (args?.lxcRootPassword !== undefined &&
         pulumi.secret(args.lxcRootPassword)) ||
@@ -100,5 +101,20 @@ export class HomelabProvider extends proxmox.Provider {
     );
     this.porkbunApiKey = pulumi.output(this.rawPorkbunApiKey);
     this.porkbunSecretKey = pulumi.output(this.rawPorkbunSecretKey);
+  }
+
+  public toObject(): pulumi.Output<Record<string, string>> {
+    return pulumi.all({
+      pveNodeName: this.pveNodeName,
+      localIpPrefix: this.localIpPrefix,
+      gatewayIp: this.gatewayIp,
+      rootContainerDomain: this.rootContainerDomain,
+      defaultRootPassword: this.defaultRootPassword,
+      lxcPublicSshKey: this.lxcPublicSshKey,
+      lxcPrivateSshKey: this.lxcPrivateSshKey,
+      imageTemplateDatastoreId: this.imageTemplateDatastoreId,
+      porkbunApiKey: this.porkbunApiKey,
+      porkbunSecretKey: this.porkbunSecretKey,
+    });
   }
 }
