@@ -74,7 +74,6 @@ securityGroup = "web"  # security group (optional)
 # Script provisioner example
 [[provisioners]]
 type = "script"
-name = "install-docker"
 script = "/path/to/script.sh"
 workingDirectory = "/tmp"  # default: /tmp
 runAs = "root"            # default: root
@@ -94,7 +93,6 @@ privateKey = "/path/to/key"
 # Ansible provisioner example
 [[provisioners]]
 type = "ansible"
-name = "configure-system"
 playbook = "/path/to/playbook.yml"
 user = "root"                    # default: root
 privateKeyFile = "~/.ssh/lxc_ed25519"  # default: ~/.ssh/lxc_ed25519

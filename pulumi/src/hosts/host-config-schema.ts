@@ -198,7 +198,6 @@ const FirewallRuleSchema = z
 const ScriptProvisionerSchema = z
   .object({
     type: z.literal('script'),
-    name: z.string().min(1),
     script: z.string().min(1),
     workingDirectory: z.string().default('/tmp'),
     runAs: z.string().default('root'),
@@ -215,7 +214,6 @@ const ScriptProvisionerSchema = z
 const AnsibleProvisionerSchema = z
   .object({
     type: z.literal('ansible'),
-    name: z.string().min(1),
     playbook: z.string().min(1),
     variables: z.record(z.string(), z.unknown()).optional(),
     tags: z.array(z.string()).optional(),

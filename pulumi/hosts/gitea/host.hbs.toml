@@ -28,17 +28,14 @@ comment = "gitea ssh"
 
 [[provisioners]]
 type = "ansible"
-name = "lxc-init"
 playbook = "provisioners/ansible/lxc-init.yaml"
 replayable = false
 
 [[provisioners]]
 type = "ansible"
-name = "gitea-setup"
 playbook = "provisioners/ansible/gitea-setup.yaml"
 replayable = true
 
 [[provisioners]]
 type = "script"
-name = "install-docker"
 script = "provisioners/scripts/install-docker.sh"

@@ -83,7 +83,7 @@ services:
       TZ: America/Los_Angeles
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ../loggifly/config:/config
+      - ./config:/config
     restart: unless-stopped
 
 networks:

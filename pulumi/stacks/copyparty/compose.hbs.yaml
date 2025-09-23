@@ -1,10 +1,11 @@
 services:
   ac:
     image: copyparty/ac
-    # ports:
-    #   - '3939:3939'
+    container_name: copyparty
     restart: unless-stopped
     user: '0:0'
+    # ports:
+    #   - '3939:3939'
     volumes:
       - /docker/copyparty:/cfg
       - ./copyparty.conf:/cfg/copyparty.conf

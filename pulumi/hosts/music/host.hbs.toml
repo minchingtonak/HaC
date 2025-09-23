@@ -35,11 +35,9 @@ mountPoint = "/mnt/podcasts"
 
 [[provisioners]]
 type = "ansible"
-name = "lxc-init"
 playbook = "provisioners/ansible/lxc-init.yaml"
 replayable = false
 
 [[provisioners]]
 type = "script"
-name = "install-docker"
 script = "provisioners/scripts/install-docker.sh"

@@ -10,6 +10,7 @@ import {
   AnsibleProvisioner,
 } from './host-config-schema';
 import { EnvUtils } from '../utils/env-utils';
+import { TemplateProcessor } from '../templates/template-processor';
 
 export type ProvisionerResource = command.remote.Command | ansible.Playbook;
 
@@ -54,7 +55,7 @@ export class ProvisionerEngine {
     dependsOn?: ProvisionerResource,
     index?: number,
   ): ProvisionerResource {
-    const commandName = `${this.args.hostname}-provisioner-${index}-${provisioner.name}`;
+    const commandName = `${this.args.hostname}-provisioner-${index}`;
 
     switch (provisioner.type) {
       case 'script':
@@ -140,7 +141,9 @@ export class ProvisionerEngine {
     );
 
     return new command.remote.Command(
-      commandName,
+      `${commandName}-${TemplateProcessor.buildSanitizedNameForId(
+        provisioner.script,
+      )}`,
       {
         ...provisioner.runOn.reduce((acc, curr) => {
           acc[curr] = commandString;
@@ -162,17 +165,21 @@ export class ProvisionerEngine {
   ): string {
     const scriptName = path.basename(provisioner.script);
 
+    const safeName = TemplateProcessor.buildSanitizedNameForId(
+      provisioner.script,
+    );
+
     const remoteScriptDir = path.join(
       provisioner.workingDirectory,
       'pulumi',
-      provisioner.name,
+      safeName,
     );
 
     const remoteScriptPath = path.join(remoteScriptDir, scriptName);
 
     const commands = [
       `cd ${provisioner.workingDirectory}`,
-      `echo "=== Script Provisioner: ${provisioner.name} ==="`,
+      `echo "=== Script Provisioner: ${safeName} ==="`,
       `echo "Working directory: $(pwd)"`,
       `echo "Running as: ${provisioner.runAs}"`,
       `echo "=== Script Content ==="`,
@@ -207,7 +214,7 @@ export class ProvisionerEngine {
       `  echo "=== Execution Failed (Exit Code: $EXIT_CODE) ==="`,
       `  echo "Script: ${provisioner.script}"`,
       `  echo "Remote Script: ${remoteScriptPath}"`,
-      `  echo "Provisioner: ${provisioner.name}"`,
+      `  echo "Provisioner: ${safeName}"`,
       `  echo "Current User: $CURRENT_USER"`,
       `  echo "Target User: $TARGET_USER"`,
       `  echo "Execution Command: $EXEC_CMD"`,
@@ -248,11 +255,15 @@ export class ProvisionerEngine {
       dependsOn,
     );
 
+    const safeName = TemplateProcessor.buildSanitizedNameForId(
+      provisioner.playbook,
+    );
+
     const playbook = new ansible.Playbook(
-      commandName,
+      `${commandName}-${safeName}`,
       {
         playbook: playbookPath,
-        name: provisioner.name,
+        name: safeName,
         replayable: provisioner.replayable,
         ...(provisioner.tags && { tags: provisioner.tags }),
         ...(provisioner.limit && { limits: [provisioner.limit] }),
