@@ -14,7 +14,7 @@ importers:
   .:
     dependencies:
       '@hanseltime/pulumi-file-utils':
-        specifier: ^1.2.0
+        specifier: 1.2.0
         version: 1.2.0(patch_hash=e5d211be610d1ebcd0e4781e82cb1ec57ab59635056aa758f4366f001a469c10)(@pulumi/pulumi@3.186.0(typescript@5.8.3))
       '@muhlba91/pulumi-proxmoxve':
         specifier: ^7.3.0
@@ -23,8 +23,8 @@ importers:
         specifier: file:sdks/ansible
         version: file:sdks/ansible
       '@pulumi/command':
-        specifier: ^1.1.0
-        version: 1.1.0(typescript@5.8.3)
+        specifier: ^1.1.1
+        version: 1.1.1(typescript@5.8.3)
       '@pulumi/porkbun':
         specifier: file:sdks/porkbun
         version: file:sdks/porkbun
@@ -412,8 +412,8 @@ packages:
   '@pulumi/ansible@file:sdks/ansible':
     resolution: {directory: sdks/ansible, type: directory}
 
-  '@pulumi/command@1.1.0':
-    resolution: {integrity: sha512-ovVec+gXeqpcm76xwYYZvfJym8bG9NRvlBGQWbn0+c0fKQziZIjiv5V+AxTKfb+dLWKe7Otyt206L1IWq41hyw==}
+  '@pulumi/command@1.1.1':
+    resolution: {integrity: sha512-8dS/2B62wSd9XYVAGD4v8x52vbMQlEEsTB4YOdcE5o+le0pq+f9RtPSkqGWypDI+JblHr7j0W5wHl4CuGmL7Eg==}
 
   '@pulumi/porkbun@file:sdks/porkbun':
     resolution: {directory: sdks/porkbun, type: directory}
@@ -1713,7 +1713,7 @@ snapshots:
       - supports-color
       - ts-node
 
-  '@pulumi/command@1.1.0(typescript@5.8.3)':
+  '@pulumi/command@1.1.1(typescript@5.8.3)':
     dependencies:
       '@pulumi/pulumi': 3.186.0(typescript@5.8.3)
     transitivePeerDependencies:
