@@ -28,7 +28,7 @@ jobs:
         run: pnpm install
         working-directory: ./pulumi
 
-      - name: Pulumi Preview
+      - name: Pulumi preview
         uses: pulumi/actions@v5
         with:
           command: preview
@@ -38,13 +38,13 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
         id: preview
 
-      - name: Upload Preview Output
-        run: |
+      - run: |
           echo "${{ steps.preview.outputs.stdout }}" > preview-output.txt
 
-      - name: Upload Preview Artifact
+      - name: Upload preview artifact
         uses: actions/upload-artifact@v4
         with:
           name: pulumi-preview
@@ -76,7 +76,7 @@ jobs:
         run: pnpm install
         working-directory: ./pulumi
 
-      - name: Pulumi Up
+      - name: Pulumi up
         uses: pulumi/actions@v5
         with:
           command: up
@@ -84,3 +84,4 @@ jobs:
           comment-on-pr: false
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
