@@ -1,7 +1,7 @@
 # verified
 id = 217
 hostname = "archiver-pulumi"
-enabled = false
+enabled = true
 
 description = "worker for archive team warrior"
 
