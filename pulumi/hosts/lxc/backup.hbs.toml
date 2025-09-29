@@ -1,7 +1,6 @@
 # verified
 id = 202
 hostname = "backup-pulumi"
-enabled = false
 
 description = "various backup-related services"
 

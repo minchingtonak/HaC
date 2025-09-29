@@ -1,28 +1,20 @@
 encryptionsalt: v1:La9ewCKaH1M=:v1:gGxhP+gJa+ava6K3:01DP1sSJVBgXXyvdrsmPjb+wDq7NTw==
 config:
-  # homelab
-  homelab-pve:pveNodeName: homelab
-  homelab-pve:imageTemplateDatastoreId: local
-  homelab-pve:rootContainerDomain: akmin.dev
-  homelab-pve:localIpPrefix: 192.168.0
-  homelab-pve:gatewayIp: 192.168.0.1
-  homelab-pve:homelabDomain: 192.168.0.89
-  homelab-pve:lxcRootPassword:
+  # homelab pve
+  pve#homelab:SECRET_CONTAINER_ROOT_PASSWORD:
     secure: v1:ZJ92yyCqUP+gpGJe:ddDt5e1UcePAFSUNGp7oJjlqK4to
-  homelab-pve:lxcPublicSshKey:
+  pve#homelab:SECRET_CONTAINER_SSH_PUBLIC_KEY:
     secure: v1:F/wRFOKg518nkP7I:6mnkDvY2woOeG0g9mqsxGsdIVzbAIAmi1n89PAymWeGvmouRnFGEC0EpzAIxf6LwBxsbT4zmlY05SK37xLhW4zAF+GIiTRKepMQ4Te0mFoFupI5Kq02JruSHYb8zFWdR20at6j+z0QVrMBhv
   # pulumi config set --secret homelab-pve:lxcPrivateSshKey -- '-----BEGIN OPENSSH PRIVATE KEY-----....'
-  homelab-pve:lxcPrivateSshKey:
+  pve#homelab:SECRET_CONTAINER_SSH_PRIVATE_KEY:
     secure: v1:Gvh1GdBO1YBpztNy:VFos5hyLijW3XoPXf/4+hqGBzRztgyz1uXCofM6WdUHi9yPXmmIlEdHcsm0W4w/B5ld5h+J7RFt/mDBSyMdipAuOspFQcGcXASSmVe+a/hJ0W/bQ1giwsN4PYw/E9hfiTez6SNtgAMHQOgG8UHvRjD+uZSr3PqsI3JZzIGan40yzVJxe5OTKkhcuTKbnJxIj1o1ljhoS8tF32sffz0HgWePvzusrpzOF8GSrTXfrWx3TBn7dE2HN9HbilWC90aaa52qasXDumMdFuJVikLVVIvMY1GZIKf0Yjan8J0riVChhwdcXk0xRMWquafqkAsgFajyLraol0gia9KXDGpzGMGp4mBvq+HNtWSceMdmp2OelD0YACpSnUJHsgNvr9dPqWDr5QtEKVguNOALI1YN3lR6VyCpujKUJIKd3lf53XatHWq8GmyYZdAXdP+g22Qc/b+hEF0x/7xiHP7QDRLVcgwaNwe2BM7okJ38qv7CTSKhCxU+8E8g3wEm4uBjUmGKJkvex1sUv8mIcZEjKiArxSfYZwAEajCiEQy+eYYkx
-  homelab-pve:pveEndpoint: https://homelab.akmin.dev # TODO define in terms of nodenade and root domain
-  homelab-pve:pveInsecure: 'false'
-  homelab-pve:pveUsername:
+  pve#homelab:SECRET_USERNAME:
     secure: v1:0Misa7AjGbv6pgG8:935A2yNp0Wg+8fhzurcPkVotrLLvO5N9
-  homelab-pve:pvePassword:
+  pve#homelab:SECRET_PASSWORD:
     secure: v1:GbPQcKh46iarDfCr:T4TFcWEZPQltXrTmcnfLm2q+0QKq78LPuYo=
-  homelab-pve:porkbunApiKey:
+  pve#homelab:SECRET_PORKBUN_API_KEY:
     secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
-  homelab-pve:porkbunSecretKey:
+  pve#homelab:SECRET_PORKBUN_SECRET_KEY:
     secure: v1:TqZQHjN3ohTCSVm+:WWk6kKjKgi9xh8DLBpp4JRL790y32eWa6I/DYze/i+dvN6dXRNL60rFPniFKV6uk4PmGbvMCzilKyDFW2iqxnNLmz9XclgjoR26mAyBhp2SxSFhI
   # traefik global
   traefik:SECRET_PORKBUN_API_KEY:
@@ -65,69 +57,69 @@ config:
   # copyparty
   # tools
   # apprise
-  apprise-pulumi#apprise:SECRET_SERVARR_SLACK_WEBHOOK:
+  lxc#apprise-pulumi#apprise:SECRET_SERVARR_SLACK_WEBHOOK:
     secure: v1:WsS7ZU2EH2dvJwmu:nrRyndrzO45Te8/ARtzdo3bDzdc3jRDoZNWUNyO7qWcV/AFTRVhO+bNRMoc3VWyTz2e8abYC3aUYy474nnzTpUgs62S/SMI0cBLagEDf/YExO/QvpZ/KXTC6cca4ea8jsw==
   # admin
-  admin-pulumi#semaphore:SECRET_ADMIN_USERNAME:
+  lxc#admin-pulumi#semaphore:SECRET_ADMIN_USERNAME:
     secure: v1:hfzh9QFJQ1EIzwfo:YvPybPDxT0B3iA1b8GstY1jk7Xnv
-  admin-pulumi#semaphore:SECRET_ADMIN_PASSWORD:
+  lxc#admin-pulumi#semaphore:SECRET_ADMIN_PASSWORD:
     secure: v1:plRgEnlEJqjTfGNG:gY1Dwltn/5FV+MVjoo0KCIVpqNM/GyDUzpWJM8i1SOyKgOIH
-  admin-pulumi#semaphore:SECRET_ADMIN_EMAIL:
+  lxc#admin-pulumi#semaphore:SECRET_ADMIN_EMAIL:
     secure: v1:Ioz4e16dxqVtKDDV:1wWrm9MhEPGtfApKyGSQQFWBJMM+JWyqUAU1jU423dk1ZA==
-  admin-pulumi#semaphore:SECRET_SLACK_WEBHOOK_URL:
+  lxc#admin-pulumi#semaphore:SECRET_SLACK_WEBHOOK_URL:
     secure: v1:TssVt21kCosYCKbY:vFlhMwP39dCP7Uf8R87YdMM88+lXSDYL1nyGb8KTgpwY/N9Pu6lDPPfuajwhCycV1wf9PxxBscwbkPc3nCHA8+Vgnhc9fHSw+Q1a8RgApZTCAZksNuGLKMZjDaS0ZZMY/A==
   # gitea
   # downloader
   # immich
-  immich-pulumi#immich:SECRET_DB_PASSWORD:
+  lxc#immich-pulumi#immich:SECRET_DB_PASSWORD:
     secure: v1:ECc5/vJz6VnDlxsj:xgdWvCAj0NxBmWNBrAg4cP+l8j7DAk9cij/mO/JSNm+S8zVq
   # backup
-  backup-pulumi#cronicle:CRONICLE_BASE_APP_URL: https://cronicle.backup-pulumi.pulumi.homelab.akmin.dev
-  backup-pulumi#cronicle:SECRET_CRONICLE_UNIVERSAL_WEB_HOOK:
+  lxc#backup-pulumi#cronicle:CRONICLE_BASE_APP_URL: https://cronicle.backup-pulumi.pulumi.homelab.akmin.dev
+  lxc#backup-pulumi#cronicle:SECRET_CRONICLE_UNIVERSAL_WEB_HOOK:
     secure: v1:UiKAJNHijNn0sxiS:QWspnq95k6UcAZ6hxzMQw3LsE3JDfDdsjxx2gB0s2ChJ3nTj0LRmcuqTdF6PWCQrjlOhP5KOM2XFniDlF/4bOUpwOkioAdB+W3dwoepydWEpxk2poFWxZHEs0aznDstYeQ==
-  backup-pulumi#cronicle:SECRET_B2_ACCOUNT_ID:
+  lxc#backup-pulumi#cronicle:SECRET_B2_ACCOUNT_ID:
     secure: v1:NV+g80iUpRXDXKxH:wIKyVkc8oAelpyd/VJL1OniVzHB8EJ89PXusTdPVYj2gQFQ7PE7k+B0=
-  backup-pulumi#cronicle:SECRET_B2_ACCOUNT_KEY:
+  lxc#backup-pulumi#cronicle:SECRET_B2_ACCOUNT_KEY:
     secure: v1:KizcajXuoIQS9RBs:xWhD7CtabpiC++zF38W8snyTLXkxTT+jeefzt5zupN+myMqMm1buxQ4zWTPQQVY=
-  backup-pulumi#cronicle:SECRET_B2_EU_ACCOUNT_ID:
+  lxc#backup-pulumi#cronicle:SECRET_B2_EU_ACCOUNT_ID:
     secure: v1:SxP/vasdeAL6ipQS:1+LBAHcByyqi6tCzja4CMZ+RKekkORCgt4r2vhDkwqtgXkZLkmlHHdM=
-  backup-pulumi#cronicle:SECRET_B2_EU_ACCOUNT_KEY:
+  lxc#backup-pulumi#cronicle:SECRET_B2_EU_ACCOUNT_KEY:
     secure: v1:pBsI5ni0nPIeDKwO:Hhp06vRV3ZjpQaHR0T06+V9ypJGiVjwNnVAKz+6AqHeqihtxj5oro3Kw7WJ5kuE=
-  backup-pulumi#cronicle:SECRET_RESTIC_PASSWORD:
+  lxc#backup-pulumi#cronicle:SECRET_RESTIC_PASSWORD:
     secure: v1:K5gnxDKtlcOHst6z:qsdkR4AOO+5As2VslPO6ERzlJlA01xcTglsp6Ct8i374V6G/TqwUifpw+8gKHiU30SPJMfsI3dF7xfFFAnAcPg==
-  backup-pulumi#cronicle:RESTIC_CHECK_PERCENTAGE: '5'
-  backup-pulumi#cronicle:SECRET_B2_HEALTHCHECK_URL:
+  lxc#backup-pulumi#cronicle:RESTIC_CHECK_PERCENTAGE: '5'
+  lxc#backup-pulumi#cronicle:SECRET_B2_HEALTHCHECK_URL:
     secure: v1:+wCA5m2zsGeupOzU:0TqufLdbUSRVv6HMHfsCjYF5q/q6d8TWTGYmIbPDTAB4BjV/sq8uXJdZswAeIH1MzC7Bz418ppHq/1JrlyHPDvlm+Z0/GOvK
   # jellyfin
   # jellyseerr
   # life
-  life-pulumi:SERVER_NAME: life-pulumi
-  life-pulumi#mealie:MEALIE_BASE_URL: '{{{domainForApp "mealie"}}}'
-  life-pulumi#dawarich:SECRET_DB_PASSWORD:
+  lxc#life-pulumi:SERVER_NAME: life-pulumi
+  lxc#life-pulumi#mealie:MEALIE_BASE_URL: '{{{domainForApp "mealie"}}}'
+  lxc#life-pulumi#dawarich:SECRET_DB_PASSWORD:
     secure: v1:xEWsp+rmkp0ekfX0:fDOUcy1psCZEQPCgfxHGBMzi0oTNJdmNENQTIYNNxjQoc3Mt
-  life-pulumi#mealie:config_var_one: foo
-  life-pulumi#mealie:secret_config_var_two:
+  lxc#life-pulumi#mealie:config_var_one: foo
+  lxc#life-pulumi#mealie:secret_config_var_two:
     secure: v1:LX2BPUzsuoCbyNOC:urnuGx5snWwD2LsGaSxCm0ZVZQ==
-  life-pulumi#mealie:MY_VARIABLE_ONE: baz
-  life-pulumi#mealie:SECRET_MY_VARIABLE_TWO:
+  lxc#life-pulumi#mealie:MY_VARIABLE_ONE: baz
+  lxc#life-pulumi#mealie:SECRET_MY_VARIABLE_TWO:
     secure: v1:U0uk56thP2731+fx:NmCpYhX2FJu/cH+zqJGwxt81+bE=
-  life-pulumi#fittrackee:SECRET_SECRET_KEY:
+  lxc#life-pulumi#fittrackee:SECRET_SECRET_KEY:
     secure: v1:ifCk9F9zZ+3sHV+R:05/13+YnJnaBGpU131t0FIplYRNxyXT/0StRQu+VGe1uIcp3ppDY0lJxTCV3Gg==
-  life-pulumi#fittrackee:SECRET_DB_PASSWORD:
+  lxc#life-pulumi#fittrackee:SECRET_DB_PASSWORD:
     secure: v1:2SC5AIdLdytL3l7R:CJhjXr0pdvtwClww4/fnwDjZHKE8F4Cxs4SxPW5wNIItrxTfXwtMAdzmkiE=
   # paperless
-  paperless-pulumi#paperless-ngx:SECRET_ADMIN_USERNAME:
+  lxc#paperless-pulumi#paperless-ngx:SECRET_ADMIN_USERNAME:
     secure: v1:ZN1VLNMSu60BAhxf:okOhImt9d3D9NVlmztIPHDRv9noH
-  paperless-pulumi#paperless-ngx:SECRET_ADMIN_PASSWORD:
+  lxc#paperless-pulumi#paperless-ngx:SECRET_ADMIN_PASSWORD:
     secure: v1:0NpMQ0oelz/GSKbW:LNPX/H4nomIsrwR7uH0med0p02S2vEf7VPfOZaqiTe441JqS
   # servarr
-  servarr-pulumi#servarr:SECRET_WIREGUARD_PRIVATE_KEY:
+  lxc#servarr-pulumi#servarr:SECRET_WIREGUARD_PRIVATE_KEY:
     secure: v1:UpuGbhyPZJ7MMwcf:YwNSmcYTs321qZW3Bh0Oh0WRvthVuZ4A0jkqd5pV2w53RZEE5ReQ5WXkF4+EWy/RIy5vWv8tnV+TKcZi
-  servarr-pulumi#servarr:SECRET_WIREGUARD_PRESHARED_KEY:
+  lxc#servarr-pulumi#servarr:SECRET_WIREGUARD_PRESHARED_KEY:
     secure: v1:CmV+NG1VGxbL5T/i:m1wYPbD7ZB+8Qx3WH++xmSK4X+/hV0rMulX8LygT3j8amy9TRJVhAYSTz9w9DwCvL+ppRJahFuNLyGU0
-  servarr-pulumi#servarr:SECRET_WIREGUARD_ADDRESSES:
+  lxc#servarr-pulumi#servarr:SECRET_WIREGUARD_ADDRESSES:
     secure: v1:rj2ol6IXhUc4+sPx:1Adqh3BT4b1YL28YBXYS1OUDmohdq6woRcU2CxemVCMd
   # tailscale
-  tailscale-pulumi#tailscale:SECRET_TAILSCALE_AUTHKEY:
+  lxc#tailscale-pulumi#tailscale:SECRET_TAILSCALE_AUTHKEY:
     secure: v1:WzqZRv9cGYpzab5r:QmAK2vrwxNtPNZwMv0k/uWlnHT/nqKb+yGXPiRdSl83AhTm2SusJhSf03MEDGUIxZFe+9oF7R5POga0vC8k2JiRSvcmlVjRSTHlWkYae
-  tailscale-pulumi#tailscale:TAILSCALE_SUBNET_ROUTES: 192.168.0.0/24
+  lxc#tailscale-pulumi#tailscale:TAILSCALE_SUBNET_ROUTES: 192.168.0.0/24

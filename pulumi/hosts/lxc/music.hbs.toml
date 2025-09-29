@@ -1,6 +1,5 @@
 id = 216
 hostname = "music-pulumi"
-enabled = false
 
 description = "assorted audio management apps"
 

@@ -1,23 +1,26 @@
 # verified
-id = 204
-hostname = "jellyseerr-pulumi"
-enabled = false
+id = 207
+hostname = "immich-pulumi"
 
-description = "easy to use media recommendation and request app"
+description = "private image server"
 
 [stacks]
 traefik = {}
-jellyseerr = {}
+immich = {}
 
 [cpu]
 cores = 2
 
 [memory]
-dedicated = 2048
-swap = 1024
+dedicated = 4096
+swap = 2048
 
 [disk]
-size = 8
+size = 64
+
+[[mountPoints]]
+volume = "/void/photos"
+mountPoint = "/mnt/photos"
 
 [[provisioners]]
 type = "ansible"

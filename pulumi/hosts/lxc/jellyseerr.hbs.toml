@@ -1,23 +1,22 @@
 # verified
-id = 210
-hostname = "apprise-pulumi"
-enabled = false
+id = 204
+hostname = "jellyseerr-pulumi"
 
-description = "lightweight file-based notifications server"
+description = "easy to use media recommendation and request app"
 
 [stacks]
 traefik = {}
-apprise = {}
+jellyseerr = {}
 
 [cpu]
-cores = 1
+cores = 2
 
 [memory]
 dedicated = 2048
 swap = 1024
 
 [disk]
-size = 4
+size = 8
 
 [[provisioners]]
 type = "ansible"

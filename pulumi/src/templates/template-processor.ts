@@ -3,7 +3,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as Handlebars from 'handlebars';
 import { EnvUtils } from '../utils/env-utils';
-import { HostConfigToml } from '../hosts/host-config-schema';
+import { LxcHostConfigToml } from '../hosts/lxc-host-config-schema';
 
 export interface TemplateContext {
   [key: string]: string | pulumi.Output<string>;
@@ -98,6 +98,7 @@ export class TemplateProcessor {
     templatePath: string,
     config: pulumi.Config,
     dataVariables?: unknown,
+    context?: 'pve' | 'lxc',
   ): RenderedTemplateFile {
     const templateContent = fs.readFileSync(templatePath, 'utf-8');
 
@@ -119,6 +120,7 @@ export class TemplateProcessor {
     const initialVarValueMap = EnvUtils.assembleVariableMapFromConfig(
       config,
       variables,
+      context,
     );
 
     let maxVariableDepth = 1;
@@ -140,6 +142,7 @@ export class TemplateProcessor {
       const varMap = EnvUtils.assembleVariableMapFromConfig(
         config,
         discoveredVars,
+        context,
       );
 
       return pulumi
@@ -361,7 +364,7 @@ TemplateProcessor.registerTemplateHelper(
 );
 
 type ComposeStackTemplateContext = {
-  host: HostConfigToml;
+  host: LxcHostConfigToml;
   node: Record<string, string>;
   stackName: string;
   root: Record<string, string>; // resolved template variables

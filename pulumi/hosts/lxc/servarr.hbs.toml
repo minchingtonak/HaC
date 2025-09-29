@@ -1,7 +1,6 @@
 # verified
 id = 201
 hostname = "servarr-pulumi"
-enabled = false
 
 description = "servarr media stack"
 
@@ -55,4 +54,4 @@ replayable = false
 lxc_id = 201
 
 [provisioners.connection]
-host = "{{{homelab-pve:homelabDomain}}}"
+host = "{{{@pve.dns.domain}}}"

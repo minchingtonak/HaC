@@ -1,0 +1,34 @@
+[pve]
+endpoint = "https://homelab.akmin.dev"
+node = "homelab"
+
+[pve.auth]
+username = "{{{SECRET_USERNAME}}}"
+password = "{{{SECRET_PASSWORD}}}"
+insecure = false
+
+[storage]
+templates = "local"
+
+[dns]
+domain = "192.168.0.89"
+
+[lxc.hosts]
+archiver = { enabled = false }
+immich = {}
+
+[lxc.network]
+domain = "akmin.dev"
+subnet = "192.168.0"
+gateway = "192.168.0.1"
+
+[lxc.auth]
+password = "{{{SECRET_CONTAINER_ROOT_PASSWORD}}}"
+
+[lxc.ssh]
+publicKey = "{{{SECRET_CONTAINER_SSH_PUBLIC_KEY}}}"
+privateKey = """{{{SECRET_CONTAINER_SSH_PRIVATE_KEY}}}"""
+
+[lxc.dns.porkbun]
+apiKey = "{{{SECRET_PORKBUN_API_KEY}}}"
+secretKey = "{{{SECRET_PORKBUN_SECRET_KEY}}}"

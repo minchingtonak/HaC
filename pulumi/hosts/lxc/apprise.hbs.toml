@@ -1,27 +1,22 @@
 # verified
-id = 207
-hostname = "immich-pulumi"
-enabled = false
+id = 210
+hostname = "apprise-pulumi"
 
-description = "private image server"
+description = "lightweight file-based notifications server"
 
 [stacks]
 traefik = {}
-immich = {}
+apprise = {}
 
 [cpu]
-cores = 2
+cores = 1
 
 [memory]
-dedicated = 4096
-swap = 2048
+dedicated = 2048
+swap = 1024
 
 [disk]
-size = 64
-
-[[mountPoints]]
-volume = "/void/photos"
-mountPoint = "/mnt/photos"
+size = 4
 
 [[provisioners]]
 type = "ansible"

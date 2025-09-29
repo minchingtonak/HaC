@@ -1,24 +1,27 @@
 # verified
-id = 211
-hostname = "tailscale-pulumi"
-enabled = false
+id = 208
+hostname = "tools-pulumi"
 
-description = "tailscale subnet router to enable easy remote access"
+description = "swiss army knife array of utility tools"
 
 [stacks]
 traefik = {}
-dozzle = {}
-tailscale = {}
+cyberchef = {}
+docuseal = {}
+it-tools = {}
+mazanoke = {}
+omni-tools = {}
+stirling-pdf = {}
 
 [cpu]
-cores = 2
+cores = 4
 
 [memory]
-dedicated = 1024
-swap = 512
+dedicated = 8192
+swap = 4096
 
 [disk]
-size = 4
+size = 32
 
 [[provisioners]]
 type = "ansible"

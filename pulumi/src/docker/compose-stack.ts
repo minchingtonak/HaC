@@ -3,7 +3,7 @@ import * as command from '@pulumi/command';
 import * as path from 'node:path';
 import { HandlebarsTemplateDirectory } from '../templates/handlebars-template-directory';
 import { ComposeStackUtils } from './compose-file-processor';
-import { HostConfigToml } from '../hosts/host-config-schema';
+import { LxcHostConfigToml } from '../hosts/lxc-host-config-schema';
 import { TemplateProcessor } from '../templates/template-processor';
 
 export type StackName = string;
@@ -11,7 +11,7 @@ export type StackName = string;
 export type ComposeStackArgs = {
   stackName: StackName;
   connection: command.types.input.remote.ConnectionArgs;
-  hostConfig: HostConfigToml;
+  hostConfig: LxcHostConfigToml;
   pveConfig: Record<string, string>; // TODO strong typing
 };
 
@@ -53,7 +53,7 @@ export class ComposeStack extends pulumi.ComponentResource {
 
     // copy static files in stack directory, including unrendered templates
     this.copyStackToRemote = new command.remote.CopyToRemote(
-      `${args.hostConfig.hostname}-copy-${args.stackName}-stack-directory`,
+      `${name}-copy-${args.stackName}-stack-directory`,
       {
         source: this.stackDirectoryAsset,
         remotePath: remoteStackDirectoryBase,
@@ -65,7 +65,7 @@ export class ComposeStack extends pulumi.ComponentResource {
     );
 
     this.handlebarsTemplateDirectory = new HandlebarsTemplateDirectory(
-      `${args.hostConfig.hostname}-${args.stackName}-handlebars-template-folder`,
+      `${name}-${args.stackName}-handlebars-template-folder`,
       {
         templateDirectory: stackDirectory,
         configNamespace: `${args.hostConfig.hostname}#${args.stackName}`,
@@ -75,6 +75,7 @@ export class ComposeStack extends pulumi.ComponentResource {
           stackName: args.stackName,
           templateDirectory: stackDirectory,
         },
+        context: 'lxc',
       },
       {
         parent: this,
@@ -87,7 +88,7 @@ export class ComposeStack extends pulumi.ComponentResource {
     )) {
       this.processedTemplateCopies[templatePath] =
         new command.remote.CopyToRemote(
-          `${args.hostConfig.hostname}-copy-${args.stackName}-template-${templateFile.processedTemplate.idSafeName}`,
+          `${name}-copy-${args.stackName}-template-${templateFile.processedTemplate.idSafeName}`,
           {
             source: templateFile.asset.copyableSource,
             remotePath: templateFile.processedTemplate.remoteOutputPath,
@@ -102,13 +103,13 @@ export class ComposeStack extends pulumi.ComponentResource {
 
     // delete stack folder when removing this resource
     this.deleteStackFolder = new command.remote.Command(
-      `${args.hostConfig.hostname}-delete-${args.stackName}-stack-directory`,
+      `${name}-delete-${args.stackName}-stack-directory`,
       { delete: `rm -rf ${remoteStackDirectory}`, connection: args.connection },
       { parent: this, dependsOn: this.copyStackToRemote },
     );
 
     this.deployStack = new command.remote.Command(
-      `${args.hostConfig.hostname}-deploy-${args.stackName}-stack`,
+      `${name}-deploy-${args.stackName}-stack`,
       {
         create: `cd ${remoteStackDirectory} && docker compose up -d --force-recreate`,
         delete: `cd ${remoteStackDirectory} && docker compose down`,

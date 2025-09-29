@@ -1,24 +1,18 @@
 import * as pulumi from '@pulumi/pulumi';
-import * as Handlebars from 'handlebars';
 
 /**
  * Utility functions for handling environment variables in various contexts
  */
 export class EnvUtils {
-  /**
-   * Assembles a variable map from a Pulumi config for the given variable names
-   * @param config The Pulumi config instance to read from
-   * @param variableNames Array of variable names to read from config
-   * @returns Map of variable names to their values (secrets are handled appropriately)
-   */
   static assembleVariableMapFromConfig(
     config: pulumi.Config,
     variableNames: string[],
+    context?: 'pve' | 'lxc',
   ): Record<string, string | pulumi.Output<string>> {
     const envMap: Record<string, string | pulumi.Output<string>> = {};
 
     for (const varName of variableNames) {
-      const { getConfigValue } = EnvUtils.resolveVariable(varName, config);
+      const { getConfigValue } = EnvUtils.resolveVariable(varName, config, context);
       if (getConfigValue) {
         envMap[varName] = getConfigValue();
       }
@@ -31,7 +25,19 @@ export class EnvUtils {
 
   private static readonly PARENT_NAMESPACE_PREFIX = 'parent:';
 
-  private static resolveVariable(varName: string, config: pulumi.Config) {
+  private static createNamespacedConfig(
+    context: 'pve' | 'lxc',
+    configName: string,
+    varName: string,
+  ): { resolvedConfig: pulumi.Config; resolvedConfigKey: string } {
+    const namespace = `${context}#${configName}`;
+    return {
+      resolvedConfig: new pulumi.Config(namespace),
+      resolvedConfigKey: varName,
+    };
+  }
+
+  private static resolveVariable(varName: string, config: pulumi.Config, context?: 'pve' | 'lxc') {
     // data variable, do not fetch from config
     if (varName.startsWith('@')) {
       return {};
@@ -62,6 +68,12 @@ export class EnvUtils {
       const [namespace, configVarName] = varName.split(':');
       resolvedConfig = new pulumi.Config(namespace);
       resolvedConfigKey = configVarName;
+    } else {
+      if (context) {
+        const namespacedConfig = EnvUtils.createNamespacedConfig(context, config.name, varName);
+        resolvedConfig = namespacedConfig.resolvedConfig;
+        resolvedConfigKey = namespacedConfig.resolvedConfigKey;
+      }
     }
 
     const isSecret = resolvedConfigKey

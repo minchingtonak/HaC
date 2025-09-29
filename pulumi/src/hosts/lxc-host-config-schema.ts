@@ -1,9 +1,9 @@
 import { z } from 'zod';
 import {
-  ProxmoxFirewallDirection,
-  ProxmoxFirewallLogLevel,
-  ProxmoxFirewallMacro,
-  ProxmoxFirewallPolicy,
+  PveFirewallDirection,
+  PveFirewallLogLevel,
+  PveFirewallMacro,
+  PveFirewallPolicy,
 } from '../constants';
 
 const CpuConfigSchema = z
@@ -103,20 +103,20 @@ const FirewallOptionsSchema = z
      */
     ipfilter: z.boolean().default(false).optional(),
     logLevelIn: z
-      .enum(ProxmoxFirewallLogLevel)
-      .default(ProxmoxFirewallLogLevel.nolog)
+      .enum(PveFirewallLogLevel)
+      .default(PveFirewallLogLevel.nolog)
       .optional(),
     logLevelOut: z
-      .enum(ProxmoxFirewallLogLevel)
-      .default(ProxmoxFirewallLogLevel.nolog)
+      .enum(PveFirewallLogLevel)
+      .default(PveFirewallLogLevel.nolog)
       .optional(),
     inputPolicy: z
-      .enum(ProxmoxFirewallPolicy)
-      .default(ProxmoxFirewallPolicy.DROP)
+      .enum(PveFirewallPolicy)
+      .default(PveFirewallPolicy.DROP)
       .optional(),
     outputPolicy: z
-      .enum(ProxmoxFirewallPolicy)
-      .default(ProxmoxFirewallPolicy.ACCEPT)
+      .enum(PveFirewallPolicy)
+      .default(PveFirewallPolicy.ACCEPT)
       .optional(),
   })
   .strict();
@@ -128,17 +128,17 @@ const DEFAULT_FIREWALL_OPTIONS: FirewallOptions = {
   radv: false,
   macfilter: true,
   ipfilter: false,
-  inputPolicy: ProxmoxFirewallPolicy.DROP,
-  outputPolicy: ProxmoxFirewallPolicy.ACCEPT,
-  logLevelIn: ProxmoxFirewallLogLevel.nolog,
-  logLevelOut: ProxmoxFirewallLogLevel.nolog,
+  inputPolicy: PveFirewallPolicy.DROP,
+  outputPolicy: PveFirewallPolicy.ACCEPT,
+  logLevelIn: PveFirewallLogLevel.nolog,
+  logLevelOut: PveFirewallLogLevel.nolog,
 };
 
 const FirewallRuleSchema = z
   .object({
     enabled: z.boolean().default(true).optional(),
-    type: z.enum(ProxmoxFirewallDirection).optional(),
-    action: z.enum(ProxmoxFirewallPolicy).optional(),
+    type: z.enum(PveFirewallDirection).optional(),
+    action: z.enum(PveFirewallPolicy).optional(),
     comment: z.string().optional(),
     /**
      * Restrict packet source address. This can refer
@@ -180,8 +180,8 @@ const FirewallRuleSchema = z
      * related rules can use arbitrary strings.
      */
     iface: z.string().optional(),
-    log: z.enum(ProxmoxFirewallLogLevel).optional(),
-    macro: z.enum(ProxmoxFirewallMacro).optional(),
+    log: z.enum(PveFirewallLogLevel).optional(),
+    macro: z.enum(PveFirewallMacro).optional(),
     /**
      * Position of the rule in the list.
      */
@@ -237,12 +237,11 @@ const StackSchema = z
 
 const StackSchemaMap = z.record(z.string(), StackSchema);
 
-export const HostConfigSchema = z
+export const LxcHostConfigSchema = z
   .object({
     id: z.number().positive().int(),
     hostname: z.string().min(1),
     description: z.string().optional(),
-    enabled: z.boolean(),
     tags: z.array(z.string()).optional(),
     os: OsConfigSchema.optional(),
     cpu: CpuConfigSchema.optional(),
@@ -257,7 +256,7 @@ export const HostConfigSchema = z
   })
   .strict();
 
-export type HostConfigToml = z.infer<typeof HostConfigSchema>;
+export type LxcHostConfigToml = z.infer<typeof LxcHostConfigSchema>;
 export type Provisioner = z.infer<typeof ProvisionerSchema>;
 export type ScriptProvisioner = z.infer<typeof ScriptProvisionerSchema>;
 export type AnsibleProvisioner = z.infer<typeof AnsibleProvisionerSchema>;
@@ -266,8 +265,8 @@ export type ConnectionOverride = z.infer<
 >;
 export type FirewallOptions = z.infer<typeof FirewallOptionsSchema>;
 
-export const HostnameSchema = z.object({
+export const LxcHostnameSchema = z.object({
   hostname: z.string().min(1),
 });
 
-export type HostnameToml = z.infer<typeof HostnameSchema>;
+export type LxcHostnameToml = z.infer<typeof LxcHostnameSchema>;

@@ -1,26 +1,28 @@
 # verified
-id = 213
-hostname = "admin-pulumi"
-enabled = false
+id = 214
+hostname = "paperless-pulumi"
 
-description = "homelab administration-related apps"
+description = "paperless document management systems"
 
 [stacks]
 traefik = {}
-dozzle = {}
 komodo = {}
-semaphore = {}
-glance = {}
+dozzle = {}
+paperless-ngx = {}
 
 [cpu]
 cores = 2
 
 [memory]
-dedicated = 2048
-swap = 1024
+dedicated = 4096
+swap = 2048
 
 [disk]
-size = 8
+size = 4
+
+[[mountPoints]]
+volume = "/void/documents"
+mountPoint = "/mnt/documents"
 
 [[provisioners]]
 type = "ansible"

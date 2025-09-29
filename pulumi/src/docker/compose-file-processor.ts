@@ -2,7 +2,7 @@ import * as pulumi from '@pulumi/pulumi';
 
 export class ComposeStackUtils {
   static STACK_DIRECTORY_FOR = (stackName: string) =>
-    `./stacks/${stackName}`;
+    `./hosts/stacks/${stackName}`;
 
   private static UNSET_VARIABLE_MARKER = 'variable is not set';
 

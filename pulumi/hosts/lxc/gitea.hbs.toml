@@ -1,7 +1,6 @@
 # verified
 id = 206
 hostname = "gitea-pulumi"
-enabled = false
 
 description = "lightweight private git server and github mirror"
 
@@ -20,6 +19,7 @@ swap = 1024
 size = 16
 
 [[firewallRules]]
+enabled = true
 type = "in"
 action = "ACCEPT"
 dport = "222"

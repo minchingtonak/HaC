@@ -40,19 +40,19 @@ export enum CommonPorts {
   DOCKER = 2376,
 }
 
-export enum ProxmoxFirewallDirection {
+export enum PveFirewallDirection {
   in = 'in',
   out = 'out'
 }
 
-export enum ProxmoxFirewallPolicy {
+export enum PveFirewallPolicy {
   ACCEPT = 'ACCEPT',
   REJECT = 'REJECT',
   DROP = 'DROP',
 }
 
 // https://pve.proxmox.com/pve-docs/pve-admin-guide.html#pve_firewall_host_specific_configuration
-export enum ProxmoxFirewallLogLevel {
+export enum PveFirewallLogLevel {
   emerg = 'emerg',
   alert = 'alert',
   crit = 'crit',
@@ -65,7 +65,7 @@ export enum ProxmoxFirewallLogLevel {
 }
 
 // https://pve.proxmox.com/pve-docs/pve-admin-guide.html#_firewall_macro_definitions
-export enum ProxmoxFirewallMacro {
+export enum PveFirewallMacro {
   /** Amanda Backup - udp/tcp 10080 */
   Amanda = 'Amanda',
   /** Auth (identd) traffic - tcp 113 */

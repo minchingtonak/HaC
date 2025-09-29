@@ -2,30 +2,39 @@ import * as fs from 'node:fs';
 import * as pulumi from '@pulumi/pulumi';
 import TOML from 'smol-toml';
 import { z } from 'zod';
-import {
-  HostConfigSchema,
-  HostConfigToml,
-  HostnameSchema,
-} from './host-config-schema';
 import { TemplateProcessor } from '../templates/template-processor';
 
-export class HostConfigParser {
-  static loadAllHostConfigs(
+export interface ParserConfig<TConfig, THostnameConfig> {
+  configSchema: z.ZodSchema<TConfig>;
+  hostnameSchema: z.ZodSchema<THostnameConfig>;
+  extractIdentifier: (parsed: THostnameConfig) => string;
+  errorPrefix: string;
+  context: 'pve' | 'lxc';
+}
+
+export abstract class HostConfigParser<TConfig, THostnameConfig> {
+  protected abstract getConfig(): ParserConfig<TConfig, THostnameConfig>;
+
+  /**
+   * Load all host configurations from a directory
+   */
+  public loadAllConfigs(
     hostsDir: string,
-  ): (HostConfigToml | pulumi.Output<HostConfigToml>)[] {
-    const configs: (HostConfigToml | pulumi.Output<HostConfigToml>)[] = [];
+    extraData?: unknown
+  ): (TConfig | pulumi.Output<TConfig>)[] {
+    const configs: (TConfig | pulumi.Output<TConfig>)[] = [];
     const configFiles = TemplateProcessor.discoverTemplateFiles(hostsDir, {
       isTemplateOverride: (_, filename) =>
-        /^host\.(hbs|handlebars)\.toml$/.test(filename),
+        /^.+\.(hbs|handlebars)\.toml(\.(hbs|handlebars))?$/.test(filename),
     });
 
     for (const configPath of configFiles) {
       try {
-        const config = HostConfigParser.parseHostConfigFile(configPath);
+        const config = this.parseConfigFile(configPath, extraData);
         configs.push(config);
       } catch (error) {
         console.warn(
-          `Warning: Failed to load config from ${configPath}:`,
+          `Warning: Failed to load ${this.getConfig().errorPrefix} config from ${configPath}:`,
           error,
         );
       }
@@ -34,26 +43,37 @@ export class HostConfigParser {
     return configs;
   }
 
-  static parseHostConfigFile(
+  /**
+   * Parse a host configuration file
+   */
+  public parseConfigFile(
     filePath: string,
-  ): HostConfigToml | pulumi.Output<HostConfigToml> {
-    const hostname = HostConfigParser.getHostnameFromConfigFile(filePath);
+    extraData?: unknown
+  ): TConfig | pulumi.Output<TConfig> {
+    const identifier = this.getIdentifierFromConfigFile(filePath);
+    const config = this.getConfig();
     const renderedTemplate = TemplateProcessor.processTemplate(
       filePath,
-      new pulumi.Config(hostname),
+      new pulumi.Config(identifier),
+      extraData,
+      config.context
     );
 
-    return HostConfigParser.parseHostConfigString(renderedTemplate.content);
+    return this.parseConfigString(renderedTemplate.content);
   }
 
-  // TODO find more efficient way of getting this info that avoids reading/parsing/validating twice
-  private static getHostnameFromConfigFile(filePath: string) {
+  /**
+   * Extract identifier from config file for Pulumi config lookup
+   * TODO: find more efficient way of getting this info that avoids reading/parsing/validating twice
+   */
+  protected getIdentifierFromConfigFile(filePath: string): string {
     const fileContent = fs.readFileSync(filePath, { encoding: 'utf-8' });
     const parsed = TOML.parse(fileContent);
+    const config = this.getConfig();
 
     try {
-      const { hostname } = HostnameSchema.parse(parsed);
-      return hostname;
+      const hostnameConfig = config.hostnameSchema.parse(parsed);
+      return config.extractIdentifier(hostnameConfig);
     } catch (error) {
       if (error instanceof z.ZodError) {
         const errorMessages = error.issues
@@ -61,26 +81,37 @@ export class HostConfigParser {
             return JSON.stringify(err); // FIXME this may crash when err.path contains symbol values
           })
           .join('\n;\n');
-        throw new Error(`Invalid TOML structure: ${errorMessages}`);
+        throw new Error(`Invalid ${config.errorPrefix} TOML structure: ${errorMessages}`);
       }
       throw error;
     }
   }
 
-  static parseHostConfigString(
+  /**
+   * Parse host configuration from TOML string
+   */
+  public parseConfigString(
     tomlContent: pulumi.Output<string>,
-  ): pulumi.Output<HostConfigToml> {
-    function parseAndValidate(tomlContent: string) {
+  ): pulumi.Output<TConfig> {
+    const config = this.getConfig();
+
+    function parseAndValidate(tomlContent: string): TConfig {
       const parsed = TOML.parse(tomlContent);
-      return HostConfigParser.validateHostConfig(parsed);
+      return HostConfigParser.validateConfig(parsed, config);
     }
 
     return tomlContent.apply(parseAndValidate);
   }
 
-  private static validateHostConfig(config: unknown): HostConfigToml {
+  /**
+   * Validate parsed configuration against schema
+   */
+  private static validateConfig<TConfig>(
+    config: unknown,
+    parserConfig: ParserConfig<TConfig, any>
+  ): TConfig {
     try {
-      return HostConfigSchema.parse(config);
+      return parserConfig.configSchema.parse(config);
     } catch (error) {
       if (error instanceof z.ZodError) {
         const errorMessages = error.issues
@@ -88,7 +119,7 @@ export class HostConfigParser {
             return JSON.stringify(err); // FIXME this may crash when err.path contains symbol values
           })
           .join('\n;\n');
-        throw new Error(`Invalid TOML structure: ${errorMessages}`);
+        throw new Error(`Invalid ${parserConfig.errorPrefix} TOML structure: ${errorMessages}`);
       }
       throw error;
     }

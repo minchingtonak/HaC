@@ -7,6 +7,7 @@ export type HandlebarsTemplateDirectoryArgs = {
   configNamespace: string;
   templateContext: Record<string, unknown>;
   recurse?: boolean;
+  context?: 'pve' | 'lxc';
 };
 
 export class HandlebarsTemplateDirectory extends pulumi.ComponentResource {
@@ -37,6 +38,7 @@ export class HandlebarsTemplateDirectory extends pulumi.ComponentResource {
           templatePath,
           configNamespace: args.configNamespace,
           templateContext: { ...args.templateContext, templatePath },
+          context: args.context,
         },
         {
           parent: this,

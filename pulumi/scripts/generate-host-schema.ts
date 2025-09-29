@@ -1,11 +1,11 @@
 import { writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { z } from 'zod';
-import { HostConfigSchema } from '../src/hosts/host-config-schema';
+import { LxcHostConfigSchema } from '../src/hosts/lxc-host-config-schema';
 
 function generateHostConfigJsonSchema() {
   try {
-    const jsonSchema = z.toJSONSchema(HostConfigSchema);
+    const jsonSchema = z.toJSONSchema(LxcHostConfigSchema);
 
     const outputDir = join(process.cwd(), 'schemas');
     if (!existsSync(outputDir)) {

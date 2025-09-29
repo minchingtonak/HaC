@@ -1,7 +1,6 @@
 # verified
 id = 203
 hostname = "jellyfin-pulumi"
-enabled = false
 
 description = "jellyfin media player server"
 
@@ -21,6 +20,7 @@ swap = 2048
 size = 16
 
 [[firewallRules]]
+enabled = true
 type = "in"
 action = "ACCEPT"
 dport = "1900"
@@ -28,6 +28,7 @@ proto = "udp"
 comment = "jellyfin service discovery"
 
 [[firewallRules]]
+enabled = true
 type = "in"
 action = "ACCEPT"
 dport = "7369"

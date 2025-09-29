@@ -1,0 +1,29 @@
+# verified
+id = 211
+hostname = "tailscale-pulumi"
+
+description = "tailscale subnet router to enable easy remote access"
+
+[stacks]
+traefik = {}
+dozzle = {}
+tailscale = {}
+
+[cpu]
+cores = 2
+
+[memory]
+dedicated = 1024
+swap = 512
+
+[disk]
+size = 4
+
+[[provisioners]]
+type = "ansible"
+playbook = "provisioners/ansible/lxc-init.yaml"
+replayable = false
+
+[[provisioners]]
+type = "script"
+script = "provisioners/scripts/install-docker.sh"

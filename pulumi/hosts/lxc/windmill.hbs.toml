@@ -1,6 +1,5 @@
 id = 209
 hostname = "windmill-pulumi"
-enabled = false
 
 description = "windmill code-based automation platform, mostly used for spotify automation"
 

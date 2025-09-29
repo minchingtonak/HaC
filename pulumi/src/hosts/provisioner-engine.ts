@@ -8,7 +8,7 @@ import {
   Provisioner,
   ScriptProvisioner,
   AnsibleProvisioner,
-} from './host-config-schema';
+} from './lxc-host-config-schema';
 import { EnvUtils } from '../utils/env-utils';
 import { TemplateProcessor } from '../templates/template-processor';
 
@@ -17,7 +17,7 @@ export type ProvisionerResource = command.remote.Command | ansible.Playbook;
 export interface ProvisionerEngineArgs {
   connection: command.types.input.remote.ConnectionArgs;
   projectRoot: string;
-  hostname: string;
+  name: string;
 }
 
 export class ProvisionerEngine {
@@ -55,7 +55,7 @@ export class ProvisionerEngine {
     dependsOn?: ProvisionerResource,
     index?: number,
   ): ProvisionerResource {
-    const commandName = `${this.args.hostname}-provisioner-${index}`;
+    const commandName = `${this.args.name}-provisioner-${index}`;
 
     switch (provisioner.type) {
       case 'script':
