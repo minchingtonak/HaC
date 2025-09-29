@@ -1,16 +1,14 @@
-- refactor constants
+- auto update via bot PR with that one tool, scaffold? blueprint? something like that RENOVATE i think
 
-- toml schema for file provisioner on hosts? for now maybe not necessary since you can have arbitrary files in a stack directory
+- figure out a better standard for having defaults. need a standard way of defining default values for things that aren't explicit fields in the config by default, like privateKeyFile for ansible
 
-- finish up firewall configuration
+- consider different syntax for secret vars
 
-- look into command execution on PVE host as well as containers
-  - https://github.com/ItsMeBrianD/homelab-automation/blob/680fa1c405a8c0dedb9c0e171befcf608715dce4/pulumi/src/proxmox/Provider.ts#L26
+- opens the door for things like stack-specific provisioners/setup steps
 
-- inspiration from github
-  - https://github.com/ItsMeBrianD/homelab-automation/blob/680fa1c405a8c0dedb9c0e171befcf608715dce4/pulumi/src/proxmox/cloud/BuildVmOptions.ts#L24
-  - https://github.com/ItsMeBrianD/homelab-automation/blob/680fa1c405a8c0dedb9c0e171befcf608715dce4/pulumi/src/proxmox/cloud/CloudImageTemplate.ts
-  - refactor into factory functions? look at link for provider example https://github.com/IsaacOrzDev/personal-website-pulumi/blob/559111450e88380234573de73fe67a5748f4c4d7/src/certificate.ts
-  - class to encapsulate a service deployment?
-    - https://github.com/graphql-hive/console/blob/main/deployment/utils/service-deployment.ts#L32
-    - https://github.com/graphql-hive/console/blob/8ff04c56f7f0471f8249d1c21a5b27d54fc0d37c/deployment/services/graphql.ts
+- have multiple stacks for deploying to separate hosts
+
+- refactor parser to be functional instead of calssbased
+
+- see if a "from backup" option is possible, where it will check for a backup from a specific source and restore it instead of fresh creating
+  - would be useful in cases where you need to redeploy all containers because some infra changed
