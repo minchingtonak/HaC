@@ -25,7 +25,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '22'
+          node-version: '22.19.0'
           cache: 'pnpm'
           cache-dependency-path: ./pulumi/pnpm-lock.yaml
 
@@ -65,7 +65,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
-          node-version: '22'
+          node-version: '22.19.0'
           cache: 'pnpm'
           cache-dependency-path: ./pulumi/pnpm-lock.yaml
 
