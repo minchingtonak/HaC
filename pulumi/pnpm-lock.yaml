@@ -18,7 +18,7 @@ importers:
         version: 1.2.0(patch_hash=e5d211be610d1ebcd0e4781e82cb1ec57ab59635056aa758f4366f001a469c10)(@pulumi/pulumi@3.186.0(typescript@5.8.3))
       '@muhlba91/pulumi-proxmoxve':
         specifier: ^7.3.0
-        version: 7.3.0(typescript@5.8.3)
+        version: 7.5.0(typescript@5.8.3)
       '@pulumi/ansible':
         specifier: file:sdks/ansible
         version: file:sdks/ansible
@@ -238,8 +238,8 @@ packages:
     resolution: {integrity: sha512-XGSsWDweP80Fks16lwkAUIr54ICyBs6PsI4mpfTLQaWgEJRtY9xEV+PeyDpJ+sJEGZxqINlpmAwe/6tS1pP8Ng==}
     engines: {node: '>=10.3.0'}
 
-  '@muhlba91/pulumi-proxmoxve@7.3.0':
-    resolution: {integrity: sha512-udBKHSRbm4USMw0TyW7KA9NeupRu4GFwWcwsYok4DoeCyzEr+MxzLWK4/NyshSFqJ2mF+Ko6JtSmrY/Hr+naIA==}
+  '@muhlba91/pulumi-proxmoxve@7.5.0':
+    resolution: {integrity: sha512-7itQZVZXChLpBbRBbrRx1fLd5JCZVfhUlossB779wOCQ7EQxifrjon415mddcH8KG15bkr4pwB+YLT3ZQkh5rw==}
 
   '@npmcli/agent@2.2.2':
     resolution: {integrity: sha512-OrcNPXdpSl9UX7qPVRWbmWMCSXrcDa2M9DvrbOTj7ao1S4PlqVFYv9/yLKMkrJKZ/V5A/kDBC690or307i26Og==}
@@ -1457,7 +1457,7 @@ snapshots:
 
   '@logdna/tail-file@2.2.0': {}
 
-  '@muhlba91/pulumi-proxmoxve@7.3.0(typescript@5.8.3)':
+  '@muhlba91/pulumi-proxmoxve@7.5.0(typescript@5.8.3)':
     dependencies:
       '@pulumi/pulumi': 3.186.0(typescript@5.8.3)
     transitivePeerDependencies:
