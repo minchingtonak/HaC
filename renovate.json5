@@ -43,6 +43,63 @@
       "matchPackageNames": "postgres",
       "matchCurrentVersion": "15",
       "enabled": false
+    },
+    // endurain
+    {
+      "matchPackageNames": "postgres",
+      "matchCurrentVersion": "18.0",
+      "enabled": false
+    },
+    // fittrackee
+    {
+      "matchPackageNames": "postgres",
+      "matchCurrentVersion": "17-alpine",
+      "enabled": false
+    },
+    // immich
+    {
+      "matchPackageNames": "docker.io/redis",
+      "matchCurrentVersion": "6.2-alpine",
+      "enabled": false
+    },
+    {
+      "matchPackageNames": "ghcr.io/immich-app/postgres",
+      "matchCurrentVersion": "14-vectorchord0.3.0-pgvectors0.2.0",
+      "enabled": false
+    },
+    // komodo
+    {
+      "matchPackageNames": "mongo",
+      "matchCurrentVersion": "8.0.14",
+      "enabled": false
+    },
+    // paperless-ngx
+    {
+      "matchPackageNames": "docker.io/library/redis",
+      "matchCurrentVersion": "7",
+      "enabled": false
+    },
+    {
+      "matchPackageNames": "docker.io/library/postgres",
+      "matchCurrentVersion": "16",
+      "enabled": false
+    },
+    {
+      "matchPackageNames": "docker.io/gotenberg/gotenberg",
+      "matchCurrentVersion": "8.20",
+      "enabled": false
+    },
+    // windmill
+    {
+      "matchPackageNames": "postgres",
+      "matchCurrentVersion": "16",
+      "enabled": false
+    },
+    // your_spotify
+    {
+      "matchPackageNames": "mongo",
+      "matchCurrentVersion": "6",
+      "enabled": false
     }
   ],
 
