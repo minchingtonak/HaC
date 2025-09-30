@@ -24,6 +24,10 @@
       "datasources": ["docker"],
       "updateTypes": ["major"],
       "enabled": true
+    },
+    {
+      "matchPackageNames": ["ghcr.io/linuxserver/jellyfin"],
+      "allowedVersions": "<2021"
     }
   ],
 
