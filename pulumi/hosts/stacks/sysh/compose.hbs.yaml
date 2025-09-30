@@ -1,7 +1,7 @@
 services:
   app:
     container_name: sysh-server
-    image: barmiro/sysh-server:latest
+    image: barmiro/sysh-server:latest@sha256:de410f549a4e08f932d6f2d0d4f233094f08fb7232238838e38e1a2335531686
     env_file:
       - .env
     environment:
@@ -33,7 +33,7 @@ services:
 
   postgres:
     container_name: sysh-postgres
-    image: barmiro/sysh-postgres:latest
+    image: barmiro/sysh-postgres:latest@sha256:44bbd8665e11d390b2348eaa237bc8773780840fc0b12f41d05ff7fe6b95d049
     env_file:
       - .env
     environment:

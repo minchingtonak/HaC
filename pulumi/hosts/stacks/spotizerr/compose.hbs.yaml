@@ -8,7 +8,7 @@ services:
       - /mnt/media/music:/app/downloads  # your music library dir
     # ports:
     #   - 7171:7171
-    image: cooldockerizer93/spotizerr:latest
+    image: lavaforge.org/spotizerr/spotizerr:4.0.0@sha256:80e7f932f7e67770dc715f434822459170a4682254bbc8e7bcf3fa4b35a9980c
     container_name: spotizerr-app
     restart: unless-stopped
     environment:
@@ -36,7 +36,7 @@ services:
       - traefik
 
   redis:
-    image: redis:alpine
+    image: redis:alpine@sha256:987c376c727652f99625c7d205a1cba3cb2c53b92b0b62aade2bd48ee1593232
     container_name: spotizerr-redis
     restart: unless-stopped
     environment:
