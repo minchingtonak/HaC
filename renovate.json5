@@ -1,5 +1,8 @@
 {
+  // https://docs.renovatebot.com/configuration-options
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  // https://emmer.dev/blog/keep-docker-base-images-updated-with-renovate
+  // https://nickcunningh.am/blog/how-to-automate-version-updates-for-your-self-hosted-docker-containers-with-gitea-renovate-and-komodo
   "extends": [
     "config:recommended"
   ],
@@ -23,6 +26,23 @@
     {
       "matchPackageNames": ["ghcr.io/linuxserver/jellyfin"],
       "allowedVersions": "<2021"
+    },
+    // dawarich
+    {
+      "matchPackageNames": "redis",
+      "matchCurrentVersion": "7.4-alpine@sha256:bb186d083732f669da90be8b0f975a37812b15e913465bb14d845db72a4e3e08",
+      "enabled": false
+    },
+    {
+      "matchPackageNames": "postgis/postgis",
+      "matchCurrentVersion": "17-3.5-alpine@sha256:6ebb2b32a6d5315c8fc2b00427356eebd4778bfaf7211d4b28eac481f3d194ec",
+      "enabled": false
+    },
+    // docuseal
+    {
+      "matchPackageNames": "postgres",
+      "matchCurrentVersion": "15@sha256:08155957f670000953ad9bf7f654a13bb0d4fb01b8f1cc83736f2fd18601aab4",
+      "enabled": false
     }
   ],
 
