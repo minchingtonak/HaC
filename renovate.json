@@ -2,5 +2,32 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
-  ]
+  ],
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "Renovate Dashboard",
+
+  // Run on a monthly schedule to keep interruptions to a minimum,
+  //  but always open vulnerability-fixing pull requests immediately
+  "schedule": "on saturday",
+  "timezone": "America/Los_Angeles",
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    "schedule": "at any time"
+  },
+
+  "ignoreUnstable": true,
+  "stabilityDays": 7,
+
+  // docker:enableMajor preset, this is disabled by default
+  "packageRules": [
+    {
+      "matchPackageNames": ["lscr.io/linuxserver/jellyfin"],
+      "allowedVersions": "<2021"
+    }
+  ],
+
+  // docker:pinDigests preset, this allows for reproducible builds
+  "docker": {
+    "pinDigests": true
+  }
 }
