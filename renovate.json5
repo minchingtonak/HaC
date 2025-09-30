@@ -24,6 +24,10 @@
   // docker:enableMajor preset, this is disabled by default
   "packageRules": [
     {
+      "matchPackagePatterns": ["^lavaforge\\.org/"],
+      "enabled": false
+    },
+    {
       "matchPackageNames": ["ghcr.io/linuxserver/jellyfin"],
       "allowedVersions": "<2021"
     },
