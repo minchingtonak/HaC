@@ -24,12 +24,12 @@
   // docker:enableMajor preset, this is disabled by default
   "packageRules": [
     {
-      "matchPackageNames": ["ghcr.io/linuxserver/jellyfin"],
-      "allowedVersions": "<2021"
+      "matchPackageNames": ["ghcr.io/linuxserver/qbittorrent"],
+      "minimumReleaseAge": "2 years"
     },
     {
-      "matchPackageNames": ["ghcr.io/linuxserver/qbittorrent"],
-      "allowedVersions": "<20"
+      "matchPackageNames": ["ghcr.io/linuxserver/jellyfin"],
+      "allowedVersions": "<2021"
     },
     // dawarich
     {
