@@ -1,6 +1,6 @@
 services:
   epub_to_audiobook:
-    image: ghcr.io/p0n1/epub_to_audiobook:latest
+    image: ghcr.io/p0n1/epub_to_audiobook:v0.8.6@sha256:fb204a8099dd808aac98b18978bf7fa1249e91ac3886cd9670478561cc97b10d
     environment:
       # for custom OpenAI-compatible endpoints
       # OPENAI_BASE_URL: <your_openai_base_url>

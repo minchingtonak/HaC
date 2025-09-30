@@ -1,6 +1,6 @@
 services:
   handbrake-server:
-    image: ghcr.io/thenickoftime/handbrake-web-server:latest
+    image: ghcr.io/thenickoftime/handbrake-web-server:0.7.3@sha256:1bb42d405c5936ae66885002e6424fd858f6cd9472b35837828e6d40e673006c
     container_name: handbrake-web-server
     user: 0:0
     # ports:
@@ -20,7 +20,7 @@ services:
       - traefik
 
   handbrake-worker:
-    image: ghcr.io/thenickoftime/handbrake-web-worker:latest
+    image: ghcr.io/thenickoftime/handbrake-web-worker:0.7.3@sha256:e4768a28a98002610c3b2d8bb9f3d5a05ba5f87e08c8df9aec2778760b206b45
     container_name: handbrake-web-worker
     user: 0:0
     environment:

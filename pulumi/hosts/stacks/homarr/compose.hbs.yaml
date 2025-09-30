@@ -1,12 +1,12 @@
 services:
   homarr:
     container_name: homarr
-    image: ghcr.io/homarr-labs/homarr:latest
+    image: ghcr.io/homarr-labs/homarr:v1.39.0@sha256:c7cfe7209739f1554b166ccbade8784c89b76953399263b7c9ee96ae5d478172
     restart: unless-stopped
     volumes:
       - /docker/homarr:/appdata
     environment:
-      - SECRET_ENCRYPTION_KEY=${{{SECRET_ENCRYPTION_KEY}}}
+      - SECRET_ENCRYPTION_KEY={{{SECRET_ENCRYPTION_KEY}}}
     # ports:
     #   - '7575:7575'
     labels:

@@ -3,7 +3,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    image: docuseal/docuseal:latest
+    image: docuseal/docuseal:2.1.7@sha256:85753206a4e57867645ceeb1aee8dadbaee3711e4cab15ae4ff17a1ae985cd5c
     # ports:
     #   - 3000:3000
     volumes:
@@ -26,7 +26,8 @@ services:
       - traefik
 
   postgres:
-    image: postgres:15
+    # pinned
+    image: postgres:15@sha256:08155957f670000953ad9bf7f654a13bb0d4fb01b8f1cc83736f2fd18601aab4
     volumes:
       - /docker/docuseal/pg_data:/var/lib/postgresql/data
     environment:

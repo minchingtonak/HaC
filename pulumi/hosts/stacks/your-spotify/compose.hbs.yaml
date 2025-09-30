@@ -1,6 +1,6 @@
 services:
   your_spotify:
-    image: lscr.io/linuxserver/your_spotify:latest
+    image: ghcr.io/linuxserver/your_spotify:1.14.0@sha256:b0bc3ae43405daf56d90e7c78dc75935fe18a7d80792e8842c2c6c71e7b3e337
     container_name: your_spotify
     environment:
       # cannot use root user for this image
@@ -29,7 +29,8 @@ services:
 
   mongo:
     container_name: mongo
-    image: mongo:6
+    # pinned
+    image: mongo:6@sha256:16118486b1c7e672a0d9a1e7f59e3a510eeb0038629ceb678eb43f8029eb77d6
     volumes:
       - /docker/your_spotify/db:/data/db
     restart: unless-stopped

@@ -1,7 +1,7 @@
 services:
   endurain:
     container_name: endurain
-    image: ghcr.io/joaovitoriasilva/endurain:latest
+    image: ghcr.io/joaovitoriasilva/endurain:latest@sha256:b42cb66cc8ee41ebff562c096f3aa604b780b252f11182f661c8a257e2255971
     environment:
       - TZ=America/Los_Angeles
       - DB_TYPE=postgres
@@ -37,7 +37,8 @@ services:
       - traefik
 
   postgres:
-    image: postgres:latest
+    # pinned
+    image: postgres:18.0@sha256:1d288494853e244e7a78d87b3526e650e5221c622f9768ecac9313d0874a9c39
     container_name: postgres
     environment:
       - POSTGRES_PASSWORD=${ENDURAIN_DB_PASSWORD}

@@ -1,6 +1,6 @@
 services:
   semaphore:
-    image: semaphoreui/semaphore:latest
+    image: semaphoreui/semaphore:v2.16.31@sha256:7c9617ecd6233a019c85f52b122108c1113458c3cf91554145f3c56d4dbc25b3
     container_name: semaphore
     user: "0:0"
     # ports:

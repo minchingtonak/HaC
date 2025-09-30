@@ -10,7 +10,8 @@
 services:
   fittrackee-db:
     container_name: fittrackee-db
-    image: postgres:17-alpine
+    # pinned
+    image: postgres:17-alpine@sha256:855021a5b10954343902a8c22a15f8464233126c1d12d9ad84d4a14c5af07a80
     volumes:
       - /docker/fittrackee/db:/var/lib/postgresql/data
     env_file:
@@ -26,7 +27,7 @@ services:
 
   fittrackee:
     container_name: fittrackee
-    image: fittrackee/fittrackee:latest
+    image: fittrackee/fittrackee:v0.12.2@sha256:f21bea6b3e36f3c63fea705276ec5ccccbd3fe2040c7d93f7451defee36bf99b
     volumes:
       - /docker/fittrackee/uploads:/usr/src/app/uploads
       - /docker/fittrackee/logs:/usr/src/app/logs

@@ -1,7 +1,7 @@
 services:
   dumbassets:
     container_name: dumbassets
-    image: dumbwareio/dumbassets:latest
+    image: dumbwareio/dumbassets:1.0.11@sha256:1bbe3a1c4aa404f3cbd9641cbf7ef24dfd3f4f09a92570eecc88d48de31517ab
     restart: unless-stopped
     # ports:
     #   - ${DUMBASSETS_PORT:-3002}:3000

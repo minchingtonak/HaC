@@ -9,7 +9,8 @@ services:
   db:
     deploy:
       replicas: 1
-    image: postgres:16
+    # pinned
+    image: postgres:16@sha256:46b64df84f4c8c5bd586952eb8ff813f1ce12f1bc36eb12af678894b6a66ab89
     shm_size: 1g
     restart: unless-stopped
     volumes:
@@ -29,7 +30,7 @@ services:
     logging: *default-logging
 
   windmill_server:
-    image: ${WM_IMAGE}
+    image: ghcr.io/windmill-labs/windmill:1.552.1@sha256:fa64b81b2b6f7d3359ad9d5fac54a3bc4adb6eb79f72b801a715409b1badbfbe
     pull_policy: always
     deploy:
       replicas: 1
@@ -61,7 +62,7 @@ services:
       - traefik
 
   windmill_worker:
-    image: ${WM_IMAGE}
+    image: ghcr.io/windmill-labs/windmill:1.552.1@sha256:fa64b81b2b6f7d3359ad9d5fac54a3bc4adb6eb79f72b801a715409b1badbfbe
     pull_policy: always
     deploy:
       replicas: 1
@@ -88,8 +89,7 @@ services:
 
   ## This worker is specialized for "native" jobs. Native jobs run in-process and thus are much more lightweight than other jobs
   windmill_worker_native:
-    # Use ghcr.io/windmill-labs/windmill-ee:main for the ee
-    image: ${WM_IMAGE}
+    image: ghcr.io/windmill-labs/windmill:1.552.1@sha256:fa64b81b2b6f7d3359ad9d5fac54a3bc4adb6eb79f72b801a715409b1badbfbe
     pull_policy: always
     deploy:
       replicas: 1
@@ -114,7 +114,7 @@ services:
 
   # This worker is specialized for reports or scraping jobs. It is assigned the "reports" worker group which has an init script that installs chromium and can be targeted by using the "chromium" worker tag.
   windmill_worker_reports:
-    image: ${WM_IMAGE}
+    image: ghcr.io/windmill-labs/windmill:1.552.1@sha256:fa64b81b2b6f7d3359ad9d5fac54a3bc4adb6eb79f72b801a715409b1badbfbe
     pull_policy: always
     deploy:
       replicas: 1
@@ -139,7 +139,7 @@ services:
       - /docker/windmill/logs:/tmp/windmill/logs
 
   lsp:
-    image: ghcr.io/windmill-labs/windmill-lsp:latest
+    image: ghcr.io/windmill-labs/windmill-lsp:1.552.1@sha256:173f07b78f34997c9f1a664ec35a818fc7ea6e3ff5f91c3b6ad0cee56638e2f5
     pull_policy: always
     restart: unless-stopped
     expose:

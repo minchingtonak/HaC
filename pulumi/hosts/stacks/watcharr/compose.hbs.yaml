@@ -1,6 +1,6 @@
 services:
   watcharr:
-    image: ghcr.io/sbondco/watcharr:latest
+    image: ghcr.io/sbondco/watcharr:v2.1.1@sha256:e19f8beec1269b4a6677549ca212acbba829fae5ee4113c9687f0b04611db7b8
     container_name: watcharr
     # ports:
     #   - 3080:3080

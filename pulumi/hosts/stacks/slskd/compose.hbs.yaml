@@ -1,6 +1,6 @@
 services:
   slskd:
-    image: slskd/slskd:latest
+    image: slskd/slskd:0.23.2@sha256:28df5325f301537ea8669b2ef90112a30cc9f2efd3eb714c9a778460b5dc6288
     container_name: slskd
     # ports:
     #   # - "5030:5030" # HTTP

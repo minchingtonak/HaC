@@ -1,6 +1,6 @@
 services:
   apprise:
-    image: caronc/apprise:latest
+    image: caronc/apprise:1.2.1@sha256:127b3834f0679502529397ead8ffeaadf5189019c4c863fa6652e9b942fdccf8
     environment:
       - APPRISE_WORKER_COUNT=1
       - APPRISE_STATEFUL_MODE=simple

@@ -1,7 +1,7 @@
 services:
   mazanoke:
     container_name: mazanoke
-    image: ghcr.io/civilblur/mazanoke:latest
+    image: ghcr.io/civilblur/mazanoke:v1.1.5@sha256:e43dc48de575b7a032bbefd96b890d69c1f141417e43d5d096469aa1398711d6
     # ports:
     #   - "3474:80"
     restart: unless-stopped

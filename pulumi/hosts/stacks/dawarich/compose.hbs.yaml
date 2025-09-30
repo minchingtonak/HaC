@@ -1,6 +1,7 @@
 services:
   dawarich_redis:
-    image: redis:7.4-alpine
+    # pinned
+    image: redis:7.4-alpine@sha256:bb186d083732f669da90be8b0f975a37812b15e913465bb14d845db72a4e3e08
     container_name: dawarich_redis
     command: redis-server
     networks:
@@ -16,7 +17,8 @@ services:
       timeout: 10s
 
   dawarich_db:
-    image: postgis/postgis:17-3.5-alpine
+    # pinned
+    image: postgis/postgis:17-3.5-alpine@sha256:6ebb2b32a6d5315c8fc2b00427356eebd4778bfaf7211d4b28eac481f3d194ec
     shm_size: 1G
     container_name: dawarich_db
     volumes:
@@ -39,7 +41,7 @@ services:
     # command: postgres -c config_file=/etc/postgresql/postgresql.conf # Use custom config, uncomment if you want to use a custom config
 
   dawarich_app:
-    image: freikin/dawarich:latest
+    image: freikin/dawarich:0.32.0@sha256:4cb9bd4e05dbea4cf5176c2d07c613c10bff231e487e2a95ab978fd7e3e7c174
     container_name: dawarich_app
     volumes:
       - /docker/dawarich/public:/var/app/public
@@ -107,7 +109,7 @@ services:
       - traefik
 
   dawarich_sidekiq:
-    image: freikin/dawarich:latest
+    image: freikin/dawarich:0.32.0@sha256:4cb9bd4e05dbea4cf5176c2d07c613c10bff231e487e2a95ab978fd7e3e7c174
     container_name: dawarich_sidekiq
     volumes:
       - /docker/dawarich/public:/var/app/public

@@ -8,7 +8,7 @@
 
 services:
   core:
-    image: ghcr.io/moghtech/komodo-core:${COMPOSE_KOMODO_IMAGE_TAG:-latest}
+    image: ghcr.io/moghtech/komodo-core:1.19.5@sha256:a1cceb4f971443b1e9f2a767788f663d0afb6244ee2135f7fe3fd1036af37ade
     container_name: komodo
     restart: unless-stopped
     depends_on:
@@ -44,7 +44,8 @@ services:
       - traefik
 
   mongo:
-    image: mongo
+    # pinned
+    image: mongo:8.0.14@sha256:3031bfad5692e3fa1defcd054d4794370889c93b2049e0c323f2b7571e495413
     container_name: komodo-mongo
     labels:
       komodo.skip: # Prevent Komodo from stopping with StopAllContainers
@@ -66,7 +67,7 @@ services:
       - komodo
 
   # periphery:
-  #   image: ghcr.io/moghtech/komodo-periphery:${COMPOSE_KOMODO_IMAGE_TAG:-latest}
+  #   image: ghcr.io/moghtech/komodo-periphery:1.19.5@sha256:bd79cf960ed054fe8e02384322303e462448679b1149dde48bbef151417255b1
   #   labels:
   #     komodo.skip: # Prevent Komodo from stopping with StopAllContainers
   #   restart: unless-stopped

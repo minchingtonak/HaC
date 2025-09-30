@@ -1,6 +1,6 @@
 services:
   gluetun:
-    image: qmcgaw/gluetun
+    image: qmcgaw/gluetun:latest@sha256:5099f4ec7d5a3ea87bbe217ee4755c8442070fdcd5f3d76bc826c9bda3843013
     container_name: gluetun
     cap_add:
       - NET_ADMIN
@@ -56,7 +56,7 @@ services:
       - traefik
 
   deunhealth:
-    image: qmcgaw/deunhealth
+    image: qmcgaw/deunhealth:latest@sha256:fca3832ace35e3c028d3ec2e6271ac1161ed302b75b34e9dd01db1c106a25802
     container_name: deunhealth
     network_mode: 'none'
     environment:
@@ -68,7 +68,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   qbittorrent:
-    image: lscr.io/linuxserver/qbittorrent:latest
+    image: ghcr.io/linuxserver/qbittorrent:5.1.2@sha256:5f3785f8d8cd27d509cd948a06195306c3d951b1e1e123e46c7be40ecfb6965f
     container_name: qbittorrent
     restart: unless-stopped
     labels:
@@ -95,7 +95,7 @@ services:
       timeout: 10s
 
   sabnzbd:
-    image: lscr.io/linuxserver/sabnzbd:latest
+    image: ghcr.io/linuxserver/sabnzbd:4.5.3@sha256:26b99fbc22f3e8ba3e1b3a8803a6b807974126e0855e786ae3275b534de51b7f
     container_name: sabnzbd
     environment:
       - PUID=0
@@ -127,7 +127,7 @@ services:
       start_period: 15s
 
   prowlarr:
-    image: lscr.io/linuxserver/prowlarr:latest
+    image: ghcr.io/linuxserver/prowlarr:2.0.5@sha256:856c93bab72a6a41a23ff60bab48554135c044a456f40909307011dea8ddeafb
     container_name: prowlarr
     environment:
       - PUID=0
@@ -170,7 +170,7 @@ services:
       - traefik
 
   sonarr:
-    image: lscr.io/linuxserver/sonarr:latest
+    image: ghcr.io/linuxserver/sonarr:4.0.15@sha256:328d322af2bb8d7211a9c43a26ff5e658ba3e6f47a695e8fb9ff806bfeab0f04
     container_name: sonarr
     restart: unless-stopped
     environment:
@@ -220,7 +220,7 @@ services:
       - traefik
 
   radarr:
-    image: lscr.io/linuxserver/radarr:latest
+    image: ghcr.io/linuxserver/radarr:5.27.5@sha256:19474a623b278f558c9696a19b84640ad4aff3b2959f08904a77ffbad73ed7bd
     container_name: radarr
     restart: unless-stopped
     environment:
@@ -270,7 +270,7 @@ services:
       - traefik
 
   bazarr:
-    image: lscr.io/linuxserver/bazarr:latest
+    image: ghcr.io/linuxserver/bazarr:1.5.3@sha256:e424330f048ff1401f22413e34ee11c25ac2de79b6213c6ead3f593b44626c55
     container_name: bazarr
     restart: unless-stopped
     environment:
@@ -317,7 +317,7 @@ services:
       - traefik
 
   subsyncarr:
-    image: mrorbitman/subsyncarr:latest
+    image: mrorbitman/subsyncarr:0.0.8@sha256:5185ff4d403e1267fc38a30dcf13c631ebf4ff0e56a8bbb1dc1da70996bf2b83
     container_name: subsyncarr
     user: 0:0
     volumes:
@@ -333,7 +333,7 @@ services:
       - INCLUDE_ENGINES=ffsubsync,autosubsync # If not set, all engines are used by default
 
   profilarr:
-    image: santiagosayshey/profilarr:latest
+    image: santiagosayshey/profilarr:v1.1.3@sha256:c8ad91a8e5d60b3816321b3a1f68332b29a23f910f6bd2c2d7b4a83f881f032f
     container_name: profilarr
     user: 0:0
     # ports:
@@ -377,7 +377,7 @@ services:
     #   start_period: 5s
 
   cleanuparr:
-    image: ghcr.io/cleanuparr/cleanuparr:latest
+    image: ghcr.io/cleanuparr/cleanuparr:2.3.3@sha256:d20efe405d4144e87736c25123cd22992fa4a76c9d80d7467ca5313b92107e4a
     container_name: cleanuparr
     restart: unless-stopped
     depends_on:
@@ -429,7 +429,7 @@ services:
       - traefik
 
   huntarr:
-    image: huntarr/huntarr:latest
+    image: huntarr/huntarr:8.2.10@sha256:b5a47c2b43806165f433d308d69a21e74a687ce59f4fcccb612d6a7acb3af6d7
     container_name: huntarr
     restart: unless-stopped
     # ports:
