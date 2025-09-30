@@ -34,7 +34,7 @@ jobs:
         working-directory: ./pulumi
 
       - name: Pulumi preview
-        uses: pulumi/actions@v5
+        uses: pulumi/actions@v6
         with:
           command: preview
           stack-name: homelab
@@ -74,7 +74,7 @@ jobs:
         working-directory: ./pulumi
 
       - name: Pulumi up
-        uses: pulumi/actions@v5
+        uses: pulumi/actions@v6
         with:
           command: up
           stack-name: homelab
