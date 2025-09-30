@@ -27,6 +27,10 @@
       "matchPackageNames": ["ghcr.io/linuxserver/jellyfin"],
       "allowedVersions": "<2021"
     },
+    {
+      "matchPackageNames": ["ghcr.io/linuxserver/qbittorrent"],
+      "allowedVersions": "<20"
+    },
     // dawarich
     {
       "matchPackageNames": "redis",
