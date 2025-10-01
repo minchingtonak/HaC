@@ -9,7 +9,6 @@ export interface ParserConfig<TConfig, THostnameConfig> {
   hostnameSchema: z.ZodSchema<THostnameConfig>;
   extractIdentifier: (parsed: THostnameConfig) => string;
   errorPrefix: string;
-  context: 'pve' | 'lxc';
 }
 
 export abstract class HostConfigParser<TConfig, THostnameConfig> {
@@ -20,13 +19,10 @@ export abstract class HostConfigParser<TConfig, THostnameConfig> {
    */
   public loadAllConfigs(
     hostsDir: string,
-    extraData?: unknown
+    extraData?: unknown,
   ): (TConfig | pulumi.Output<TConfig>)[] {
     const configs: (TConfig | pulumi.Output<TConfig>)[] = [];
-    const configFiles = TemplateProcessor.discoverTemplateFiles(hostsDir, {
-      isTemplateOverride: (_, filename) =>
-        /^.+\.(hbs|handlebars)\.toml(\.(hbs|handlebars))?$/.test(filename),
-    });
+    const configFiles = TemplateProcessor.discoverTemplateFiles(hostsDir);
 
     for (const configPath of configFiles) {
       try {
@@ -34,7 +30,9 @@ export abstract class HostConfigParser<TConfig, THostnameConfig> {
         configs.push(config);
       } catch (error) {
         console.warn(
-          `Warning: Failed to load ${this.getConfig().errorPrefix} config from ${configPath}:`,
+          `Warning: Failed to load ${
+            this.getConfig().errorPrefix
+          } config from ${configPath}:`,
           error,
         );
       }
@@ -48,15 +46,13 @@ export abstract class HostConfigParser<TConfig, THostnameConfig> {
    */
   public parseConfigFile(
     filePath: string,
-    extraData?: unknown
+    extraData?: unknown,
   ): TConfig | pulumi.Output<TConfig> {
     const identifier = this.getIdentifierFromConfigFile(filePath);
-    const config = this.getConfig();
     const renderedTemplate = TemplateProcessor.processTemplate(
       filePath,
       new pulumi.Config(identifier),
       extraData,
-      config.context
     );
 
     return this.parseConfigString(renderedTemplate.content);
@@ -81,7 +77,9 @@ export abstract class HostConfigParser<TConfig, THostnameConfig> {
             return JSON.stringify(err); // FIXME this may crash when err.path contains symbol values
           })
           .join('\n;\n');
-        throw new Error(`Invalid ${config.errorPrefix} TOML structure: ${errorMessages}`);
+        throw new Error(
+          `Invalid ${config.errorPrefix} TOML structure: ${errorMessages}`,
+        );
       }
       throw error;
     }
@@ -108,7 +106,7 @@ export abstract class HostConfigParser<TConfig, THostnameConfig> {
    */
   private static validateConfig<TConfig>(
     config: unknown,
-    parserConfig: ParserConfig<TConfig, any>
+    parserConfig: ParserConfig<TConfig, any>,
   ): TConfig {
     try {
       return parserConfig.configSchema.parse(config);
@@ -119,7 +117,9 @@ export abstract class HostConfigParser<TConfig, THostnameConfig> {
             return JSON.stringify(err); // FIXME this may crash when err.path contains symbol values
           })
           .join('\n;\n');
-        throw new Error(`Invalid ${parserConfig.errorPrefix} TOML structure: ${errorMessages}`);
+        throw new Error(
+          `Invalid ${parserConfig.errorPrefix} TOML structure: ${errorMessages}`,
+        );
       }
       throw error;
     }

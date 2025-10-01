@@ -15,9 +15,8 @@ export class LxcHostConfigParser extends HostConfigParser<
     return {
       configSchema: LxcHostConfigSchema,
       hostnameSchema: LxcHostnameSchema,
-      extractIdentifier: (parsed: LxcHostnameToml) => parsed.hostname,
+      extractIdentifier: (parsed: LxcHostnameToml) => `lxc#${parsed.hostname}`,
       errorPrefix: 'LXC host',
-      context: 'lxc',
     };
   }
 

@@ -7,14 +7,16 @@ import {
 } from './pve-host-config-schema';
 import { HostConfigParser, ParserConfig } from './host-config-parser';
 
-export class PveHostConfigParser extends HostConfigParser<PveHostConfigToml, PveHostnameToml> {
+export class PveHostConfigParser extends HostConfigParser<
+  PveHostConfigToml,
+  PveHostnameToml
+> {
   protected getConfig(): ParserConfig<PveHostConfigToml, PveHostnameToml> {
     return {
       configSchema: PveHostConfigSchema,
       hostnameSchema: PveHostnameSchema,
-      extractIdentifier: (parsed: PveHostnameToml) => parsed.pve.node,
+      extractIdentifier: (parsed: PveHostnameToml) => `pve#${parsed.pve.node}`,
       errorPrefix: 'PVE host',
-      context: 'pve',
     };
   }
 
@@ -36,7 +38,7 @@ export class PveHostConfigParser extends HostConfigParser<PveHostConfigToml, Pve
 
   static parsePveHostConfigFile(
     filePath: string,
-    extraData?: unknown
+    extraData?: unknown,
   ): PveHostConfigToml | pulumi.Output<PveHostConfigToml> {
     const parser = new PveHostConfigParser();
     return parser.parseConfigFile(filePath, extraData);

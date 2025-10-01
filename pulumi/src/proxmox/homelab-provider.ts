@@ -18,6 +18,8 @@ export class HomelabProvider extends proxmox.Provider {
   public readonly porkbunApiKey: pulumi.Output<string>;
   public readonly porkbunSecretKey: pulumi.Output<string>;
 
+  public readonly pveConfig: pulumi.Output<PveHostConfigToml>;
+
   constructor(
     name: string,
     args: HomelabProviderArgs,
@@ -26,38 +28,36 @@ export class HomelabProvider extends proxmox.Provider {
     const config = pulumi.output(args.pveHostConfig);
 
     const providerArgs = {
-      endpoint: config.apply(c => c.pve.endpoint),
-      insecure: config.apply(c => c.pve.auth.insecure),
-      username: config.apply(c => c.pve.auth.username),
-      password: pulumi.secret(config.apply(c => c.pve.auth.password)),
+      endpoint: config.apply((c) => c.pve.endpoint),
+      insecure: config.apply((c) => c.pve.auth.insecure),
+      username: config.apply((c) => c.pve.auth.username),
+      password: pulumi.secret(config.apply((c) => c.pve.auth.password)),
     };
 
     super(name, providerArgs, opts);
 
-    this.pveNodeName = config.apply(c => c.pve.node);
-    this.localIpPrefix = config.apply(c => c.lxc.network.subnet);
-    this.gatewayIp = config.apply(c => c.lxc.network.gateway || `${c.lxc.network.subnet}.1`);
-    this.rootContainerDomain = config.apply(c => c.lxc.network.domain);
-    this.defaultRootPassword = pulumi.secret(config.apply(c => c.lxc.auth.password));
-    this.lxcPublicSshKey = pulumi.secret(config.apply(c => c.lxc.ssh.publicKey));
-    this.lxcPrivateSshKey = pulumi.secret(config.apply(c => c.lxc.ssh.privateKey));
-    this.imageTemplateDatastoreId = config.apply(c => c.storage.templates);
-    this.porkbunApiKey = pulumi.secret(config.apply(c => c.lxc.dns?.porkbun?.apiKey || ''));
-    this.porkbunSecretKey = pulumi.secret(config.apply(c => c.lxc.dns?.porkbun?.secretKey || ''));
-  }
-
-  public toObject(): pulumi.Output<Record<string, string>> {
-    return pulumi.all({
-      pveNodeName: this.pveNodeName,
-      localIpPrefix: this.localIpPrefix,
-      gatewayIp: this.gatewayIp,
-      rootContainerDomain: this.rootContainerDomain,
-      defaultRootPassword: this.defaultRootPassword,
-      lxcPublicSshKey: this.lxcPublicSshKey,
-      lxcPrivateSshKey: this.lxcPrivateSshKey,
-      imageTemplateDatastoreId: this.imageTemplateDatastoreId,
-      porkbunApiKey: this.porkbunApiKey,
-      porkbunSecretKey: this.porkbunSecretKey,
-    });
+    this.pveConfig = config;
+    this.pveNodeName = config.apply((c) => c.pve.node);
+    this.localIpPrefix = config.apply((c) => c.lxc.network.subnet);
+    this.gatewayIp = config.apply(
+      (c) => c.lxc.network.gateway || `${c.lxc.network.subnet}.1`,
+    );
+    this.rootContainerDomain = config.apply((c) => c.lxc.network.domain);
+    this.defaultRootPassword = pulumi.secret(
+      config.apply((c) => c.lxc.auth.password),
+    );
+    this.lxcPublicSshKey = pulumi.secret(
+      config.apply((c) => c.lxc.ssh.publicKey),
+    );
+    this.lxcPrivateSshKey = pulumi.secret(
+      config.apply((c) => c.lxc.ssh.privateKey),
+    );
+    this.imageTemplateDatastoreId = config.apply((c) => c.storage.templates);
+    this.porkbunApiKey = pulumi.secret(
+      config.apply((c) => c.lxc.dns?.porkbun?.apiKey || ''),
+    );
+    this.porkbunSecretKey = pulumi.secret(
+      config.apply((c) => c.lxc.dns?.porkbun?.secretKey || ''),
+    );
   }
 }

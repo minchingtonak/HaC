@@ -5,14 +5,20 @@ import { HandlebarsTemplateDirectory } from '../templates/handlebars-template-di
 import { ComposeStackUtils } from './compose-file-processor';
 import { LxcHostConfigToml } from '../hosts/lxc-host-config-schema';
 import { TemplateProcessor } from '../templates/template-processor';
+import { PveHostConfigToml } from '../hosts/pve-host-config-schema';
 
-export type StackName = string;
+export type ComposeStackTemplateContext = {
+  stackName: string;
+  templateDirectory: string;
+  lxc: LxcHostConfigToml;
+  pve: PveHostConfigToml;
+};
 
 export type ComposeStackArgs = {
-  stackName: StackName;
+  stackName: string;
   connection: command.types.input.remote.ConnectionArgs;
-  hostConfig: LxcHostConfigToml;
-  pveConfig: Record<string, string>; // TODO strong typing
+  lxcConfig: LxcHostConfigToml;
+  pveConfig: PveHostConfigToml;
 };
 
 export class ComposeStack extends pulumi.ComponentResource {
@@ -64,23 +70,23 @@ export class ComposeStack extends pulumi.ComponentResource {
       },
     );
 
-    this.handlebarsTemplateDirectory = new HandlebarsTemplateDirectory(
-      `${name}-${args.stackName}-handlebars-template-folder`,
-      {
-        templateDirectory: stackDirectory,
-        configNamespace: `${args.hostConfig.hostname}#${args.stackName}`,
-        templateContext: {
-          host: args.hostConfig,
-          node: args.pveConfig,
-          stackName: args.stackName,
+    this.handlebarsTemplateDirectory =
+      new HandlebarsTemplateDirectory<ComposeStackTemplateContext>(
+        `${name}-${args.stackName}-handlebars-template-folder`,
+        {
           templateDirectory: stackDirectory,
+          configNamespace: `lxc#${args.lxcConfig.hostname}#${args.stackName}`,
+          templateContext: {
+            lxc: args.lxcConfig,
+            pve: args.pveConfig,
+            stackName: args.stackName,
+            templateDirectory: stackDirectory,
+          },
         },
-        context: 'lxc',
-      },
-      {
-        parent: this,
-      },
-    );
+        {
+          parent: this,
+        },
+      );
 
     // copy rendered template files
     for (const [templatePath, templateFile] of Object.entries(

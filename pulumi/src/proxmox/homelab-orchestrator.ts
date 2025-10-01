@@ -7,7 +7,7 @@ export function deployHomelab() {
 
   pulumi.all(pveConfigs).apply((configs) => {
     for (const pveConfig of configs) {
-      new HomelabPveHost(`pve-${pveConfig.pve.node}`, {
+      new HomelabPveHost(pveConfig.pve.node, {
         pveHostConfig: pveConfig,
       });
     }

@@ -68,8 +68,6 @@ config:
     secure: v1:Ioz4e16dxqVtKDDV:1wWrm9MhEPGtfApKyGSQQFWBJMM+JWyqUAU1jU423dk1ZA==
   lxc#admin-pulumi#semaphore:SECRET_SLACK_WEBHOOK_URL:
     secure: v1:TssVt21kCosYCKbY:vFlhMwP39dCP7Uf8R87YdMM88+lXSDYL1nyGb8KTgpwY/N9Pu6lDPPfuajwhCycV1wf9PxxBscwbkPc3nCHA8+Vgnhc9fHSw+Q1a8RgApZTCAZksNuGLKMZjDaS0ZZMY/A==
-  # gitea
-  # downloader
   # immich
   lxc#immich-pulumi#immich:SECRET_DB_PASSWORD:
     secure: v1:ECc5/vJz6VnDlxsj:xgdWvCAj0NxBmWNBrAg4cP+l8j7DAk9cij/mO/JSNm+S8zVq
@@ -90,8 +88,6 @@ config:
   lxc#backup-pulumi#cronicle:RESTIC_CHECK_PERCENTAGE: '5'
   lxc#backup-pulumi#cronicle:SECRET_B2_HEALTHCHECK_URL:
     secure: v1:+wCA5m2zsGeupOzU:0TqufLdbUSRVv6HMHfsCjYF5q/q6d8TWTGYmIbPDTAB4BjV/sq8uXJdZswAeIH1MzC7Bz418ppHq/1JrlyHPDvlm+Z0/GOvK
-  # jellyfin
-  # jellyseerr
   # life
   lxc#life-pulumi:SERVER_NAME: life-pulumi
   lxc#life-pulumi#mealie:MEALIE_BASE_URL: '{{{domainForApp "mealie"}}}'

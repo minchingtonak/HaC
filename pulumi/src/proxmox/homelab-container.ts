@@ -59,7 +59,6 @@ export class HomelabContainer extends pulumi.ComponentResource {
   ) {
     super(HomelabContainer.RESOURCE_TYPE, name, {}, opts);
 
-    const ctName = `${name}-lxc`;
     const ctAddress = pulumi.interpolate`${args.provider.localIpPrefix}.${args.id}`;
     const ctCidr = pulumi.interpolate`${ctAddress}/24`;
 
@@ -78,7 +77,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
     const stackNames = Object.keys(args.stacks ?? {});
 
     this.container = new proxmox.ct.Container(
-      ctName,
+      name,
       {
         nodeName: args.provider.pveNodeName,
         vmId: args.id,
@@ -148,7 +147,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
     );
 
     this.firewallOptions = new proxmox.network.FirewallOptions(
-      `${ctName}-fw-options`,
+      `${name}-fw-options`,
       {
         nodeName: args.provider.pveNodeName,
         containerId: args.id,
@@ -161,7 +160,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
       },
     );
 
-    const fwAliasName = `${ctName}-fw-alias`;
+    const fwAliasName = `${name}-fw-alias`;
     this.firewallAlias = new proxmox.network.FirewallAlias(
       fwAliasName,
       {
@@ -181,7 +180,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
     const hasProxy = stackNames.includes(HomelabContainer.PROXY_STACK_NAME);
 
     this.firewallRules = new proxmox.network.FirewallRules(
-      `${ctName}-fw-rules`,
+      `${name}-fw-rules`,
       {
         nodeName: args.provider.pveNodeName,
         containerId: args.id,
@@ -218,13 +217,13 @@ export class HomelabContainer extends pulumi.ComponentResource {
       },
     );
 
-    const porkbunProvider = new porkbun.Provider(`${ctName}-provider`, {
+    const porkbunProvider = new porkbun.Provider(`${name}-provider`, {
       apiKey: args.provider.porkbunApiKey,
       secretKey: args.provider.porkbunSecretKey,
     });
 
     this.baseDnsRecord = new porkbun.DnsRecord(
-      `${ctName}-base-dns-record`,
+      `${name}-base-dns-record`,
       {
         domain: args.provider.rootContainerDomain,
         subdomain: args.provider.pveNodeName.apply((nodeName: string) =>
@@ -240,7 +239,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
     );
 
     this.wildcardDnsRecord = new porkbun.DnsRecord(
-      `${ctName}-wildcard-dns-record`,
+      `${name}-wildcard-dns-record`,
       {
         domain: args.provider.rootContainerDomain,
         subdomain: args.provider.pveNodeName.apply(
@@ -265,8 +264,8 @@ export class HomelabContainer extends pulumi.ComponentResource {
 
     if (args.provisioners && args.provisioners.length > 0) {
       const provisionerEngine = new ProvisionerEngine({
+        name,
         connection,
-        name: ctName,
         projectRoot: path.resolve(__dirname, '../..'),
       });
 
@@ -279,7 +278,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
     if (args.stacks) {
       if (hasProxy) {
         this.proxyNetwork = new command.remote.Command(
-          `${ctName}-create-${HomelabContainer.PROXY_STACK_NAME}-network`,
+          `${name}-create-${HomelabContainer.PROXY_STACK_NAME}-network`,
           {
             create: `if ! docker network ls --format "{{.Name}}" | grep -q "^${HomelabContainer.PROXY_STACK_NAME}$"; then docker network create '${HomelabContainer.PROXY_STACK_NAME}'; fi`,
             delete: `if docker network ls --format "{{.Name}}" | grep -q "^${HomelabContainer.PROXY_STACK_NAME}$"; then docker network rm '${HomelabContainer.PROXY_STACK_NAME}'; fi`,
@@ -294,7 +293,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
       }
 
       this.createRemoteOutputRootDir = new command.remote.Command(
-        `${ctName}-create-pulumi-root-output-dir`,
+        `${name}-create-pulumi-root-output-dir`,
         {
           create: `mkdir -p ${TemplateProcessor.REMOTE_OUTPUT_FOLDER_ROOT}`,
           delete: `rm -rf ${TemplateProcessor.REMOTE_OUTPUT_FOLDER_ROOT}`,
@@ -307,16 +306,16 @@ export class HomelabContainer extends pulumi.ComponentResource {
         },
       );
 
-      const { provider, ...hostConfig } = args;
-      provider.toObject().apply((pveConfig) => {
-        for (const name of stackNames) {
+      const { provider, ...lxcConfig } = args;
+      provider.pveConfig.apply((pveConfig) => {
+        for (const stackName of stackNames) {
           this.stacks.push(
             new ComposeStack(
-              `${ctName}-${name}-compose-stack`,
+              `${name}-${stackName}-compose-stack`,
               {
-                stackName: name,
+                stackName,
                 connection,
-                hostConfig,
+                lxcConfig,
                 pveConfig,
               },
               {

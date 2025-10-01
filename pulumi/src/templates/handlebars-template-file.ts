@@ -6,7 +6,6 @@ export type HandlebarsTemplateFileArgs = {
   templatePath: string;
   configNamespace: string;
   templateContext: Record<string, unknown>;
-  context?: 'pve' | 'lxc';
 };
 
 export class HandlebarsTemplateFile extends pulumi.ComponentResource {
@@ -27,7 +26,6 @@ export class HandlebarsTemplateFile extends pulumi.ComponentResource {
       args.templatePath,
       new pulumi.Config(args.configNamespace),
       args.templateContext,
-      args.context,
     );
 
     this.asset = new CopyableAsset(

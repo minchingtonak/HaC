@@ -34,8 +34,8 @@ export type ASTNode =
   | hbs.AST.HashPair;
 
 export class TemplateProcessor {
-  private static readonly TEMPLATE_EXTENSIONS = ['.hbs', '.handlebars'];
-  private static readonly TEMPLATE_PATTERN = () => /\.(hbs|handlebars)\..+$/;
+  private static readonly TEMPLATE_PATTERN = () =>
+    /^.*\.(hbs|handlebars)\.toml(\.(hbs|handlebars))?$/;
 
   /**
    * Discover and return a list containing the paths of all template files in
@@ -86,11 +86,6 @@ export class TemplateProcessor {
   }
 
   private static isTemplateFile(filename: string): boolean {
-    const ext = path.extname(filename);
-    if (TemplateProcessor.TEMPLATE_EXTENSIONS.includes(ext)) {
-      return true;
-    }
-
     return TemplateProcessor.TEMPLATE_PATTERN().test(filename);
   }
 
@@ -98,7 +93,6 @@ export class TemplateProcessor {
     templatePath: string,
     config: pulumi.Config,
     dataVariables?: unknown,
-    context?: 'pve' | 'lxc',
   ): RenderedTemplateFile {
     const templateContent = fs.readFileSync(templatePath, 'utf-8');
 
@@ -120,7 +114,6 @@ export class TemplateProcessor {
     const initialVarValueMap = EnvUtils.assembleVariableMapFromConfig(
       config,
       variables,
-      context,
     );
 
     let maxVariableDepth = 1;
@@ -142,7 +135,6 @@ export class TemplateProcessor {
       const varMap = EnvUtils.assembleVariableMapFromConfig(
         config,
         discoveredVars,
-        context,
       );
 
       return pulumi

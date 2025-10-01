@@ -2,22 +2,25 @@ import * as pulumi from '@pulumi/pulumi';
 import { TemplateProcessor } from './template-processor';
 import { HandlebarsTemplateFile } from './handlebars-template-file';
 
-export type HandlebarsTemplateDirectoryArgs = {
+export type HandlebarsTemplateDirectoryArgs<
+  TContext = Record<string, unknown>,
+> = {
   templateDirectory: string;
   configNamespace: string;
-  templateContext: Record<string, unknown>;
+  templateContext: TContext;
   recurse?: boolean;
-  context?: 'pve' | 'lxc';
 };
 
-export class HandlebarsTemplateDirectory extends pulumi.ComponentResource {
+export class HandlebarsTemplateDirectory<
+  TContext = Record<string, unknown>,
+> extends pulumi.ComponentResource {
   public static RESOURCE_TYPE = 'HaC:templates:HandlebarsTemplateDirectory';
 
   templateFiles: { [templatePath: string]: HandlebarsTemplateFile } = {};
 
   constructor(
     name: string,
-    args: HandlebarsTemplateDirectoryArgs,
+    args: HandlebarsTemplateDirectoryArgs<TContext>,
     opts?: pulumi.ComponentResourceOptions,
   ) {
     super(HandlebarsTemplateDirectory.RESOURCE_TYPE, name, {}, opts);
@@ -38,7 +41,6 @@ export class HandlebarsTemplateDirectory extends pulumi.ComponentResource {
           templatePath,
           configNamespace: args.configNamespace,
           templateContext: { ...args.templateContext, templatePath },
-          context: args.context,
         },
         {
           parent: this,
