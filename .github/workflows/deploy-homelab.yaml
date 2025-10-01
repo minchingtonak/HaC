@@ -73,6 +73,13 @@ jobs:
         run: pnpm install
         working-directory: ./pulumi
 
+      - name: Join Tailscale network
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
       - name: Pulumi up
         uses: pulumi/actions@v6
         with:
