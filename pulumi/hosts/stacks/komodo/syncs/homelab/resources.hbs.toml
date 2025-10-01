@@ -52,7 +52,7 @@ alert_types = [
 ##
 
 [[server]]
-name = "{{{@host.hostname}}}"
+name = "{{{@lxc.hostname}}}"
 [server.config]
 address = "https://host.docker.internal:8120"
 # address = "https://periphery:8120"

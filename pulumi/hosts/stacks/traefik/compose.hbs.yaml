@@ -65,7 +65,7 @@ services:
       - "loggifly.monitor=true"
       - "loggifly.attach_logfile=true"
       - "loggifly.keywords.0.regex= ERR "
-      - "loggifly.keywords.0.notification_title={{{@host.hostname}}}#{container} - error"
+      - "loggifly.keywords.0.notification_title={{{@lxc.hostname}}}#{container} - error"
       - "loggifly.keywords.0.action=restart"
       - "loggifly.keywords.0.action_cooldown=300"
     networks:
