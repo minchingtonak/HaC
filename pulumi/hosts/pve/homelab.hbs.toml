@@ -1,5 +1,5 @@
 [pve]
-endpoint = "https://192.168.0.89:8006"
+endpoint = "https://homelab.akmin.dev"
 node = "homelab"
 
 [pve.auth]
