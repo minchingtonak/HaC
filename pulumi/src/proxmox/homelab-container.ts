@@ -266,7 +266,6 @@ export class HomelabContainer extends pulumi.ComponentResource {
       const provisionerEngine = new ProvisionerEngine({
         name,
         connection,
-        projectRoot: path.resolve(__dirname, '../..'),
       });
 
       this.provisionerResources = provisionerEngine.executeProvisioners(

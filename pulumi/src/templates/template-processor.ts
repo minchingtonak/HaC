@@ -4,6 +4,7 @@ import * as path from 'node:path';
 import * as Handlebars from 'handlebars';
 import { EnvUtils } from '../utils/env-utils';
 import { LxcHostConfigToml } from '../hosts/lxc-host-config-schema';
+import { PveHostConfigToml } from '../hosts/pve-host-config-schema';
 
 export interface TemplateContext {
   [key: string]: string | pulumi.Output<string>;
@@ -35,7 +36,7 @@ export type ASTNode =
 
 export class TemplateProcessor {
   private static readonly TEMPLATE_PATTERN = () =>
-    /^.*\.(hbs|handlebars)\.toml(\.(hbs|handlebars))?$/;
+    /^.*\.(hbs|handlebars)\..+(\.(hbs|handlebars))?$/;
 
   /**
    * Discover and return a list containing the paths of all template files in
@@ -355,11 +356,11 @@ TemplateProcessor.registerTemplateHelper(
   },
 );
 
-type ComposeStackTemplateContext = {
-  host: LxcHostConfigToml;
-  node: Record<string, string>;
+export type ComposeStackTemplateContext = {
   stackName: string;
-  root: Record<string, string>; // resolved template variables
+  templateDirectory: string;
+  lxc: LxcHostConfigToml;
+  pve: PveHostConfigToml;
 };
 
 TemplateProcessor.registerTemplateHelper(
@@ -367,10 +368,10 @@ TemplateProcessor.registerTemplateHelper(
   (appName: string, options: Handlebars.HelperOptions) => {
     const context = options.data as ComposeStackTemplateContext;
     const subdomainPrefix =
-      context.host.stacks?.[context.stackName].domainPrefixes?.[appName] ??
+      context.lxc.stacks?.[context.stackName].domainPrefixes?.[appName] ??
       appName;
 
-    return `${subdomainPrefix}.${context.host.hostname}.pulumi.${context.node.pveNodeName}.${context.node.rootContainerDomain}`;
+    return `${subdomainPrefix}.${context.lxc.hostname}.pulumi.${context.pve.pve.node}.${context.pve.dns?.domain}`;
   },
 );
 
@@ -379,7 +380,7 @@ TemplateProcessor.registerTemplateHelper(
   (options: Handlebars.HelperOptions) => {
     const context = options.data as ComposeStackTemplateContext;
 
-    return `${context.host.hostname}.pulumi.${context.node.pveNodeName}.${context.node.rootContainerDomain}`;
+    return `${context.lxc.hostname}.pulumi.${context.pve.pve.node}.${context.pve.dns?.domain}`;
   },
 );
 

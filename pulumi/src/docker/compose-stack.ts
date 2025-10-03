@@ -4,15 +4,11 @@ import * as path from 'node:path';
 import { HandlebarsTemplateDirectory } from '../templates/handlebars-template-directory';
 import { ComposeStackUtils } from './compose-file-processor';
 import { LxcHostConfigToml } from '../hosts/lxc-host-config-schema';
-import { TemplateProcessor } from '../templates/template-processor';
+import {
+  ComposeStackTemplateContext,
+  TemplateProcessor,
+} from '../templates/template-processor';
 import { PveHostConfigToml } from '../hosts/pve-host-config-schema';
-
-export type ComposeStackTemplateContext = {
-  stackName: string;
-  templateDirectory: string;
-  lxc: LxcHostConfigToml;
-  pve: PveHostConfigToml;
-};
 
 export type ComposeStackArgs = {
   stackName: string;
