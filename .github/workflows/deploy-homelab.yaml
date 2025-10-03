@@ -73,6 +73,11 @@ jobs:
         run: pnpm install
         working-directory: ./pulumi
 
+      - name: Write SSH key
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/lxc_ed25519
+          echo "${{ secrets.LXC_SSH_PRIVATE_KEY }}" > ~/.ssh/lxc_ed25519
+
       - name: Join Tailscale network
         uses: tailscale/github-action@v3
         with:
