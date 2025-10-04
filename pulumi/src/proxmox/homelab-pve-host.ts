@@ -90,7 +90,7 @@ export class HomelabPveHost extends pulumi.ComponentResource {
       pulumi.all(referencedHostConfigs).apply((hostConfigs) => {
         for (const config of hostConfigs) {
           const createAppDataDir = new command.Command(
-            `${name}-appdata-dir`,
+            `${name}-${config.hostname}-appdata-dir`,
             {
               create: `mkdir -p ${path.join(
                 pveConfig.lxc.appdata,
