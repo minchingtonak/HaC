@@ -314,7 +314,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
         for (const stackName of stackNames) {
           this.stacks.push(
             new ComposeStack(
-              `${name}-${stackName}-compose-stack`,
+              `${name}-${stackName}`,
               {
                 stackName,
                 connection,

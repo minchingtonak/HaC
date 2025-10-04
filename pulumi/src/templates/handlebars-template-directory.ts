@@ -34,7 +34,7 @@ export class HandlebarsTemplateDirectory<
 
     for (const templatePath of templateFilePaths) {
       this.templateFiles[templatePath] = new HandlebarsTemplateFile(
-        `${name}-file-${TemplateProcessor.buildSanitizedNameForId(
+        `${name}-${TemplateProcessor.buildSanitizedNameForId(
           templatePath,
         )}`,
         {

@@ -54,7 +54,7 @@ export class ComposeStack extends pulumi.ComponentResource {
 
     // copy static files in stack directory, including unrendered templates
     this.copyStackToRemote = new command.remote.CopyToRemote(
-      `${name}-copy-${args.stackName}-stack-directory`,
+      `${name}-copy-stack-dir`,
       {
         source: this.stackDirectoryAsset,
         remotePath: TemplateProcessor.REMOTE_STACK_DIRECTORY_ROOT,
@@ -67,7 +67,7 @@ export class ComposeStack extends pulumi.ComponentResource {
 
     this.handlebarsTemplateDirectory =
       new HandlebarsTemplateDirectory<ComposeStackTemplateContext>(
-        `${name}-${args.stackName}-handlebars-template-folder`,
+        `${name}-template-dir`,
         {
           templateDirectory: stackDirectory,
           configNamespace: `lxc#${args.lxcConfig.hostname}#${args.stackName}`,
@@ -93,7 +93,7 @@ export class ComposeStack extends pulumi.ComponentResource {
 
       this.processedTemplateCopies[templatePath] =
         new command.remote.CopyToRemote(
-          `${name}-copy-${args.stackName}-template-${templateFile.processedTemplate.idSafeName}`,
+          `${name}-copy-rendered-${templateFile.processedTemplate.idSafeName}`,
           {
             source: templateFile.asset.copyableSource,
             remotePath: ComposeStack.getRemoteOutputPath(stacksRelativePath),
@@ -108,13 +108,13 @@ export class ComposeStack extends pulumi.ComponentResource {
 
     // delete stack folder when removing this resource
     this.deleteStackFolder = new command.remote.Command(
-      `${name}-delete-${args.stackName}-stack-directory`,
+      `${name}-delete-stack-dir`,
       { delete: `rm -rf ${remoteStackDirectory}`, connection: args.connection },
       { parent: this, dependsOn: this.copyStackToRemote },
     );
 
     this.deployStack = new command.remote.Command(
-      `${name}-deploy-${args.stackName}-stack`,
+      `${name}-deploy-stack`,
       {
         create: `cd ${remoteStackDirectory} && docker compose up -d --force-recreate`,
         delete: `cd ${remoteStackDirectory} && docker compose down`,
