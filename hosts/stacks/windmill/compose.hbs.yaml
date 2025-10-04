@@ -139,7 +139,7 @@ services:
       - /docker/windmill/logs:/tmp/windmill/logs
 
   lsp:
-    image: ghcr.io/windmill-labs/windmill-lsp:1.552.1@sha256:173f07b78f34997c9f1a664ec35a818fc7ea6e3ff5f91c3b6ad0cee56638e2f5
+    image: ghcr.io/windmill-labs/windmill-lsp:1.555.1@sha256:fdb3cd94cc46498fd0f1782658e1ba27f217d8548cb36c1f48a1d0337a099675
     pull_policy: always
     restart: unless-stopped
     expose:
