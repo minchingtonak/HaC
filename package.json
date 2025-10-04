@@ -10,7 +10,7 @@
     "@pulumi/ansible": "file:sdks/ansible",
     "@pulumi/command": "^1.1.1",
     "@pulumi/porkbun": "file:sdks/porkbun",
-    "@pulumi/pulumi": "^3.197.0",
+    "@pulumi/pulumi": "^3.198.0",
     "handlebars": "^4.7.8",
     "smol-toml": "^1.4.2",
     "zod": "^4.1.11"
