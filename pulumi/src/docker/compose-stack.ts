@@ -4,15 +4,11 @@ import * as path from 'node:path';
 import { HandlebarsTemplateDirectory } from '../templates/handlebars-template-directory';
 import { ComposeStackUtils } from './compose-file-processor';
 import { LxcHostConfigToml } from '../hosts/lxc-host-config-schema';
-import { TemplateProcessor } from '../templates/template-processor';
+import {
+  ComposeStackTemplateContext,
+  TemplateProcessor,
+} from '../templates/template-processor';
 import { PveHostConfigToml } from '../hosts/pve-host-config-schema';
-
-export type ComposeStackTemplateContext = {
-  stackName: string;
-  templateDirectory: string;
-  lxc: LxcHostConfigToml;
-  pve: PveHostConfigToml;
-};
 
 export type ComposeStackArgs = {
   stackName: string;
@@ -51,9 +47,8 @@ export class ComposeStack extends pulumi.ComponentResource {
 
     this.stackDirectoryAsset = new pulumi.asset.FileArchive(stackDirectory);
 
-    const remoteStackDirectoryBase = `${TemplateProcessor.REMOTE_OUTPUT_FOLDER_ROOT}/stacks`; // TODO make configurable?
     const remoteStackDirectory = path.join(
-      remoteStackDirectoryBase,
+      TemplateProcessor.REMOTE_STACK_DIRECTORY_ROOT,
       args.stackName,
     );
 
@@ -62,7 +57,7 @@ export class ComposeStack extends pulumi.ComponentResource {
       `${name}-copy-${args.stackName}-stack-directory`,
       {
         source: this.stackDirectoryAsset,
-        remotePath: remoteStackDirectoryBase,
+        remotePath: TemplateProcessor.REMOTE_STACK_DIRECTORY_ROOT,
         connection: args.connection,
       },
       {
@@ -92,12 +87,16 @@ export class ComposeStack extends pulumi.ComponentResource {
     for (const [templatePath, templateFile] of Object.entries(
       this.handlebarsTemplateDirectory.templateFiles,
     )) {
+      const stacksRelativePath = templatePath.substring(
+        templatePath.indexOf(TemplateProcessor.LOCAL_STACKS_FOLDER_ROOT_NAME),
+      );
+
       this.processedTemplateCopies[templatePath] =
         new command.remote.CopyToRemote(
           `${name}-copy-${args.stackName}-template-${templateFile.processedTemplate.idSafeName}`,
           {
             source: templateFile.asset.copyableSource,
-            remotePath: templateFile.processedTemplate.remoteOutputPath,
+            remotePath: ComposeStack.getRemoteOutputPath(stacksRelativePath),
             connection: args.connection,
           },
           {
@@ -142,6 +141,13 @@ export class ComposeStack extends pulumi.ComponentResource {
       deployCommandStderr: this.deployStack.stderr,
       processedTemplates: this.prepareProcessedTemplateOutputs(),
     });
+  }
+
+  private static getRemoteOutputPath(templatePath: string): string {
+    return path.join(
+      TemplateProcessor.REMOTE_OUTPUT_FOLDER_ROOT,
+      TemplateProcessor.removeTemplateExtensions(templatePath),
+    );
   }
 
   private prepareProcessedTemplateOutputs() {

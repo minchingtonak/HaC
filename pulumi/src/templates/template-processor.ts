@@ -4,6 +4,7 @@ import * as path from 'node:path';
 import * as Handlebars from 'handlebars';
 import { EnvUtils } from '../utils/env-utils';
 import { LxcHostConfigToml } from '../hosts/lxc-host-config-schema';
+import { PveHostConfigToml } from '../hosts/pve-host-config-schema';
 
 export interface TemplateContext {
   [key: string]: string | pulumi.Output<string>;
@@ -12,7 +13,6 @@ export interface TemplateContext {
 export interface RenderedTemplateFile {
   idSafeName: string;
   templatePath: string;
-  remoteOutputPath: string;
   content: pulumi.Output<string>;
 }
 
@@ -34,8 +34,20 @@ export type ASTNode =
   | hbs.AST.HashPair;
 
 export class TemplateProcessor {
+  public static readonly REMOTE_OUTPUT_FOLDER_ROOT = '/etc/pulumi';
+
+  public static readonly LOCAL_STACKS_FOLDER_ROOT_NAME = 'stacks';
+
+  public static readonly REMOTE_STACK_DIRECTORY_ROOT = path.join(
+    TemplateProcessor.REMOTE_OUTPUT_FOLDER_ROOT,
+    TemplateProcessor.LOCAL_STACKS_FOLDER_ROOT_NAME,
+  );
+
   private static readonly TEMPLATE_PATTERN = () =>
-    /^.*\.(hbs|handlebars)\.toml(\.(hbs|handlebars))?$/;
+    /^.*\.(hbs|handlebars)\..+(\.(hbs|handlebars))?$/;
+
+  private static readonly FILENAME_REPLACE_PATTERN = () =>
+    /\.(hbs|handlebars)/g;
 
   /**
    * Discover and return a list containing the paths of all template files in
@@ -99,15 +111,12 @@ export class TemplateProcessor {
     const variables = TemplateProcessor.discoverVariables(templateContent);
 
     const idSafeName = TemplateProcessor.buildSanitizedNameForId(templatePath);
-    const remoteOutputPath =
-      TemplateProcessor.getRemoteOutputPath(templatePath);
 
     if (variables.length === 0) {
       return {
         content: pulumi.output(templateContent),
         idSafeName,
         templatePath,
-        remoteOutputPath,
       };
     }
 
@@ -188,7 +197,6 @@ export class TemplateProcessor {
       content,
       idSafeName,
       templatePath,
-      remoteOutputPath,
     };
   }
 
@@ -307,19 +315,10 @@ export class TemplateProcessor {
     return Array.from(variables);
   }
 
-  public static readonly REMOTE_OUTPUT_FOLDER_ROOT = '/etc/pulumi';
-  private static readonly FILENAME_REPLACE_PATTERN = () =>
-    /\.(hbs|handlebars)/g;
-
-  private static getRemoteOutputPath(templatePath: string): string {
-    const pathWithoutTemplateExt = templatePath.replaceAll(
+  public static removeTemplateExtensions(templatePath: string) {
+    return templatePath.replaceAll(
       TemplateProcessor.FILENAME_REPLACE_PATTERN(),
       '',
-    );
-
-    return path.join(
-      TemplateProcessor.REMOTE_OUTPUT_FOLDER_ROOT,
-      pathWithoutTemplateExt,
     );
   }
 
@@ -355,11 +354,11 @@ TemplateProcessor.registerTemplateHelper(
   },
 );
 
-type ComposeStackTemplateContext = {
-  host: LxcHostConfigToml;
-  node: Record<string, string>;
+export type ComposeStackTemplateContext = {
   stackName: string;
-  root: Record<string, string>; // resolved template variables
+  templateDirectory: string;
+  lxc: LxcHostConfigToml;
+  pve: PveHostConfigToml;
 };
 
 TemplateProcessor.registerTemplateHelper(
@@ -367,10 +366,10 @@ TemplateProcessor.registerTemplateHelper(
   (appName: string, options: Handlebars.HelperOptions) => {
     const context = options.data as ComposeStackTemplateContext;
     const subdomainPrefix =
-      context.host.stacks?.[context.stackName].domainPrefixes?.[appName] ??
+      context.lxc.stacks?.[context.stackName].domainPrefixes?.[appName] ??
       appName;
 
-    return `${subdomainPrefix}.${context.host.hostname}.pulumi.${context.node.pveNodeName}.${context.node.rootContainerDomain}`;
+    return `${subdomainPrefix}.${context.lxc.hostname}.pulumi.${context.pve.pve.node}.${context.pve.lxc.network.domain}`;
   },
 );
 
@@ -379,7 +378,7 @@ TemplateProcessor.registerTemplateHelper(
   (options: Handlebars.HelperOptions) => {
     const context = options.data as ComposeStackTemplateContext;
 
-    return `${context.host.hostname}.pulumi.${context.node.pveNodeName}.${context.node.rootContainerDomain}`;
+    return `${context.lxc.hostname}.pulumi.${context.pve.pve.node}.${context.pve.lxc.network.domain}`;
   },
 );
 

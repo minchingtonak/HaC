@@ -179,6 +179,10 @@ export class HomelabContainer extends pulumi.ComponentResource {
 
     const hasProxy = stackNames.includes(HomelabContainer.PROXY_STACK_NAME);
 
+    if (!hasProxy) {
+      throw new Error(`Container ${name} must use proxy stack ${HomelabContainer.PROXY_STACK_NAME}`);
+    }
+
     this.firewallRules = new proxmox.network.FirewallRules(
       `${name}-fw-rules`,
       {
@@ -266,7 +270,6 @@ export class HomelabContainer extends pulumi.ComponentResource {
       const provisionerEngine = new ProvisionerEngine({
         name,
         connection,
-        projectRoot: path.resolve(__dirname, '../..'),
       });
 
       this.provisionerResources = provisionerEngine.executeProvisioners(

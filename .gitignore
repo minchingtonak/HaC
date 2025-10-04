@@ -27,5 +27,6 @@ Thumbs.db
 
 .pulumi/
 node_modules/
+.ansible/
 
 tmp/

@@ -15,9 +15,8 @@ import { TemplateProcessor } from '../templates/template-processor';
 export type ProvisionerResource = command.remote.Command | ansible.Playbook;
 
 export interface ProvisionerEngineArgs {
-  connection: command.types.input.remote.ConnectionArgs;
-  projectRoot: string;
   name: string;
+  connection: command.types.input.remote.ConnectionArgs;
 }
 
 export class ProvisionerEngine {
@@ -120,12 +119,7 @@ export class ProvisionerEngine {
     parent: pulumi.Resource,
     dependsOn?: ProvisionerResource,
   ): command.remote.Command {
-    const scriptPath = path.resolve(this.args.projectRoot, provisioner.script);
-
-    // Validate script path exists and is within project
-    this.validateScriptPath(scriptPath, provisioner.script);
-
-    const scriptContent = fs.readFileSync(scriptPath, 'utf-8');
+    const scriptContent = fs.readFileSync(provisioner.script, 'utf-8');
 
     const executeScript = ProvisionerEngine.buildExecutionCommands(
       provisioner,
@@ -235,14 +229,7 @@ export class ProvisionerEngine {
     parent: pulumi.Resource,
     dependsOn?: ProvisionerResource,
   ): ansible.Playbook {
-    const playbookPath = path.resolve(
-      this.args.projectRoot,
-      provisioner.playbook,
-    );
-
-    this.validatePlaybookPath(playbookPath, provisioner.playbook);
-
-    const playbookContent = fs.readFileSync(playbookPath, 'utf-8');
+    const playbookContent = fs.readFileSync(provisioner.playbook, 'utf-8');
     const playbookHash = crypto
       .createHash('sha256')
       .update(playbookContent)
@@ -262,7 +249,7 @@ export class ProvisionerEngine {
     const playbook = new ansible.Playbook(
       `${commandName}-${safeName}`,
       {
-        playbook: playbookPath,
+        playbook: provisioner.playbook,
         name: safeName,
         replayable: provisioner.replayable,
         ...(provisioner.tags && { tags: provisioner.tags }),
@@ -305,21 +292,6 @@ export class ProvisionerEngine {
     return playbook;
   }
 
-  private validateScriptPath(absolutePath: string, relativePath: string): void {
-    if (!fs.existsSync(absolutePath)) {
-      throw new Error(`Provisioner script not found: ${relativePath}`);
-    }
-
-    const normalizedProjectRoot = path.normalize(this.args.projectRoot);
-    const normalizedScriptPath = path.normalize(absolutePath);
-
-    if (!normalizedScriptPath.startsWith(normalizedProjectRoot)) {
-      throw new Error(
-        `Provisioner script path outside project directory: ${relativePath}`,
-      );
-    }
-  }
-
   /**
    * Creates a local command to install Ansible requirements if a requirements file exists
    * for the given playbook. The requirements file should be named <playbookname>.requirements.yaml
@@ -330,14 +302,10 @@ export class ProvisionerEngine {
     parent: pulumi.Resource,
     dependsOn?: ProvisionerResource,
   ): command.local.Command | undefined {
-    const playbookPath = path.resolve(
-      this.args.projectRoot,
-      provisioner.playbook,
-    );
-    const playbookDir = path.dirname(playbookPath);
+    const playbookDir = path.dirname(provisioner.playbook);
     const playbookName = path.basename(
-      playbookPath,
-      path.extname(playbookPath),
+      provisioner.playbook,
+      path.extname(provisioner.playbook),
     );
     const requirementsPath = path.join(
       playbookDir,
@@ -367,23 +335,5 @@ export class ProvisionerEngine {
         ...(dependsOn && { dependsOn }),
       },
     );
-  }
-
-  private validatePlaybookPath(
-    absolutePath: string,
-    relativePath: string,
-  ): void {
-    if (!fs.existsSync(absolutePath)) {
-      throw new Error(`Provisioner playbook not found: ${relativePath}`);
-    }
-
-    const normalizedProjectRoot = path.normalize(this.args.projectRoot);
-    const normalizedPlaybookPath = path.normalize(absolutePath);
-
-    if (!normalizedPlaybookPath.startsWith(normalizedProjectRoot)) {
-      throw new Error(
-        `Provisioner playbook path outside project directory: ${relativePath}`,
-      );
-    }
   }
 }

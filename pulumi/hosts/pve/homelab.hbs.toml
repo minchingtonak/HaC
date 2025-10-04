@@ -14,8 +14,8 @@ templates = "local"
 domain = "192.168.0.89"
 
 [lxc.hosts]
-archiver = { enabled = false }
-immich = {}
+archiver = { enabled = true }
+immich = { enabled = false }
 
 [lxc.network]
 domain = "akmin.dev"
