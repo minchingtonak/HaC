@@ -14,7 +14,7 @@ A homelab infrastructure management system powered by Pulumi that automates the 
 - Automated DNS record provisioning (Porkbun only)
 - Declarative firewall rules for LXC hosts
 
-### Glossary
+#### Glossary
 
 - **Handlebars** - A templating engine that allows dynamic content generation using variables and helpers
 - **LXC** - Linux Containers; an operating system-level virtualization method for running multiple isolated systems
