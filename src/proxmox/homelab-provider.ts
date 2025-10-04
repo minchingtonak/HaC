@@ -1,6 +1,6 @@
-import * as proxmox from '@muhlba91/pulumi-proxmoxve';
-import * as pulumi from '@pulumi/pulumi';
-import { PveHostConfigToml } from '../hosts/pve-host-config-schema';
+import * as proxmox from "@muhlba91/pulumi-proxmoxve";
+import * as pulumi from "@pulumi/pulumi";
+import { PveHostConfigToml } from "../hosts/pve-host-config-schema";
 
 export interface HomelabProviderArgs {
   pveHostConfig: PveHostConfigToml | pulumi.Output<PveHostConfigToml>;
@@ -54,10 +54,10 @@ export class HomelabProvider extends proxmox.Provider {
     );
     this.imageTemplateDatastoreId = config.apply((c) => c.storage.templates);
     this.porkbunApiKey = pulumi.secret(
-      config.apply((c) => c.lxc.dns?.porkbun?.apiKey || ''),
+      config.apply((c) => c.lxc.dns?.porkbun?.apiKey || ""),
     );
     this.porkbunSecretKey = pulumi.secret(
-      config.apply((c) => c.lxc.dns?.porkbun?.secretKey || ''),
+      config.apply((c) => c.lxc.dns?.porkbun?.secretKey || ""),
     );
   }
 }

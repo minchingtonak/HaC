@@ -19,7 +19,11 @@ services:
       - /docker/cronicle/workloads/app:/app
       - ./:/opt/scripts
     healthcheck:
-      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider localhost:3012/api/app/ping || exit 1"]
+      test:
+        [
+          "CMD-SHELL",
+          "wget --no-verbose --tries=1 --spider localhost:3012/api/app/ping || exit 1",
+        ]
       interval: 5s
       timeout: 1s
       retries: 3

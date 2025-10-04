@@ -1,16 +1,16 @@
-import * as pulumi from '@pulumi/pulumi';
-import * as command from '@pulumi/command';
-import * as ansible from '@pulumi/ansible';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as crypto from 'crypto';
+import * as pulumi from "@pulumi/pulumi";
+import * as command from "@pulumi/command";
+import * as ansible from "@pulumi/ansible";
+import * as fs from "fs";
+import * as path from "path";
+import * as crypto from "crypto";
 import {
   Provisioner,
   ScriptProvisioner,
   AnsibleProvisioner,
-} from './lxc-host-config-schema';
-import { EnvUtils } from '../utils/env-utils';
-import { TemplateProcessor } from '../templates/template-processor';
+} from "./lxc-host-config-schema";
+import { EnvUtils } from "../utils/env-utils";
+import { TemplateProcessor } from "../templates/template-processor";
 
 export type ProvisionerResource = command.remote.Command | ansible.Playbook;
 
@@ -57,7 +57,7 @@ export class ProvisionerEngine {
     const commandName = `${this.args.name}-provisioner-${index}`;
 
     switch (provisioner.type) {
-      case 'script':
+      case "script":
         return this.createScriptCommand(
           provisioner,
           commandName,
@@ -65,7 +65,7 @@ export class ProvisionerEngine {
           parent,
           dependsOn,
         );
-      case 'ansible':
+      case "ansible":
         return this.createAnsiblePlaybook(
           provisioner,
           commandName,
@@ -100,11 +100,11 @@ export class ProvisionerEngine {
     const override = provisioner.connection;
 
     if (!override)
-      return { ...baseConnection, privateKeyFile: '~/.ssh/lxc_ed25519' };
+      return { ...baseConnection, privateKeyFile: "~/.ssh/lxc_ed25519" };
 
     return {
       ...baseConnection,
-      privateKeyFile: '~/.ssh/lxc_ed25519',
+      privateKeyFile: "~/.ssh/lxc_ed25519",
       ...(override.host && { host: override.host }),
       ...(override.user && { user: override.user }),
       ...(override.port && { port: override.port }),
@@ -119,16 +119,17 @@ export class ProvisionerEngine {
     parent: pulumi.Resource,
     dependsOn?: ProvisionerResource,
   ): command.remote.Command {
-    const scriptContent = fs.readFileSync(provisioner.script, 'utf-8');
+    const scriptContent = fs.readFileSync(provisioner.script, "utf-8");
 
     const executeScript = ProvisionerEngine.buildExecutionCommands(
       provisioner,
       scriptContent,
     );
 
-    const env = provisioner.environment
-      ? EnvUtils.stringifyEnvForScript(provisioner.environment)
-      : '';
+    const env =
+      provisioner.environment ?
+        EnvUtils.stringifyEnvForScript(provisioner.environment)
+      : "";
 
     const commandString = pulumi.secret(
       pulumi.interpolate`${env}\n${executeScript}`,
@@ -148,7 +149,7 @@ export class ProvisionerEngine {
       {
         parent,
         ...(dependsOn && { dependsOn }),
-        additionalSecretOutputs: ['stdout', 'stderr'],
+        additionalSecretOutputs: ["stdout", "stderr"],
       },
     );
   }
@@ -165,7 +166,7 @@ export class ProvisionerEngine {
 
     const remoteScriptDir = path.join(
       provisioner.workingDirectory,
-      'pulumi',
+      "pulumi",
       safeName,
     );
 
@@ -180,7 +181,7 @@ export class ProvisionerEngine {
       `mkdir -p ${remoteScriptDir}`,
       `cat > ${remoteScriptPath} << 'EOF'`,
       scriptContent,
-      'EOF',
+      "EOF",
       `chmod +x ${remoteScriptPath}`,
       `echo "=== Execution Start ==="`,
       `# Check if we need to switch users`,
@@ -219,7 +220,7 @@ export class ProvisionerEngine {
       `echo "=== Provisioner Complete ==="`,
     ];
 
-    return commands.join('\n');
+    return commands.join("\n");
   }
 
   private createAnsiblePlaybook(
@@ -229,11 +230,11 @@ export class ProvisionerEngine {
     parent: pulumi.Resource,
     dependsOn?: ProvisionerResource,
   ): ansible.Playbook {
-    const playbookContent = fs.readFileSync(provisioner.playbook, 'utf-8');
+    const playbookContent = fs.readFileSync(provisioner.playbook, "utf-8");
     const playbookHash = crypto
-      .createHash('sha256')
+      .createHash("sha256")
       .update(playbookContent)
-      .digest('hex');
+      .digest("hex");
 
     const requirementsCommand = this.createRequirementsInstallCommand(
       provisioner,
@@ -254,9 +255,7 @@ export class ProvisionerEngine {
         replayable: provisioner.replayable,
         ...(provisioner.tags && { tags: provisioner.tags }),
         ...(provisioner.limit && { limits: [provisioner.limit] }),
-        timeouts: {
-          create: `${provisioner.timeout}s`,
-        },
+        timeouts: { create: `${provisioner.timeout}s` },
         extraVars: {
           // https://docs.ansible.com/ansible/latest/reference_appendices/special_variables.html#connection-variables
           ansible_host: connection.host,
@@ -264,27 +263,30 @@ export class ProvisionerEngine {
           // https://docs.ansible.com/ansible/2.9/plugins/connection/ssh.html#ssh-connection
           ansible_ssh_private_key_file: connection.privateKeyFile,
           // ansible_ssh_port: String(connection.port),
-          ansible_ssh_common_args: '-o StrictHostKeyChecking=no',
-          ansible_ssh_retries: '3',
+          ansible_ssh_common_args: "-o StrictHostKeyChecking=no",
+          ansible_ssh_retries: "3",
           // disable warning due to ansible automatically choosing the python version on the target
-          ansible_python_interpreter: 'auto_silent',
-          ...(provisioner.variables
-            ? Object.entries(provisioner.variables).reduce((acc, [k, v]) => {
+          ansible_python_interpreter: "auto_silent",
+          ...(provisioner.variables ?
+            Object.entries(provisioner.variables).reduce(
+              (acc, [k, v]) => {
                 acc[k] = String(v);
                 return acc;
-              }, {} as Record<string, string>)
-            : {}),
+              },
+              {} as Record<string, string>,
+            )
+          : {}),
           pulumi_playbook_hash: playbookHash,
         },
       },
       {
         parent,
-        ...(requirementsCommand
-          ? { dependsOn: requirementsCommand }
-          : dependsOn && { dependsOn }),
+        ...(requirementsCommand ?
+          { dependsOn: requirementsCommand }
+        : dependsOn && { dependsOn }),
         additionalSecretOutputs: [
-          'ansiblePlaybookStdout',
-          'ansiblePlaybookStderr',
+          "ansiblePlaybookStdout",
+          "ansiblePlaybookStderr",
         ],
       },
     );
@@ -326,14 +328,11 @@ export class ProvisionerEngine {
         update: installCommand,
         environment: {
           ANSIBLE_COLLECTIONS_PATH:
-            process.env.ANSIBLE_COLLECTIONS_PATH || '~/.ansible/collections',
+            process.env.ANSIBLE_COLLECTIONS_PATH || "~/.ansible/collections",
         },
         triggers: [new pulumi.asset.FileAsset(requirementsPath)], // rerun when file content changes
       },
-      {
-        parent,
-        ...(dependsOn && { dependsOn }),
-      },
+      { parent, ...(dependsOn && { dependsOn }) },
     );
   }
 }

@@ -1,6 +1,6 @@
-import * as pulumi from '@pulumi/pulumi';
-import { TemplateProcessor } from './template-processor';
-import { HandlebarsTemplateFile } from './handlebars-template-file';
+import * as pulumi from "@pulumi/pulumi";
+import { TemplateProcessor } from "./template-processor";
+import { HandlebarsTemplateFile } from "./handlebars-template-file";
 
 export type HandlebarsTemplateDirectoryArgs<
   TContext = Record<string, unknown>,
@@ -14,7 +14,7 @@ export type HandlebarsTemplateDirectoryArgs<
 export class HandlebarsTemplateDirectory<
   TContext = Record<string, unknown>,
 > extends pulumi.ComponentResource {
-  public static RESOURCE_TYPE = 'HaC:templates:HandlebarsTemplateDirectory';
+  public static RESOURCE_TYPE = "HaC:templates:HandlebarsTemplateDirectory";
 
   templateFiles: { [templatePath: string]: HandlebarsTemplateFile } = {};
 
@@ -27,24 +27,18 @@ export class HandlebarsTemplateDirectory<
 
     const templateFilePaths = TemplateProcessor.discoverTemplateFiles(
       args.templateDirectory,
-      {
-        recursive: args.recurse,
-      },
+      { recursive: args.recurse },
     );
 
     for (const templatePath of templateFilePaths) {
       this.templateFiles[templatePath] = new HandlebarsTemplateFile(
-        `${name}-${TemplateProcessor.buildSanitizedNameForId(
-          templatePath,
-        )}`,
+        `${name}-${TemplateProcessor.buildSanitizedNameForId(templatePath)}`,
         {
           templatePath,
           configNamespace: args.configNamespace,
           templateContext: { ...args.templateContext, templatePath },
         },
-        {
-          parent: this,
-        },
+        { parent: this },
       );
     }
 

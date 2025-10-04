@@ -6,4 +6,4 @@ containers:
 notifications:
   apprise:
     # Any Apprise-compatible URL (https://github.com/caronc/apprise/wiki)
-    url: '{{{loggifly:SECRET_SLACK_WEBHOOK}}}'
+    url: "{{{loggifly:SECRET_SLACK_WEBHOOK}}}"

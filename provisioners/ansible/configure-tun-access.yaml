@@ -6,22 +6,22 @@
   tasks:
     - name: Check if LXC container exists
       ansible.builtin.stat:
-        path: '/etc/pve/lxc/{{ lxc_id }}.conf'
+        path: "/etc/pve/lxc/{{ lxc_id }}.conf"
       register: lxc_config_file
 
     - name: Fail if LXC container doesn't exist
       ansible.builtin.fail:
-        msg: 'LXC container {{ lxc_id }} configuration file not found'
+        msg: "LXC container {{ lxc_id }} configuration file not found"
       when: not lxc_config_file.stat.exists
 
     - name: Add TUN/TAP device configuration to LXC container
       ansible.builtin.blockinfile:
-        path: '/etc/pve/lxc/{{ lxc_id }}.conf'
+        path: "/etc/pve/lxc/{{ lxc_id }}.conf"
         block: |
           lxc.cgroup2.devices.allow: c 10:200 rwm
           lxc.mount.entry: /dev/net dev/net none bind,create=dir
           lxc.mount.entry: /dev/net/tun dev/net/tun none bind,create=file
-        marker: '# {mark} ANSIBLE MANAGED - TUN/TAP CONFIGURATION'
+        marker: "# {mark} ANSIBLE MANAGED - TUN/TAP CONFIGURATION"
         backup: true
       notify: Restart container
 
@@ -31,5 +31,5 @@
 
   handlers:
     - name: Restart container
-      ansible.builtin.command: 'pct reboot {{ lxc_id }}'
+      ansible.builtin.command: "pct reboot {{ lxc_id }}"
       changed_when: true

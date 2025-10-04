@@ -2,7 +2,12 @@
   "name": "hac",
   "main": "index.ts",
   "scripts": {
-    "generate-host-schema": "tsx scripts/generate-host-schema.ts"
+    "check": "pnpx prettier --check .",
+    "format": "pnpx prettier --write .",
+    "lint": "pnpx eslint .",
+    "lint:fix": "pnpx eslint --fix .",
+    "prepare": "husky",
+    "commitlint": "commitlint --edit"
   },
   "dependencies": {
     "@hanseltime/pulumi-file-utils": "1.2.0",
@@ -16,8 +21,34 @@
     "zod": "^4.1.11"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "@eslint/js": "^9.37.0",
     "@types/node": "^22.18.6",
+    "eslint": "^9.37.0",
+    "globals": "^16.4.0",
+    "husky": "^9.1.7",
+    "prettier": "^3.6.2",
     "tsx": "^4.20.6",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.45.0"
+  },
+  "prettier": {
+    "experimentalTernaries": true,
+    "printWidth": 80,
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": false,
+    "quoteProps": "consistent",
+    "trailingComma": "all",
+    "bracketSpacing": true,
+    "objectWrap": "collapse",
+    "arrowParens": "always",
+    "endOfLine": "lf"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
 }

@@ -58,7 +58,7 @@ services:
   deunhealth:
     image: qmcgaw/deunhealth:latest@sha256:fca3832ace35e3c028d3ec2e6271ac1161ed302b75b34e9dd01db1c106a25802
     container_name: deunhealth
-    network_mode: 'none'
+    network_mode: "none"
     environment:
       - LOG_LEVEL=info
       - HEALTH_SERVER_ADDRESS=127.0.0.1:9999
@@ -466,7 +466,6 @@ services:
       - traefik.http.services.huntarr.loadbalancer.server.port=9705
     networks:
       - traefik
-
 
 networks:
   traefik:

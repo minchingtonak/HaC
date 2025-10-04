@@ -1,11 +1,11 @@
-import * as pulumi from '@pulumi/pulumi';
+import * as pulumi from "@pulumi/pulumi";
 import {
   LxcHostConfigSchema,
   LxcHostConfigToml,
   LxcHostnameSchema,
   LxcHostnameToml,
-} from './lxc-host-config-schema';
-import { HostConfigParser, ParserConfig } from './host-config-parser';
+} from "./lxc-host-config-schema";
+import { HostConfigParser, ParserConfig } from "./host-config-parser";
 
 export class LxcHostConfigParser extends HostConfigParser<
   LxcHostConfigToml,
@@ -16,7 +16,7 @@ export class LxcHostConfigParser extends HostConfigParser<
       configSchema: LxcHostConfigSchema,
       hostnameSchema: LxcHostnameSchema,
       extractIdentifier: (parsed: LxcHostnameToml) => `lxc#${parsed.hostname}`,
-      errorPrefix: 'LXC host',
+      errorPrefix: "LXC host",
     };
   }
 

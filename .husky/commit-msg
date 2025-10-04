@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -Eeuxo pipefail
+
+pnpm run check
+
+pnpm run lint
+
+pnpm run commitlint "$1"

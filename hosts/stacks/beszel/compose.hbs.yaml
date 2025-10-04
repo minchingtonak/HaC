@@ -35,8 +35,8 @@ services:
       # use socket to communicate with hub because agent uses network_mode: host
       LISTEN: /beszel_socket/beszel.sock
       HUB_URL: 'https://{{{domainForApp "beszel"}}}'
-      KEY: '{{{SECRET_KEY}}}' # grab this from the deployed instance's 'Add System' modal
-      TOKEN: '{{{beszel:SECRET_TOKEN}}}'
+      KEY: "{{{SECRET_KEY}}}" # grab this from the deployed instance's 'Add System' modal
+      TOKEN: "{{{beszel:SECRET_TOKEN}}}"
 
 networks:
   traefik:

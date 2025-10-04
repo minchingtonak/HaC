@@ -1,11 +1,11 @@
-import * as pulumi from '@pulumi/pulumi';
+import * as pulumi from "@pulumi/pulumi";
 import {
   PveHostConfigSchema,
   PveHostConfigToml,
   PveHostnameSchema,
   PveHostnameToml,
-} from './pve-host-config-schema';
-import { HostConfigParser, ParserConfig } from './host-config-parser';
+} from "./pve-host-config-schema";
+import { HostConfigParser, ParserConfig } from "./host-config-parser";
 
 export class PveHostConfigParser extends HostConfigParser<
   PveHostConfigToml,
@@ -16,7 +16,7 @@ export class PveHostConfigParser extends HostConfigParser<
       configSchema: PveHostConfigSchema,
       hostnameSchema: PveHostnameSchema,
       extractIdentifier: (parsed: PveHostnameToml) => `pve#${parsed.pve.node}`,
-      errorPrefix: 'PVE host',
+      errorPrefix: "PVE host",
     };
   }
 

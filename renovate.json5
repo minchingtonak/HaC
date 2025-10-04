@@ -1,124 +1,108 @@
 {
   // https://docs.renovatebot.com/configuration-options
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
   // https://emmer.dev/blog/keep-docker-base-images-updated-with-renovate
   // https://nickcunningh.am/blog/how-to-automate-version-updates-for-your-self-hosted-docker-containers-with-gitea-renovate-and-komodo
-  "extends": [
-    "config:recommended"
-  ],
-  "dependencyDashboard": true,
-  "dependencyDashboardTitle": "Renovate Dashboard",
+  extends: ["config:recommended"],
+  dependencyDashboard: true,
+  dependencyDashboardTitle: "Renovate Dashboard",
 
   // Run on a monthly schedule to keep interruptions to a minimum,
   //  but always open vulnerability-fixing pull requests immediately
-  "schedule": "on saturday",
-  "timezone": "America/Los_Angeles",
-  "vulnerabilityAlerts": {
-    "labels": ["security"],
-    "schedule": "at any time"
-  },
+  schedule: "on saturday",
+  timezone: "America/Los_Angeles",
+  vulnerabilityAlerts: { labels: ["security"], schedule: "at any time" },
 
-  "ignoreUnstable": true,
-  "minimumReleaseAge": "7 days",
+  ignoreUnstable: true,
+  minimumReleaseAge: "7 days",
 
-  "ignorePaths": [
-    "sdks/**"
-  ],
+  ignorePaths: ["sdks/**"],
 
-  "rangeStrategy": "bump",
+  rangeStrategy: "bump",
 
   // docker:enableMajor preset, this is disabled by default
-  "packageRules": [
+  packageRules: [
+    { matchPackagePatterns: ["^lavaforge\\.org/"], enabled: false },
     {
-      "matchPackagePatterns": ["^lavaforge\\.org/"],
-      "enabled": false
+      matchPackageNames: ["ghcr.io/linuxserver/jellyfin"],
+      allowedVersions: "<2021",
     },
     {
-      "matchPackageNames": ["ghcr.io/linuxserver/jellyfin"],
-      "allowedVersions": "<2021"
-    },
-    {
-      "matchPackageNames": ["ghcr.io/linuxserver/qbittorrent"],
-      "allowedVersions": "<6"
+      matchPackageNames: ["ghcr.io/linuxserver/qbittorrent"],
+      allowedVersions: "<6",
     },
     // dawarich
     {
-      "matchPackageNames": "redis",
-      "matchCurrentVersion": "7.4-alpine",
-      "enabled": false
+      matchPackageNames: "redis",
+      matchCurrentVersion: "7.4-alpine",
+      enabled: false,
     },
     {
-      "matchPackageNames": "postgis/postgis",
-      "matchCurrentVersion": "17-3.5-alpine",
-      "enabled": false
+      matchPackageNames: "postgis/postgis",
+      matchCurrentVersion: "17-3.5-alpine",
+      enabled: false,
     },
     // docuseal
     {
-      "matchPackageNames": "postgres",
-      "matchCurrentVersion": "15",
-      "enabled": false
+      matchPackageNames: "postgres",
+      matchCurrentVersion: "15",
+      enabled: false,
     },
     // endurain
     {
-      "matchPackageNames": "postgres",
-      "matchCurrentVersion": "18.0",
-      "enabled": false
+      matchPackageNames: "postgres",
+      matchCurrentVersion: "18.0",
+      enabled: false,
     },
     // fittrackee
     {
-      "matchPackageNames": "postgres",
-      "matchCurrentVersion": "17-alpine",
-      "enabled": false
+      matchPackageNames: "postgres",
+      matchCurrentVersion: "17-alpine",
+      enabled: false,
     },
     // immich
     {
-      "matchPackageNames": "docker.io/redis",
-      "matchCurrentVersion": "6.2-alpine",
-      "enabled": false
+      matchPackageNames: "docker.io/redis",
+      matchCurrentVersion: "6.2-alpine",
+      enabled: false,
     },
     {
-      "matchPackageNames": "ghcr.io/immich-app/postgres",
-      "matchCurrentVersion": "14-vectorchord0.3.0-pgvectors0.2.0",
-      "enabled": false
+      matchPackageNames: "ghcr.io/immich-app/postgres",
+      matchCurrentVersion: "14-vectorchord0.3.0-pgvectors0.2.0",
+      enabled: false,
     },
     // komodo
     {
-      "matchPackageNames": "mongo",
-      "matchCurrentVersion": "8.0.14",
-      "enabled": false
+      matchPackageNames: "mongo",
+      matchCurrentVersion: "8.0.14",
+      enabled: false,
     },
     // paperless-ngx
     {
-      "matchPackageNames": "docker.io/library/redis",
-      "matchCurrentVersion": "7",
-      "enabled": false
+      matchPackageNames: "docker.io/library/redis",
+      matchCurrentVersion: "7",
+      enabled: false,
     },
     {
-      "matchPackageNames": "docker.io/library/postgres",
-      "matchCurrentVersion": "16",
-      "enabled": false
+      matchPackageNames: "docker.io/library/postgres",
+      matchCurrentVersion: "16",
+      enabled: false,
     },
     {
-      "matchPackageNames": "docker.io/gotenberg/gotenberg",
-      "matchCurrentVersion": "8.20",
-      "enabled": false
+      matchPackageNames: "docker.io/gotenberg/gotenberg",
+      matchCurrentVersion: "8.20",
+      enabled: false,
     },
     // windmill
     {
-      "matchPackageNames": "postgres",
-      "matchCurrentVersion": "16",
-      "enabled": false
+      matchPackageNames: "postgres",
+      matchCurrentVersion: "16",
+      enabled: false,
     },
     // your_spotify
-    {
-      "matchPackageNames": "mongo",
-      "matchCurrentVersion": "6",
-      "enabled": false
-    }
+    { matchPackageNames: "mongo", matchCurrentVersion: "6", enabled: false },
   ],
 
   // docker:pinDigests preset, this allows for reproducible builds
-  "docker": {
-    "pinDigests": true
-  }
+  docker: { pinDigests: true },
 }

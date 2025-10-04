@@ -1,10 +1,10 @@
-import * as pulumi from '@pulumi/pulumi';
-import * as fs from 'node:fs';
-import * as path from 'node:path';
-import * as Handlebars from 'handlebars';
-import { EnvUtils } from '../utils/env-utils';
-import { LxcHostConfigToml } from '../hosts/lxc-host-config-schema';
-import { PveHostConfigToml } from '../hosts/pve-host-config-schema';
+import * as pulumi from "@pulumi/pulumi";
+import * as fs from "node:fs";
+import * as path from "node:path";
+import * as Handlebars from "handlebars";
+import { EnvUtils } from "../utils/env-utils";
+import { LxcHostConfigToml } from "../hosts/lxc-host-config-schema";
+import { PveHostConfigToml } from "../hosts/pve-host-config-schema";
 
 export interface TemplateContext {
   [key: string]: string | pulumi.Output<string>;
@@ -34,9 +34,9 @@ export type ASTNode =
   | hbs.AST.HashPair;
 
 export class TemplateProcessor {
-  public static readonly REMOTE_OUTPUT_FOLDER_ROOT = '/etc/pulumi';
+  public static readonly REMOTE_OUTPUT_FOLDER_ROOT = "/etc/pulumi";
 
-  public static readonly LOCAL_STACKS_FOLDER_ROOT_NAME = 'stacks';
+  public static readonly LOCAL_STACKS_FOLDER_ROOT_NAME = "stacks";
 
   public static readonly REMOTE_STACK_DIRECTORY_ROOT = path.join(
     TemplateProcessor.REMOTE_OUTPUT_FOLDER_ROOT,
@@ -70,8 +70,9 @@ export class TemplateProcessor {
 
     const templateFiles: string[] = [];
 
-    const isTemplate = options?.isTemplateOverride
-      ? options.isTemplateOverride
+    const isTemplate =
+      options?.isTemplateOverride ?
+        options.isTemplateOverride
       : TemplateProcessor.isTemplateFile;
 
     function scanDirectory(dir: string) {
@@ -106,7 +107,7 @@ export class TemplateProcessor {
     config: pulumi.Config,
     dataVariables?: unknown,
   ): RenderedTemplateFile {
-    const templateContent = fs.readFileSync(templatePath, 'utf-8');
+    const templateContent = fs.readFileSync(templatePath, "utf-8");
 
     const variables = TemplateProcessor.discoverVariables(templateContent);
 
@@ -131,7 +132,7 @@ export class TemplateProcessor {
       varValues: string[],
     ): pulumi.Output<Record<string, string | pulumi.Output<string>>> {
       const discoveredVars = TemplateProcessor.discoverVariables(
-        varValues.join('\n'),
+        varValues.join("\n"),
       );
 
       if (discoveredVars.length === 0) {
@@ -175,9 +176,7 @@ export class TemplateProcessor {
         for (const [varName, varValue] of Object.entries(merged)) {
           const template = Handlebars.compile<Record<string, string>>(varValue);
 
-          const newVariableValue = template(result, {
-            data: dataVariables,
-          });
+          const newVariableValue = template(result, { data: dataVariables });
 
           result[varName] = newVariableValue;
         }
@@ -193,11 +192,7 @@ export class TemplateProcessor {
       template(vars, { data: dataVariables }),
     );
 
-    return {
-      content,
-      idSafeName,
-      templatePath,
-    };
+    return { content, idSafeName, templatePath };
   }
 
   private static discoverVariables(templateContent: string): string[] {
@@ -219,12 +214,12 @@ export class TemplateProcessor {
       const astNode = node as ASTNode;
 
       switch (astNode.type) {
-        case 'PathExpression': {
+        case "PathExpression": {
           variables.add(astNode.original);
           break;
         }
 
-        case 'MustacheStatement': {
+        case "MustacheStatement": {
           walkAST(astNode.path);
           if (astNode.params.length > 0) {
             walkAST(astNode.params);
@@ -235,7 +230,7 @@ export class TemplateProcessor {
           break;
         }
 
-        case 'BlockStatement': {
+        case "BlockStatement": {
           walkAST(astNode.path);
           if (astNode.params.length > 0) {
             walkAST(astNode.params);
@@ -252,7 +247,7 @@ export class TemplateProcessor {
           break;
         }
 
-        case 'SubExpression': {
+        case "SubExpression": {
           walkAST(astNode.path);
           if (astNode.params.length > 0) {
             walkAST(astNode.params);
@@ -263,7 +258,7 @@ export class TemplateProcessor {
           break;
         }
 
-        case 'PartialStatement': {
+        case "PartialStatement": {
           walkAST(astNode.name);
           if (astNode.params.length > 0) {
             walkAST(astNode.params);
@@ -274,7 +269,7 @@ export class TemplateProcessor {
           break;
         }
 
-        case 'PartialBlockStatement': {
+        case "PartialBlockStatement": {
           walkAST(astNode.name);
           if (astNode.params.length > 0) {
             walkAST(astNode.params);
@@ -288,24 +283,24 @@ export class TemplateProcessor {
           break;
         }
 
-        case 'Hash': {
+        case "Hash": {
           walkAST(astNode.pairs);
           break;
         }
 
-        case 'HashPair': {
+        case "HashPair": {
           walkAST(astNode.value);
           break;
         }
 
         // Terminal nodes
-        case 'ContentStatement':
-        case 'CommentStatement':
-        case 'StringLiteral':
-        case 'BooleanLiteral':
-        case 'NumberLiteral':
-        case 'UndefinedLiteral':
-        case 'NullLiteral':
+        case "ContentStatement":
+        case "CommentStatement":
+        case "StringLiteral":
+        case "BooleanLiteral":
+        case "NumberLiteral":
+        case "UndefinedLiteral":
+        case "NullLiteral":
           break;
       }
     }
@@ -318,22 +313,22 @@ export class TemplateProcessor {
   public static removeTemplateExtensions(templatePath: string) {
     return templatePath.replaceAll(
       TemplateProcessor.FILENAME_REPLACE_PATTERN(),
-      '',
+      "",
     );
   }
 
   static buildSanitizedNameForId(templatePath: string): string {
     let filename = path.basename(templatePath);
 
-    if (filename.startsWith('.')) {
+    if (filename.startsWith(".")) {
       filename = `dot-${filename.substring(1)}`;
       templatePath = path.join(path.dirname(templatePath), filename);
     }
 
     return templatePath
-      .replaceAll('.', '-')
-      .replaceAll(path.sep, '-')
-      .replaceAll(/[^a-zA-Z0-9_-]/g, '');
+      .replaceAll(".", "-")
+      .replaceAll(path.sep, "-")
+      .replaceAll(/[^a-zA-Z0-9_-]/g, "");
   }
 
   static registerTemplateHelper(name: string, fn: Handlebars.HelperDelegate) {
@@ -348,7 +343,7 @@ export class TemplateProcessor {
 }
 
 TemplateProcessor.registerTemplateHelper(
-  'raw',
+  "raw",
   (options: Handlebars.HelperOptions) => {
     return options.fn({});
   },
@@ -361,34 +356,35 @@ export type ComposeStackTemplateContext = {
   pve: PveHostConfigToml;
 };
 
+function buildBaseDomain(context: ComposeStackTemplateContext): string {
+  return `${context.lxc.hostname}.pulumi.${context.pve.pve.node}.${context.pve.lxc.network.domain}`;
+}
+
 TemplateProcessor.registerTemplateHelper(
-  'domainForApp',
+  "domainForApp",
   (appName: string, options: Handlebars.HelperOptions) => {
     const context = options.data as ComposeStackTemplateContext;
     const subdomainPrefix =
       context.lxc.stacks?.[context.stackName].domainPrefixes?.[appName] ??
       appName;
 
-    return `${subdomainPrefix}.${context.lxc.hostname}.pulumi.${context.pve.pve.node}.${context.pve.lxc.network.domain}`;
+    return `${subdomainPrefix}.${buildBaseDomain(context)}`;
   },
 );
 
 TemplateProcessor.registerTemplateHelper(
-  'domainForContainer',
+  "domainForContainer",
   (options: Handlebars.HelperOptions) => {
     const context = options.data as ComposeStackTemplateContext;
 
-    return `${context.lxc.hostname}.pulumi.${context.pve.pve.node}.${context.pve.lxc.network.domain}`;
+    return buildBaseDomain(context);
   },
 );
 
-TemplateProcessor.registerTemplateHelper(
-  'helperMissing',
-  function (/* dynamic arguments */) {
-    const options = arguments[arguments.length - 1];
-    const args = Array.prototype.slice.call(arguments, 0, arguments.length - 1);
-    return new Handlebars.SafeString(
-      'helperMissing: ' + options.name + '(' + args + ')',
-    );
-  },
-);
+TemplateProcessor.registerTemplateHelper("helperMissing", function (...args) {
+  const options = args[args.length - 1];
+  const helperArgs = args.slice(0, args.length - 1);
+  return new Handlebars.SafeString(
+    "helperMissing: " + options.name + "(" + helperArgs + ")",
+  );
+});

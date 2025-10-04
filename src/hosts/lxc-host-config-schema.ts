@@ -1,10 +1,10 @@
-import { z } from 'zod';
+import { z } from "zod";
 import {
   PveFirewallDirection,
   PveFirewallLogLevel,
   PveFirewallMacro,
   PveFirewallPolicy,
-} from '../constants';
+} from "../constants";
 
 const CpuConfigSchema = z
   .object({
@@ -23,16 +23,13 @@ const MemoryConfigSchema = z
 
 const DiskConfigSchema = z
   .object({
-    datastoreId: z.string().default('fast'),
+    datastoreId: z.string().default("fast"),
     size: z.number().positive().optional(),
   })
   .strict();
 
 const OsConfigSchema = z
-  .object({
-    templateFileId: z.string(),
-    type: z.string().optional(),
-  })
+  .object({ templateFileId: z.string(), type: z.string().optional() })
   .strict();
 
 const MountPointSchema = z
@@ -61,16 +58,16 @@ const DevicePassthroughSchema = z
 const AnsibleConnectionOverrideSchema = z
   .object({
     host: z.string().optional(),
-    user: z.string().optional().default('root'),
+    user: z.string().optional().default("root"),
     port: z.number().positive().optional().default(22),
-    privateKeyFile: z.string().optional().default('~/.ssh/lxc_ed25519'),
+    privateKeyFile: z.string().optional().default("~/.ssh/lxc_ed25519"),
   })
   .strict();
 
 const ScriptConnectionOverrideSchema = z
   .object({
     host: z.string().optional(),
-    user: z.string().optional().default('root'),
+    user: z.string().optional().default("root"),
     port: z.number().positive().optional().default(22),
     privateKey: z.string().optional(),
   })
@@ -197,23 +194,23 @@ const FirewallRuleSchema = z
 
 const ScriptProvisionerSchema = z
   .object({
-    type: z.literal('script'),
+    type: z.literal("script"),
     script: z.string().min(1),
-    workingDirectory: z.string().default('/tmp'),
-    runAs: z.string().default('root'),
+    workingDirectory: z.string().default("/tmp"),
+    runAs: z.string().default("root"),
     environment: z.record(z.string(), z.string()).optional(),
     timeout: z.number().positive().default(600),
     connection: ScriptConnectionOverrideSchema.optional(),
     runOn: z
-      .array(z.enum(['create', 'update', 'delete']))
+      .array(z.enum(["create", "update", "delete"]))
       .optional()
-      .default(['create']),
+      .default(["create"]),
   })
   .strict();
 
 const AnsibleProvisionerSchema = z
   .object({
-    type: z.literal('ansible'),
+    type: z.literal("ansible"),
     playbook: z.string().min(1),
     variables: z.record(z.string(), z.unknown()).optional(),
     tags: z.array(z.string()).optional(),
@@ -224,15 +221,13 @@ const AnsibleProvisionerSchema = z
   })
   .strict();
 
-const ProvisionerSchema = z.discriminatedUnion('type', [
+const ProvisionerSchema = z.discriminatedUnion("type", [
   ScriptProvisionerSchema,
   AnsibleProvisionerSchema,
 ]);
 
 const StackSchema = z
-  .object({
-    domainPrefixes: z.record(z.string(), z.string()).optional(),
-  })
+  .object({ domainPrefixes: z.record(z.string(), z.string()).optional() })
   .strict();
 
 const StackSchemaMap = z.record(z.string(), StackSchema);
@@ -265,8 +260,6 @@ export type ConnectionOverride = z.infer<
 >;
 export type FirewallOptions = z.infer<typeof FirewallOptionsSchema>;
 
-export const LxcHostnameSchema = z.object({
-  hostname: z.string().min(1),
-});
+export const LxcHostnameSchema = z.object({ hostname: z.string().min(1) });
 
 export type LxcHostnameToml = z.infer<typeof LxcHostnameSchema>;

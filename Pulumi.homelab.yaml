@@ -85,7 +85,7 @@ config:
     secure: v1:pBsI5ni0nPIeDKwO:Hhp06vRV3ZjpQaHR0T06+V9ypJGiVjwNnVAKz+6AqHeqihtxj5oro3Kw7WJ5kuE=
   lxc#backup-pulumi#cronicle:SECRET_RESTIC_PASSWORD:
     secure: v1:K5gnxDKtlcOHst6z:qsdkR4AOO+5As2VslPO6ERzlJlA01xcTglsp6Ct8i374V6G/TqwUifpw+8gKHiU30SPJMfsI3dF7xfFFAnAcPg==
-  lxc#backup-pulumi#cronicle:RESTIC_CHECK_PERCENTAGE: '5'
+  lxc#backup-pulumi#cronicle:RESTIC_CHECK_PERCENTAGE: "5"
   lxc#backup-pulumi#cronicle:SECRET_B2_HEALTHCHECK_URL:
     secure: v1:+wCA5m2zsGeupOzU:0TqufLdbUSRVv6HMHfsCjYF5q/q6d8TWTGYmIbPDTAB4BjV/sq8uXJdZswAeIH1MzC7Bz418ppHq/1JrlyHPDvlm+Z0/GOvK
   # life

@@ -5,7 +5,7 @@ services:
     # ports:
     #   - "8282:80/tcp"
     environment:
-      TZ: 'America/Los_Angeles'
+      TZ: "America/Los_Angeles"
     volumes:
       - /docker/wallos/db:/var/www/html/db
       - /docker/wallos/logos:/var/www/html/images/uploads/logos

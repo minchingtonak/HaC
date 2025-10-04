@@ -4,21 +4,21 @@ services:
   spotizerr:
     volumes:
       - /docker/spotizerr/data:/app/data
-      - /docker/spotizerr/logs:/app/logs  # persistent logs
-      - /mnt/media/music:/app/downloads  # your music library dir
+      - /docker/spotizerr/logs:/app/logs # persistent logs
+      - /mnt/media/music:/app/downloads # your music library dir
     # ports:
     #   - 7171:7171
     image: lavaforge.org/spotizerr/spotizerr:4.0.0@sha256:80e7f932f7e67770dc715f434822459170a4682254bbc8e7bcf3fa4b35a9980c
     container_name: spotizerr-app
     restart: unless-stopped
     environment:
-      - PUID={{{PUID}}}  # Replace with your desired user ID  | Remove both if you want to run as root (not recommended, might result in unreadable files)
-      - PGID={{{PGID}}}  # Replace with your desired group ID | The user must have write permissions in the volume mapped to /app/downloads
+      - PUID={{{PUID}}} # Replace with your desired user ID  | Remove both if you want to run as root (not recommended, might result in unreadable files)
+      - PGID={{{PGID}}} # Replace with your desired group ID | The user must have write permissions in the volume mapped to /app/downloads
       - UMASK={{{UMASK}}} # Optional: Sets the default file permissions for newly created files within the container.
       - REDIS_HOST={{{REDIS_HOST}}}
       - REDIS_PORT={{{REDIS_PORT}}}
       - REDIS_DB={{{REDIS_DB}}}
-      - REDIS_PASSWORD={{{REDIS_PASSWORD}}}  # Optional, Redis AUTH password. Leave empty if not using authentication
+      - REDIS_PASSWORD={{{REDIS_PASSWORD}}} # Optional, Redis AUTH password. Leave empty if not using authentication
       - REDIS_URL=redis://:{{{REDIS_PASSWORD}}}@{{{REDIS_HOST}}}:{{{REDIS_PORT}}}/{{{REDIS_DB}}}
       - REDIS_BACKEND=redis://:{{{REDIS_PASSWORD}}}@{{{REDIS_HOST}}}:{{{REDIS_PORT}}}/{{{REDIS_DB}}}
       - EXPLICIT_FILTER={{{EXPLICIT_FILTER}}} # Set to true to filter out explicit content

@@ -1,14 +1,14 @@
-import * as pulumi from '@pulumi/pulumi';
-import * as command from '@pulumi/command';
-import * as path from 'node:path';
-import { HandlebarsTemplateDirectory } from '../templates/handlebars-template-directory';
-import { ComposeStackUtils } from './compose-file-processor';
-import { LxcHostConfigToml } from '../hosts/lxc-host-config-schema';
+import * as pulumi from "@pulumi/pulumi";
+import * as command from "@pulumi/command";
+import * as path from "node:path";
+import { HandlebarsTemplateDirectory } from "../templates/handlebars-template-directory";
+import { ComposeStackUtils } from "./compose-file-processor";
+import { LxcHostConfigToml } from "../hosts/lxc-host-config-schema";
 import {
   ComposeStackTemplateContext,
   TemplateProcessor,
-} from '../templates/template-processor';
-import { PveHostConfigToml } from '../hosts/pve-host-config-schema';
+} from "../templates/template-processor";
+import { PveHostConfigToml } from "../hosts/pve-host-config-schema";
 
 export type ComposeStackArgs = {
   stackName: string;
@@ -18,7 +18,7 @@ export type ComposeStackArgs = {
 };
 
 export class ComposeStack extends pulumi.ComponentResource {
-  public static RESOURCE_TYPE = 'HaC:docker:ComposeStack';
+  public static RESOURCE_TYPE = "HaC:docker:ComposeStack";
 
   stackDirectoryAsset: pulumi.asset.FileAsset;
 
@@ -60,9 +60,7 @@ export class ComposeStack extends pulumi.ComponentResource {
         remotePath: TemplateProcessor.REMOTE_STACK_DIRECTORY_ROOT,
         connection: args.connection,
       },
-      {
-        parent: this,
-      },
+      { parent: this },
     );
 
     this.handlebarsTemplateDirectory =
@@ -78,9 +76,7 @@ export class ComposeStack extends pulumi.ComponentResource {
             templateDirectory: stackDirectory,
           },
         },
-        {
-          parent: this,
-        },
+        { parent: this },
       );
 
     // copy rendered template files
@@ -130,7 +126,7 @@ export class ComposeStack extends pulumi.ComponentResource {
           afterUpdate: [ComposeStackUtils.checkForMissingVariables],
         },
         deleteBeforeReplace: true,
-        additionalSecretOutputs: ['stdout', 'stderr'],
+        additionalSecretOutputs: ["stdout", "stderr"],
       },
     );
 
@@ -156,9 +152,9 @@ export class ComposeStack extends pulumi.ComponentResource {
         acc[`template-${name}`] = {
           remotePath: copy.remotePath,
           sourcePath: copy.source.apply((v) =>
-            v instanceof pulumi.asset.FileAsset
-              ? v.path
-              : '(not found, something is wrong)',
+            v instanceof pulumi.asset.FileAsset ?
+              v.path
+            : "(not found, something is wrong)",
           ),
         };
         return acc;

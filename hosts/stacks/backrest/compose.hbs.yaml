@@ -9,8 +9,8 @@ services:
       - /docker/backrest/config:/config
       - /docker/backrest/cache:/cache
       - /docker/backrest/tmp:/tmp
-      - /mnt/backup-data:/userdata  # Mount local paths to backup
-      - /mnt/repos:/repos     # Mount local repos (optional for remote storage)
+      - /mnt/backup-data:/userdata # Mount local paths to backup
+      - /mnt/repos:/repos # Mount local repos (optional for remote storage)
     environment:
       - BACKREST_DATA=/data
       - BACKREST_CONFIG=/config/config.json

@@ -1,8 +1,8 @@
-import * as fs from 'node:fs';
-import * as pulumi from '@pulumi/pulumi';
-import TOML from 'smol-toml';
-import { z } from 'zod';
-import { TemplateProcessor } from '../templates/template-processor';
+import * as fs from "node:fs";
+import * as pulumi from "@pulumi/pulumi";
+import TOML from "smol-toml";
+import { z } from "zod";
+import { TemplateProcessor } from "../templates/template-processor";
 
 export interface ParserConfig<TConfig, THostnameConfig> {
   configSchema: z.ZodSchema<TConfig>;
@@ -63,7 +63,7 @@ export abstract class HostConfigParser<TConfig, THostnameConfig> {
    * TODO: find more efficient way of getting this info that avoids reading/parsing/validating twice
    */
   protected getIdentifierFromConfigFile(filePath: string): string {
-    const fileContent = fs.readFileSync(filePath, { encoding: 'utf-8' });
+    const fileContent = fs.readFileSync(filePath, { encoding: "utf-8" });
     const parsed = TOML.parse(fileContent);
     const config = this.getConfig();
 
@@ -76,7 +76,7 @@ export abstract class HostConfigParser<TConfig, THostnameConfig> {
           .map((err: z.core.$ZodIssue) => {
             return JSON.stringify(err); // FIXME this may crash when err.path contains symbol values
           })
-          .join('\n;\n');
+          .join("\n;\n");
         throw new Error(
           `Invalid ${config.errorPrefix} TOML structure: ${errorMessages}`,
         );
@@ -104,9 +104,9 @@ export abstract class HostConfigParser<TConfig, THostnameConfig> {
   /**
    * Validate parsed configuration against schema
    */
-  private static validateConfig<TConfig>(
+  private static validateConfig<TConfig, THostnameConfig>(
     config: unknown,
-    parserConfig: ParserConfig<TConfig, any>,
+    parserConfig: ParserConfig<TConfig, THostnameConfig>,
   ): TConfig {
     try {
       return parserConfig.configSchema.parse(config);
@@ -116,7 +116,7 @@ export abstract class HostConfigParser<TConfig, THostnameConfig> {
           .map((err: z.core.$ZodIssue) => {
             return JSON.stringify(err); // FIXME this may crash when err.path contains symbol values
           })
-          .join('\n;\n');
+          .join("\n;\n");
         throw new Error(
           `Invalid ${parserConfig.errorPrefix} TOML structure: ${errorMessages}`,
         );

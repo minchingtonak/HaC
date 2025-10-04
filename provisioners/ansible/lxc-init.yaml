@@ -65,7 +65,7 @@
     - name: Configure SSH daemon settings
       ansible.builtin.blockinfile:
         path: /etc/ssh/sshd_config
-        marker: '# {mark} ANSIBLE MANAGED SSH SECURITY BLOCK'
+        marker: "# {mark} ANSIBLE MANAGED SSH SECURITY BLOCK"
         block: |
           PermitRootLogin yes
           PasswordAuthentication no
@@ -100,12 +100,12 @@
     - name: Configure automatic security updates
       ansible.builtin.blockinfile:
         path: /etc/apt/apt.conf.d/20auto-upgrades
-        marker: '// {mark} ANSIBLE MANAGED AUTO-UPDATES BLOCK'
+        marker: "// {mark} ANSIBLE MANAGED AUTO-UPDATES BLOCK"
         block: |
           APT::Periodic::Update-Package-Lists "1";
           APT::Periodic::Unattended-Upgrade "1";
         create: true
-        mode: '0700'
+        mode: "0700"
       tags:
         - updates
 

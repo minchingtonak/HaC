@@ -1,9 +1,9 @@
 onlyBuiltDependencies:
-  - '@pulumi/ansible'
-  - '@pulumi/command'
-  - '@pulumi/porkbun'
+  - "@pulumi/ansible"
+  - "@pulumi/command"
+  - "@pulumi/porkbun"
   - esbuild
   - protobufjs
 
 patchedDependencies:
-  '@hanseltime/pulumi-file-utils': patches/@hanseltime__pulumi-file-utils.patch
+  "@hanseltime/pulumi-file-utils": patches/@hanseltime__pulumi-file-utils.patch

@@ -14,7 +14,7 @@ services:
     environment:
       PUID: 0
       PGID: 0
-      ALLOW_SIGNUP: 'false'
+      ALLOW_SIGNUP: "false"
       TZ: America/Los_Angeles
       BASE_URL: "{{{MEALIE_BASE_URL}}}"
     labels:

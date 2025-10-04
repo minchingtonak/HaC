@@ -12,12 +12,10 @@
   - possibly require some sort of monitoring/notif stacks on every host
   - would be cool to be able to configure these rules via file
 
-
 - consider having a single komodo instance with generated config file
   - can expose list of all enabled stacks and use helpers to get domains for each app
     - need to modify domainFor helpers to optionally take a specific container as a second arg so the url generates correctly
 - this also applies to dashboards in some ways. maybe would be cool to expose list of lxc hosts to do monitoring or something
-
 
 - make pve host schema less confusing
 

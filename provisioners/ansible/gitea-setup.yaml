@@ -12,19 +12,19 @@
     - name: Create void-access group
       ansible.builtin.group:
         name: void-access
-        gid: '{{ void_access_gid }}'
+        gid: "{{ void_access_gid }}"
         state: present
 
     - name: Create git group
       ansible.builtin.group:
         name: git
-        gid: '{{ git_user_gid }}'
+        gid: "{{ git_user_gid }}"
         state: present
 
     - name: Create git user
       ansible.builtin.user:
         name: git
-        uid: '{{ git_user_uid }}'
+        uid: "{{ git_user_uid }}"
         group: git
         groups: void-access
         shell: /bin/bash
@@ -38,7 +38,7 @@
         content: |
           #!/bin/sh
           /usr/bin/docker exec -i -u git --env SSH_ORIGINAL_COMMAND="$SSH_ORIGINAL_COMMAND" {{ gitea_container_name }} sh "$@"
-        mode: '0755'
+        mode: "0755"
         owner: git
         group: git
 
@@ -54,7 +54,7 @@
           Match User git
             AuthorizedKeysCommandUser git
             AuthorizedKeysCommand /usr/bin/docker exec -i -u git {{ gitea_container_name }} /usr/local/bin/gitea keys -e git -u %u -t %t -k %k
-        marker: '# {mark} ANSIBLE MANAGED BLOCK - Gitea SSH'
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - Gitea SSH"
         insertafter: EOF
 
     - name: Reboot with systemctl

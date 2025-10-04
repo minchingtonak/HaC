@@ -1,4 +1,4 @@
-import * as pulumi from '@pulumi/pulumi';
+import * as pulumi from "@pulumi/pulumi";
 
 /**
  * Utility functions for handling environment variables in various contexts
@@ -20,14 +20,13 @@ export class EnvUtils {
     return envMap;
   }
 
-  private static readonly SECRET_VARIABLE_PREFIX = 'SECRET_';
+  private static readonly SECRET_VARIABLE_PREFIX = "SECRET_";
 
-  private static readonly PARENT_NAMESPACE_PREFIX = 'parent:';
-
+  private static readonly PARENT_NAMESPACE_PREFIX = "parent:";
 
   private static resolveVariable(varName: string, config: pulumi.Config) {
     // data variable, do not fetch from config
-    if (varName.startsWith('@')) {
+    if (varName.startsWith("@")) {
       return {};
     }
 
@@ -40,7 +39,7 @@ export class EnvUtils {
 
     if (varName.startsWith(EnvUtils.PARENT_NAMESPACE_PREFIX)) {
       const namespace = config.name;
-      if (!namespace.includes('#')) {
+      if (!namespace.includes("#")) {
         throw new Error(
           `Tried to access parent of root namespace: '${namespace}'`,
         );
@@ -50,10 +49,10 @@ export class EnvUtils {
       resolvedConfigKey = varName.slice(
         EnvUtils.PARENT_NAMESPACE_PREFIX.length,
       );
-      const parentNamespace = namespace.slice(0, namespace.lastIndexOf('#'));
+      const parentNamespace = namespace.slice(0, namespace.lastIndexOf("#"));
       resolvedConfig = new pulumi.Config(parentNamespace);
-    } else if (varName.includes(':')) {
-      const [namespace, configVarName] = varName.split(':');
+    } else if (varName.includes(":")) {
+      const [namespace, configVarName] = varName.split(":");
       resolvedConfig = new pulumi.Config(namespace);
       resolvedConfigKey = configVarName;
     }
@@ -62,15 +61,12 @@ export class EnvUtils {
       .toLocaleUpperCase()
       .startsWith(EnvUtils.SECRET_VARIABLE_PREFIX);
 
-    const getConfigValue = isSecret
-      ? () => resolvedConfig.requireSecret(resolvedConfigKey)
+    const getConfigValue =
+      isSecret ?
+        () => resolvedConfig.requireSecret(resolvedConfigKey)
       : () => resolvedConfig.require(resolvedConfigKey);
 
-    return {
-      getConfigValue,
-      resolvedConfigKey,
-      resolvedConfig,
-    };
+    return { getConfigValue, resolvedConfigKey, resolvedConfig };
   }
 
   private static IGNORED_VARIABLES = new Set<string>();
@@ -94,13 +90,13 @@ export class EnvUtils {
     allowVariableExpansion: boolean = false,
   ): string | pulumi.Output<string> {
     function replacer(value: string): string {
-      let result = value.replaceAll('\\', '\\\\').replaceAll('"', '\\"');
+      let result = value.replaceAll("\\", "\\\\").replaceAll('"', '\\"');
 
       if (!allowVariableExpansion) {
-        result = result.replaceAll('$', '\\$');
+        result = result.replaceAll("$", "\\$");
       }
 
-      return result.replaceAll('`', '\\`').replaceAll('!', '\\!');
+      return result.replaceAll("`", "\\`").replaceAll("!", "\\!");
     }
 
     if (pulumi.Output.isInstance(value)) {
@@ -126,7 +122,7 @@ export class EnvUtils {
             pulumi.interpolate`${name}="${EnvUtils.escapeBashEnvValue(value)}"`,
         ),
       )
-      .apply((envArray) => envArray.join(' '));
+      .apply((envArray) => envArray.join(" "));
   }
 
   /**
@@ -147,7 +143,7 @@ export class EnvUtils {
             )}"`,
         ),
       )
-      .apply((envArray) => envArray.join('\n'));
+      .apply((envArray) => envArray.join("\n"));
   }
 
   /**

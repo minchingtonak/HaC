@@ -52,17 +52,18 @@ Referencing a variable within a template file will cause that variable to be loo
 - In PVE host configs: `pve#<pve-nodename>:VAR_NAME`
 
 Example:
+
 ```yaml
-...
+---
 # Compose stack
 volumes:
-   - '{{{DATA_PATH}}}:/data'
-...
+  - "{{{DATA_PATH}}}:/data"
 ```
 
 Assuming that this stack is named `gitea` and deployed on an LXC named `git-server`, this variable would be namespaced as `lxc#git-server#gitea:DATA_PATH` in the Pulumi config
 
 Example:
+
 ```toml
 ...
 # LXC host config
@@ -79,6 +80,7 @@ dport = "{{{GIT_SSH_PORT}}}"
 Assuming that this is an LXC named `git-server`, this variable would be namespaced as `lxc#git-server:GIT_SSH_PORT` in the Pulumi config
 
 Example:
+
 ```toml
 ...
 # PVE host config
