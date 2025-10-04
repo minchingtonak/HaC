@@ -1,6 +1,6 @@
 # verified
 id = 217
-hostname = "archiver-pulumi"
+hostname = "archiver"
 
 description = "worker for archive team warrior"
 
