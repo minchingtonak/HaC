@@ -1,6 +1,6 @@
 # verified
 id = 200
-hostname = "copyparty-pulumi"
+hostname = "copyparty"
 
 description = "copyparty lightweight fileserver container"
 
@@ -20,35 +20,39 @@ swap = 512
 size = 4
 
 [[mountPoints]]
-volume = "/void/audiobooks"
+volume = "{{{@pve.lxc.appdata}}}/copyparty"
+mountPoint = "/docker"
+
+[[mountPoints]]
+volume = "{{{@pve.storage.pools.mass}}}/audiobooks"
 mountPoint = "/mnt/audiobooks"
 
 [[mountPoints]]
-volume = "/void/backups"
+volume = "{{{@pve.storage.pools.mass}}}/backups"
 mountPoint = "/mnt/backups"
 
 [[mountPoints]]
-volume = "/void/documents"
+volume = "{{{@pve.storage.pools.mass}}}/documents"
 mountPoint = "/mnt/documents"
 
 [[mountPoints]]
-volume = "/void/drive"
+volume = "{{{@pve.storage.pools.mass}}}/drive"
 mountPoint = "/mnt/drive"
 
 [[mountPoints]]
-volume = "/void/media"
+volume = "{{{@pve.storage.pools.mass}}}/media"
 mountPoint = "/mnt/media"
 
 [[mountPoints]]
-volume = "/void/photos"
+volume = "{{{@pve.storage.pools.mass}}}/photos"
 mountPoint = "/mnt/photos"
 
 [[mountPoints]]
-volume = "/void/podcasts"
+volume = "{{{@pve.storage.pools.mass}}}/podcasts"
 mountPoint = "/mnt/podcasts"
 
 [[mountPoints]]
-volume = "/void/restic"
+volume = "{{{@pve.storage.pools.mass}}}/restic"
 mountPoint = "/mnt/restic"
 
 [[provisioners]]

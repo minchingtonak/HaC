@@ -22,7 +22,7 @@ appdata = "/fast/test-appdata"
 
 [lxc.hosts]
 archiver = { enabled = true }
-immich = { enabled = false }
+copyparty = { enabled = true }
 
 [lxc.network]
 domain = "akmin.dev"
