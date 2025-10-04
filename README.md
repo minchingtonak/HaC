@@ -14,7 +14,88 @@ A homelab infrastructure management system powered by Pulumi that automates the 
 - Automated DNS record provisioning (Porkbun only)
 - Declarative firewall rules for LXC hosts
 
-## Project Structure
+### Glossary
+
+- **Handlebars** - A templating engine that allows dynamic content generation using variables and helpers
+- **LXC** - Linux Containers; an operating system-level virtualization method for running multiple isolated systems
+- **Proxmox VE (PVE)** - An open-source virtualization management platform combining KVM hypervisor and LXC containers
+- **Pulumi** - An Infrastructure as Code platform that uses familiar programming languages to define cloud resources
+- **Pulumi Config** - Pulumi's configuration system for managing settings and secrets across different environments
+- **Pulumi Stack** - An isolated, independently configurable instance of a Pulumi program
+- **TOML** - Tom's Obvious, Minimal Language; a configuration file format that's easy to read and write
+- **YAML** - YAML Ain't Markup Language; a human-readable data serialization standard commonly used for configuration files
+
+## Architecture
+
+### Deployment Flow
+
+1. HaC reads TOML configuration files for PVE hosts, LXC containers, and Docker Compose stacks
+2. Creates and manages LXC containers on specified Proxmox VE hosts
+3. Installs Docker and dependencies on LXC containers using provisioners
+4. Deploys Docker Compose stacks to appropriate LXC containers
+5. Handles networking, DNS records, firewall rules, and ongoing infrastructure management
+
+The following diagram illustrates the deployment model used by HaC:
+
+```mermaid
+flowchart LR
+    HaC[HaC]
+
+    subgraph PVEA_BOX["PVE Host A"]
+        direction LR
+        PVEA[PVE Host A]
+
+        subgraph LXCB_BOX["LXC Host B"]
+            direction TB
+            LXCB[LXC Host B]
+            StackBA[Compose Stack C]
+        end
+
+        subgraph LXCA_BOX["LXC Host A"]
+            direction TB
+            LXCA[LXC Host A]
+            StackAA[Compose Stack A]
+            StackAB[Compose Stack B]
+        end
+
+        PVEA --> LXCA
+        PVEA --> LXCB
+        LXCA --> StackAA
+        LXCA --> StackAB
+        LXCB --> StackBA
+    end
+
+    subgraph PVEB_BOX["PVE Host B"]
+        direction LR
+        PVEB[PVE Host B]
+
+        subgraph LXCC_BOX["LXC Host C"]
+            direction TB
+            LXCC[LXC Host C]
+            StackCA[Compose Stack D]
+            StackCB[Compose Stack E]
+        end
+
+        PVEB --> LXCC
+        LXCC --> StackCA
+        LXCC --> StackCB
+    end
+
+    HaC --> PVEA_BOX
+    HaC --> PVEB_BOX
+
+    classDef hacNode fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000
+    classDef pveNode fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000
+    classDef lxcNode fill:#e8f5e8,stroke:#1b5e20,stroke-width:2px,color:#000
+    classDef stackNode fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#000
+
+    class HaC hacNode
+    class PVEA,PVEB pveNode
+    class LXCA,LXCB,LXCC lxcNode
+    class StackAA,StackAB,StackBA,StackCA,StackCB,StackDA stackNode
+```
+
+### File Structure
 
 ```
 ├── hosts/
