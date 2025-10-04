@@ -1,6 +1,6 @@
 # verified
 id = 203
-hostname = "jellyfin-pulumi"
+hostname = "jellyfin"
 
 description = "jellyfin media player server"
 
@@ -36,7 +36,7 @@ proto = "udp"
 comment = "jellyfin auto discovery"
 
 [[devicePassthroughs]]
-path = "/dev/dri/card0"
+path = "/dev/dri/card1"
 uid = 0
 gid = 44
 mode = "0660"
@@ -48,7 +48,11 @@ gid = 104
 mode = "0660"
 
 [[mountPoints]]
-volume = "/void/media"
+volume = "{{{@pve.lxc.appdata}}}/jellyfin"
+mountPoint = "/docker"
+
+[[mountPoints]]
+volume = "{{{@pve.storage.pools.mass}}}/media"
 mountPoint = "/mnt/media"
 
 [[provisioners]]

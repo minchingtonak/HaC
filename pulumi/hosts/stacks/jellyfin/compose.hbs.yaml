@@ -19,7 +19,7 @@ services:
       # select VAAPI acceleration in Dashboard > Playback > Transcoding
       # device: /dev/dri/renderD128
       # use 'radeontop' to measure gpu usage
-      - /dev/dri:/dev/dri # renderD128, card0
+      - /dev/dri:/dev/dri # renderD128, card0/1
     restart: unless-stopped
     labels:
       - traefik.enable=true
