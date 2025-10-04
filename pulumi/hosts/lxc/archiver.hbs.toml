@@ -6,7 +6,7 @@ description = "worker for archive team warrior"
 
 [stacks]
 traefik = {}
-dozzle = {}
+# dozzle = {}
 archiveteam-warrior = {}
 ytptube = {}
 
