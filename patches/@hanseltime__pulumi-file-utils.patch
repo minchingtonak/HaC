@@ -1,0 +1,29 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+deleted file mode 100644
+index 65e235c86a73ef0ffcc929a12a0b3a2c15e334ce..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/CopyableAsset.js b/dist/cjs/CopyableAsset.js
+index 5d89727c47855324e3bc91854ec62710c49d1a30..5f478cd20c5a081194df31f03fddeb02a7badda6 100644
+--- a/dist/cjs/CopyableAsset.js
++++ b/dist/cjs/CopyableAsset.js
+@@ -328,7 +328,7 @@ let CopyableAsset = class CopyableAsset {
+                     recursive: true
+                 });
+                 // Add to exit handler array
+-                if (!noClean && COPYABLE_ASSET_NO_CLEAN) {
++                if (!noClean && !COPYABLE_ASSET_NO_CLEAN) {
+                     CLEAN_UP_DIRS.push((0, _path.resolve)(process.cwd(), tmpDirRet));
+                 }
+                 await (0, _promises.utimes)(tmpDirRet, DUMMY_TIMESTAMP, DUMMY_TIMESTAMP);
+diff --git a/dist/esm/CopyableAsset.mjs b/dist/esm/CopyableAsset.mjs
+index ce6eedb0d5dd5a23b44211d4ee89f7e65e7d4436..3cc752e32e9a81af9c20e02654011909502b9d74 100644
+--- a/dist/esm/CopyableAsset.mjs
++++ b/dist/esm/CopyableAsset.mjs
+@@ -262,7 +262,7 @@ function cleanUpDirs() {
+                     recursive: true
+                 });
+                 // Add to exit handler array
+-                if (!noClean && COPYABLE_ASSET_NO_CLEAN) {
++                if (!noClean && !COPYABLE_ASSET_NO_CLEAN) {
+                     CLEAN_UP_DIRS.push(resolve(process.cwd(), tmpDirRet));
+                 }
+                 await utimes(tmpDirRet, DUMMY_TIMESTAMP, DUMMY_TIMESTAMP);

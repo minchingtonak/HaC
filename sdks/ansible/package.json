@@ -1,0 +1,27 @@
+{
+    "name": "@pulumi/ansible",
+    "version": "1.3.0",
+    "description": "A Pulumi provider dynamically bridged from ansible.",
+    "repository": "https://github.com/ansible/terraform-provider-ansible",
+    "main": "bin/index.js",
+    "scripts": {
+        "build": "tsc",
+        "postinstall": "node ./scripts/postinstall.js"
+    },
+    "dependencies": {
+        "@pulumi/pulumi": "^3.142.0",
+        "@types/node": "^18",
+        "async-mutex": "^0.5.0",
+        "typescript": "^4.3.5"
+    },
+    "pulumi": {
+        "resource": true,
+        "name": "terraform-provider",
+        "version": "0.12.0",
+        "parameterization": {
+            "name": "ansible",
+            "version": "1.3.0",
+            "value": "eyJyZW1vdGUiOnsidXJsIjoicmVnaXN0cnkub3BlbnRvZnUub3JnL2Fuc2libGUvYW5zaWJsZSIsInZlcnNpb24iOiIxLjMuMCJ9fQ=="
+        }
+    }
+}

@@ -17,7 +17,6 @@ A homelab infrastructure management system powered by Pulumi that automates the 
 ## Project Structure
 
 ```
-pulumi/
 ├── hosts/
 │   ├── pve/                        # Proxmox VE host configurations
 │   │   └── *[.hbs].toml            # PVE host config toml
@@ -125,19 +124,19 @@ Secret variables are supported through [Pulumi config secrets](https://www.pulum
 
 ### PVE Host Configuration
 
-PVE hosts are configured using TOML files. See [`pulumi/hosts/pve/`](pulumi/hosts/pve/) for examples
+PVE hosts are configured using TOML files. See [`hosts/pve/`](hosts/pve/) for examples
 
-See [`pulumi/hosts/pve/host.reference.toml`](pulumi/hosts/pve/pve-host.reference.toml) for a complete configuration reference.
+See [`hosts/pve/host.reference.toml`](hosts/pve/pve-host.reference.toml) for a complete configuration reference.
 
 ### LXC Host Configuration
 
-LXC hosts are configured using TOML files. See [`pulumi/hosts/lxc/`](pulumi/hosts/lxc/) for examples
+LXC hosts are configured using TOML files. See [`hosts/lxc/`](hosts/lxc/) for examples
 
-See [`pulumi/hosts/lxc/host.reference.toml`](pulumi/hosts/lxc/lxc-host.reference.toml) for a complete configuration reference.
+See [`hosts/lxc/host.reference.toml`](hosts/lxc/lxc-host.reference.toml) for a complete configuration reference.
 
 ### Docker Compose Stacks
 
-Application stacks are defined in [`pulumi/hosts/stacks/`](pulumi/hosts/stacks/) with each service having its own directory containing:
+Application stacks are defined in [`hosts/stacks/`](hosts/stacks/) with each service having its own directory containing:
 
 - `compose[.hbs].yaml`
 - Any additional config files required by the stack
@@ -175,7 +174,7 @@ Application stacks are defined in [`pulumi/hosts/stacks/`](pulumi/hosts/stacks/)
 
 ## Custom Providers
 
-The packages living under `pulumi/sdks` were generated from the following terraform modules using `pulumi package add terraform-provider <org>/<package>`:
+The packages living under `sdks` were generated from the following terraform modules using `pulumi package add terraform-provider <org>/<package>`:
 
 - `sdks/ansible`: https://registry.terraform.io/providers/ansible/ansible/latest/docs
 - `sdks/porkbun`: https://registry.terraform.io/providers/jianyuan/porkbun/latest/docs
@@ -188,10 +187,10 @@ LXC hosts can be configured at create-time using provisioners. Currently, two ty
 
 Executes an Ansible playbook against the host when it is created (by default).
 
-See [`pulumi/provisioners/ansible/`](pulumi/provisioners/ansible/) for examples.
+See [`provisioners/ansible/`](provisioners/ansible/) for examples.
 
 ### Script Provisioner
 
 Executes a script on the host when it is created (by default).
 
-See [`pulumi/provisioners/scripts/`](pulumi/provisioners/scripts/) for examples.
+See [`provisioners/scripts/`](provisioners/scripts/) for examples.

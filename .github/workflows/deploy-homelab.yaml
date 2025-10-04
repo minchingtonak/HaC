@@ -15,7 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       changes-check-outcome: ${{ steps.preview.outcome }}
-      changes-check-conclusion: ${{ steps.preview.conclusion }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -30,36 +29,11 @@ jobs:
         with:
           node-version: "22.19.0"
           cache: "pnpm"
-          cache-dependency-path: ./pulumi/pnpm-lock.yaml
+          cache-dependency-path: ./pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install
-        working-directory: ./pulumi
-
-      # - name: Check for changes
-      #   uses: pulumi/actions@v6
-      #   continue-on-error: true
-      #   with:
-      #     command: preview
-      #     stack-name: homelab
-      #     work-dir: ./pulumi
-      #     comment-on-pr: false
-      #     expect-no-changes: true
-      #   env:
-      #     PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-      #     PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   id: changes-check
-
-      # - name: Record changes check result
-      #   run: |
-      #     echo "Changes check outcome: ${{ steps.changes-check.outcome }}"
-      #     echo "Changes check conclusion: ${{ steps.changes-check.conclusion }}"
-      #     if [ "${{ steps.changes-check.outcome }}" = "failure" ]; then
-      #       echo "Changes detected - the check failed as expected when changes are present"
-      #     else
-      #       echo "No changes detected - the check passed"
-      #     fi
+        working-directory: ./
 
       - name: Pulumi preview
         uses: pulumi/actions@v6
@@ -67,7 +41,7 @@ jobs:
         with:
           command: preview
           stack-name: homelab
-          work-dir: ./pulumi
+          work-dir: ./
           comment-on-pr: true
           expect-no-changes: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -80,7 +54,7 @@ jobs:
   pulumi-deploy:
     runs-on: ubuntu-latest
     needs: pulumi-preview
-    # Only deploy from main branch and when changes are detected (changes-check failed)
+    # Only deploy from main branch and when changes are detected
     if: github.ref == 'refs/heads/main' && needs.pulumi-preview.outputs.changes-check-outcome == 'failure'
     environment: homelab
     steps:
@@ -97,11 +71,11 @@ jobs:
         with:
           node-version: "22.19.0"
           cache: "pnpm"
-          cache-dependency-path: ./pulumi/pnpm-lock.yaml
+          cache-dependency-path: ./pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install
-        working-directory: ./pulumi
+        working-directory: ./
 
       - name: Write SSH key
         run: |
@@ -122,7 +96,7 @@ jobs:
           command: up
           stack-name: homelab
           comment-on-pr: false
-          work-dir: ./pulumi
+          work-dir: ./
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
           PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}

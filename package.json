@@ -1,0 +1,23 @@
+{
+  "name": "hac",
+  "main": "index.ts",
+  "scripts": {
+    "generate-host-schema": "tsx scripts/generate-host-schema.ts"
+  },
+  "dependencies": {
+    "@hanseltime/pulumi-file-utils": "1.2.0",
+    "@muhlba91/pulumi-proxmoxve": "^7.5.0",
+    "@pulumi/ansible": "file:sdks/ansible",
+    "@pulumi/command": "^1.1.1",
+    "@pulumi/porkbun": "file:sdks/porkbun",
+    "@pulumi/pulumi": "^3.197.0",
+    "handlebars": "^4.7.8",
+    "smol-toml": "^1.4.2",
+    "zod": "^4.1.11"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.6",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
+}
