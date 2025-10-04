@@ -9,6 +9,9 @@ services:
       - JELLYFIN_PublishedServerUrl=https://{{{domainForApp "jellyfin"}}}
     volumes:
       - /docker/jellyfin:/config
+      # mount baremetal paths since data was migrated from a baremetal insall
+      - /docker/jellyfin/data:/var/lib/jellyfin
+      - /docker/jellyfin:/etc/jellyfin
       - /mnt/media:/mnt/media
     # ports:
     #   - 8096:8096 # http
