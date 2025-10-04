@@ -16,11 +16,19 @@ const PveConfigSchema = z
   })
   .strict();
 
+const StoragePoolsConfigSchema = z
+  .object({
+    mass: z.string().min(1),
+    fast: z.string().min(1),
+  })
+  .strict();
+
 const StorageConfigSchema = z
   .object({
     templates: z.string().min(1),
     containers: z.string().optional(),
     backups: z.string().optional(),
+    pools: StoragePoolsConfigSchema,
   })
   .strict();
 
@@ -91,6 +99,7 @@ const LxcNetworkSchema = z
 
 const LxcConfigSchema = z
   .object({
+    appdata: z.string().min(1),
     hosts: LxcHostsSchema,
     network: LxcNetworkSchema,
     auth: LxcAuthSchema,
@@ -103,8 +112,7 @@ export const PveHostConfigSchema = z
   .object({
     pve: PveConfigSchema,
     storage: StorageConfigSchema,
-    network: NetworkConfigSchema.optional(),
-    dns: NetworkDnsSchema.optional(),
+    dns: NetworkDnsSchema,
     lxc: LxcConfigSchema,
     providers: ProvidersSchema.optional(),
   })

@@ -10,8 +10,15 @@ insecure = false
 [storage]
 templates = "local"
 
+[storage.pools]
+mass = "/void"
+fast = "/fast"
+
 [dns]
 domain = "192.168.0.89"
+
+[lxc]
+appdata = "/fast/test-appdata"
 
 [lxc.hosts]
 archiver = { enabled = true }

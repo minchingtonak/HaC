@@ -1,10 +1,12 @@
 import * as pulumi from '@pulumi/pulumi';
 import * as proxmox from '@muhlba91/pulumi-proxmoxve';
+import * as command from '@pulumi/command/remote';
 import { HomelabContainer } from './homelab-container';
 import { HomelabProvider } from './homelab-provider';
 import { LxcHostConfigParser } from '../hosts/lxc-host-config-parser';
 import { PveHostConfigToml } from '../hosts/pve-host-config-schema';
 import { PveFirewallPolicy } from '../constants';
+import path from 'node:path';
 
 export interface HomelabPveHostArgs {
   pveHostConfig: PveHostConfigToml;
@@ -84,22 +86,48 @@ export class HomelabPveHost extends pulumi.ComponentResource {
       });
     });
 
-    pulumi.all(referencedHostConfigs).apply((hostConfigs) => {
-      for (const config of hostConfigs) {
-        const container = new HomelabContainer(
-          `${name}-${config.hostname}`,
-          {
-            ...config,
-            provider: this.provider,
-          },
-          {
-            dependsOn: this.templateFile,
-            parent: this,
-          },
-        );
+    this.provider.pveConfig.apply((pveConfig) => {
+      pulumi.all(referencedHostConfigs).apply((hostConfigs) => {
+        for (const config of hostConfigs) {
+          const createAppDataDir = new command.Command(
+            `${name}-appdata-dir`,
+            {
+              create: `mkdir -p ${path.join(
+                pveConfig.lxc.appdata,
+                config.hostname,
+              )}`,
+              delete: `rm -rf ${path.join(
+                pveConfig.lxc.appdata,
+                config.hostname,
+              )}`,
+              connection: {
+                user: 'root',
+                host: pveConfig.dns.domain,
+                privateKey: this.provider.lxcPrivateSshKey,
+              },
+            },
+            {
+              parent: this,
+              dependsOn: this.templateFile,
+              retainOnDelete: true,
+            },
+          );
 
-        this.containers.push(container);
-      }
+          const container = new HomelabContainer(
+            `${name}-${config.hostname}`,
+            {
+              ...config,
+              provider: this.provider,
+            },
+            {
+              dependsOn: createAppDataDir,
+              parent: this,
+            },
+          );
+
+          this.containers.push(container);
+        }
+      });
     });
 
     this.registerOutputs({
