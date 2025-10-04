@@ -67,7 +67,7 @@ services:
       - "loggifly.keywords.0.regex= ERR "
       - "loggifly.keywords.0.notification_title={{{@lxc.hostname}}}#{container} - error"
       - "loggifly.keywords.0.action=restart"
-      - "loggifly.keywords.0.action_cooldown=300"
+      - "loggifly.keywords.0.action_cooldown=30"
     networks:
       - traefik
 
