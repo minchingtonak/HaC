@@ -143,6 +143,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
       {
         provider: args.provider,
         parent: this,
+        deleteBeforeReplace: true,
       },
     );
 
@@ -157,6 +158,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
         provider: args.provider,
         parent: this,
         dependsOn: this.container,
+        deleteBeforeReplace: true,
       },
     );
 
@@ -174,13 +176,16 @@ export class HomelabContainer extends pulumi.ComponentResource {
         provider: args.provider,
         parent: this,
         dependsOn: this.container,
+        deleteBeforeReplace: true,
       },
     );
 
     const hasProxy = stackNames.includes(HomelabContainer.PROXY_STACK_NAME);
 
     if (!hasProxy) {
-      throw new Error(`Container ${name} must use proxy stack ${HomelabContainer.PROXY_STACK_NAME}`);
+      throw new Error(
+        `Container ${name} must use proxy stack ${HomelabContainer.PROXY_STACK_NAME}`,
+      );
     }
 
     this.firewallRules = new proxmox.network.FirewallRules(
@@ -218,6 +223,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
         provider: args.provider,
         parent: this,
         dependsOn: this.container,
+        deleteBeforeReplace: true,
       },
     );
 
@@ -239,6 +245,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
       {
         parent: this,
         provider: porkbunProvider,
+        deleteBeforeReplace: true,
       },
     );
 
@@ -257,6 +264,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
       {
         parent: this,
         provider: porkbunProvider,
+        deleteBeforeReplace: true,
       },
     );
 
@@ -291,6 +299,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
           {
             parent: this.container,
             dependsOn: this.provisionerResources,
+            deleteBeforeReplace: true,
           },
         );
       }

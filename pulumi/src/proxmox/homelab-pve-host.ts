@@ -95,6 +95,9 @@ export class HomelabPveHost extends pulumi.ComponentResource {
               create: `mkdir -p ${path.join(
                 pveConfig.lxc.appdata,
                 config.hostname,
+              )} && chmod 777 ${path.join(
+                pveConfig.lxc.appdata,
+                config.hostname,
               )}`,
               delete: `rm -rf ${path.join(
                 pveConfig.lxc.appdata,
