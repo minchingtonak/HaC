@@ -10,6 +10,7 @@ const PveAuthSchema = z
 
 const PveConfigSchema = z
   .object({
+    enabled: z.boolean().default(true),
     endpoint: z.string().min(1),
     node: z.string().min(1),
     auth: PveAuthSchema,
