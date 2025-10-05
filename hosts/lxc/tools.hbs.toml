@@ -6,6 +6,7 @@ description = "swiss army knife of utility tools"
 
 [stacks]
 traefik = {}
+dozzle = {}
 cyberchef = {}
 docuseal = {}
 it-tools = {}
