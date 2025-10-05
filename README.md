@@ -277,3 +277,28 @@ See [`provisioners/ansible/`](provisioners/ansible/) for examples.
 Executes a script on the host when it is created (by default).
 
 See [`provisioners/scripts/`](provisioners/scripts/) for examples.
+
+## Roadmap
+
+### Security
+
+- test tcp/udp proxying from traefik
+- Restrict access to docker socket, use socket proxy
+- firewall and proxy for pve hosts
+
+### Usability
+
+- preview-time checks
+  - container must deploy traefik (or whatever the proxy stack is)
+  - possibly require some sort of monitoring/notif stacks on every host
+  - would be cool to be able to configure these rules via file
+- make pve host schema less confusing
+- expose all pve/lxc hosts as template data for use in autogenerating dashboards
+- stack provisioners
+- simplify script provisioner wrapper code
+
+### Dev Experience
+
+- linting step that checks the reference configs to make sure they have all members, even optional
+- handle template context using context objet pattern
+- refactor into a separate package that's imported and used in the deploy function
