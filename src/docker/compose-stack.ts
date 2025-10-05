@@ -113,7 +113,7 @@ export class ComposeStack extends pulumi.ComponentResource {
       `${name}-deploy-stack`,
       {
         create: `cd ${remoteStackDirectory} && docker compose up -d --force-recreate`,
-        delete: `cd ${remoteStackDirectory} && docker compose down`,
+        delete: `cd ${remoteStackDirectory} && docker compose down && docker image prune -a -f`,
         addPreviousOutputInEnv: false,
         triggers: [this.stackDirectoryAsset],
         connection: args.connection,
