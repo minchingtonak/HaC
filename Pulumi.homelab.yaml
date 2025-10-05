@@ -89,19 +89,11 @@ config:
   lxc#backup-pulumi#cronicle:SECRET_B2_HEALTHCHECK_URL:
     secure: v1:+wCA5m2zsGeupOzU:0TqufLdbUSRVv6HMHfsCjYF5q/q6d8TWTGYmIbPDTAB4BjV/sq8uXJdZswAeIH1MzC7Bz418ppHq/1JrlyHPDvlm+Z0/GOvK
   # life
-  lxc#life-pulumi:SERVER_NAME: life-pulumi
-  lxc#life-pulumi#mealie:MEALIE_BASE_URL: '{{{domainForApp "mealie"}}}'
-  lxc#life-pulumi#dawarich:SECRET_DB_PASSWORD:
+  lxc#life#dawarich:SECRET_DB_PASSWORD:
     secure: v1:xEWsp+rmkp0ekfX0:fDOUcy1psCZEQPCgfxHGBMzi0oTNJdmNENQTIYNNxjQoc3Mt
-  lxc#life-pulumi#mealie:config_var_one: foo
-  lxc#life-pulumi#mealie:secret_config_var_two:
-    secure: v1:LX2BPUzsuoCbyNOC:urnuGx5snWwD2LsGaSxCm0ZVZQ==
-  lxc#life-pulumi#mealie:MY_VARIABLE_ONE: baz
-  lxc#life-pulumi#mealie:SECRET_MY_VARIABLE_TWO:
-    secure: v1:U0uk56thP2731+fx:NmCpYhX2FJu/cH+zqJGwxt81+bE=
-  lxc#life-pulumi#fittrackee:SECRET_SECRET_KEY:
+  lxc#life#fittrackee:SECRET_SECRET_KEY:
     secure: v1:ifCk9F9zZ+3sHV+R:05/13+YnJnaBGpU131t0FIplYRNxyXT/0StRQu+VGe1uIcp3ppDY0lJxTCV3Gg==
-  lxc#life-pulumi#fittrackee:SECRET_DB_PASSWORD:
+  lxc#life#fittrackee:SECRET_DB_PASSWORD:
     secure: v1:2SC5AIdLdytL3l7R:CJhjXr0pdvtwClww4/fnwDjZHKE8F4Cxs4SxPW5wNIItrxTfXwtMAdzmkiE=
   # paperless
   lxc#paperless-pulumi#paperless-ngx:SECRET_ADMIN_USERNAME:

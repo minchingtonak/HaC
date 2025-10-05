@@ -16,7 +16,7 @@ services:
       PGID: 0
       ALLOW_SIGNUP: "false"
       TZ: America/Los_Angeles
-      BASE_URL: "{{{MEALIE_BASE_URL}}}"
+      BASE_URL: '{{{domainForApp "mealie"}}}'
     labels:
       - traefik.enable=true
       - traefik.http.routers.mealie.rule=Host(`{{{domainForApp "mealie"}}}`)

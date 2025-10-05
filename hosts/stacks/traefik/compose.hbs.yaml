@@ -17,7 +17,7 @@ services:
       - --api=true
       - --api.dashboard=true
       - --api.debug=true
-      - --log.level=info
+      - --log.level=debug
       # - --log.filePath=/etc/traefik/traefik.log
       - --entrypoints.http.address=:80
       - --entrypoints.https.address=:443
@@ -67,7 +67,7 @@ services:
       - "loggifly.keywords.0.regex= ERR "
       - "loggifly.keywords.0.notification_title={{{@lxc.hostname}}}#{container} - error"
       - "loggifly.keywords.0.action=restart"
-      - "loggifly.keywords.0.action_cooldown=30"
+      - "loggifly.keywords.0.action_cooldown=60"
     networks:
       - traefik
 

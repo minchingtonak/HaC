@@ -1,12 +1,11 @@
 # verified
 id = 215
-hostname = "life-pulumi"
+hostname = "life"
 
 description = "life tracking apps"
 
 [stacks]
 traefik = {}
-komodo = {}
 dozzle = {}
 dawarich = {}
 fittrackee = {}
@@ -24,6 +23,10 @@ swap = 4096
 [disk]
 size = 32
 
+[[mountPoints]]
+volume = "{{{@pve.lxc.appdata}}}/life"
+mountPoint = "/docker"
+
 [[provisioners]]
 type = "ansible"
 playbook = "provisioners/ansible/lxc-init.yaml"
@@ -32,7 +35,3 @@ replayable = false
 [[provisioners]]
 type = "script"
 script = "provisioners/scripts/install-docker.sh"
-
-[[provisioners]]
-type = "script"
-script = "provisioners/scripts/install-periphery.sh"

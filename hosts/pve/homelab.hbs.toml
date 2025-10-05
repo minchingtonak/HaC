@@ -25,6 +25,7 @@ archiver = { enabled = true }
 copyparty = { enabled = true }
 jellyfin = { enabled = true }
 tools = { enabled = true }
+life = { enabled = true }
 
 [lxc.network]
 domain = "akmin.dev"
