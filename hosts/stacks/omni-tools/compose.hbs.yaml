@@ -1,6 +1,6 @@
 services:
   omni-tools:
-    image: iib0011/omni-tools:0.5.0@sha256:9d494a4d8d64f34a87ebbf5bc5e1a5f02b5b9796f7ddbc9e3aacda5996e76b61
+    image: iib0011/omni-tools:0.6.0@sha256:ceb5acc317daf387634f7f212cefe4722fd1243ad1cba74203f25254195b6c69
     container_name: omni-tools
     restart: unless-stopped
     # ports:
