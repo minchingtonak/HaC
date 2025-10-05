@@ -24,6 +24,7 @@ appdata = "/fast/test-appdata"
 archiver = { enabled = true }
 copyparty = { enabled = true }
 jellyfin = { enabled = true }
+tools = { enabled = true }
 
 [lxc.network]
 domain = "akmin.dev"
