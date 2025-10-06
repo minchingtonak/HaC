@@ -1,11 +1,12 @@
 # verified
 id = 206
-hostname = "gitea-pulumi"
+hostname = "gitea"
 
 description = "lightweight private git server and github mirror"
 
 [stacks]
 traefik = {}
+dozzle = {}
 gitea = {}
 
 [cpu]
@@ -25,6 +26,10 @@ action = "ACCEPT"
 dport = "222"
 proto = "tcp"
 comment = "gitea ssh"
+
+[[mountPoints]]
+volume = "{{{@pve.lxc.appdata}}}/gitea"
+mountPoint = "/docker"
 
 [[provisioners]]
 type = "ansible"
