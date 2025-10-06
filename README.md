@@ -302,3 +302,8 @@ See [`provisioners/scripts/`](provisioners/scripts/) for examples.
 - linting step that checks the reference configs to make sure they have all members, even optional
 - handle template context using context objet pattern
 - refactor into a separate package that's imported and used in the deploy function
+
+### Homelab
+
+- set up pbs backup of app data folder
+  - discontinue lxc backups after since they should be able to be recreated trivially, data is the only thing worth backing up

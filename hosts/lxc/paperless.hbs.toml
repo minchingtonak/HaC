@@ -1,12 +1,11 @@
 # verified
 id = 214
-hostname = "paperless-pulumi"
+hostname = "paperless"
 
 description = "paperless document management systems"
 
 [stacks]
 traefik = {}
-komodo = {}
 dozzle = {}
 paperless-ngx = {}
 
@@ -19,6 +18,10 @@ swap = 2048
 
 [disk]
 size = 4
+
+[[mountPoints]]
+volume = "{{{@pve.lxc.appdata}}}/paperless"
+mountPoint = "/docker"
 
 [[mountPoints]]
 volume = "/void/documents"

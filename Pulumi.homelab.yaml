@@ -96,9 +96,9 @@ config:
   lxc#life#fittrackee:SECRET_DB_PASSWORD:
     secure: v1:2SC5AIdLdytL3l7R:CJhjXr0pdvtwClww4/fnwDjZHKE8F4Cxs4SxPW5wNIItrxTfXwtMAdzmkiE=
   # paperless
-  lxc#paperless-pulumi#paperless-ngx:SECRET_ADMIN_USERNAME:
+  lxc#paperless#paperless-ngx:SECRET_ADMIN_USERNAME:
     secure: v1:ZN1VLNMSu60BAhxf:okOhImt9d3D9NVlmztIPHDRv9noH
-  lxc#paperless-pulumi#paperless-ngx:SECRET_ADMIN_PASSWORD:
+  lxc#paperless#paperless-ngx:SECRET_ADMIN_PASSWORD:
     secure: v1:0NpMQ0oelz/GSKbW:LNPX/H4nomIsrwR7uH0med0p02S2vEf7VPfOZaqiTe441JqS
   # servarr
   lxc#servarr-pulumi#servarr:SECRET_WIREGUARD_PRIVATE_KEY:

@@ -27,6 +27,7 @@ jellyfin = { enabled = true }
 tools = { enabled = true }
 life = { enabled = true }
 music = { enabled = true }
+paperless = { enabled = true }
 
 [lxc.network]
 domain = "akmin.dev"
