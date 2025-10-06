@@ -1,12 +1,15 @@
 # verified
 id = 204
-hostname = "jellyseerr-pulumi"
+hostname = "jellyseerr"
 
 description = "easy to use media recommendation and request app"
 
 [stacks]
 traefik = {}
+dozzle = {}
 jellyseerr = {}
+movie-roulette = {}
+watcharr = {}
 
 [cpu]
 cores = 2
@@ -17,6 +20,10 @@ swap = 1024
 
 [disk]
 size = 8
+
+[[mountPoints]]
+volume = "{{{@pve.lxc.appdata}}}/jellyseerr"
+mountPoint = "/docker"
 
 [[provisioners]]
 type = "ansible"
