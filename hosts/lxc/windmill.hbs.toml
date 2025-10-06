@@ -1,10 +1,11 @@
 id = 209
-hostname = "windmill-pulumi"
+hostname = "windmill"
 
-description = "windmill code-based automation platform, mostly used for spotify automation"
+description = "windmill code-first automation platform, mostly used for spotify automation"
 
 [stacks]
 traefik = {}
+dozzle = {}
 windmill = {}
 
 [cpu]
@@ -16,6 +17,10 @@ swap = 2048
 
 [disk]
 size = 64
+
+[[mountPoints]]
+volume = "{{{@pve.lxc.appdata}}}/windmill"
+mountPoint = "/docker"
 
 [[provisioners]]
 type = "ansible"

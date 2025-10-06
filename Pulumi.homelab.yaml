@@ -120,3 +120,6 @@ config:
     secure: v1:w/o6ZsYbS5sUTcQC:DNy5wi+ud/rWyPqDiqpE8Kcbo6WrrVrz3JymjQqW+/Mie7RT5THNvbEAI4y439m2
   lxc#music#your-spotify:SECRET_SPOTIFY_CLIENT_SECRET:
     secure: v1:vOfwntO6rFuwv7HX:TfO4gitQRKUjvAuVgrObOpfQubcKbAGG36aKGPBKcGUaRoKe+1u0QUQV9WdskLg3
+  # windmill
+  lxc#windmill#windmill:SECRET_DB_PASSWORD:
+    secure: v1:o/l5rWI9Pdv7C2lQ:fktUJhe1pR3EcFvC/GoAGmqSJ9xSsQCGJycZYSMudmPe4yJupQKrUlX0OPAT7g==

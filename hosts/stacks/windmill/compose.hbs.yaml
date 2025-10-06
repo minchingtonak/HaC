@@ -11,14 +11,15 @@ services:
       replicas: 1
     # pinned
     image: postgres:16@sha256:46b64df84f4c8c5bd586952eb8ff813f1ce12f1bc36eb12af678894b6a66ab89
+    container_name: windmill-db
     shm_size: 1g
     restart: unless-stopped
     volumes:
       - /docker/windmill/db:/var/lib/postgresql/data
-    expose:
-      - 8000
-    ports:
-      - 5432:5432
+    # expose:
+    #   - 8000
+    # ports:
+    #   - 5432:5432
     environment:
       POSTGRES_PASSWORD: ${WINDMILL_DB_PASSWORD}
       POSTGRES_DB: windmill
@@ -28,16 +29,19 @@ services:
       timeout: 5s
       retries: 5
     logging: *default-logging
+    networks:
+      - windmill
 
   windmill_server:
     image: ghcr.io/windmill-labs/windmill:1.555.1@sha256:ffc2d27ca9b090820c94c3180578d81c10896e5e88d6a6d2af4ab7060cb21ea9
+    container_name: windmill-server
     pull_policy: always
     deploy:
       replicas: 1
     restart: unless-stopped
-    expose:
-      - 8000
-      - 2525
+    # expose:
+    #   - 8000
+    #   - 2525
     # ports:
     #   - 8000:8000
     #   - 2525:2525 # SMTP
@@ -59,10 +63,12 @@ services:
       - traefik.http.routers.windmill.service=windmill
       - traefik.http.services.windmill.loadbalancer.server.port=8000
     networks:
+      - windmill
       - traefik
 
   windmill_worker:
     image: ghcr.io/windmill-labs/windmill:1.555.1@sha256:ffc2d27ca9b090820c94c3180578d81c10896e5e88d6a6d2af4ab7060cb21ea9
+    container_name: windmill-worker
     pull_policy: always
     deploy:
       replicas: 1
@@ -86,10 +92,13 @@ services:
       - /docker/windmill/cache:/tmp/windmill/cache
       - /docker/windmill/logs:/tmp/windmill/logs
     logging: *default-logging
+    networks:
+      - windmill
 
   ## This worker is specialized for "native" jobs. Native jobs run in-process and thus are much more lightweight than other jobs
   windmill_worker_native:
     image: ghcr.io/windmill-labs/windmill:1.555.1@sha256:ffc2d27ca9b090820c94c3180578d81c10896e5e88d6a6d2af4ab7060cb21ea9
+    container_name: windmill-worker-native
     pull_policy: always
     deploy:
       replicas: 1
@@ -111,10 +120,13 @@ services:
     volumes:
       - /docker/windmill/logs:/tmp/windmill/logs
     logging: *default-logging
+    networks:
+      - windmill
 
   # This worker is specialized for reports or scraping jobs. It is assigned the "reports" worker group which has an init script that installs chromium and can be targeted by using the "chromium" worker tag.
   windmill_worker_reports:
     image: ghcr.io/windmill-labs/windmill:1.555.1@sha256:ffc2d27ca9b090820c94c3180578d81c10896e5e88d6a6d2af4ab7060cb21ea9
+    container_name: windmill-worker-reports
     pull_policy: always
     deploy:
       replicas: 1
@@ -137,19 +149,25 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /docker/windmill/cache:/tmp/windmill/cache
       - /docker/windmill/logs:/tmp/windmill/logs
+    networks:
+      - windmill
 
   lsp:
     image: ghcr.io/windmill-labs/windmill-lsp:1.555.1@sha256:fdb3cd94cc46498fd0f1782658e1ba27f217d8548cb36c1f48a1d0337a099675
+    container_name: windmill-lsp
     pull_policy: always
     restart: unless-stopped
-    expose:
-      - 3001
-    ports:
-      - 3001:3001
+    # expose:
+    #   - 3001
+    # ports:
+    #   - 3001:3001
     volumes:
       - /docker/windmill/lsp-cache:/pyls/.cache
     logging: *default-logging
+    networks:
+      - windmill
 
 networks:
+  windmill:
   traefik:
     external: true

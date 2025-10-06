@@ -29,6 +29,7 @@ life = { enabled = true }
 music = { enabled = true }
 paperless = { enabled = true }
 jellyseerr = { enabled = true }
+windmill = { enabled = true }
 
 [lxc.network]
 domain = "akmin.dev"
