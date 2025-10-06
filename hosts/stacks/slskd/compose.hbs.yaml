@@ -22,10 +22,10 @@ services:
       - traefik.http.routers.slskd.tls=true
       - traefik.http.routers.slskd.tls.certresolver=porkbun
       - traefik.http.routers.slskd.service=slskd
-      - traefik.http.services.slskd.loadbalancer.server.port=5031
+      - traefik.http.services.slskd.loadbalancer.server.port=5030
       # https://doc.traefik.io/traefik/reference/routing-configuration/tcp/router/rules-and-priority/#hostsni-and-hostsniregexp
-      - traefik.tcp.routers.slskd-listen.rule=HostSNI('*')
-      - traefik.tcp.routers.slskd-listen.entrypoints=slskd-listen
+      - traefik.tcp.routers.slskd-listen.rule=HostSNI(`*`)
+      - traefik.tcp.routers.slskd-listen.entrypoints=slskd-listen-50300-tcp
       - traefik.tcp.routers.slskd-listen.service=slskd-listen
       - traefik.tcp.services.slskd-listen.loadbalancer.server.port=50300
     networks:

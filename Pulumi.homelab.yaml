@@ -111,3 +111,12 @@ config:
   lxc#tailscale-pulumi#tailscale:SECRET_TAILSCALE_AUTHKEY:
     secure: v1:WzqZRv9cGYpzab5r:QmAK2vrwxNtPNZwMv0k/uWlnHT/nqKb+yGXPiRdSl83AhTm2SusJhSf03MEDGUIxZFe+9oF7R5POga0vC8k2JiRSvcmlVjRSTHlWkYae
   lxc#tailscale-pulumi#tailscale:TAILSCALE_SUBNET_ROUTES: 192.168.0.0/24
+  # music
+  lxc#music#navidrome:SECRET_LASTFM_APIKEY:
+    secure: v1:gvt3vIfX9NTkf9tQ:8bIKcNzkJtSvd/R/h2A8wHq1xPqQHTurz8JrlxXHj1DStEyU0030sx1u0K1qlga7
+  lxc#music#navidrome:SECRET_LASTFM_SECRET:
+    secure: v1:FZ5g3LGrRrEiTcJb:d+KvrmDiHbcaltG5xuUE1s3XjkwJyHZ6Pfwv9xc2OhPPl0ENuHnGergBhe/UxLbU
+  lxc#music#your-spotify:SECRET_SPOTIFY_CLIENT_ID:
+    secure: v1:w/o6ZsYbS5sUTcQC:DNy5wi+ud/rWyPqDiqpE8Kcbo6WrrVrz3JymjQqW+/Mie7RT5THNvbEAI4y439m2
+  lxc#music#your-spotify:SECRET_SPOTIFY_CLIENT_SECRET:
+    secure: v1:vOfwntO6rFuwv7HX:TfO4gitQRKUjvAuVgrObOpfQubcKbAGG36aKGPBKcGUaRoKe+1u0QUQV9WdskLg3

@@ -1,10 +1,11 @@
 id = 216
-hostname = "music-pulumi"
+hostname = "music"
 
 description = "assorted audio management apps"
 
 [stacks]
 traefik = {}
+dozzle = {}
 audiobookshelf = {}
 navidrome = {}
 slskd = {}
@@ -19,6 +20,10 @@ swap = 4096
 
 [disk]
 size = 16
+
+[[mountPoints]]
+volume = "{{{@pve.lxc.appdata}}}/music"
+mountPoint = "/docker"
 
 [[mountPoints]]
 volume = "/void/audiobooks"

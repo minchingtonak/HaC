@@ -7,10 +7,10 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/Los_Angeles
-      - APP_URL={{{APP_URL}}}
+      - APP_URL=https://{{{domainForApp "your-spotify"}}}
       - SPOTIFY_PUBLIC={{{SECRET_SPOTIFY_CLIENT_ID}}}
       - SPOTIFY_SECRET={{{SECRET_SPOTIFY_CLIENT_SECRET}}}
-      - CORS=all # {{{APP_URL}}}:80,{{{APP_URL}}}:443 # all
+      - CORS=all # <APP_URL>:80,<APP_URL>:443 # all
       - MONGO_ENDPOINT=mongodb://mongo:27017/your_spotify
     # ports:
     #   - 80:80
@@ -23,8 +23,9 @@ services:
       - traefik.http.routers.yourspotify.tls=true
       - traefik.http.routers.yourspotify.tls.certresolver=porkbun
       - traefik.http.routers.yourspotify.service=yourspotify
-      - traefik.http.services.yourspotify.loadbalancer.server.port=443
+      - traefik.http.services.yourspotify.loadbalancer.server.port=80
     networks:
+      - your_spotify
       - traefik
 
   mongo:
@@ -34,7 +35,10 @@ services:
     volumes:
       - /docker/your_spotify/db:/data/db
     restart: unless-stopped
+    networks:
+      - your_spotify
 
 networks:
+  your_spotify:
   traefik:
     external: true

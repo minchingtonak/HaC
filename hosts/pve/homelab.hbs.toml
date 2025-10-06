@@ -26,6 +26,7 @@ copyparty = { enabled = true }
 jellyfin = { enabled = true }
 tools = { enabled = true }
 life = { enabled = true }
+music = { enabled = true }
 
 [lxc.network]
 domain = "akmin.dev"
