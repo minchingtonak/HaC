@@ -20,6 +20,9 @@ export type ComposeStackArgs = {
 export class ComposeStack extends pulumi.ComponentResource {
   public static RESOURCE_TYPE = "HaC:docker:ComposeStack";
 
+  private static readonly PRUNE_LOCKFILE_PATH =
+    "/tmp/HaC-compose-stack-prune.lock";
+
   stackDirectoryAsset: pulumi.asset.FileAsset;
 
   copyStackToRemote: command.remote.CopyToRemote;
@@ -109,11 +112,40 @@ export class ComposeStack extends pulumi.ComponentResource {
       { parent: this, dependsOn: this.copyStackToRemote },
     );
 
+    // commands that run an image prune use locking to prevent multiple prunes running at once and to prevent a prune deleting an image that is in the processing of starting up
+    // wait for the lock: flock -w <timeout-seconds> <lockfile-path> -c "true"
+    // open the lock: exec <fd-N>>"<lockfile-path>"
+    // acquire the lock: flock -x <fd-N>
+    // release the lock: exec <fd-N>>&- (also released when the shell terminates)
+    const waitForAndAcquireLock = [
+      `flock -w 300 "${ComposeStack.PRUNE_LOCKFILE_PATH}" -c "true"`,
+      `exec 226>"${ComposeStack.PRUNE_LOCKFILE_PATH}"`,
+      `flock -x 226`,
+    ];
+
     this.deployStack = new command.remote.Command(
       `${name}-deploy-stack`,
       {
-        create: `cd ${remoteStackDirectory} && docker compose up -d --force-recreate`,
-        delete: `cd ${remoteStackDirectory} && docker compose down && docker image prune -a -f`,
+        create: [
+          `cd ${remoteStackDirectory}`,
+          "docker compose pull",
+          ...waitForAndAcquireLock,
+          "docker compose up -d --force-recreate",
+        ].join(" && "),
+        update: [
+          `cd ${remoteStackDirectory}`,
+          "docker compose pull",
+          ...waitForAndAcquireLock,
+          "docker compose down",
+          "docker compose up -d --force-recreate",
+          "docker image prune -a -f",
+        ].join(" && "),
+        delete: [
+          `cd ${remoteStackDirectory}`,
+          ...waitForAndAcquireLock,
+          "docker compose down",
+          "docker image prune -a -f",
+        ].join(" && "),
         addPreviousOutputInEnv: false,
         triggers: [this.stackDirectoryAsset],
         connection: args.connection,
