@@ -65,7 +65,7 @@ config:
   lxc#admin#apprise:SECRET_SERVARR_SLACK_WEBHOOK:
     secure: v1:WsS7ZU2EH2dvJwmu:nrRyndrzO45Te8/ARtzdo3bDzdc3jRDoZNWUNyO7qWcV/AFTRVhO+bNRMoc3VWyTz2e8abYC3aUYy474nnzTpUgs62S/SMI0cBLagEDf/YExO/QvpZ/KXTC6cca4ea8jsw==
   # immich
-  lxc#immich-pulumi#immich:SECRET_DB_PASSWORD:
+  lxc#immich#immich:SECRET_DB_PASSWORD:
     secure: v1:ECc5/vJz6VnDlxsj:xgdWvCAj0NxBmWNBrAg4cP+l8j7DAk9cij/mO/JSNm+S8zVq
   # backup
   lxc#backup-pulumi#cronicle:CRONICLE_BASE_APP_URL: https://cronicle.backup-pulumi.pulumi.homelab.akmin.dev

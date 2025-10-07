@@ -1,11 +1,12 @@
 # verified
 id = 207
-hostname = "immich-pulumi"
+hostname = "immich"
 
 description = "private image server"
 
 [stacks]
 traefik = {}
+dozzle = {}
 immich = {}
 
 [cpu]
@@ -17,6 +18,10 @@ swap = 2048
 
 [disk]
 size = 64
+
+[[mountPoints]]
+volume = "{{{@pve.lxc.appdata}}}/immich"
+mountPoint = "/docker"
 
 [[mountPoints]]
 volume = "/void/photos"
