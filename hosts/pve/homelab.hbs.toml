@@ -31,6 +31,7 @@ paperless = { enabled = true }
 jellyseerr = { enabled = true }
 windmill = { enabled = true }
 gitea = { enabled = true }
+admin = { enabled = true }
 
 [lxc.network]
 domain = "akmin.dev"

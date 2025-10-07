@@ -1,15 +1,16 @@
 # verified
 id = 213
-hostname = "admin-pulumi"
+hostname = "admin"
 
 description = "homelab administration-related apps"
 
 [stacks]
 traefik = {}
 dozzle = {}
-komodo = {}
+apprise = {}
 semaphore = {}
-glance = {}
+# komodo = {}
+# glance = {}
 
 [cpu]
 cores = 2
@@ -20,6 +21,10 @@ swap = 1024
 
 [disk]
 size = 8
+
+[[mountPoints]]
+volume = "{{{@pve.lxc.appdata}}}/admin"
+mountPoint = "/docker"
 
 [[provisioners]]
 type = "ansible"
