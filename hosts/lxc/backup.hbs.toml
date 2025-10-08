@@ -1,11 +1,12 @@
 # verified
 id = 202
-hostname = "backup-pulumi"
+hostname = "backup"
 
 description = "various backup-related services"
 
 [stacks]
 traefik = {}
+dozzle = {}
 backrest = {}
 cronicle = {}
 
@@ -18,6 +19,10 @@ swap = 4096
 
 [disk]
 size = 4
+
+[[mountPoints]]
+volume = "{{{@pve.lxc.appdata}}}/backup"
+mountPoint = "/docker"
 
 [[mountPoints]]
 volume = "/void/backups"

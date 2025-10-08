@@ -33,6 +33,7 @@ windmill = { enabled = true }
 gitea = { enabled = true }
 admin = { enabled = true }
 immich = { enabled = true }
+backup = { enabled = true }
 
 [lxc.network]
 domain = "akmin.dev"
