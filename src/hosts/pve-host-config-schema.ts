@@ -1,10 +1,17 @@
 import { z } from "zod";
 
+export const PVE_DEFAULTS = {
+  AUTH: { USERNAME: "root", INSECURE: false },
+  DNS: { SERVERS: ["8.8.8.8", "1.1.1.1", "8.8.4.4"] },
+  LXC_HOST: { ENABLED: true },
+  HOST: { ENABLED: true },
+};
+
 const PveAuthSchema = z
   .object({
-    username: z.string().default("root"),
+    username: z.string().default(PVE_DEFAULTS.AUTH.USERNAME),
     password: z.string().min(1),
-    insecure: z.boolean().default(false),
+    insecure: z.boolean().default(PVE_DEFAULTS.AUTH.INSECURE),
   })
   .strict();
 
@@ -23,7 +30,7 @@ const StorageConfigSchema = z
 const DnsSchema = z
   .object({
     domain: z.string().min(1),
-    servers: z.array(z.string()).default(["8.8.8.8", "1.1.1.1", "8.8.4.4"]),
+    servers: z.array(z.string()).default(PVE_DEFAULTS.DNS.SERVERS),
   })
   .strict();
 
@@ -45,7 +52,9 @@ const ProvidersSchema = z
   .object({ dns: DnsProvidersSchema.optional() })
   .strict();
 
-const LxcHostSchema = z.object({ enabled: z.boolean().default(true) }).strict();
+const LxcHostSchema = z
+  .object({ enabled: z.boolean().default(PVE_DEFAULTS.LXC_HOST.ENABLED) })
+  .strict();
 
 const LxcHostsSchema = z.record(z.string(), LxcHostSchema);
 
@@ -69,7 +78,7 @@ const LxcConfigSchema = z
 
 export const PveHostConfigSchema = z
   .object({
-    enabled: z.boolean().default(true),
+    enabled: z.boolean().default(PVE_DEFAULTS.HOST.ENABLED),
     node: z.string().min(1),
     endpoint: z.string().min(1),
     ip: z.string().min(1),

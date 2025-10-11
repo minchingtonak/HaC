@@ -3,9 +3,6 @@ import * as command from "@pulumi/command";
 import * as proxmox from "@muhlba91/pulumi-proxmoxve";
 import * as porkbun from "@pulumi/porkbun";
 import {
-  CpuCores,
-  DiskSize,
-  MemorySize,
   PveFirewallDirection,
   PveFirewallMacro,
   PveFirewallPolicy,
@@ -80,16 +77,12 @@ export class HomelabContainer extends pulumi.ComponentResource {
       {
         nodeName: args.provider.pveNodeName,
         vmId: args.id,
-        description: args.description ?? "managed by pulumi",
+        description: args.description,
         tags: [...stackNames, ...(args.tags ?? [])],
-        unprivileged: true,
-        startOnBoot: true,
-        protection: false,
-        operatingSystem: args.os ?? {
-          type: "debian",
-          templateFileId:
-            "local:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst",
-        },
+        unprivileged: args.unprivileged,
+        startOnBoot: args.startOnBoot,
+        protection: args.protection,
+        operatingSystem: args.os,
         mountPoints: mountPoints,
         devicePassthroughs: args.devicePassthroughs,
         initialization: {
@@ -102,19 +95,12 @@ export class HomelabContainer extends pulumi.ComponentResource {
             password: args.provider.defaultRootPassword,
           },
         },
-        networkInterfaces: [{ name: "eth0", bridge: "vmbr0", firewall: true }],
-        cpu: args.cpu ?? {
-          architecture: "amd64",
-          cores: CpuCores.DUAL,
-          units: 1024,
-        },
-        memory: args.memory ?? {
-          dedicated: MemorySize.GB_4,
-          swap: MemorySize.GB_2,
-        },
-        disk: args.disk ?? { datastoreId: "fast", size: DiskSize.GB_8 },
-        features: { nesting: true, keyctl: true, fuse: false, mounts: [] },
-        console: { enabled: true, type: "tty", ttyCount: 2 },
+        networkInterfaces: args.networkInterfaces,
+        cpu: args.cpu,
+        memory: args.memory,
+        disk: args.disk,
+        features: args.features,
+        console: args.console,
       },
       { provider: args.provider, parent: this, deleteBeforeReplace: true },
     );
