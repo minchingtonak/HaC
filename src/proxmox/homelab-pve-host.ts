@@ -1,15 +1,27 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as proxmox from "@muhlba91/pulumi-proxmoxve";
 import * as command from "@pulumi/command/remote";
-import { HomelabContainer } from "./homelab-container";
-import { HomelabProvider } from "./homelab-provider";
+import {
+  HomelabContainer,
+  HomelabContainerTemplateContext,
+} from "./homelab-container";
+import { HomelabPveProvider } from "./homelab-pve-provider";
 import { LxcHostConfigParser } from "../hosts/lxc-host-config-parser";
-import { PveHostConfigToml } from "../hosts/pve-host-config-schema";
 import { PveFirewallPolicy } from "../constants";
 import path from "node:path";
+import { TemplateContext } from "../templates/template-context";
+import { PveHostConfigToml } from "../hosts/pve-host-config-schema";
+import { LxcHostConfigToml } from "../hosts/lxc-host-config-schema";
+
+export type HomelabPveHostTemplateContext = {
+  pve: PveHostConfigToml;
+  enabledPveHosts: PveHostConfigToml[];
+  lxc: LxcHostConfigToml;
+  enabledLxcHosts: LxcHostConfigToml[];
+};
 
 export interface HomelabPveHostArgs {
-  pveHostConfig: PveHostConfigToml;
+  context: TemplateContext<HomelabPveHostTemplateContext>;
 }
 
 export class HomelabPveHost extends pulumi.ComponentResource {
@@ -18,7 +30,7 @@ export class HomelabPveHost extends pulumi.ComponentResource {
   static LXC_HOST_CONFIG_PATH_FOR = (hostname: string) =>
     `./hosts/lxc/${hostname}.hbs.toml`;
 
-  public readonly provider: HomelabProvider;
+  public readonly provider: HomelabPveProvider;
   public readonly firewall: proxmox.network.Firewall;
   public readonly templateFile: proxmox.download.File;
   public readonly containers: HomelabContainer[] = [];
@@ -30,9 +42,11 @@ export class HomelabPveHost extends pulumi.ComponentResource {
   ) {
     super(HomelabPveHost.RESOURCE_TYPE, name, {}, opts);
 
-    this.provider = new HomelabProvider(
+    const { pve } = args.context.get("pve");
+
+    this.provider = new HomelabPveProvider(
       `${name}-provider`,
-      { pveHostConfig: args.pveHostConfig },
+      { pveHostConfig: pve },
       { parent: this },
     );
 
@@ -51,8 +65,9 @@ export class HomelabPveHost extends pulumi.ComponentResource {
     this.templateFile = new proxmox.download.File(
       `${name}-debian-12-lxc-template`,
       {
-        nodeName: this.provider.pveNodeName,
-        datastoreId: this.provider.imageTemplateDatastoreId,
+        nodeName: pve.node,
+        datastoreId: pve.storage.templates,
+        // TODO add download file to pve config schema
         contentType: "vztmpl",
         url: "http://download.proxmox.com/images/system/debian-12-standard_12.7-1_amd64.tar.zst",
         checksum:
@@ -63,52 +78,51 @@ export class HomelabPveHost extends pulumi.ComponentResource {
       { provider: this.provider, retainOnDelete: true, parent: this },
     );
 
-    const enabledHostnames = Object.keys(args.pveHostConfig.lxc.hosts).filter(
-      (hostname) => args.pveHostConfig.lxc.hosts[hostname].enabled,
+    const enabledHostnames = Object.keys(pve.lxc.hosts).filter(
+      (hostname) => pve.lxc.hosts[hostname].enabled,
     );
 
-    const referencedHostConfigs = enabledHostnames.map((hostname) => {
+    const enabledLxcConfigs = enabledHostnames.map((hostname) => {
       const hostConfigPath = HomelabPveHost.LXC_HOST_CONFIG_PATH_FOR(hostname);
-      return LxcHostConfigParser.parseHostConfigFile(hostConfigPath, {
-        pve: args.pveHostConfig,
-      });
+      return LxcHostConfigParser.parseHostConfigFile(hostConfigPath, { pve });
     });
 
-    this.provider.pveConfig.apply((pveConfig) => {
-      pulumi.all(referencedHostConfigs).apply((hostConfigs) => {
-        for (const config of hostConfigs) {
-          const appDataDirPath = path.join(
-            pveConfig.lxc.appDataDirectory,
-            config.hostname,
-          );
+    pulumi.all(enabledLxcConfigs).apply((hostConfigs) => {
+      for (const config of hostConfigs) {
+        const appDataDirPath = path.join(
+          pve.lxc.appDataDirectory,
+          config.hostname,
+        );
 
-          const createAppDataDir = new command.Command(
-            `${name}-${config.hostname}-appdata-dir`,
-            {
-              create: `mkdir -p ${appDataDirPath} && chmod 777 ${appDataDirPath}`,
-              delete: `rm -rf ${appDataDirPath}`,
-              connection: {
-                user: "root",
-                host: pveConfig.dns.domain,
-                privateKey: this.provider.lxcPrivateSshKey,
-              },
+        const createAppDataDir = new command.Command(
+          `${name}-${config.hostname}-appdata-dir`,
+          {
+            create: `mkdir -p ${appDataDirPath} && chmod 777 ${appDataDirPath}`,
+            delete: `rm -rf ${appDataDirPath}`,
+            connection: {
+              // TODO user: pve.auth.username,
+              user: "root",
+              host: pve.dns.domain,
+              privateKey: pve.lxc.ssh.privateKey,
             },
-            {
-              parent: this,
-              dependsOn: this.templateFile,
-              retainOnDelete: true,
-            },
-          );
+          },
+          { parent: this, dependsOn: this.templateFile, retainOnDelete: true },
+        );
 
-          const container = new HomelabContainer(
-            `${name}-${config.hostname}`,
-            { ...config, provider: this.provider },
-            { dependsOn: createAppDataDir, parent: this },
-          );
+        const container = new HomelabContainer(
+          `${name}-${config.hostname}`,
+          {
+            context: args.context.withData<HomelabContainerTemplateContext>({
+              lxc: config,
+              enabledLxcHosts: hostConfigs,
+            }),
+            provider: this.provider,
+          },
+          { dependsOn: createAppDataDir, parent: this },
+        );
 
-          this.containers.push(container);
-        }
-      });
+        this.containers.push(container);
+      }
     });
 
     this.registerOutputs({

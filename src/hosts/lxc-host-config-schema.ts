@@ -372,7 +372,7 @@ const StackSchemaMap = z.record(z.string(), StackSchema);
 
 export const LxcHostConfigSchema = z
   .object({
-    id: z.number().positive().int().gte(1).lte(255),
+    id: z.number().int().min(1).max(255),
     hostname: z.string().min(1),
     description: z.string().default(LXC_DEFAULTS.DESCRIPTION),
     unprivileged: z.boolean().default(LXC_DEFAULTS.UNPRIVILEGED),

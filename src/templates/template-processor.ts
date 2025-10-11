@@ -3,12 +3,6 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import * as Handlebars from "handlebars";
 import { EnvUtils } from "../utils/env-utils";
-import { LxcHostConfigToml } from "../hosts/lxc-host-config-schema";
-import { PveHostConfigToml } from "../hosts/pve-host-config-schema";
-
-export interface TemplateContext {
-  [key: string]: string | pulumi.Output<string>;
-}
 
 export interface RenderedTemplateFile {
   idSafeName: string;
@@ -346,38 +340,6 @@ TemplateProcessor.registerTemplateHelper(
   "raw",
   (options: Handlebars.HelperOptions) => {
     return options.fn({});
-  },
-);
-
-export type ComposeStackTemplateContext = {
-  stackName: string;
-  templateDirectory: string;
-  lxc: LxcHostConfigToml;
-  pve: PveHostConfigToml;
-};
-
-function buildBaseDomain(context: ComposeStackTemplateContext): string {
-  return `${context.lxc.hostname}.pulumi.${context.pve.node}.${context.pve.lxc.network.domain}`;
-}
-
-TemplateProcessor.registerTemplateHelper(
-  "domainForApp",
-  (appName: string, options: Handlebars.HelperOptions) => {
-    const context = options.data as ComposeStackTemplateContext;
-    const subdomainPrefix =
-      context.lxc.stacks?.[context.stackName].domainPrefixes?.[appName] ??
-      appName;
-
-    return `${subdomainPrefix}.${buildBaseDomain(context)}`;
-  },
-);
-
-TemplateProcessor.registerTemplateHelper(
-  "domainForContainer",
-  (options: Handlebars.HelperOptions) => {
-    const context = options.data as ComposeStackTemplateContext;
-
-    return buildBaseDomain(context);
   },
 );
 
