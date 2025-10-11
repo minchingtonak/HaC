@@ -357,7 +357,7 @@ export type ComposeStackTemplateContext = {
 };
 
 function buildBaseDomain(context: ComposeStackTemplateContext): string {
-  return `${context.lxc.hostname}.pulumi.${context.pve.pve.node}.${context.pve.lxc.network.domain}`;
+  return `${context.lxc.hostname}.pulumi.${context.pve.node}.${context.pve.lxc.network.domain}`;
 }
 
 TemplateProcessor.registerTemplateHelper(

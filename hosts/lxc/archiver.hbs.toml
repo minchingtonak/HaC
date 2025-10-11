@@ -21,11 +21,11 @@ swap = 2048
 size = 8
 
 [[mountPoints]]
-volume = "{{{@pve.lxc.appdata}}}/archiver"
+volume = "{{{@pve.lxc.appDataDirectory}}}/archiver"
 mountPoint = "/docker"
 
 [[mountPoints]]
-volume = "{{{@pve.storage.pools.mass}}}/podcasts"
+volume = "{{{@pve.storage.mass.path}}}/podcasts"
 mountPoint = "/mnt/podcasts"
 
 [[provisioners]]

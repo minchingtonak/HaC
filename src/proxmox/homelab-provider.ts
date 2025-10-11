@@ -28,16 +28,16 @@ export class HomelabProvider extends proxmox.Provider {
     const config = pulumi.output(args.pveHostConfig);
 
     const providerArgs = {
-      endpoint: config.apply((c) => c.pve.endpoint),
-      insecure: config.apply((c) => c.pve.auth.insecure),
-      username: config.apply((c) => c.pve.auth.username),
-      password: pulumi.secret(config.apply((c) => c.pve.auth.password)),
+      endpoint: config.apply((c) => c.endpoint),
+      insecure: config.apply((c) => c.auth.insecure),
+      username: config.apply((c) => c.auth.username),
+      password: pulumi.secret(config.apply((c) => c.auth.password)),
     };
 
     super(name, providerArgs, opts);
 
     this.pveConfig = config;
-    this.pveNodeName = config.apply((c) => c.pve.node);
+    this.pveNodeName = config.apply((c) => c.node);
     this.localIpPrefix = config.apply((c) => c.lxc.network.subnet);
     this.gatewayIp = config.apply(
       (c) => c.lxc.network.gateway || `${c.lxc.network.subnet}.1`,
@@ -54,10 +54,10 @@ export class HomelabProvider extends proxmox.Provider {
     );
     this.imageTemplateDatastoreId = config.apply((c) => c.storage.templates);
     this.porkbunApiKey = pulumi.secret(
-      config.apply((c) => c.lxc.dns?.porkbun?.apiKey || ""),
+      config.apply((c) => c.providers.dns?.porkbun?.apiKey || ""),
     );
     this.porkbunSecretKey = pulumi.secret(
-      config.apply((c) => c.lxc.dns?.porkbun?.secretKey || ""),
+      config.apply((c) => c.providers.dns?.porkbun?.secretKey || ""),
     );
   }
 }

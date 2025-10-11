@@ -77,20 +77,16 @@ export class HomelabPveHost extends pulumi.ComponentResource {
     this.provider.pveConfig.apply((pveConfig) => {
       pulumi.all(referencedHostConfigs).apply((hostConfigs) => {
         for (const config of hostConfigs) {
+          const appDataDirPath = path.join(
+            pveConfig.lxc.appDataDirectory,
+            config.hostname,
+          );
+
           const createAppDataDir = new command.Command(
             `${name}-${config.hostname}-appdata-dir`,
             {
-              create: `mkdir -p ${path.join(
-                pveConfig.lxc.appdata,
-                config.hostname,
-              )} && chmod 777 ${path.join(
-                pveConfig.lxc.appdata,
-                config.hostname,
-              )}`,
-              delete: `rm -rf ${path.join(
-                pveConfig.lxc.appdata,
-                config.hostname,
-              )}`,
+              create: `mkdir -p ${appDataDirPath} && chmod 777 ${appDataDirPath}`,
+              delete: `rm -rf ${appDataDirPath}`,
               connection: {
                 user: "root",
                 host: pveConfig.dns.domain,

@@ -22,7 +22,7 @@ swap = 4096
 size = 16
 
 [[mountPoints]]
-volume = "{{{@pve.lxc.appdata}}}/music"
+volume = "{{{@pve.lxc.appDataDirectory}}}/music"
 mountPoint = "/docker"
 
 [[mountPoints]]

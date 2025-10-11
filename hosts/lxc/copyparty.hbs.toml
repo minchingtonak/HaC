@@ -20,39 +20,39 @@ swap = 512
 size = 4
 
 [[mountPoints]]
-volume = "{{{@pve.lxc.appdata}}}/copyparty"
+volume = "{{{@pve.lxc.appDataDirectory}}}/copyparty"
 mountPoint = "/docker"
 
 [[mountPoints]]
-volume = "{{{@pve.storage.pools.mass}}}/audiobooks"
+volume = "{{{@pve.storage.mass.path}}}/audiobooks"
 mountPoint = "/mnt/audiobooks"
 
 [[mountPoints]]
-volume = "{{{@pve.storage.pools.mass}}}/backups"
+volume = "{{{@pve.storage.mass.path}}}/backups"
 mountPoint = "/mnt/backups"
 
 [[mountPoints]]
-volume = "{{{@pve.storage.pools.mass}}}/documents"
+volume = "{{{@pve.storage.mass.path}}}/documents"
 mountPoint = "/mnt/documents"
 
 [[mountPoints]]
-volume = "{{{@pve.storage.pools.mass}}}/drive"
+volume = "{{{@pve.storage.mass.path}}}/drive"
 mountPoint = "/mnt/drive"
 
 [[mountPoints]]
-volume = "{{{@pve.storage.pools.mass}}}/media"
+volume = "{{{@pve.storage.mass.path}}}/media"
 mountPoint = "/mnt/media"
 
 [[mountPoints]]
-volume = "{{{@pve.storage.pools.mass}}}/photos"
+volume = "{{{@pve.storage.mass.path}}}/photos"
 mountPoint = "/mnt/photos"
 
 [[mountPoints]]
-volume = "{{{@pve.storage.pools.mass}}}/podcasts"
+volume = "{{{@pve.storage.mass.path}}}/podcasts"
 mountPoint = "/mnt/podcasts"
 
 [[mountPoints]]
-volume = "{{{@pve.storage.pools.mass}}}/restic"
+volume = "{{{@pve.storage.mass.path}}}/restic"
 mountPoint = "/mnt/restic"
 
 [[provisioners]]

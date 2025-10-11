@@ -3,40 +3,27 @@ import { z } from "zod";
 const PveAuthSchema = z
   .object({
     username: z.string().default("root"),
-    password: z.string(),
+    password: z.string().min(1),
     insecure: z.boolean().default(false),
   })
   .strict();
 
-const PveConfigSchema = z
-  .object({
-    enabled: z.boolean().default(true),
-    endpoint: z.string().min(1),
-    node: z.string().min(1),
-    auth: PveAuthSchema,
-  })
-  .strict();
-
-const StoragePoolsConfigSchema = z
-  .object({ mass: z.string().min(1), fast: z.string().min(1) })
+const StoragePoolSchema = z
+  .object({ name: z.string().min(1), path: z.string().min(1) })
   .strict();
 
 const StorageConfigSchema = z
   .object({
     templates: z.string().min(1),
-    containers: z.string().optional(),
-    backups: z.string().optional(),
-    pools: StoragePoolsConfigSchema,
+    mass: StoragePoolSchema,
+    fast: StoragePoolSchema,
   })
   .strict();
 
-const NetworkDnsSchema = z
+const DnsSchema = z
   .object({
     domain: z.string().min(1),
-    servers: z
-      .array(z.string())
-      .optional()
-      .default(["8.8.8.8", "1.1.1.1", "8.8.4.4"]),
+    servers: z.array(z.string()).default(["8.8.8.8", "1.1.1.1", "8.8.4.4"]),
   })
   .strict();
 
@@ -66,28 +53,31 @@ const LxcNetworkSchema = z
   .object({
     domain: z.string().min(1),
     subnet: z.string().min(1),
-    gateway: z.string().min(1).optional(),
+    gateway: z.string().min(1),
   })
   .strict();
 
 const LxcConfigSchema = z
   .object({
-    appdata: z.string().min(1),
+    appDataDirectory: z.string().min(1),
     hosts: LxcHostsSchema,
     network: LxcNetworkSchema,
     auth: LxcAuthSchema,
     ssh: LxcSshSchema,
-    dns: DnsProvidersSchema.optional(),
   })
   .strict();
 
 export const PveHostConfigSchema = z
   .object({
-    pve: PveConfigSchema,
+    enabled: z.boolean().default(true),
+    node: z.string().min(1),
+    endpoint: z.string().min(1),
+    ip: z.string().min(1),
+    auth: PveAuthSchema,
     storage: StorageConfigSchema,
-    dns: NetworkDnsSchema,
+    dns: DnsSchema,
     lxc: LxcConfigSchema,
-    providers: ProvidersSchema.optional(),
+    providers: ProvidersSchema,
   })
   .strict();
 
@@ -99,8 +89,6 @@ export type LxcHostsConfig = z.infer<typeof LxcHostsSchema>;
 export type LxcNetworkConfig = z.infer<typeof LxcNetworkSchema>;
 export type LxcConfig = z.infer<typeof LxcConfigSchema>;
 
-export const PveHostnameSchema = z.object({
-  pve: z.object({ node: z.string().min(1) }),
-});
+export const PveHostnameSchema = z.object({ node: z.string().min(1) });
 
 export type PveHostnameToml = z.infer<typeof PveHostnameSchema>;

@@ -19,7 +19,7 @@ swap = 2048
 size = 64
 
 [[mountPoints]]
-volume = "{{{@pve.lxc.appdata}}}/windmill"
+volume = "{{{@pve.lxc.appDataDirectory}}}/windmill"
 mountPoint = "/docker"
 
 [[provisioners]]

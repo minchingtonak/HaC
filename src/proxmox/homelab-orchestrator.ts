@@ -6,9 +6,9 @@ export function deployHomelab() {
   const pveConfigs = PveHostConfigParser.loadAllPveHostConfigs("./hosts/pve");
 
   pulumi.all(pveConfigs).apply((configs) => {
-    const enabledConfigs = configs.filter((c) => c.pve.enabled);
+    const enabledConfigs = configs.filter((c) => c.enabled);
     for (const pveConfig of enabledConfigs) {
-      new HomelabPveHost(pveConfig.pve.node, { pveHostConfig: pveConfig });
+      new HomelabPveHost(pveConfig.node, { pveHostConfig: pveConfig });
     }
   });
 }

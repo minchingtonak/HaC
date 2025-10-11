@@ -15,7 +15,7 @@ export class PveHostConfigParser extends HostConfigParser<
     return {
       configSchema: PveHostConfigSchema,
       hostnameSchema: PveHostnameSchema,
-      extractIdentifier: (parsed: PveHostnameToml) => `pve#${parsed.pve.node}`,
+      extractIdentifier: (parsed: PveHostnameToml) => `pve#${parsed.node}`,
       errorPrefix: "PVE host",
     };
   }

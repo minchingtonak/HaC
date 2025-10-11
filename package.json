@@ -15,9 +15,10 @@
     "@pulumi/ansible": "file:sdks/ansible",
     "@pulumi/command": "^1.1.1",
     "@pulumi/porkbun": "file:sdks/porkbun",
-    "@pulumi/pulumi": "^3.198.0",
+    "@pulumi/pulumi": "^3.202.0",
     "handlebars": "^4.7.8",
     "smol-toml": "^1.4.2",
+    "ts-node": "^10.9.2",
     "zod": "^4.1.11"
   },
   "devDependencies": {
@@ -29,7 +30,6 @@
     "globals": "^16.4.0",
     "husky": "^9.1.7",
     "prettier": "^3.6.2",
-    "tsx": "^4.20.6",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.45.0"
   },

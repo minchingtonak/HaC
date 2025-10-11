@@ -1,24 +1,22 @@
-[pve]
-endpoint = "https://homelab.akmin.dev"
 node = "homelab"
+endpoint = "https://homelab.akmin.dev"
+ip = "192.168.0.89"
 
-[pve.auth]
+[auth]
 username = "{{{SECRET_USERNAME}}}"
 password = "{{{SECRET_PASSWORD}}}"
 insecure = false
 
-[storage]
-templates = "local"
-
-[storage.pools]
-mass = "/void"
-fast = "/fast"
-
 [dns]
 domain = "192.168.0.89"
 
+[storage]
+templates = "local"
+mass = { name = "void", path = "/void" }
+fast = { name = "fast", path = "/fast" }
+
 [lxc]
-appdata = "/fast/test-appdata"
+appDataDirectory = "/fast/test-appdata"
 
 [lxc.hosts]
 archiver = { enabled = true }
@@ -47,6 +45,6 @@ password = "{{{SECRET_CONTAINER_ROOT_PASSWORD}}}"
 publicKey = "{{{SECRET_CONTAINER_SSH_PUBLIC_KEY}}}"
 privateKey = """{{{SECRET_CONTAINER_SSH_PRIVATE_KEY}}}"""
 
-[lxc.dns.porkbun]
+[providers.dns.porkbun]
 apiKey = "{{{SECRET_PORKBUN_API_KEY}}}"
 secretKey = "{{{SECRET_PORKBUN_SECRET_KEY}}}"

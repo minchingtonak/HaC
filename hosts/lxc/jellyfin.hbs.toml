@@ -48,11 +48,11 @@ gid = 104
 mode = "0660"
 
 [[mountPoints]]
-volume = "{{{@pve.lxc.appdata}}}/jellyfin"
+volume = "{{{@pve.lxc.appDataDirectory}}}/jellyfin"
 mountPoint = "/docker"
 
 [[mountPoints]]
-volume = "{{{@pve.storage.pools.mass}}}/media"
+volume = "{{{@pve.storage.mass.path}}}/media"
 mountPoint = "/mnt/media"
 
 [[provisioners]]

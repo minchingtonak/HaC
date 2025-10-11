@@ -21,7 +21,7 @@ swap = 4096
 size = 4
 
 [[mountPoints]]
-volume = "{{{@pve.lxc.appdata}}}/backup"
+volume = "{{{@pve.lxc.appDataDirectory}}}/backup"
 mountPoint = "/docker"
 
 [[mountPoints]]

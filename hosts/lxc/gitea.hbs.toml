@@ -28,7 +28,7 @@ proto = "tcp"
 comment = "gitea ssh"
 
 [[mountPoints]]
-volume = "{{{@pve.lxc.appdata}}}/gitea"
+volume = "{{{@pve.lxc.appDataDirectory}}}/gitea"
 mountPoint = "/docker"
 
 [[provisioners]]

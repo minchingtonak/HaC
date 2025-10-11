@@ -22,7 +22,7 @@ swap = 1024
 size = 8
 
 [[mountPoints]]
-volume = "{{{@pve.lxc.appdata}}}/jellyseerr"
+volume = "{{{@pve.lxc.appDataDirectory}}}/jellyseerr"
 mountPoint = "/docker"
 
 [[provisioners]]
