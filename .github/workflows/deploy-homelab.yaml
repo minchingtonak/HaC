@@ -14,7 +14,7 @@ jobs:
   pulumi-preview:
     runs-on: ubuntu-latest
     outputs:
-      changes-check-outcome: ${{ steps.preview.outcome }}
+      changes-check-outcome: ${{ steps.check-for-changes.outcome }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -35,21 +35,39 @@ jobs:
         run: pnpm install
         working-directory: ./
 
-      - name: Pulumi preview
+      # This step is needed to comment on PRs.
+      # PR comments are not posted if the preview step fails due
+      # to detecting changes (expect-no-changes: true)
+      - name: Pulumi preview (PR comment)
         uses: pulumi/actions@v6
-        continue-on-error: true
+        if: github.event_name == 'pull_request'
         with:
           command: preview
           stack-name: homelab
           work-dir: ./
           comment-on-pr: true
-          expect-no-changes: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
           PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: preview
+
+      - name: Pulumi preview (check for changes)
+        uses: pulumi/actions@v6
+        continue-on-error: true
+        with:
+          command: preview
+          stack-name: homelab
+          work-dir: ./
+          comment-on-pr: false
+          expect-no-changes: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: check-for-changes
 
   pulumi-deploy:
     runs-on: ubuntu-latest
