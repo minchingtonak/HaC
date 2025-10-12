@@ -8,11 +8,15 @@ import {
   Provisioner,
   ScriptProvisioner,
   AnsibleProvisioner,
+  LXC_DEFAULTS,
 } from "./schema/lxc-host-config";
 import { EnvUtils } from "../utils/env-utils";
 import { TemplateProcessor } from "../templates/template-processor";
 
 export type ProvisionerResource = command.remote.Command | ansible.Playbook;
+
+export type AnsibleProvisionerConnection =
+  command.types.input.remote.ConnectionArgs & { privateKeyPath: string };
 
 export interface ProvisionerEngineArgs {
   name: string;
@@ -82,33 +86,28 @@ export class ProvisionerEngine {
     const baseConnection = this.args.connection;
     const override = provisioner.connection;
 
-    if (!override) return { ...baseConnection };
-
     return {
       ...baseConnection,
-      ...(override.host && { host: override.host }),
-      ...(override.user && { user: override.user }),
-      ...(override.port && { port: override.port }),
-      ...(override.privateKey && { privateKey: override.privateKey }),
+      ...(override?.host && { host: override.host }),
+      ...(override?.user && { user: override.user }),
+      ...(override?.port && { port: override.port }),
+      ...(override?.privateKey && { privateKey: override.privateKey }),
     };
   }
 
   private buildAnsibleConnection(
     provisioner: AnsibleProvisioner,
-  ): command.types.input.remote.ConnectionArgs & { privateKeyFile: string } {
+  ): AnsibleProvisionerConnection {
     const baseConnection = this.args.connection;
     const override = provisioner.connection;
 
-    if (!override)
-      return { ...baseConnection, privateKeyFile: "~/.ssh/lxc_ed25519" };
-
     return {
       ...baseConnection,
-      privateKeyFile: "~/.ssh/lxc_ed25519",
-      ...(override.host && { host: override.host }),
-      ...(override.user && { user: override.user }),
-      ...(override.port && { port: override.port }),
-      ...(override.privateKeyPath && { privateKey: override.privateKeyPath }),
+      privateKeyPath: LXC_DEFAULTS.SSH_PRIVATE_KEY_FILE,
+      ...(override?.host && { host: override.host }),
+      ...(override?.user && { user: override.user }),
+      ...(override?.port && { port: override.port }),
+      ...(override?.privateKeyPath && { privateKey: override.privateKeyPath }),
     };
   }
 
@@ -261,7 +260,7 @@ export class ProvisionerEngine {
           ansible_host: connection.host,
           ansible_user: connection.user!,
           // https://docs.ansible.com/ansible/2.9/plugins/connection/ssh.html#ssh-connection
-          ansible_ssh_private_key_file: connection.privateKeyFile,
+          ansible_ssh_private_key_file: connection.privateKeyPath,
           // ansible_ssh_port: String(connection.port),
           ansible_ssh_common_args: "-o StrictHostKeyChecking=no",
           ansible_ssh_retries: "3",

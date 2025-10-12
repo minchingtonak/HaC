@@ -111,6 +111,12 @@ export class HomelabContainer extends pulumi.ComponentResource {
         disk: lxcConfig.disk,
         features: lxcConfig.features,
         console: lxcConfig.console,
+        startup: lxcConfig.startup,
+        started: lxcConfig.started,
+        clone: lxcConfig.clone,
+        hookScriptFileId: lxcConfig.hookScriptFileId,
+        poolId: lxcConfig.poolId,
+        template: lxcConfig.template,
       },
       { provider: args.provider, parent: this, deleteBeforeReplace: true },
     );

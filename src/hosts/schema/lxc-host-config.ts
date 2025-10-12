@@ -10,6 +10,12 @@ import {
   CommonPorts,
 } from "../../constants";
 import { CamelCasedPropertiesDeep } from "type-fest";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { remote } from "@pulumi/command/types/input";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { types, network, ct } from "@muhlba91/pulumi-proxmoxve";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { PlaybookArgs } from "@pulumi/ansible";
 
 export const LXC_DEFAULTS = {
   DATASTORE_ID: "fast",
@@ -20,6 +26,7 @@ export const LXC_DEFAULTS = {
   DESCRIPTION: "managed by pulumi",
   UNPRIVILEGED: true,
   START_ON_BOOT: true,
+  STARTED: true,
   PROTECTION: false,
   OS: {
     TYPE: "debian",
@@ -53,6 +60,40 @@ export const LXC_DEFAULTS = {
   },
 };
 
+/////////////////////////////////////////
+//////// Library-defined schemas ////////
+/////////////////////////////////////////
+
+/**
+ * @see {@link types.input.CT.ContainerStartup}
+ */
+const StartupConfigSchema = z.object({
+  down_delay: z.number().optional(),
+  order: z.number().optional(),
+  up_delay: z.number().optional(),
+});
+
+/**
+ * @see {@link types.input.CT.ContainerClone}
+ */
+const CloneConfigSchema = z
+  .object({
+    datastore_id: z.string().optional(),
+    node_name: z.string().optional(),
+    vm_id: z.number(),
+  })
+  .strict();
+
+/**
+ * @see {@link types.input.CT.ContainerOperatingSystem}
+ */
+const OsConfigSchema = z
+  .object({ template_file_id: z.string(), type: z.string().optional() })
+  .strict();
+
+/**
+ * @see {@link types.input.CT.ContainerCpu}
+ */
 const CpuConfigSchema = z
   .object({
     architecture: z.string().optional(),
@@ -61,6 +102,9 @@ const CpuConfigSchema = z
   })
   .strict();
 
+/**
+ * @see {@link types.input.CT.ContainerMemory}
+ */
 const MemoryConfigSchema = z
   .object({
     dedicated: z.number().positive().optional(),
@@ -68,6 +112,9 @@ const MemoryConfigSchema = z
   })
   .strict();
 
+/**
+ * @see {@link types.input.CT.ContainerDisk}
+ */
 const DiskConfigSchema = z
   .object({
     datastore_id: z.string().default(LXC_DEFAULTS.DATASTORE_ID),
@@ -75,47 +122,18 @@ const DiskConfigSchema = z
   })
   .strict();
 
-const OsConfigSchema = z
-  .object({ templateFileId: z.string(), type: z.string().optional() })
-  .strict();
-
+/**
+ * @see {@link types.input.CT.ContainerNetworkInterface}
+ */
 const NetworkInterfacesSchema = z
   .object({
-    /**
-     * The network interface name.
-     */
     name: z.string().min(1),
-    /**
-     * The name of the network bridge (defaults
-     * to `vmbr0`).
-     */
     bridge: z.string().default(LXC_DEFAULTS.NETWORK_BRIDGE),
-    /**
-     * Whether to enable the network device (defaults
-     * to `true`).
-     */
     enabled: z.boolean().default(LXC_DEFAULTS.NETWORK_INTERFACE.ENABLED),
-    /**
-     * Whether this interface's firewall rules should be
-     * used (defaults to `true`).
-     */
     firewall: z.boolean().default(LXC_DEFAULTS.NETWORK_INTERFACE.FIREWALL),
-    /**
-     * The MAC address.
-     */
     mac_address: z.string().optional(),
-    /**
-     * Maximum transfer unit of the interface. Cannot be
-     * larger than the bridge's MTU.
-     */
     mtu: z.number().min(1).optional(),
-    /**
-     * The rate limit in megabytes per second.
-     */
     rate_limit: z.number().optional(),
-    /**
-     * The VLAN identifier.
-     */
     vlan_id: z.number().optional(),
   })
   .strict();
@@ -123,48 +141,35 @@ const NetworkInterfacesSchema = z
 type FeaturesMountsValues = "cifs" | "nfs";
 const FEATURES_MOUNTS_VALUES: FeaturesMountsValues[] = ["cifs", "nfs"];
 
+/**
+ * @see {@link types.input.CT.ContainerFeatures}
+ */
 const FeaturesSchema = z
   .object({
-    /**
-     * Whether the container supports FUSE mounts (defaults to `false`)
-     */
     fuse: z.boolean().default(LXC_DEFAULTS.FEATURES.FUSE),
-    /**
-     * Whether the container supports `keyctl()` system call (defaults to `true`)
-     */
     keyctl: z.boolean().default(LXC_DEFAULTS.FEATURES.KEYCTL),
-    /**
-     * List of allowed mount types (`cifs` or `nfs`)
-     */
-    mounts: z.array(z.enum(FEATURES_MOUNTS_VALUES)).optional(),
-    /**
-     * Whether the container is nested (defaults to `true`)
-     */
     nesting: z.boolean().default(LXC_DEFAULTS.FEATURES.NESTING),
+    mounts: z.array(z.enum(FEATURES_MOUNTS_VALUES)).optional(),
   })
   .strict();
 
 type ConsoleTypeValue = "tty" | "console" | "shell";
 const CONSOLE_TYPE_VALUES: ConsoleTypeValue[] = ["console", "shell", "tty"];
 
+/**
+ * @see {@link types.input.CT.ContainerConsole}
+ */
 const ConsoleSchema = z
   .object({
-    /**
-     * Whether to enable the console device (defaults
-     * to `true`).
-     */
     enabled: z.boolean().default(LXC_DEFAULTS.CONSOLE.ENABLED),
-    /**
-     * The number of available TTY (defaults to `2`).
-     */
     tty_count: z.number().int().default(LXC_DEFAULTS.CONSOLE.TTY_COUNT),
-    /**
-     * The console mode (defaults to `tty`).
-     */
     type: z.enum(CONSOLE_TYPE_VALUES).default(LXC_DEFAULTS.CONSOLE.TYPE),
   })
   .strict();
 
+/**
+ * @see {@link types.input.CT.ContainerMountPoint}
+ */
 const MountPointSchema = z
   .object({
     volume: z.string().min(1),
@@ -178,6 +183,9 @@ const MountPointSchema = z
   })
   .strict();
 
+/**
+ * @see {@link types.input.CT.ContainerDevicePassthrough}
+ */
 const DevicePassthroughSchema = z
   .object({
     path: z.string().min(1),
@@ -188,52 +196,44 @@ const DevicePassthroughSchema = z
   })
   .strict();
 
+/**
+ * @see {@link remote.ConnectionArgs}
+ */
 const AnsibleConnectionOverrideSchema = z
   .object({
     host: z.string().optional(),
-    user: z.string().optional().default(LXC_DEFAULTS.SSH_USER),
-    port: z.number().positive().optional().default(LXC_DEFAULTS.SSH_PORT),
-    private_key_path: z
-      .string()
-      .optional()
-      .default(LXC_DEFAULTS.SSH_PRIVATE_KEY_FILE),
+    user: z.string().optional(),
+    port: z.number().positive().optional(),
+    /**
+     * Path to private key file. Required to invoke Ansible
+     */
+    private_key_path: z.string().optional(),
   })
   .strict();
 
+/**
+ * @see {@link remote.ConnectionArgs}
+ */
 const ScriptConnectionOverrideSchema = z
   .object({
     host: z.string().optional(),
-    user: z.string().optional().default(LXC_DEFAULTS.SSH_USER),
-    port: z.number().positive().optional().default(LXC_DEFAULTS.SSH_PORT),
+    user: z.string().optional(),
+    port: z.number().positive().optional(),
     private_key: z.string().optional(),
   })
   .strict();
 
+/**
+ * @see {@link network.FirewallOptionsArgs}
+ */
 const FirewallOptionsSchema = z
   .object({
     container_id: z.number().optional(),
     enabled: z.boolean().default(LXC_DEFAULTS.FIREWALL.ENABLED).optional(),
-
     dhcp: z.boolean().default(LXC_DEFAULTS.FIREWALL.DHCP).optional(),
-    /**
-     * Enable NDP (Neighbor Discovery Protocol).
-     */
     ndp: z.boolean().default(LXC_DEFAULTS.FIREWALL.NDP).optional(),
-    /**
-     * Enable Router Advertisement.
-     */
     radv: z.boolean().default(LXC_DEFAULTS.FIREWALL.RADV).optional(),
-    /**
-     * Enable/disable MAC address filter.
-     */
     macfilter: z.boolean().default(LXC_DEFAULTS.FIREWALL.MACFILTER).optional(),
-    /**
-     * Enable default IP filters. This is equivalent to
-     * adding an empty `ipfilter-net<id>` ipset for every interface. Such ipsets
-     * implicitly contain sane default restrictions such as restricting IPv6 link
-     * local addresses to the one derived from the interface's MAC address. For
-     * containers the configured IP addresses will be implicitly added.
-     */
     ipfilter: z.boolean().default(LXC_DEFAULTS.FIREWALL.IPFILTER).optional(),
     log_level_in: z
       .enum(PveFirewallLogLevel)
@@ -254,62 +254,23 @@ const FirewallOptionsSchema = z
   })
   .strict();
 
+/**
+ * @see {@link types.input.Network.FirewallRulesRule}
+ */
 const FirewallRuleSchema = z
   .object({
     enabled: z.boolean().default(LXC_DEFAULTS.FIREWALL_RULE.ENABLED).optional(),
     type: z.enum(PveFirewallDirection).optional(),
     action: z.enum(PveFirewallPolicy).optional(),
     comment: z.string().optional(),
-    /**
-     * Restrict packet source address. This can refer
-     * to a single IP address, an IP set ('+ipsetname') or an IP alias
-     * definition. You can also specify an address range
-     * like `20.34.101.207-201.3.9.99`, or a list of IP addresses and
-     * networks (entries are separated by comma). Please do not mix IPv4
-     * and IPv6 addresses inside such lists.
-     */
     source: z.string().optional(),
-    /**
-     * Restrict TCP/UDP source port. You can use
-     * service names or simple numbers (0-65535), as defined
-     * in `/etc/services`. Port ranges can be specified with '\d+:\d+', for
-     * example `80:85`, and you can use comma separated list to match
-     * several ports or ranges.
-     */
     sport: z.string().optional(),
-    /**
-     * Restrict packet destination address. This can
-     * refer to a single IP address, an IP set ('+ipsetname') or an IP
-     * alias definition. You can also specify an address range
-     * like `20.34.101.207-201.3.9.99`, or a list of IP addresses and
-     * networks (entries are separated by comma). Please do not mix IPv4
-     * and IPv6 addresses inside such lists.
-     */
     dest: z.string().optional(),
-    /**
-     * Restrict TCP/UDP destination port. You can use
-     * service names or simple numbers (0-65535), as defined
-     * in `/etc/services`. Port ranges can be specified with '\d+:\d+', for
-     * example `80:85`, and you can use comma separated list to match
-     * several ports or ranges.
-     */
     dport: z.string().optional(),
-    /**
-     * Network interface name. You have to use network
-     * configuration key names for VMs and containers ('net\d+'). Host
-     * related rules can use arbitrary strings.
-     */
     iface: z.string().optional(),
     log: z.enum(PveFirewallLogLevel).optional(),
     macro: z.enum(PveFirewallMacro).optional(),
-    /**
-     * Position of the rule in the list.
-     */
     pos: z.number().optional(),
-    /**
-     * Restrict packet protocol. You can use protocol
-     * names as defined in '/etc/protocols'.
-     */
     proto: z.string().optional(),
     security_group: z.string().optional(),
   })
@@ -320,6 +281,10 @@ const SCRIPT_RUN_ON_VALUES: ("create" | "update" | "delete")[] = [
   "update",
   "delete",
 ];
+
+////////////////////////////////////////
+//////////// Custom schemas ////////////
+////////////////////////////////////////
 
 const ScriptProvisionerSchema = z
   .object({
@@ -342,6 +307,9 @@ const ScriptProvisionerSchema = z
   })
   .strict();
 
+/**
+ * @see {@link PlaybookArgs}
+ */
 const AnsibleProvisionerSchema = z
   .object({
     type: z.literal("ansible"),
@@ -371,6 +339,9 @@ const StackSchema = z
 
 const StackSchemaMap = z.record(z.string(), StackSchema);
 
+/**
+ * @see {@link ct.ContainerArgs}
+ */
 export const LxcHostConfigSchema = z
   .object({
     id: z.number().int().min(1).max(255),
@@ -380,9 +351,14 @@ export const LxcHostConfigSchema = z
     start_on_boot: z.boolean().default(LXC_DEFAULTS.START_ON_BOOT),
     protection: z.boolean().default(LXC_DEFAULTS.PROTECTION),
     tags: z.array(z.string()).optional(),
+    started: z.boolean().default(LXC_DEFAULTS.STARTED),
+    startup: StartupConfigSchema.optional(),
+    hook_script_file_id: z.string().optional(),
+    pool_id: z.string().optional(),
+    template: z.boolean().optional(),
     os: OsConfigSchema.default({
       type: LXC_DEFAULTS.OS.TYPE,
-      templateFileId: LXC_DEFAULTS.OS.TEMPLATE_FILE_ID,
+      template_file_id: LXC_DEFAULTS.OS.TEMPLATE_FILE_ID,
     }),
     cpu: CpuConfigSchema.default({
       architecture: LXC_DEFAULTS.CPU.ARCHITECTURE,
@@ -417,7 +393,7 @@ export const LxcHostConfigSchema = z
       keyctl: LXC_DEFAULTS.FEATURES.KEYCTL,
       nesting: LXC_DEFAULTS.FEATURES.NESTING,
     }),
-    stacks: StackSchemaMap.optional(),
+    clone: CloneConfigSchema.optional(),
     mount_points: z.array(MountPointSchema).optional(),
     device_passthroughs: z.array(DevicePassthroughSchema).optional(),
     firewall_options: FirewallOptionsSchema.default({
@@ -433,6 +409,9 @@ export const LxcHostConfigSchema = z
       log_level_out: PveFirewallLogLevel.nolog,
     }),
     firewall_rules: z.array(FirewallRuleSchema).optional(),
+
+    // HaC custom fields
+    stacks: StackSchemaMap.optional(),
     provisioners: z.array(ProvisionerSchema).optional(),
   })
   .strict();
