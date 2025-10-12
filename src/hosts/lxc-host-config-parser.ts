@@ -2,20 +2,14 @@ import * as pulumi from "@pulumi/pulumi";
 import {
   LxcHostConfigSchema,
   LxcHostConfigToml,
-  LxcHostnameSchema,
-  LxcHostnameToml,
 } from "./schema/lxc-host-config";
 import { HostConfigParser, ParserConfig } from "./host-config-parser";
 
-export class LxcHostConfigParser extends HostConfigParser<
-  LxcHostConfigToml,
-  LxcHostnameToml
-> {
-  protected getConfig(): ParserConfig<LxcHostConfigToml, LxcHostnameToml> {
+export class LxcHostConfigParser extends HostConfigParser<LxcHostConfigToml> {
+  protected getConfig(): ParserConfig<LxcHostConfigToml> {
     return {
+      type: "lxc",
       configSchema: LxcHostConfigSchema,
-      hostnameSchema: LxcHostnameSchema,
-      extractIdentifier: (parsed: LxcHostnameToml) => `lxc#${parsed.hostname}`,
       errorPrefix: "LXC host",
     };
   }

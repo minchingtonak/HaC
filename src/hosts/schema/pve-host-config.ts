@@ -99,7 +99,3 @@ export type ProvidersConfig = z.infer<typeof ProvidersSchema>;
 export type LxcHostsConfig = z.infer<typeof LxcHostsSchema>;
 export type LxcNetworkConfig = z.infer<typeof LxcNetworkSchema>;
 export type LxcConfig = z.infer<typeof LxcConfigSchema>;
-
-export const PveHostnameSchema = z.object({ node: z.string().min(1) });
-
-export type PveHostnameToml = z.infer<typeof PveHostnameSchema>;

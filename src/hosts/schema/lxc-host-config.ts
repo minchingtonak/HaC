@@ -455,7 +455,3 @@ export type ConnectionOverride = CamelCasedPropertiesDeep<
 export type FirewallOptions = CamelCasedPropertiesDeep<
   z.infer<typeof FirewallOptionsSchema>
 >;
-
-export const LxcHostnameSchema = z.object({ hostname: z.string().min(1) });
-
-export type LxcHostnameToml = z.infer<typeof LxcHostnameSchema>;

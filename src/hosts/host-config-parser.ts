@@ -1,18 +1,17 @@
-import * as fs from "node:fs";
 import * as pulumi from "@pulumi/pulumi";
 import TOML from "smol-toml";
 import { z } from "zod";
 import { TemplateProcessor } from "../templates/template-processor";
+import path from "node:path";
 
-export interface ParserConfig<TConfig, THostnameConfig> {
+export interface ParserConfig<TConfig> {
+  type: "pve" | "lxc";
   configSchema: z.ZodSchema<TConfig>;
-  hostnameSchema: z.ZodSchema<THostnameConfig>;
-  extractIdentifier: (parsed: THostnameConfig) => string;
   errorPrefix: string;
 }
 
-export abstract class HostConfigParser<TConfig, THostnameConfig> {
-  protected abstract getConfig(): ParserConfig<TConfig, THostnameConfig>;
+export abstract class HostConfigParser<TConfig> {
+  protected abstract getConfig(): ParserConfig<TConfig>;
 
   /**
    * Load all host configurations from a directory
@@ -48,7 +47,8 @@ export abstract class HostConfigParser<TConfig, THostnameConfig> {
     filePath: string,
     extraData?: unknown,
   ): TConfig | pulumi.Output<TConfig> {
-    const identifier = this.getIdentifierFromConfigFile(filePath);
+    const fileName = path.basename(filePath);
+    const identifier = `${this.getConfig().type}#${fileName.substring(0, fileName.indexOf("."))}`;
     const renderedTemplate = TemplateProcessor.processTemplate(
       filePath,
       new pulumi.Config(identifier),
@@ -56,33 +56,6 @@ export abstract class HostConfigParser<TConfig, THostnameConfig> {
     );
 
     return this.parseConfigString(renderedTemplate.content);
-  }
-
-  /**
-   * Extract identifier from config file for Pulumi config lookup
-   * TODO: find more efficient way of getting this info that avoids reading/parsing/validating twice
-   */
-  protected getIdentifierFromConfigFile(filePath: string): string {
-    const fileContent = fs.readFileSync(filePath, { encoding: "utf-8" });
-    const parsed = TOML.parse(fileContent);
-    const config = this.getConfig();
-
-    try {
-      const hostnameConfig = config.hostnameSchema.parse(parsed);
-      return config.extractIdentifier(hostnameConfig);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const errorMessages = error.issues
-          .map((err: z.core.$ZodIssue) => {
-            return JSON.stringify(err); // FIXME this may crash when err.path contains symbol values
-          })
-          .join("\n;\n");
-        throw new Error(
-          `Invalid ${config.errorPrefix} TOML structure: ${errorMessages}`,
-        );
-      }
-      throw error;
-    }
   }
 
   /**
@@ -104,9 +77,9 @@ export abstract class HostConfigParser<TConfig, THostnameConfig> {
   /**
    * Validate parsed configuration against schema
    */
-  private static validateConfig<TConfig, THostnameConfig>(
+  private static validateConfig<TConfig>(
     config: unknown,
-    parserConfig: ParserConfig<TConfig, THostnameConfig>,
+    parserConfig: ParserConfig<TConfig>,
   ): TConfig {
     try {
       return parserConfig.configSchema.parse(config);

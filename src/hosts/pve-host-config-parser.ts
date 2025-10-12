@@ -2,20 +2,14 @@ import * as pulumi from "@pulumi/pulumi";
 import {
   PveHostConfigSchema,
   PveHostConfigToml,
-  PveHostnameSchema,
-  PveHostnameToml,
 } from "./schema/pve-host-config";
 import { HostConfigParser, ParserConfig } from "./host-config-parser";
 
-export class PveHostConfigParser extends HostConfigParser<
-  PveHostConfigToml,
-  PveHostnameToml
-> {
-  protected getConfig(): ParserConfig<PveHostConfigToml, PveHostnameToml> {
+export class PveHostConfigParser extends HostConfigParser<PveHostConfigToml> {
+  protected getConfig(): ParserConfig<PveHostConfigToml> {
     return {
+      type: "pve",
       configSchema: PveHostConfigSchema,
-      hostnameSchema: PveHostnameSchema,
-      extractIdentifier: (parsed: PveHostnameToml) => `pve#${parsed.node}`,
       errorPrefix: "PVE host",
     };
   }
@@ -25,15 +19,6 @@ export class PveHostConfigParser extends HostConfigParser<
   ): (PveHostConfigToml | pulumi.Output<PveHostConfigToml>)[] {
     const parser = new PveHostConfigParser();
     return parser.loadAllConfigs(pveHostsDir);
-  }
-
-  static loadPveHostConfigByName(
-    pveHostsDir: string,
-    hostname: string,
-  ): PveHostConfigToml | pulumi.Output<PveHostConfigToml> {
-    const parser = new PveHostConfigParser();
-    const filePath = `${pveHostsDir}/${hostname}.hbs.toml`;
-    return parser.parseConfigFile(filePath);
   }
 
   static parsePveHostConfigFile<TExtraData = unknown>(
