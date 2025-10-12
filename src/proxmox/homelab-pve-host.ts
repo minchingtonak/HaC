@@ -125,7 +125,7 @@ export class HomelabPveHost extends pulumi.ComponentResource {
             connection: {
               // TODO user: pve.auth.username,
               user: "root",
-              host: pveConfig.dns.domain,
+              host: pveConfig.ip,
               privateKey: pveConfig.lxc.ssh.privateKey,
             },
           },

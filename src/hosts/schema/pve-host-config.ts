@@ -29,10 +29,7 @@ const StorageConfigSchema = z
   .strict();
 
 const DnsSchema = z
-  .object({
-    domain: z.string().min(1),
-    servers: z.array(z.string()).default(PVE_DEFAULTS.DNS.SERVERS),
-  })
+  .object({ servers: z.array(z.string()).default(PVE_DEFAULTS.DNS.SERVERS) })
   .strict();
 
 const LxcAuthSchema = z.object({ password: z.string() }).strict();
@@ -85,7 +82,7 @@ export const PveHostConfigSchema = z
     ip: z.string().min(1),
     auth: PveAuthSchema,
     storage: StorageConfigSchema,
-    dns: DnsSchema,
+    dns: DnsSchema.default({ servers: PVE_DEFAULTS.DNS.SERVERS }),
     lxc: LxcConfigSchema,
     providers: ProvidersSchema,
   })
