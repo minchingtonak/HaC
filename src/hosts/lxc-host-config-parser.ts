@@ -4,7 +4,7 @@ import {
   LxcHostConfigToml,
   LxcHostnameSchema,
   LxcHostnameToml,
-} from "./lxc-host-config-schema";
+} from "./schema/lxc-host-config";
 import { HostConfigParser, ParserConfig } from "./host-config-parser";
 
 export class LxcHostConfigParser extends HostConfigParser<
@@ -27,9 +27,9 @@ export class LxcHostConfigParser extends HostConfigParser<
     return parser.loadAllConfigs(hostsDir);
   }
 
-  static parseHostConfigFile(
+  static parseHostConfigFile<TExtraData = unknown>(
     filePath: string,
-    extraData?: unknown,
+    extraData?: TExtraData,
   ): LxcHostConfigToml | pulumi.Output<LxcHostConfigToml> {
     const parser = new LxcHostConfigParser();
     return parser.parseConfigFile(filePath, extraData);

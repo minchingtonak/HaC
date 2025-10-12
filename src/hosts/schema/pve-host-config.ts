@@ -1,3 +1,4 @@
+import { CamelCasedPropertiesDeep } from "type-fest";
 import { z } from "zod";
 
 export const PVE_DEFAULTS = {
@@ -37,11 +38,11 @@ const DnsSchema = z
 const LxcAuthSchema = z.object({ password: z.string() }).strict();
 
 const LxcSshSchema = z
-  .object({ publicKey: z.string(), privateKey: z.string() })
+  .object({ public_key: z.string(), private_key: z.string() })
   .strict();
 
 const PorkbunProviderSchema = z
-  .object({ apiKey: z.string(), secretKey: z.string() })
+  .object({ api_key: z.string(), secret_key: z.string() })
   .strict();
 
 const DnsProvidersSchema = z
@@ -68,7 +69,7 @@ const LxcNetworkSchema = z
 
 const LxcConfigSchema = z
   .object({
-    appDataDirectory: z.string().min(1),
+    app_data_dir: z.string().min(1),
     hosts: LxcHostsSchema,
     network: LxcNetworkSchema,
     auth: LxcAuthSchema,
@@ -91,6 +92,7 @@ export const PveHostConfigSchema = z
   .strict();
 
 export type PveHostConfigToml = z.infer<typeof PveHostConfigSchema>;
+export type PveHostConfig = CamelCasedPropertiesDeep<PveHostConfigToml>;
 export type PveAuth = z.infer<typeof PveAuthSchema>;
 export type StorageConfig = z.infer<typeof StorageConfigSchema>;
 export type ProvidersConfig = z.infer<typeof ProvidersSchema>;

@@ -23,9 +23,9 @@ swap = 4096
 [disk]
 size = 32
 
-[[mountPoints]]
-volume = "{{{@pve.lxc.appDataDirectory}}}/life"
-mountPoint = "/docker"
+[[mount_points]]
+volume = "{{{@pve.lxc.app_data_dir}}}/life"
+mount_point = "/docker"
 
 [[provisioners]]
 type = "ansible"

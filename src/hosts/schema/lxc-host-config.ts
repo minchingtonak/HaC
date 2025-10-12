@@ -8,7 +8,8 @@ import {
   PveFirewallMacro,
   PveFirewallPolicy,
   CommonPorts,
-} from "../constants";
+} from "../../constants";
+import { CamelCasedPropertiesDeep } from "type-fest";
 
 export const LXC_DEFAULTS = {
   DATASTORE_ID: "fast",
@@ -69,7 +70,7 @@ const MemoryConfigSchema = z
 
 const DiskConfigSchema = z
   .object({
-    datastoreId: z.string().default(LXC_DEFAULTS.DATASTORE_ID),
+    datastore_id: z.string().default(LXC_DEFAULTS.DATASTORE_ID),
     size: z.number().positive().optional(),
   })
   .strict();
@@ -102,7 +103,7 @@ const NetworkInterfacesSchema = z
     /**
      * The MAC address.
      */
-    macAddress: z.string().optional(),
+    mac_address: z.string().optional(),
     /**
      * Maximum transfer unit of the interface. Cannot be
      * larger than the bridge's MTU.
@@ -111,11 +112,11 @@ const NetworkInterfacesSchema = z
     /**
      * The rate limit in megabytes per second.
      */
-    rateLimit: z.number().optional(),
+    rate_limit: z.number().optional(),
     /**
      * The VLAN identifier.
      */
-    vlanId: z.number().optional(),
+    vlan_id: z.number().optional(),
   })
   .strict();
 
@@ -156,7 +157,7 @@ const ConsoleSchema = z
     /**
      * The number of available TTY (defaults to `2`).
      */
-    ttyCount: z.number().int().default(LXC_DEFAULTS.CONSOLE.TTY_COUNT),
+    tty_count: z.number().int().default(LXC_DEFAULTS.CONSOLE.TTY_COUNT),
     /**
      * The console mode (defaults to `tty`).
      */
@@ -167,7 +168,7 @@ const ConsoleSchema = z
 const MountPointSchema = z
   .object({
     volume: z.string().min(1),
-    mountPoint: z.string().min(1),
+    mount_point: z.string().min(1),
     size: z.number().positive().optional(),
     acl: z.boolean().optional(),
     backup: z.boolean().optional(),
@@ -180,7 +181,7 @@ const MountPointSchema = z
 const DevicePassthroughSchema = z
   .object({
     path: z.string().min(1),
-    denyWrite: z.boolean().optional(),
+    deny_write: z.boolean().optional(),
     uid: z.number().optional(),
     gid: z.number().optional(),
     mode: z.string().length(4).optional(),
@@ -192,7 +193,7 @@ const AnsibleConnectionOverrideSchema = z
     host: z.string().optional(),
     user: z.string().optional().default(LXC_DEFAULTS.SSH_USER),
     port: z.number().positive().optional().default(LXC_DEFAULTS.SSH_PORT),
-    privateKeyFile: z
+    private_key_path: z
       .string()
       .optional()
       .default(LXC_DEFAULTS.SSH_PRIVATE_KEY_FILE),
@@ -204,13 +205,13 @@ const ScriptConnectionOverrideSchema = z
     host: z.string().optional(),
     user: z.string().optional().default(LXC_DEFAULTS.SSH_USER),
     port: z.number().positive().optional().default(LXC_DEFAULTS.SSH_PORT),
-    privateKey: z.string().optional(),
+    private_key: z.string().optional(),
   })
   .strict();
 
 const FirewallOptionsSchema = z
   .object({
-    containerId: z.number().optional(),
+    container_id: z.number().optional(),
     enabled: z.boolean().default(LXC_DEFAULTS.FIREWALL.ENABLED).optional(),
 
     dhcp: z.boolean().default(LXC_DEFAULTS.FIREWALL.DHCP).optional(),
@@ -234,19 +235,19 @@ const FirewallOptionsSchema = z
      * containers the configured IP addresses will be implicitly added.
      */
     ipfilter: z.boolean().default(LXC_DEFAULTS.FIREWALL.IPFILTER).optional(),
-    logLevelIn: z
+    log_level_in: z
       .enum(PveFirewallLogLevel)
       .default(PveFirewallLogLevel.nolog)
       .optional(),
-    logLevelOut: z
+    log_level_out: z
       .enum(PveFirewallLogLevel)
       .default(PveFirewallLogLevel.nolog)
       .optional(),
-    inputPolicy: z
+    input_policy: z
       .enum(PveFirewallPolicy)
       .default(PveFirewallPolicy.DROP)
       .optional(),
-    outputPolicy: z
+    output_policy: z
       .enum(PveFirewallPolicy)
       .default(PveFirewallPolicy.ACCEPT)
       .optional(),
@@ -310,7 +311,7 @@ const FirewallRuleSchema = z
      * names as defined in '/etc/protocols'.
      */
     proto: z.string().optional(),
-    securityGroup: z.string().optional(),
+    security_group: z.string().optional(),
   })
   .strict();
 
@@ -324,17 +325,17 @@ const ScriptProvisionerSchema = z
   .object({
     type: z.literal("script"),
     script: z.string().min(1),
-    workingDirectory: z
+    working_directory: z
       .string()
       .default(LXC_DEFAULTS.PROVISIONER.WORKING_DIRECTORY),
-    runAs: z.string().default(LXC_DEFAULTS.SSH_USER),
+    run_as: z.string().default(LXC_DEFAULTS.SSH_USER),
     environment: z.record(z.string(), z.string()).optional(),
     timeout: z
       .number()
       .positive()
       .default(LXC_DEFAULTS.PROVISIONER.TIMEOUT_SECONDS),
     connection: ScriptConnectionOverrideSchema.optional(),
-    runOn: z
+    run_on: z
       .array(z.enum(SCRIPT_RUN_ON_VALUES))
       .optional()
       .default(LXC_DEFAULTS.PROVISIONER.RUN_ON),
@@ -365,7 +366,7 @@ const ProvisionerSchema = z.discriminatedUnion("type", [
 ]);
 
 const StackSchema = z
-  .object({ domainPrefixes: z.record(z.string(), z.string()).optional() })
+  .object({ subdomain_prefixes: z.record(z.string(), z.string()).optional() })
   .strict();
 
 const StackSchemaMap = z.record(z.string(), StackSchema);
@@ -376,7 +377,7 @@ export const LxcHostConfigSchema = z
     hostname: z.string().min(1),
     description: z.string().default(LXC_DEFAULTS.DESCRIPTION),
     unprivileged: z.boolean().default(LXC_DEFAULTS.UNPRIVILEGED),
-    startOnBoot: z.boolean().default(LXC_DEFAULTS.START_ON_BOOT),
+    start_on_boot: z.boolean().default(LXC_DEFAULTS.START_ON_BOOT),
     protection: z.boolean().default(LXC_DEFAULTS.PROTECTION),
     tags: z.array(z.string()).optional(),
     os: OsConfigSchema.default({
@@ -393,10 +394,10 @@ export const LxcHostConfigSchema = z
       swap: LXC_DEFAULTS.MEMORY.SWAP,
     }),
     disk: DiskConfigSchema.default({
-      datastoreId: LXC_DEFAULTS.DISK.DATASTORE_ID,
+      datastore_id: LXC_DEFAULTS.DISK.DATASTORE_ID,
       size: LXC_DEFAULTS.DISK.SIZE,
     }),
-    networkInterfaces: z
+    network_interfaces: z
       .array(NetworkInterfacesSchema)
       .default([
         {
@@ -409,7 +410,7 @@ export const LxcHostConfigSchema = z
     console: ConsoleSchema.default({
       enabled: LXC_DEFAULTS.CONSOLE.ENABLED,
       type: LXC_DEFAULTS.CONSOLE.TYPE,
-      ttyCount: LXC_DEFAULTS.CONSOLE.TTY_COUNT,
+      tty_count: LXC_DEFAULTS.CONSOLE.TTY_COUNT,
     }),
     features: FeaturesSchema.default({
       fuse: LXC_DEFAULTS.FEATURES.FUSE,
@@ -417,33 +418,43 @@ export const LxcHostConfigSchema = z
       nesting: LXC_DEFAULTS.FEATURES.NESTING,
     }),
     stacks: StackSchemaMap.optional(),
-    mountPoints: z.array(MountPointSchema).optional(),
-    devicePassthroughs: z.array(DevicePassthroughSchema).optional(),
-    firewallOptions: FirewallOptionsSchema.default({
+    mount_points: z.array(MountPointSchema).optional(),
+    device_passthroughs: z.array(DevicePassthroughSchema).optional(),
+    firewall_options: FirewallOptionsSchema.default({
       enabled: LXC_DEFAULTS.FIREWALL.ENABLED,
       dhcp: LXC_DEFAULTS.FIREWALL.DHCP,
       ndp: LXC_DEFAULTS.FIREWALL.NDP,
       radv: LXC_DEFAULTS.FIREWALL.RADV,
       macfilter: LXC_DEFAULTS.FIREWALL.MACFILTER,
       ipfilter: LXC_DEFAULTS.FIREWALL.IPFILTER,
-      inputPolicy: PveFirewallPolicy.DROP,
-      outputPolicy: PveFirewallPolicy.ACCEPT,
-      logLevelIn: PveFirewallLogLevel.nolog,
-      logLevelOut: PveFirewallLogLevel.nolog,
+      input_policy: PveFirewallPolicy.DROP,
+      output_policy: PveFirewallPolicy.ACCEPT,
+      log_level_in: PveFirewallLogLevel.nolog,
+      log_level_out: PveFirewallLogLevel.nolog,
     }),
-    firewallRules: z.array(FirewallRuleSchema).optional(),
+    firewall_rules: z.array(FirewallRuleSchema).optional(),
     provisioners: z.array(ProvisionerSchema).optional(),
   })
   .strict();
 
 export type LxcHostConfigToml = z.infer<typeof LxcHostConfigSchema>;
-export type Provisioner = z.infer<typeof ProvisionerSchema>;
-export type ScriptProvisioner = z.infer<typeof ScriptProvisionerSchema>;
-export type AnsibleProvisioner = z.infer<typeof AnsibleProvisionerSchema>;
-export type ConnectionOverride = z.infer<
-  typeof AnsibleConnectionOverrideSchema
+
+export type LxcHostConfig = CamelCasedPropertiesDeep<LxcHostConfigToml>;
+export type Provisioner = CamelCasedPropertiesDeep<
+  z.infer<typeof ProvisionerSchema>
 >;
-export type FirewallOptions = z.infer<typeof FirewallOptionsSchema>;
+export type ScriptProvisioner = CamelCasedPropertiesDeep<
+  z.infer<typeof ScriptProvisionerSchema>
+>;
+export type AnsibleProvisioner = CamelCasedPropertiesDeep<
+  z.infer<typeof AnsibleProvisionerSchema>
+>;
+export type ConnectionOverride = CamelCasedPropertiesDeep<
+  z.infer<typeof AnsibleConnectionOverrideSchema>
+>;
+export type FirewallOptions = CamelCasedPropertiesDeep<
+  z.infer<typeof FirewallOptionsSchema>
+>;
 
 export const LxcHostnameSchema = z.object({ hostname: z.string().min(1) });
 

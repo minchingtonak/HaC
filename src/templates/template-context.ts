@@ -33,6 +33,8 @@ export class TemplateContext<TContext extends Record<string, unknown>> {
           acc[curr] = data as TFiltered[TKey];
           return acc;
         }, {} as TFiltered)
+        // TODO fix issue where incomplete data can be returned as is typed as complete
+        // can use schema to validate
       : (this.data as Required<TContext>);
 
     return data;

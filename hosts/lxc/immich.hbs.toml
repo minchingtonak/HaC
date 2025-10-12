@@ -19,13 +19,13 @@ swap = 2048
 [disk]
 size = 64
 
-[[mountPoints]]
-volume = "{{{@pve.lxc.appDataDirectory}}}/immich"
-mountPoint = "/docker"
+[[mount_points]]
+volume = "{{{@pve.lxc.app_data_dir}}}/immich"
+mount_point = "/docker"
 
-[[mountPoints]]
+[[mount_points]]
 volume = "/void/photos"
-mountPoint = "/mnt/photos"
+mount_point = "/mnt/photos"
 
 [[provisioners]]
 type = "ansible"

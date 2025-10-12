@@ -8,7 +8,7 @@ import {
   Provisioner,
   ScriptProvisioner,
   AnsibleProvisioner,
-} from "./lxc-host-config-schema";
+} from "./schema/lxc-host-config";
 import { EnvUtils } from "../utils/env-utils";
 import { TemplateProcessor } from "../templates/template-processor";
 
@@ -108,7 +108,7 @@ export class ProvisionerEngine {
       ...(override.host && { host: override.host }),
       ...(override.user && { user: override.user }),
       ...(override.port && { port: override.port }),
-      ...(override.privateKeyFile && { privateKey: override.privateKeyFile }),
+      ...(override.privateKeyPath && { privateKey: override.privateKeyPath }),
     };
   }
 

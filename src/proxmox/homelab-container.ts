@@ -8,24 +8,21 @@ import {
   PveFirewallPolicy,
 } from "../constants";
 import { HomelabPveProvider } from "./homelab-pve-provider";
-import {
-  ComposeStack,
-  ComposeStackTemplateContext,
-} from "../docker/compose-stack";
+import { ComposeStack, ComposeStackContext } from "../docker/compose-stack";
 import {
   ProvisionerEngine,
   ProvisionerResource,
 } from "../hosts/provisioner-engine";
 import { TemplateProcessor } from "../templates/template-processor";
 import { TemplateContext } from "../templates/template-context";
-import { type HomelabPveHostTemplateContext } from "./homelab-pve-host";
+import { type HomelabPveHostContext } from "./homelab-pve-host";
 
-export type HomelabContainerTemplateContext = HomelabPveHostTemplateContext & {
+export type HomelabContainerContext = HomelabPveHostContext & {
   stackName: string;
 };
 
 export type HomelabContainerArgs = {
-  context: TemplateContext<HomelabContainerTemplateContext>;
+  context: TemplateContext<HomelabContainerContext>;
   provider: HomelabPveProvider;
 };
 
@@ -64,13 +61,13 @@ export class HomelabContainer extends pulumi.ComponentResource {
   ) {
     super(HomelabContainer.RESOURCE_TYPE, name, {}, opts);
 
-    const { lxc, pve } = args.context.get("lxc", "pve");
+    const { lxcConfig, pveConfig } = args.context.get("lxcConfig", "pveConfig");
 
-    const ctAddress = pulumi.interpolate`${pve.lxc.network.subnet}.${lxc.id}`;
+    const ctAddress = pulumi.interpolate`${pveConfig.lxc.network.subnet}.${lxcConfig.id}`;
     const ctCidr = pulumi.interpolate`${ctAddress}/24`;
 
     const mountPoints =
-      lxc.mountPoints?.map((mp) => ({
+      lxcConfig.mountPoints?.map((mp) => ({
         volume: mp.volume,
         path: mp.mountPoint,
         size: mp.size ? `${mp.size}G` : undefined,
@@ -81,44 +78,50 @@ export class HomelabContainer extends pulumi.ComponentResource {
         shared: mp.shared,
       })) ?? [];
 
-    const stackNames = Object.keys(lxc.stacks ?? {});
+    const stackNames = Object.keys(lxcConfig.stacks ?? {});
 
     this.container = new proxmox.ct.Container(
       name,
       {
-        nodeName: pve.node,
-        vmId: lxc.id,
-        description: lxc.description,
-        tags: [...stackNames, ...(lxc.tags ?? [])],
-        unprivileged: lxc.unprivileged,
-        startOnBoot: lxc.startOnBoot,
-        protection: lxc.protection,
-        operatingSystem: lxc.os,
+        nodeName: pveConfig.node,
+        vmId: lxcConfig.id,
+        description: lxcConfig.description,
+        tags: [...stackNames, ...(lxcConfig.tags ?? [])],
+        unprivileged: lxcConfig.unprivileged,
+        startOnBoot: lxcConfig.startOnBoot,
+        protection: lxcConfig.protection,
+        operatingSystem: lxcConfig.os,
         mountPoints: mountPoints,
-        devicePassthroughs: lxc.devicePassthroughs,
+        devicePassthroughs: lxcConfig.devicePassthroughs,
         initialization: {
-          hostname: lxc.hostname,
+          hostname: lxcConfig.hostname,
           ipConfigs: [
-            { ipv4: { address: ctCidr, gateway: pve.lxc.network.gateway } },
+            {
+              ipv4: { address: ctCidr, gateway: pveConfig.lxc.network.gateway },
+            },
           ],
           userAccount: {
-            keys: [pve.lxc.ssh.publicKey],
-            password: pve.lxc.auth.password,
+            keys: [pveConfig.lxc.ssh.publicKey],
+            password: pveConfig.lxc.auth.password,
           },
         },
-        networkInterfaces: lxc.networkInterfaces,
-        cpu: lxc.cpu,
-        memory: lxc.memory,
-        disk: lxc.disk,
-        features: lxc.features,
-        console: lxc.console,
+        networkInterfaces: lxcConfig.networkInterfaces,
+        cpu: lxcConfig.cpu,
+        memory: lxcConfig.memory,
+        disk: lxcConfig.disk,
+        features: lxcConfig.features,
+        console: lxcConfig.console,
       },
       { provider: args.provider, parent: this, deleteBeforeReplace: true },
     );
 
     this.firewallOptions = new proxmox.network.FirewallOptions(
       `${name}-fw-options`,
-      { nodeName: pve.node, containerId: lxc.id, ...lxc.firewallOptions },
+      {
+        nodeName: pveConfig.node,
+        containerId: lxcConfig.id,
+        ...lxcConfig.firewallOptions,
+      },
       {
         provider: args.provider,
         parent: this,
@@ -131,8 +134,8 @@ export class HomelabContainer extends pulumi.ComponentResource {
     this.firewallAlias = new proxmox.network.FirewallAlias(
       fwAliasName,
       {
-        nodeName: pve.node,
-        containerId: lxc.id,
+        nodeName: pveConfig.node,
+        containerId: lxcConfig.id,
         name: fwAliasName,
         cidr: ctCidr,
         comment: "created by pulumi",
@@ -156,8 +159,8 @@ export class HomelabContainer extends pulumi.ComponentResource {
     this.firewallRules = new proxmox.network.FirewallRules(
       `${name}-fw-rules`,
       {
-        nodeName: pve.node,
-        containerId: lxc.id,
+        nodeName: pveConfig.node,
+        containerId: lxcConfig.id,
         rules: [
           {
             enabled: true,
@@ -181,7 +184,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
               },
             ]
           : []),
-          ...(lxc.firewallRules ?? []),
+          ...(lxcConfig.firewallRules ?? []),
         ],
       },
       {
@@ -193,15 +196,18 @@ export class HomelabContainer extends pulumi.ComponentResource {
     );
 
     const porkbunProvider = new porkbun.Provider(`${name}-provider`, {
-      apiKey: pve.providers.dns?.porkbun?.apiKey,
-      secretKey: pve.providers.dns?.porkbun?.secretKey,
+      apiKey: pveConfig.providers.dns?.porkbun?.apiKey,
+      secretKey: pveConfig.providers.dns?.porkbun?.secretKey,
     });
 
     this.baseDnsRecord = new porkbun.DnsRecord(
       `${name}-base-dns-record`,
       {
-        domain: pve.lxc.network.domain,
-        subdomain: HomelabContainer.CONTAINER_SUBDOMAIN(lxc.hostname, pve.node),
+        domain: pveConfig.lxc.network.domain,
+        subdomain: HomelabContainer.CONTAINER_SUBDOMAIN(
+          lxcConfig.hostname,
+          pveConfig.node,
+        ),
         content: ctAddress,
         type: "A",
       },
@@ -211,8 +217,8 @@ export class HomelabContainer extends pulumi.ComponentResource {
     this.wildcardDnsRecord = new porkbun.DnsRecord(
       `${name}-wildcard-dns-record`,
       {
-        domain: pve.lxc.network.domain,
-        subdomain: `*.${HomelabContainer.CONTAINER_SUBDOMAIN(lxc.hostname, pve.node)}`,
+        domain: pveConfig.lxc.network.domain,
+        subdomain: `*.${HomelabContainer.CONTAINER_SUBDOMAIN(lxcConfig.hostname, pveConfig.node)}`,
         content: ctAddress,
         type: "A",
       },
@@ -222,19 +228,19 @@ export class HomelabContainer extends pulumi.ComponentResource {
     const connection: command.types.input.remote.ConnectionArgs = {
       host: ctAddress,
       user: "root",
-      privateKey: pve.lxc.ssh.privateKey,
+      privateKey: pveConfig.lxc.ssh.privateKey,
     };
 
-    if (lxc.provisioners && lxc.provisioners.length > 0) {
+    if (lxcConfig.provisioners && lxcConfig.provisioners.length > 0) {
       const provisionerEngine = new ProvisionerEngine({ name, connection });
 
       this.provisionerResources = provisionerEngine.executeProvisioners(
-        lxc.provisioners,
+        lxcConfig.provisioners,
         this.container,
       );
     }
 
-    if (lxc.stacks) {
+    if (lxcConfig.stacks) {
       if (hasProxy) {
         this.proxyNetwork = new command.remote.Command(
           `${name}-create-${HomelabContainer.PROXY_STACK_NAME}-network`,
@@ -272,7 +278,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
             `${name}-${stackName}`,
             {
               connection,
-              context: args.context.withData<ComposeStackTemplateContext>({
+              context: args.context.withData<ComposeStackContext>({
                 stackName,
               }),
             },

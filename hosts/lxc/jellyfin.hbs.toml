@@ -19,7 +19,7 @@ swap = 2048
 [disk]
 size = 16
 
-[[firewallRules]]
+[[firewall_rules]]
 enabled = true
 type = "in"
 action = "ACCEPT"
@@ -27,7 +27,7 @@ dport = "1900"
 proto = "udp"
 comment = "jellyfin service discovery"
 
-[[firewallRules]]
+[[firewall_rules]]
 enabled = true
 type = "in"
 action = "ACCEPT"
@@ -35,25 +35,25 @@ dport = "7369"
 proto = "udp"
 comment = "jellyfin auto discovery"
 
-[[devicePassthroughs]]
+[[device_passthroughs]]
 path = "/dev/dri/card1"
 uid = 0
 gid = 44
 mode = "0660"
 
-[[devicePassthroughs]]
+[[device_passthroughs]]
 path = "/dev/dri/renderD128"
 uid = 0
 gid = 104
 mode = "0660"
 
-[[mountPoints]]
-volume = "{{{@pve.lxc.appDataDirectory}}}/jellyfin"
-mountPoint = "/docker"
+[[mount_points]]
+volume = "{{{@pve.lxc.app_data_dir}}}/jellyfin"
+mount_point = "/docker"
 
-[[mountPoints]]
+[[mount_points]]
 volume = "{{{@pve.storage.mass.path}}}/media"
-mountPoint = "/mnt/media"
+mount_point = "/mnt/media"
 
 [[provisioners]]
 type = "ansible"

@@ -148,7 +148,7 @@ Example:
 ```toml
 ...
 # LXC host config
-[[firewallRules]]
+[[firewall_rules]]
 enabled = true
 type = "in"
 action = "ACCEPT"
@@ -186,9 +186,11 @@ Secret variables are supported through [Pulumi config secrets](https://www.pulum
   - `{{{raw}}}`: Output raw content without escaping
 - Access to contextual data
   - `{{{@pve.*}}}`: Parsed PVE host config data (in LXC and Compose stack templates only)
+  - `{{{@pve_hosts}}}`: List of all PVE hosts being deployed (in LXC and Compose stack templates only)
   - `{{{@lxc.*}}}`: Parsed LXC host config data (in Compose stack templates only)
-  - `{{{stackName}}}`: Parsed compose stack name (in Compose stack templates only)
-  - `{{{templatePath}}}`: Path of the template file being rendered
+  - `{{{@lxc_hosts}}}`: List of all LXC hosts being deployed (in Compose stack templates only)
+  - `{{{stack_name}}}`: Parsed compose stack name (in Compose stack templates only)
+  - `{{{template_path}}}`: Path of the template file being rendered
 - Arbitrary namespace reference
   - `{{{<namespace>:VAR_NAME}}}`: References a variable in any other namespace. Useful for global/shared variables
 - Parent namespace reference

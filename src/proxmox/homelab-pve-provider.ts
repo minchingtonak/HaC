@@ -1,9 +1,9 @@
 import * as proxmox from "@muhlba91/pulumi-proxmoxve";
 import * as pulumi from "@pulumi/pulumi";
-import { PveHostConfigToml } from "../hosts/pve-host-config-schema";
+import { PveHostConfig } from "../hosts/schema/pve-host-config";
 
 export interface HomelabPveProviderArgs {
-  pveHostConfig: PveHostConfigToml | pulumi.Output<PveHostConfigToml>;
+  pveConfig: PveHostConfig;
 }
 
 export class HomelabPveProvider extends proxmox.Provider {
@@ -12,13 +12,13 @@ export class HomelabPveProvider extends proxmox.Provider {
     args: HomelabPveProviderArgs,
     opts?: pulumi.ResourceOptions,
   ) {
-    const config = pulumi.output(args.pveHostConfig);
+    const config = args.pveConfig;
 
     const providerArgs: proxmox.ProviderArgs = {
-      endpoint: config.apply((c) => c.endpoint),
-      insecure: config.apply((c) => c.auth.insecure),
-      username: config.apply((c) => c.auth.username),
-      password: pulumi.secret(config.apply((c) => c.auth.password)),
+      endpoint: config.endpoint,
+      insecure: config.auth.insecure,
+      username: config.auth.username,
+      password: pulumi.secret(config.auth.password),
     };
 
     super(name, providerArgs, opts);

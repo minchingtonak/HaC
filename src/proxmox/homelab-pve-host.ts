@@ -1,27 +1,40 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as proxmox from "@muhlba91/pulumi-proxmoxve";
 import * as command from "@pulumi/command/remote";
-import {
-  HomelabContainer,
-  HomelabContainerTemplateContext,
-} from "./homelab-container";
+import { HomelabContainer, HomelabContainerContext } from "./homelab-container";
 import { HomelabPveProvider } from "./homelab-pve-provider";
 import { LxcHostConfigParser } from "../hosts/lxc-host-config-parser";
 import { PveFirewallPolicy } from "../constants";
 import path from "node:path";
 import { TemplateContext } from "../templates/template-context";
-import { PveHostConfigToml } from "../hosts/pve-host-config-schema";
-import { LxcHostConfigToml } from "../hosts/lxc-host-config-schema";
+import {
+  PveHostConfig,
+  PveHostConfigToml,
+} from "../hosts/schema/pve-host-config";
+import {
+  LxcHostConfig,
+  LxcHostConfigToml,
+} from "../hosts/schema/lxc-host-config";
+import { snakeToCamelKeys } from "../utils/schema-utils";
+import { type TemplateFileContext } from "../docker/compose-stack";
 
-export type HomelabPveHostTemplateContext = {
-  pve: PveHostConfigToml;
-  enabledPveHosts: PveHostConfigToml[];
-  lxc: LxcHostConfigToml;
-  enabledLxcHosts: LxcHostConfigToml[];
+/**
+ * a camelCase version of all properties is provided for ease of
+ * interoperability with the Pulumi pve resource APIs
+ */
+export type HomelabPveHostContext = {
+  pve_config: PveHostConfigToml;
+  pveConfig: PveHostConfig;
+  enabled_pve_hosts: PveHostConfigToml[];
+  enabledPveHosts: PveHostConfig[];
+  lxc_config: LxcHostConfigToml;
+  lxcConfig: LxcHostConfig;
+  enabled_lxc_hosts: LxcHostConfigToml[];
+  enabledLxcHosts: LxcHostConfig[];
 };
 
 export interface HomelabPveHostArgs {
-  context: TemplateContext<HomelabPveHostTemplateContext>;
+  context: TemplateContext<HomelabPveHostContext>;
 }
 
 export class HomelabPveHost extends pulumi.ComponentResource {
@@ -42,11 +55,15 @@ export class HomelabPveHost extends pulumi.ComponentResource {
   ) {
     super(HomelabPveHost.RESOURCE_TYPE, name, {}, opts);
 
-    const { pve } = args.context.get("pve");
+    const { pveConfig, pve_config, enabled_pve_hosts } = args.context.get(
+      "pveConfig",
+      "pve_config",
+      "enabled_pve_hosts",
+    );
 
     this.provider = new HomelabPveProvider(
       `${name}-provider`,
-      { pveHostConfig: pve },
+      { pveConfig: pveConfig },
       { parent: this },
     );
 
@@ -65,8 +82,8 @@ export class HomelabPveHost extends pulumi.ComponentResource {
     this.templateFile = new proxmox.download.File(
       `${name}-debian-12-lxc-template`,
       {
-        nodeName: pve.node,
-        datastoreId: pve.storage.templates,
+        nodeName: pveConfig.node,
+        datastoreId: pveConfig.storage.templates,
         // TODO add download file to pve config schema
         contentType: "vztmpl",
         url: "http://download.proxmox.com/images/system/debian-12-standard_12.7-1_amd64.tar.zst",
@@ -78,19 +95,25 @@ export class HomelabPveHost extends pulumi.ComponentResource {
       { provider: this.provider, retainOnDelete: true, parent: this },
     );
 
-    const enabledHostnames = Object.keys(pve.lxc.hosts).filter(
-      (hostname) => pve.lxc.hosts[hostname].enabled,
+    const enabledHostnames = Object.keys(pveConfig.lxc.hosts).filter(
+      (hostname) => pveConfig.lxc.hosts[hostname].enabled,
     );
 
     const enabledLxcConfigs = enabledHostnames.map((hostname) => {
       const hostConfigPath = HomelabPveHost.LXC_HOST_CONFIG_PATH_FOR(hostname);
-      return LxcHostConfigParser.parseHostConfigFile(hostConfigPath, { pve });
+      return LxcHostConfigParser.parseHostConfigFile<
+        Pick<TemplateFileContext, "pve" | "pve_hosts">
+      >(hostConfigPath, { pve: pve_config, pve_hosts: enabled_pve_hosts });
     });
 
     pulumi.all(enabledLxcConfigs).apply((hostConfigs) => {
-      for (const config of hostConfigs) {
+      const camelCasedConfigs = hostConfigs.map(snakeToCamelKeys);
+      for (let i = 0; i < hostConfigs.length; ++i) {
+        const config = hostConfigs[i];
+        const camelCasedConfig = camelCasedConfigs[i];
+
         const appDataDirPath = path.join(
-          pve.lxc.appDataDirectory,
+          pveConfig.lxc.appDataDir,
           config.hostname,
         );
 
@@ -102,8 +125,8 @@ export class HomelabPveHost extends pulumi.ComponentResource {
             connection: {
               // TODO user: pve.auth.username,
               user: "root",
-              host: pve.dns.domain,
-              privateKey: pve.lxc.ssh.privateKey,
+              host: pveConfig.dns.domain,
+              privateKey: pveConfig.lxc.ssh.privateKey,
             },
           },
           { parent: this, dependsOn: this.templateFile, retainOnDelete: true },
@@ -112,9 +135,11 @@ export class HomelabPveHost extends pulumi.ComponentResource {
         const container = new HomelabContainer(
           `${name}-${config.hostname}`,
           {
-            context: args.context.withData<HomelabContainerTemplateContext>({
-              lxc: config,
-              enabledLxcHosts: hostConfigs,
+            context: args.context.withData<HomelabContainerContext>({
+              lxc_config: config,
+              enabled_lxc_hosts: hostConfigs,
+              lxcConfig: camelCasedConfig,
+              enabledLxcHosts: camelCasedConfigs,
             }),
             provider: this.provider,
           },

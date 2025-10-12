@@ -19,7 +19,7 @@ swap = 1024
 [disk]
 size = 16
 
-[[firewallRules]]
+[[firewall_rules]]
 enabled = true
 type = "in"
 action = "ACCEPT"
@@ -27,9 +27,9 @@ dport = "222"
 proto = "tcp"
 comment = "gitea ssh"
 
-[[mountPoints]]
-volume = "{{{@pve.lxc.appDataDirectory}}}/gitea"
-mountPoint = "/docker"
+[[mount_points]]
+volume = "{{{@pve.lxc.app_data_dir}}}/gitea"
+mount_point = "/docker"
 
 [[provisioners]]
 type = "ansible"

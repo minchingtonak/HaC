@@ -19,41 +19,41 @@ swap = 512
 [disk]
 size = 4
 
-[[mountPoints]]
-volume = "{{{@pve.lxc.appDataDirectory}}}/copyparty"
-mountPoint = "/docker"
+[[mount_points]]
+volume = "{{{@pve.lxc.app_data_dir}}}/copyparty"
+mount_point = "/docker"
 
-[[mountPoints]]
+[[mount_points]]
 volume = "{{{@pve.storage.mass.path}}}/audiobooks"
-mountPoint = "/mnt/audiobooks"
+mount_point = "/mnt/audiobooks"
 
-[[mountPoints]]
+[[mount_points]]
 volume = "{{{@pve.storage.mass.path}}}/backups"
-mountPoint = "/mnt/backups"
+mount_point = "/mnt/backups"
 
-[[mountPoints]]
+[[mount_points]]
 volume = "{{{@pve.storage.mass.path}}}/documents"
-mountPoint = "/mnt/documents"
+mount_point = "/mnt/documents"
 
-[[mountPoints]]
+[[mount_points]]
 volume = "{{{@pve.storage.mass.path}}}/drive"
-mountPoint = "/mnt/drive"
+mount_point = "/mnt/drive"
 
-[[mountPoints]]
+[[mount_points]]
 volume = "{{{@pve.storage.mass.path}}}/media"
-mountPoint = "/mnt/media"
+mount_point = "/mnt/media"
 
-[[mountPoints]]
+[[mount_points]]
 volume = "{{{@pve.storage.mass.path}}}/photos"
-mountPoint = "/mnt/photos"
+mount_point = "/mnt/photos"
 
-[[mountPoints]]
+[[mount_points]]
 volume = "{{{@pve.storage.mass.path}}}/podcasts"
-mountPoint = "/mnt/podcasts"
+mount_point = "/mnt/podcasts"
 
-[[mountPoints]]
+[[mount_points]]
 volume = "{{{@pve.storage.mass.path}}}/restic"
-mountPoint = "/mnt/restic"
+mount_point = "/mnt/restic"
 
 [[provisioners]]
 type = "ansible"

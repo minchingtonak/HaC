@@ -16,7 +16,7 @@ mass = { name = "void", path = "/void" }
 fast = { name = "fast", path = "/fast" }
 
 [lxc]
-appDataDirectory = "/fast/test-appdata"
+app_data_dir = "/fast/test-appdata"
 
 [lxc.hosts]
 archiver = { enabled = true }
@@ -42,9 +42,9 @@ gateway = "192.168.0.1"
 password = "{{{SECRET_CONTAINER_ROOT_PASSWORD}}}"
 
 [lxc.ssh]
-publicKey = "{{{SECRET_CONTAINER_SSH_PUBLIC_KEY}}}"
-privateKey = """{{{SECRET_CONTAINER_SSH_PRIVATE_KEY}}}"""
+public_key = "{{{SECRET_CONTAINER_SSH_PUBLIC_KEY}}}"
+private_key = """{{{SECRET_CONTAINER_SSH_PRIVATE_KEY}}}"""
 
 [providers.dns.porkbun]
-apiKey = "{{{SECRET_PORKBUN_API_KEY}}}"
-secretKey = "{{{SECRET_PORKBUN_SECRET_KEY}}}"
+api_key = "{{{SECRET_PORKBUN_API_KEY}}}"
+secret_key = "{{{SECRET_PORKBUN_SECRET_KEY}}}"

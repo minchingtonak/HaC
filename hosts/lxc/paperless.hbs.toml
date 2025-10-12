@@ -19,13 +19,13 @@ swap = 2048
 [disk]
 size = 4
 
-[[mountPoints]]
-volume = "{{{@pve.lxc.appDataDirectory}}}/paperless"
-mountPoint = "/docker"
+[[mount_points]]
+volume = "{{{@pve.lxc.app_data_dir}}}/paperless"
+mount_point = "/docker"
 
-[[mountPoints]]
+[[mount_points]]
 volume = "/void/documents"
-mountPoint = "/mnt/documents"
+mount_point = "/mnt/documents"
 
 [[provisioners]]
 type = "ansible"

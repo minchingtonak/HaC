@@ -22,9 +22,9 @@ swap = 1024
 [disk]
 size = 8
 
-[[mountPoints]]
-volume = "{{{@pve.lxc.appDataDirectory}}}/admin"
-mountPoint = "/docker"
+[[mount_points]]
+volume = "{{{@pve.lxc.app_data_dir}}}/admin"
+mount_point = "/docker"
 
 [[provisioners]]
 type = "ansible"

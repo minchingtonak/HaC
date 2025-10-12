@@ -17,21 +17,21 @@ swap = 1024
 [disk]
 size = 8
 
-[[mountPoints]]
+[[mount_points]]
 volume = "/void/documents"
-mountPoint = "/mnt/documents"
+mount_point = "/mnt/documents"
 
-[[mountPoints]]
+[[mount_points]]
 volume = "/void/drive"
-mountPoint = "/mnt/drive"
+mount_point = "/mnt/drive"
 
-[[mountPoints]]
+[[mount_points]]
 volume = "/void/media"
-mountPoint = "/mnt/media"
+mount_point = "/mnt/media"
 
-[[mountPoints]]
+[[mount_points]]
 volume = "/void/photos"
-mountPoint = "/mnt/photos"
+mount_point = "/mnt/photos"
 
 [[provisioners]]
 type = "ansible"

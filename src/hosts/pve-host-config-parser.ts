@@ -4,7 +4,7 @@ import {
   PveHostConfigToml,
   PveHostnameSchema,
   PveHostnameToml,
-} from "./pve-host-config-schema";
+} from "./schema/pve-host-config";
 import { HostConfigParser, ParserConfig } from "./host-config-parser";
 
 export class PveHostConfigParser extends HostConfigParser<
@@ -36,9 +36,9 @@ export class PveHostConfigParser extends HostConfigParser<
     return parser.parseConfigFile(filePath);
   }
 
-  static parsePveHostConfigFile(
+  static parsePveHostConfigFile<TExtraData = unknown>(
     filePath: string,
-    extraData?: unknown,
+    extraData?: TExtraData,
   ): PveHostConfigToml | pulumi.Output<PveHostConfigToml> {
     const parser = new PveHostConfigParser();
     return parser.parseConfigFile(filePath, extraData);

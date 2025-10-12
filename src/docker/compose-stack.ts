@@ -5,15 +5,26 @@ import { HandlebarsTemplateDirectory } from "../templates/handlebars-template-di
 import { ComposeStackUtils } from "./compose-file-processor";
 import { TemplateProcessor } from "../templates/template-processor";
 import { TemplateContext } from "../templates/template-context";
-import { type HomelabContainerTemplateContext } from "../proxmox/homelab-container";
+import { type HomelabContainerContext } from "../proxmox/homelab-container";
+import { PveHostConfigToml } from "../hosts/schema/pve-host-config";
+import { LxcHostConfigToml } from "../hosts/schema/lxc-host-config";
 
-export type ComposeStackTemplateContext = HomelabContainerTemplateContext & {
+export type ComposeStackContext = HomelabContainerContext & {
   templateDirectory: string;
+};
+
+export type TemplateFileContext = {
+  pve: PveHostConfigToml;
+  pve_hosts: PveHostConfigToml[];
+  lxc: LxcHostConfigToml;
+  lxc_hosts: LxcHostConfigToml[];
+  stack_name: string;
+  template_path: string;
 };
 
 export type ComposeStackArgs = {
   connection: command.types.input.remote.ConnectionArgs;
-  context: TemplateContext<ComposeStackTemplateContext>;
+  context: TemplateContext<ComposeStackContext>;
 };
 
 export class ComposeStack extends pulumi.ComponentResource {
@@ -45,10 +56,14 @@ export class ComposeStack extends pulumi.ComponentResource {
 
     const contextData = args.context.get(
       "stackName",
-      "lxc",
-      "pve",
+      "lxcConfig",
+      "lxc_config",
+      "pveConfig",
+      "pve_config",
       "enabledLxcHosts",
+      "enabled_lxc_hosts",
       "enabledPveHosts",
+      "enabled_pve_hosts",
     );
 
     const stackDirectory = ComposeStackUtils.STACK_DIRECTORY_FOR(
@@ -74,13 +89,18 @@ export class ComposeStack extends pulumi.ComponentResource {
     );
 
     this.handlebarsTemplateDirectory =
-      new HandlebarsTemplateDirectory<ComposeStackTemplateContext>(
+      new HandlebarsTemplateDirectory<TemplateFileContext>(
         `${name}-template-dir`,
         {
           templateDirectory: stackDirectory,
-          configNamespace: `lxc#${contextData.lxc.hostname}#${contextData.stackName}`,
-          templateContext: args.context.withData({
-            templateDirectory: stackDirectory,
+          configNamespace: `lxc#${contextData.lxcConfig.hostname}#${contextData.stackName}`,
+          templateContext: new TemplateContext<TemplateFileContext>({
+            pve: contextData.pve_config,
+            pve_hosts: contextData.enabled_pve_hosts,
+            lxc: contextData.lxc_config,
+            lxc_hosts: contextData.enabled_lxc_hosts,
+            stack_name: contextData.stackName,
+            template_path: stackDirectory,
           }),
         },
         { parent: this },
@@ -200,16 +220,16 @@ export class ComposeStack extends pulumi.ComponentResource {
   }
 }
 
-function buildBaseDomain(context: ComposeStackTemplateContext): string {
+function buildBaseDomain(context: TemplateFileContext): string {
   return `${context.lxc.hostname}.pulumi.${context.pve.node}.${context.pve.lxc.network.domain}`;
 }
 
 TemplateProcessor.registerTemplateHelper(
   "domainForApp",
   (appName: string, options: Handlebars.HelperOptions) => {
-    const context = options.data as ComposeStackTemplateContext;
+    const context = options.data as TemplateFileContext;
     const subdomainPrefix =
-      context.lxc.stacks?.[context.stackName].domainPrefixes?.[appName] ??
+      context.lxc.stacks?.[context.stack_name].subdomain_prefixes?.[appName] ??
       appName;
 
     return `${subdomainPrefix}.${buildBaseDomain(context)}`;
@@ -219,7 +239,7 @@ TemplateProcessor.registerTemplateHelper(
 TemplateProcessor.registerTemplateHelper(
   "domainForContainer",
   (options: Handlebars.HelperOptions) => {
-    const context = options.data as ComposeStackTemplateContext;
+    const context = options.data as TemplateFileContext;
 
     return buildBaseDomain(context);
   },

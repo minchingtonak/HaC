@@ -20,29 +20,29 @@ swap = 4096
 [disk]
 size = 4
 
-[[mountPoints]]
-volume = "{{{@pve.lxc.appDataDirectory}}}/backup"
-mountPoint = "/docker"
+[[mount_points]]
+volume = "{{{@pve.lxc.app_data_dir}}}/backup"
+mount_point = "/docker"
 
-[[mountPoints]]
+[[mount_points]]
 volume = "/void/backups"
-mountPoint = "/mnt/backup-data/backups"
+mount_point = "/mnt/backup-data/backups"
 
-[[mountPoints]]
+[[mount_points]]
 volume = "/void/documents"
-mountPoint = "/mnt/backup-data/documents"
+mount_point = "/mnt/backup-data/documents"
 
-[[mountPoints]]
+[[mount_points]]
 volume = "/void/drive"
-mountPoint = "/mnt/backup-data/drive"
+mount_point = "/mnt/backup-data/drive"
 
-[[mountPoints]]
+[[mount_points]]
 volume = "/void/photos"
-mountPoint = "/mnt/backup-data/photos"
+mount_point = "/mnt/backup-data/photos"
 
-[[mountPoints]]
+[[mount_points]]
 volume = "/void/restic/repos"
-mountPoint = "/mnt/repos"
+mount_point = "/mnt/repos"
 
 [[provisioners]]
 type = "ansible"
