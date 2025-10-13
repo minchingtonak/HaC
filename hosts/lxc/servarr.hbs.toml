@@ -54,4 +54,4 @@ replayable = false
 lxc_id = 201
 
 [provisioners.connection]
-host = "{{{@pve.dns.domain}}}"
+host = "{{{@pve.ip}}}"
