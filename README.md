@@ -280,29 +280,49 @@ Executes a script on the host when it is created (by default).
 
 See [`provisioners/scripts/`](provisioners/scripts/) for examples.
 
-## Roadmap
+## TODO
 
 ### Security
 
 - test tcp/udp proxying from traefik
+  - syncthing, jellyfin discovery
 - Restrict access to docker socket, use socket proxy
 - firewall and proxy for pve hosts
 
 ### Usability
 
+- PVE host provisioners
+  - can help for things like installing docker, creating app data dir
+- for now, have lxc provisioner to create named docker network. can take traefik as name arg
+- move lxc id to a field in the pve host hosts list, easier to see mapping and configurable between pve instances
+- would be nice to be able to have pve config field that allows setting fields for all lxcs (potentially stacks as well)
+  - can extend this type of this for stacks within lxc config
+- add a transform to the top level lxc and pve schemas that does a recursive Object.freeze on the parsed result
+- look into adding resources for networking (requires some learning)
+  - vlans, bridges
+- look into adding resources for storage pools
+  - possibly something like ZfsStoragePool({ pve_provider, pool_name, mountpoint?=`/<pool_name>`, drive_ids, retain_on_delete?=true })
+    - look at the cli args and build based on that. probably can add some more config options
+- consider adding vm schema/vm support
+  - can possibly create vms without root user password access, need to check. if so, add support for other auth methods
+- is .min(1) really necessary?
+- use zod schema for template context impl
+- better error handling for parser
+- error handling within template helpers
+- add lxc-specific dns config to lxc schema
+- add ipConfigs array to lxc config schema for additional configs
+- generalize porkbun integration
+  - should work with any provider in theory, or that would be nice. maybe the process can just be adding the requisite keys to the schema and adding a conditional resource to lxc host resource
+  - could consider providing consumer with a function (context) => Resource | Resource[] | Record<string, Resource> that renders arbitrary code with the user's registry's provider within the lxc resource
 - preview-time checks
   - container must deploy traefik (or whatever the proxy stack is)
   - possibly require some sort of monitoring/notif stacks on every host
   - would be cool to be able to configure these rules via file
-- make pve host schema less confusing
-- expose all pve/lxc hosts as template data for use in autogenerating dashboards
 - stack provisioners
 - simplify script provisioner wrapper code
 
 ### Dev Experience
 
-- linting step that checks the reference configs to make sure they have all members, even optional
-- handle template context using context objet pattern
 - refactor into a separate package that's imported and used in the deploy function
 
 ### Homelab
