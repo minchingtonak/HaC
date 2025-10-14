@@ -1,241 +1,352 @@
-export enum MemorySize {
-  MB_512 = 512,
-  GB_1 = 1024,
-  GB_2 = 2048,
-  GB_4 = 4096,
-  GB_8 = 8192,
-  GB_16 = 16384,
-  GB_32 = 32768,
-}
+// https://www.totaltypescript.com/books/total-typescript-essentials/deriving-types#using-as-const-for-javascript-style-enums
 
-export enum DiskSize {
-  GB_8 = 8,
-  GB_16 = 16,
-  GB_32 = 32,
-  GB_64 = 64,
-}
+export const MemorySize = {
+  MB_512: 512,
+  GB_1: 1024,
+  GB_2: 2048,
+  GB_4: 4096,
+  GB_8: 8192,
+  GB_16: 16384,
+  GB_32: 32768,
+} as const;
+export type MemorySizeKey = keyof typeof MemorySize;
+export type MemorySizeValue = (typeof MemorySize)[keyof typeof MemorySize];
 
-export enum CpuCores {
-  SINGLE = 1,
-  DUAL = 2,
-  QUAD = 4,
-  HEXA = 6,
-  OCTA = 8,
-  TWELVE = 12,
-  SIXTEEN = 16,
-}
+export const DiskSize = { GB_8: 8, GB_16: 16, GB_32: 32, GB_64: 64 } as const;
+export type DiskSizeKey = keyof typeof DiskSize;
+export type DiskSizeValue = (typeof DiskSize)[keyof typeof DiskSize];
 
-export enum CommonPorts {
-  SSH = 22,
-  HTTP = 80,
-  HTTPS = 443,
-  DNS = 53,
-  DHCP = 67,
-  MYSQL = 3306,
-  POSTGRESQL = 5432,
-  REDIS = 6379,
-  MONGODB = 27017,
-  GRAFANA = 3000,
-  PROMETHEUS = 9090,
-  DOCKER = 2376,
-}
+export const CpuCores = {
+  SINGLE: 1,
+  DUAL: 2,
+  QUAD: 4,
+  HEXA: 6,
+  OCTA: 8,
+  TWELVE: 12,
+  SIXTEEN: 16,
+} as const;
+export type CpuCoresKey = keyof typeof CpuCores;
+export type CpuCoresValue = (typeof CpuCores)[keyof typeof CpuCores];
 
-export enum PveFirewallDirection {
-  in = "in",
-  out = "out",
-}
+export const CommonPorts = {
+  SSH: 22,
+  HTTP: 80,
+  HTTPS: 443,
+  DNS: 53,
+  DHCP: 67,
+  MYSQL: 3306,
+  POSTGRESQL: 5432,
+  REDIS: 6379,
+  MONGODB: 27017,
+  GRAFANA: 3000,
+  PROMETHEUS: 9090,
+  DOCKER: 2376,
+} as const;
+export type CommonPortsKey = keyof typeof CommonPorts;
+export type CommonPortsValue = (typeof CommonPorts)[keyof typeof CommonPorts];
 
-export enum PveFirewallPolicy {
-  ACCEPT = "ACCEPT",
-  REJECT = "REJECT",
-  DROP = "DROP",
-}
+export const FirewallDirection = { in: "in", out: "out" } as const;
+export type FirewallDirectionKey = keyof typeof FirewallDirection;
+export type FirewallDirectionValue =
+  (typeof FirewallDirection)[keyof typeof FirewallDirection];
+
+export const FirewallPolicy = {
+  ACCEPT: "ACCEPT",
+  REJECT: "REJECT",
+  DROP: "DROP",
+} as const;
+export type FirewallPolicyKey = keyof typeof FirewallPolicy;
+export type FirewallPolicyValue =
+  (typeof FirewallPolicy)[keyof typeof FirewallPolicy];
 
 // https://pve.proxmox.com/pve-docs/pve-admin-guide.html#pve_firewall_host_specific_configuration
-export enum PveFirewallLogLevel {
-  emerg = "emerg",
-  alert = "alert",
-  crit = "crit",
-  err = "err",
-  warning = "warning",
-  notice = "notice",
-  info = "info",
-  debug = "debug",
-  nolog = "nolog",
-}
+export const FirewallLogLevel = {
+  emerg: "emerg",
+  alert: "alert",
+  crit: "crit",
+  err: "err",
+  warning: "warning",
+  notice: "notice",
+  info: "info",
+  debug: "debug",
+  nolog: "nolog",
+} as const;
+export type FirewallLogLevelKey = keyof typeof FirewallLogLevel;
+export type FirewallLogLevelValue =
+  (typeof FirewallLogLevel)[keyof typeof FirewallLogLevel];
 
 // https://pve.proxmox.com/pve-docs/pve-admin-guide.html#_firewall_macro_definitions
-export enum PveFirewallMacro {
+export const FirewallMacro = {
   /** Amanda Backup - udp/tcp 10080 */
-  Amanda = "Amanda",
+  Amanda: "Amanda",
   /** Auth (identd) traffic - tcp 113 */
-  Auth = "Auth",
+  Auth: "Auth",
   /** Border Gateway Protocol traffic - tcp 179 */
-  BGP = "BGP",
+  BGP: "BGP",
   /** BitTorrent traffic for BitTorrent 3.1 and earlier - tcp 6881:6889, udp 6881 */
-  BitTorrent = "BitTorrent",
+  BitTorrent: "BitTorrent",
   /** BitTorrent traffic for BitTorrent 3.2 and later - tcp 6881:6999, udp 6881 */
-  BitTorrent32 = "BitTorrent32",
+  BitTorrent32: "BitTorrent32",
   /** Concurrent Versions System pserver traffic - tcp 2401 */
-  CVS = "CVS",
+  CVS: "CVS",
   /** Ceph Storage Cluster traffic (Ceph Monitors, OSD & MDS Daemons) - tcp 6789, 3300, 6800:7300 */
-  Ceph = "Ceph",
+  Ceph: "Ceph",
   /** Citrix/ICA traffic (ICA, ICA Browser, CGP) - tcp 1494, 2598; udp 1604 */
-  Citrix = "Citrix",
+  Citrix: "Citrix",
   /** Digital Audio Access Protocol traffic (iTunes, Rythmbox daemons) - tcp/udp 3689 */
-  DAAP = "DAAP",
+  DAAP: "DAAP",
   /** Distributed Checksum Clearinghouse spam filtering mechanism - tcp 6277 */
-  DCC = "DCC",
+  DCC: "DCC",
   /** Forwarded DHCP traffic - udp 67:68 */
-  DHCPfwd = "DHCPfwd",
+  DHCPfwd: "DHCPfwd",
   /** DHCPv6 traffic - udp 546:547 */
-  DHCPv6 = "DHCPv6",
+  DHCPv6: "DHCPv6",
   /** Domain Name System traffic (udp and tcp) - udp/tcp 53 */
-  DNS = "DNS",
+  DNS: "DNS",
   /** Distributed Compiler service - tcp 3632 */
-  Distcc = "Distcc",
+  Distcc: "Distcc",
   /** File Transfer Protocol - tcp 21 */
-  FTP = "FTP",
+  FTP: "FTP",
   /** Finger protocol (RFC 742) - tcp 79 */
-  Finger = "Finger",
+  Finger: "Finger",
   /** GNUnet secure peer-to-peer networking traffic - tcp/udp 2086, 1080 */
-  GNUnet = "GNUnet",
+  GNUnet: "GNUnet",
   /** Generic Routing Encapsulation tunneling protocol - proto 47 */
-  GRE = "GRE",
+  GRE: "GRE",
   /** Git distributed revision control traffic - tcp 9418 */
-  Git = "Git",
+  Git: "Git",
   /** OpenPGP HTTP key server protocol traffic - tcp 11371 */
-  HKP = "HKP",
+  HKP: "HKP",
   /** Hypertext Transfer Protocol (WWW) - tcp 80 */
-  HTTP = "HTTP",
+  HTTP: "HTTP",
   /** Hypertext Transfer Protocol (WWW) over SSL - tcp 443 */
-  HTTPS = "HTTPS",
+  HTTPS: "HTTPS",
   /** Internet Cache Protocol V2 (Squid) traffic - udp 3130 */
-  ICPV2 = "ICPV2",
+  ICPV2: "ICPV2",
   /** AOL Instant Messenger traffic - tcp 5190 */
-  ICQ = "ICQ",
+  ICQ: "ICQ",
   /** Internet Message Access Protocol - tcp 143 */
-  IMAP = "IMAP",
+  IMAP: "IMAP",
   /** Internet Message Access Protocol over SSL - tcp 993 */
-  IMAPS = "IMAPS",
+  IMAPS: "IMAPS",
   /** IPIP capsulation traffic - proto 94 */
-  IPIP = "IPIP",
+  IPIP: "IPIP",
   /** IPsec traffic - udp 500, proto 50 */
-  IPsec = "IPsec",
+  IPsec: "IPsec",
   /** IPsec authentication (AH) traffic - udp 500, proto 51 */
-  IPsecah = "IPsecah",
+  IPsecah: "IPsecah",
   /** IPsec traffic and Nat-Traversal - udp 500, 4500; proto 50 */
-  IPsecnat = "IPsecnat",
+  IPsecnat: "IPsecnat",
   /** Internet Relay Chat traffic - tcp 6667 */
-  IRC = "IRC",
+  IRC: "IRC",
   /** HP Jetdirect printing - tcp 9100 */
-  Jetdirect = "Jetdirect",
+  Jetdirect: "Jetdirect",
   /** Layer 2 Tunneling Protocol traffic - udp 1701 */
-  L2TP = "L2TP",
+  L2TP: "L2TP",
   /** Lightweight Directory Access Protocol traffic - tcp 389 */
-  LDAP = "LDAP",
+  LDAP: "LDAP",
   /** Secure Lightweight Directory Access Protocol traffic - tcp 636 */
-  LDAPS = "LDAPS",
+  LDAPS: "LDAPS",
   /** Multicast DNS - udp 5353 */
-  MDNS = "MDNS",
+  MDNS: "MDNS",
   /** Microsoft Notification Protocol - tcp 1863 */
-  MSNP = "MSNP",
+  MSNP: "MSNP",
   /** Microsoft SQL Server - tcp 1433 */
-  MSSQL = "MSSQL",
+  MSSQL: "MSSQL",
   /** Mail traffic (SMTP, SMTPS, Submission) - tcp 25, 465, 587 */
-  Mail = "Mail",
+  Mail: "Mail",
   /** Munin networked resource monitoring traffic - tcp 4949 */
-  Munin = "Munin",
+  Munin: "Munin",
   /** MySQL server - tcp 3306 */
-  MySQL = "MySQL",
+  MySQL: "MySQL",
   /** NNTP traffic (Usenet) - tcp 119 */
-  NNTP = "NNTP",
+  NNTP: "NNTP",
   /** Encrypted NNTP traffic (Usenet) - tcp 563 */
-  NNTPS = "NNTPS",
+  NNTPS: "NNTPS",
   /** Network Time Protocol (ntpd) - udp 123 */
-  NTP = "NTP",
+  NTP: "NTP",
   /** IPv6 neighbor solicitation, neighbor and router advertisement - icmpv6 */
-  NeighborDiscovery = "NeighborDiscovery",
+  NeighborDiscovery: "NeighborDiscovery",
   /** OSPF multicast traffic - proto 89 */
-  OSPF = "OSPF",
+  OSPF: "OSPF",
   /** OpenVPN traffic - udp 1194 */
-  OpenVPN = "OpenVPN",
+  OpenVPN: "OpenVPN",
   /** Symantec PCAnywere (tm) - tcp 5631, udp 5632 */
-  PCA = "PCA",
+  PCA: "PCA",
   /** Proxmox Mail Gateway web interface - tcp 8006 */
-  PMG = "PMG",
+  PMG: "PMG",
   /** POP3 traffic - tcp 110 */
-  POP3 = "POP3",
+  POP3: "POP3",
   /** Encrypted POP3 traffic - tcp 995 */
-  POP3S = "POP3S",
+  POP3S: "POP3S",
   /** Point-to-Point Tunneling Protocol - proto 47, tcp 1723 */
-  PPtP = "PPtP",
+  PPtP: "PPtP",
   /** ICMP echo request - icmp echo-request */
-  Ping = "Ping",
+  Ping: "Ping",
   /** PostgreSQL server - tcp 5432 */
-  PostgreSQL = "PostgreSQL",
+  PostgreSQL: "PostgreSQL",
   /** Line Printer protocol printing - tcp 515 */
-  Printer = "Printer",
+  Printer: "Printer",
   /** Microsoft Remote Desktop Protocol traffic - tcp 3389 */
-  RDP = "RDP",
+  RDP: "RDP",
   /** Routing Information Protocol (bidirectional) - udp 520 */
-  RIP = "RIP",
+  RIP: "RIP",
   /** BIND remote management protocol - tcp 953 */
-  RNDC = "RNDC",
+  RNDC: "RNDC",
   /** Razor Antispam System - tcp 2703 */
-  Razor = "Razor",
+  Razor: "Razor",
   /** Remote time retrieval (rdate) - tcp 37 */
-  Rdate = "Rdate",
+  Rdate: "Rdate",
   /** Rsync server - tcp 873 */
-  Rsync = "Rsync",
+  Rsync: "Rsync",
   /** SANE network scanning - tcp 6566 */
-  SANE = "SANE",
+  SANE: "SANE",
   /** Microsoft SMB traffic - tcp 135,139,445; udp 135,445,137:139,1024:65535 */
-  SMB = "SMB",
+  SMB: "SMB",
   /** Samba Web Administration Tool - tcp 901 */
-  SMBswat = "SMBswat",
+  SMBswat: "SMBswat",
   /** Simple Mail Transfer Protocol - tcp 25 */
-  SMTP = "SMTP",
+  SMTP: "SMTP",
   /** Encrypted Simple Mail Transfer Protocol - tcp 465 */
-  SMTPS = "SMTPS",
+  SMTPS: "SMTPS",
   /** Simple Network Management Protocol - udp 161:162, tcp 161 */
-  SNMP = "SNMP",
+  SNMP: "SNMP",
   /** Spam Assassin SPAMD traffic - tcp 783 */
-  SPAMD = "SPAMD",
+  SPAMD: "SPAMD",
   /** Proxmox VE SPICE display proxy traffic - tcp 3128 */
-  SPICEproxy = "SPICEproxy",
+  SPICEproxy: "SPICEproxy",
   /** Secure shell traffic - tcp 22 */
-  SSH = "SSH",
+  SSH: "SSH",
   /** Subversion server (svnserve) - tcp 3690 */
-  SVN = "SVN",
+  SVN: "SVN",
   /** SixXS IPv6 Deployment and Tunnel Broker - tcp 3874, udp 3740,5072,8374; proto 41 */
-  SixXS = "SixXS",
+  SixXS: "SixXS",
   /** Squid web proxy traffic - tcp 3128 */
-  Squid = "Squid",
+  Squid: "Squid",
   /** Mail message submission traffic - tcp 587 */
-  Submission = "Submission",
+  Submission: "Submission",
   /** Syslog protocol (RFC 5424) traffic - udp/tcp 514 */
-  Syslog = "Syslog",
+  Syslog: "Syslog",
   /** Trivial File Transfer Protocol traffic - udp 69 */
-  TFTP = "TFTP",
+  TFTP: "TFTP",
   /** Telnet traffic - tcp 23 */
-  Telnet = "Telnet",
+  Telnet: "Telnet",
   /** Telnet over SSL - tcp 992 */
-  Telnets = "Telnets",
+  Telnets: "Telnets",
   /** RFC 868 Time protocol - tcp 37 */
-  Time = "Time",
+  Time: "Time",
   /** Traceroute (for up to 30 hops) traffic - udp 33434:33524, icmp echo-request */
-  Trcrt = "Trcrt",
+  Trcrt: "Trcrt",
   /** VNC traffic for VNC display's 0 - 99 - tcp 5900:5999 */
-  VNC = "VNC",
+  VNC: "VNC",
   /** VNC traffic from Vncservers to Vncviewers in listen mode - tcp 5500 */
-  VNCL = "VNCL",
+  VNCL: "VNCL",
   /** WWW traffic (HTTP and HTTPS) - tcp 80, 443 */
-  Web = "Web",
+  Web: "Web",
   /** Web Cache/Proxy traffic (port 8080) - tcp 8080 */
-  Webcache = "Webcache",
+  Webcache: "Webcache",
   /** Webmin traffic - tcp 10000 */
-  Webmin = "Webmin",
+  Webmin: "Webmin",
   /** Whois (nicname, RFC 3912) traffic - tcp 43 */
-  Whois = "Whois",
-}
+  Whois: "Whois",
+} as const;
+export type FirewallMacroKey = keyof typeof FirewallMacro;
+export type FirewallMacroValue =
+  (typeof FirewallMacro)[keyof typeof FirewallMacro];
+
+export const ScriptProvisionerRunOn = {
+  CREATE: "create",
+  UPDATE: "update",
+  DELETE: "delete",
+} as const;
+export type ScriptProvisionerRunOnKey = keyof typeof ScriptProvisionerRunOn;
+export type ScriptProvisionerRunOnValue =
+  (typeof ScriptProvisionerRunOn)[keyof typeof ScriptProvisionerRunOn];
+
+export const FeaturesMounts = { CIFS: "cifs", NFS: "nfs" } as const;
+export type FeaturesMountsKey = keyof typeof FeaturesMounts;
+export type FeaturesMountsValue =
+  (typeof FeaturesMounts)[keyof typeof FeaturesMounts];
+
+export const ConsoleType = {
+  TTY: "tty",
+  CONSOLE: "console",
+  SHELL: "shell",
+} as const;
+export type ConsoleTypeKey = keyof typeof ConsoleType;
+export type ConsoleTypeValue = (typeof ConsoleType)[keyof typeof ConsoleType];
+
+export const FirewallForwardPolicy = {
+  ACCEPT: "ACCEPT",
+  DROP: "DROP",
+} as const;
+export type FirewallForwardPolicyKey = keyof typeof FirewallForwardPolicy;
+export type FirewallForwardPolicyValue =
+  (typeof FirewallForwardPolicy)[keyof typeof FirewallForwardPolicy];
+
+export const FirewallInputOutputPolicy = {
+  ACCEPT: "ACCEPT",
+  DROP: "DROP",
+  REJECT: "REJECT",
+} as const;
+export type FirewallInputOutputPolicyKey =
+  keyof typeof FirewallInputOutputPolicy;
+export type FirewallInputOutputPolicyValue =
+  (typeof FirewallInputOutputPolicy)[keyof typeof FirewallInputOutputPolicy];
+
+export const DownloadFileChecksumAlgorithm = {
+  MD5: "md5",
+  SHA1: "sha1",
+  SHA224: "sha224",
+  SHA256: "sha256",
+  SHA384: "sha384",
+  SHA512: "sha512",
+} as const;
+export type DownloadFileChecksumAlgorithmKey =
+  keyof typeof DownloadFileChecksumAlgorithm;
+export type DownloadFileChecksumAlgorithmValue =
+  (typeof DownloadFileChecksumAlgorithm)[keyof typeof DownloadFileChecksumAlgorithm];
+
+export const DownloadFileContentType = {
+  ISO: "iso",
+  IMPORT: "import",
+  VZTMPL: "vztmpl",
+} as const;
+export type DownloadFileContentTypeKey = keyof typeof DownloadFileContentType;
+export type DownloadFileContentTypeValue =
+  (typeof DownloadFileContentType)[keyof typeof DownloadFileContentType];
+
+export const DownloadFileDecompressionAlgorithm = {
+  GZ: "gz",
+  LZO: "lzo",
+  ZST: "zst",
+  BZ2: "bz2",
+} as const;
+export type DownloadFileDecompressionAlgorithmKey =
+  keyof typeof DownloadFileDecompressionAlgorithm;
+export type DownloadFileDecompressionAlgorithmValue =
+  (typeof DownloadFileDecompressionAlgorithm)[keyof typeof DownloadFileDecompressionAlgorithm];
+
+export const MetricsServerGraphiteProto = { TCP: "tcp", UDP: "udp" } as const;
+export type MetricsServerGraphiteProtoKey =
+  keyof typeof MetricsServerGraphiteProto;
+export type MetricsServerGraphiteProtoValue =
+  (typeof MetricsServerGraphiteProto)[keyof typeof MetricsServerGraphiteProto];
+
+export const MetricsServerInfluxDbProto = {
+  HTTP: "http",
+  HTTPS: "https",
+  UDP: "udp",
+} as const;
+export type MetricsServerInfluxDbProtoKey =
+  keyof typeof MetricsServerInfluxDbProto;
+export type MetricsServerInfluxDbProtoValue =
+  (typeof MetricsServerInfluxDbProto)[keyof typeof MetricsServerInfluxDbProto];
+
+export const MetricsServerType = {
+  GRAPHITE: "graphite",
+  INFLUXDB: "influxdb",
+} as const;
+export type MetricsServerTypeKey = keyof typeof MetricsServerType;
+export type MetricsServerTypeValue =
+  (typeof MetricsServerType)[keyof typeof MetricsServerType];

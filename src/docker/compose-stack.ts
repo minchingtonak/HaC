@@ -5,11 +5,11 @@ import { HandlebarsTemplateDirectory } from "../templates/handlebars-template-di
 import { ComposeStackUtils } from "./compose-file-processor";
 import { TemplateProcessor } from "../templates/template-processor";
 import { TemplateContext } from "../templates/template-context";
-import { type HomelabContainerContext } from "../proxmox/homelab-container";
+import { type HomelabLxcHostContext } from "../proxmox/homelab-lxc-host";
 import { PveHostConfigToml } from "../hosts/schema/pve-host-config";
 import { LxcHostConfigToml } from "../hosts/schema/lxc-host-config";
 
-export type ComposeStackContext = HomelabContainerContext & {
+export type ComposeStackContext = HomelabLxcHostContext & {
   templateDirectory: string;
 };
 

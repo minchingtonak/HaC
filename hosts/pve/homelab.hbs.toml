@@ -8,9 +8,17 @@ password = "{{{SECRET_PASSWORD}}}"
 insecure = false
 
 [storage]
-templates = "local"
 mass = { name = "void", path = "/void" }
 fast = { name = "fast", path = "/fast" }
+
+[[files]]
+datastore_id = "local"
+content_type = "vztmpl"
+url = "http://download.proxmox.com/images/system/debian-12-standard_12.7-1_amd64.tar.zst"
+checksum = "39f6d06e082d6a418438483da4f76092ebd0370a91bad30b82ab6d0f442234d63fe27a15569895e34d6d1e5ca50319f62637f7fb96b98dbde4f6103cf05bff6d"
+checksum_algorithm = "sha512"
+overwrite_unmanaged = true
+retain_on_delete = true
 
 [lxc]
 app_data_dir = "/fast/test-appdata"

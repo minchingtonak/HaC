@@ -1,10 +1,9 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as proxmox from "@muhlba91/pulumi-proxmoxve";
 import * as command from "@pulumi/command/remote";
-import { HomelabContainer, HomelabContainerContext } from "./homelab-container";
+import { HomelabLxcHost, HomelabLxcHostContext } from "./homelab-lxc-host";
 import { HomelabPveProvider } from "./homelab-pve-provider";
 import { LxcHostConfigParser } from "../hosts/lxc-host-config-parser";
-import { PveFirewallPolicy } from "../constants";
 import path from "node:path";
 import { TemplateContext } from "../templates/template-context";
 import {
@@ -17,6 +16,7 @@ import {
 } from "../hosts/schema/lxc-host-config";
 import { snakeToCamelKeys } from "../utils/schema-utils";
 import { type TemplateFileContext } from "../docker/compose-stack";
+import { TemplateProcessor } from "../templates/template-processor";
 
 /**
  * a camelCase version of all properties is provided for ease of
@@ -44,9 +44,11 @@ export class HomelabPveHost extends pulumi.ComponentResource {
     `./hosts/lxc/${hostname}.hbs.toml`;
 
   public readonly provider: HomelabPveProvider;
-  public readonly firewall: proxmox.network.Firewall;
-  public readonly templateFile: proxmox.download.File;
-  public readonly containers: HomelabContainer[] = [];
+  public readonly dns?: proxmox.DNS;
+  public readonly firewall?: proxmox.network.Firewall;
+  public readonly files?: proxmox.download.File[];
+  public readonly metricsServers?: proxmox.metrics.MetricsServer[];
+  public readonly containers: HomelabLxcHost[] = [];
 
   constructor(
     name: string,
@@ -67,33 +69,46 @@ export class HomelabPveHost extends pulumi.ComponentResource {
       { parent: this },
     );
 
-    this.firewall = new proxmox.network.Firewall(
-      `${name}-firewall`,
-      {
-        enabled: true,
-        ebtables: true,
-        inputPolicy: PveFirewallPolicy.DROP,
-        outputPolicy: PveFirewallPolicy.ACCEPT,
-        logRatelimit: { enabled: true, rate: "1/second", burst: 5 },
-      },
-      { provider: this.provider },
-    );
-
-    this.templateFile = new proxmox.download.File(
-      `${name}-debian-12-lxc-template`,
-      {
+    if (pveConfig.dns) {
+      this.dns = new proxmox.DNS(`${name}-dns`, {
         nodeName: pveConfig.node,
-        datastoreId: pveConfig.storage.templates,
-        // TODO add download file to pve config schema
-        contentType: "vztmpl",
-        url: "http://download.proxmox.com/images/system/debian-12-standard_12.7-1_amd64.tar.zst",
-        checksum:
-          "39f6d06e082d6a418438483da4f76092ebd0370a91bad30b82ab6d0f442234d63fe27a15569895e34d6d1e5ca50319f62637f7fb96b98dbde4f6103cf05bff6d",
-        checksumAlgorithm: "sha512",
-        overwriteUnmanaged: true,
-      },
-      { provider: this.provider, retainOnDelete: true, parent: this },
-    );
+        domain: pveConfig.dns.domain,
+        servers: pveConfig.dns.servers,
+      });
+    }
+
+    if (pveConfig.firewall) {
+      this.firewall = new proxmox.network.Firewall(
+        `${name}-firewall`,
+        pveConfig.firewall,
+        { provider: this.provider },
+      );
+    }
+
+    this.files = pveConfig.files?.map((file) => {
+      const url = new URL(file.url);
+      const sanitizedName = TemplateProcessor.buildSanitizedNameForId(
+        `${url.host}${url.pathname}`,
+      );
+
+      return new proxmox.download.File(
+        `${name}-file-${sanitizedName}`,
+        { nodeName: pveConfig.node, ...file },
+        {
+          provider: this.provider,
+          retainOnDelete: file.retainOnDelete,
+          parent: this,
+        },
+      );
+    });
+
+    this.metricsServers = pveConfig.metricsServers?.map((server) => {
+      return new proxmox.metrics.MetricsServer(
+        `${name}-${server.type}`,
+        server,
+        { provider: this.provider, parent: this },
+      );
+    });
 
     const enabledHostnames = Object.keys(pveConfig.lxc.hosts).filter(
       (hostname) => pveConfig.lxc.hosts[hostname].enabled,
@@ -129,13 +144,17 @@ export class HomelabPveHost extends pulumi.ComponentResource {
               privateKey: pveConfig.lxc.ssh.privateKey,
             },
           },
-          { parent: this, dependsOn: this.templateFile, retainOnDelete: true },
+          {
+            parent: this,
+            dependsOn: this.metricsServers ?? this.files ?? this.dns,
+            retainOnDelete: true,
+          },
         );
 
-        const container = new HomelabContainer(
+        const container = new HomelabLxcHost(
           `${name}-${config.hostname}`,
           {
-            context: args.context.withData<HomelabContainerContext>({
+            context: args.context.withData<HomelabLxcHostContext>({
               lxc_config: config,
               enabled_lxc_hosts: hostConfigs,
               lxcConfig: camelCasedConfig,
@@ -150,10 +169,6 @@ export class HomelabPveHost extends pulumi.ComponentResource {
       }
     });
 
-    this.registerOutputs({
-      provider: this.provider,
-      templateFile: this.templateFile,
-      containers: this.containers,
-    });
+    this.registerOutputs({ files: this.files, containers: this.containers });
   }
 }

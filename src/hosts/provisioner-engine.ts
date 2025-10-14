@@ -8,15 +8,12 @@ import {
   Provisioner,
   ScriptProvisioner,
   AnsibleProvisioner,
-  LXC_DEFAULTS,
-} from "./schema/lxc-host-config";
+} from "./schema/provisioner";
 import { EnvUtils } from "../utils/env-utils";
 import { TemplateProcessor } from "../templates/template-processor";
+import { LXC_DEFAULTS } from "./schema/pve";
 
 export type ProvisionerResource = command.remote.Command | ansible.Playbook;
-
-export type AnsibleProvisionerConnection =
-  command.types.input.remote.ConnectionArgs & { privateKeyPath: string };
 
 export interface ProvisionerEngineArgs {
   name: string;
@@ -97,7 +94,7 @@ export class ProvisionerEngine {
 
   private buildAnsibleConnection(
     provisioner: AnsibleProvisioner,
-  ): AnsibleProvisionerConnection {
+  ): command.types.input.remote.ConnectionArgs & { privateKeyPath: string } {
     const baseConnection = this.args.connection;
     const override = provisioner.connection;
 

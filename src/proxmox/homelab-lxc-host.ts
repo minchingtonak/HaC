@@ -2,11 +2,6 @@ import * as pulumi from "@pulumi/pulumi";
 import * as command from "@pulumi/command";
 import * as proxmox from "@muhlba91/pulumi-proxmoxve";
 import * as porkbun from "@pulumi/porkbun";
-import {
-  PveFirewallDirection,
-  PveFirewallMacro,
-  PveFirewallPolicy,
-} from "../constants";
 import { HomelabPveProvider } from "./homelab-pve-provider";
 import { ComposeStack, ComposeStackContext } from "../docker/compose-stack";
 import {
@@ -16,17 +11,19 @@ import {
 import { TemplateProcessor } from "../templates/template-processor";
 import { TemplateContext } from "../templates/template-context";
 import { type HomelabPveHostContext } from "./homelab-pve-host";
+import { LXC_DEFAULTS } from "../hosts/schema/pve";
+import { FirewallDirection, FirewallMacro, FirewallPolicy } from "../constants";
 
-export type HomelabContainerContext = HomelabPveHostContext & {
+export type HomelabLxcHostContext = HomelabPveHostContext & {
   stackName: string;
 };
 
-export type HomelabContainerArgs = {
-  context: TemplateContext<HomelabContainerContext>;
+export type HomelabLxcHostArgs = {
+  context: TemplateContext<HomelabLxcHostContext>;
   provider: HomelabPveProvider;
 };
 
-export class HomelabContainer extends pulumi.ComponentResource {
+export class HomelabLxcHost extends pulumi.ComponentResource {
   public static RESOURCE_TYPE = "HaC:proxmoxve:HomelabContainer";
 
   private static CONTAINER_SUBDOMAIN = (hostname: string, nodeName: string) =>
@@ -42,7 +39,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
 
   firewallRules: proxmox.network.FirewallRules;
 
-  provisionerResources: ProvisionerResource[] = [];
+  provisionerResources?: ProvisionerResource[] = [];
 
   proxyNetwork?: command.remote.Command;
 
@@ -56,10 +53,10 @@ export class HomelabContainer extends pulumi.ComponentResource {
 
   constructor(
     name: string,
-    args: HomelabContainerArgs,
+    args: HomelabLxcHostArgs,
     opts?: pulumi.ComponentResourceOptions,
   ) {
-    super(HomelabContainer.RESOURCE_TYPE, name, {}, opts);
+    super(HomelabLxcHost.RESOURCE_TYPE, name, {}, opts);
 
     const { lxcConfig, pveConfig } = args.context.get("lxcConfig", "pveConfig");
 
@@ -154,11 +151,11 @@ export class HomelabContainer extends pulumi.ComponentResource {
       },
     );
 
-    const hasProxy = stackNames.includes(HomelabContainer.PROXY_STACK_NAME);
+    const hasProxy = stackNames.includes(HomelabLxcHost.PROXY_STACK_NAME);
 
     if (!hasProxy) {
       throw new Error(
-        `Container ${name} must use proxy stack ${HomelabContainer.PROXY_STACK_NAME}`,
+        `Container ${name} must use proxy stack ${HomelabLxcHost.PROXY_STACK_NAME}`,
       );
     }
 
@@ -170,23 +167,23 @@ export class HomelabContainer extends pulumi.ComponentResource {
         rules: [
           {
             enabled: true,
-            type: PveFirewallDirection.in,
-            action: PveFirewallPolicy.ACCEPT,
-            macro: PveFirewallMacro.SSH,
+            type: FirewallDirection.in,
+            action: FirewallPolicy.ACCEPT,
+            macro: FirewallMacro.SSH,
           },
           ...(hasProxy ?
             [
               {
                 enabled: true,
-                type: PveFirewallDirection.in,
-                action: PveFirewallPolicy.ACCEPT,
-                macro: PveFirewallMacro.HTTP,
+                type: FirewallDirection.in,
+                action: FirewallPolicy.ACCEPT,
+                macro: FirewallMacro.HTTP,
               },
               {
                 enabled: true,
-                type: PveFirewallDirection.in,
-                action: PveFirewallPolicy.ACCEPT,
-                macro: PveFirewallMacro.HTTPS,
+                type: FirewallDirection.in,
+                action: FirewallPolicy.ACCEPT,
+                macro: FirewallMacro.HTTPS,
               },
             ]
           : []),
@@ -210,7 +207,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
       `${name}-base-dns-record`,
       {
         domain: pveConfig.lxc.network.domain,
-        subdomain: HomelabContainer.CONTAINER_SUBDOMAIN(
+        subdomain: HomelabLxcHost.CONTAINER_SUBDOMAIN(
           lxcConfig.hostname,
           pveConfig.node,
         ),
@@ -224,7 +221,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
       `${name}-wildcard-dns-record`,
       {
         domain: pveConfig.lxc.network.domain,
-        subdomain: `*.${HomelabContainer.CONTAINER_SUBDOMAIN(lxcConfig.hostname, pveConfig.node)}`,
+        subdomain: `*.${HomelabLxcHost.CONTAINER_SUBDOMAIN(lxcConfig.hostname, pveConfig.node)}`,
         content: ctAddress,
         type: "A",
       },
@@ -233,7 +230,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
 
     const connection: command.types.input.remote.ConnectionArgs = {
       host: ctAddress,
-      user: "root",
+      user: LXC_DEFAULTS.USER,
       privateKey: pveConfig.lxc.ssh.privateKey,
     };
 
@@ -249,16 +246,16 @@ export class HomelabContainer extends pulumi.ComponentResource {
     if (lxcConfig.stacks) {
       if (hasProxy) {
         this.proxyNetwork = new command.remote.Command(
-          `${name}-create-${HomelabContainer.PROXY_STACK_NAME}-network`,
+          `${name}-create-${HomelabLxcHost.PROXY_STACK_NAME}-network`,
           {
-            create: `if ! docker network ls --format "{{.Name}}" | grep -q "^${HomelabContainer.PROXY_STACK_NAME}$"; then docker network create '${HomelabContainer.PROXY_STACK_NAME}'; fi`,
-            delete: `if docker network ls --format "{{.Name}}" | grep -q "^${HomelabContainer.PROXY_STACK_NAME}$"; then docker network rm '${HomelabContainer.PROXY_STACK_NAME}'; fi`,
+            create: `if ! docker network ls --format "{{.Name}}" | grep -q "^${HomelabLxcHost.PROXY_STACK_NAME}$"; then docker network create '${HomelabLxcHost.PROXY_STACK_NAME}'; fi`,
+            delete: `if docker network ls --format "{{.Name}}" | grep -q "^${HomelabLxcHost.PROXY_STACK_NAME}$"; then docker network rm '${HomelabLxcHost.PROXY_STACK_NAME}'; fi`,
             addPreviousOutputInEnv: false,
             connection,
           },
           {
             parent: this.container,
-            dependsOn: this.provisionerResources,
+            dependsOn: this.provisionerResources ?? this.container,
             deleteBeforeReplace: true,
           },
         );
@@ -278,8 +275,8 @@ export class HomelabContainer extends pulumi.ComponentResource {
         },
       );
 
-      for (const stackName of stackNames) {
-        this.stacks.push(
+      this.stacks = stackNames.map(
+        (stackName) =>
           new ComposeStack(
             `${name}-${stackName}`,
             {
@@ -297,8 +294,7 @@ export class HomelabContainer extends pulumi.ComponentResource {
               // }
             },
           ),
-        );
-      }
+      );
     }
 
     this.registerOutputs();
