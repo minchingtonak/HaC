@@ -6,7 +6,6 @@ description = "servarr media stack"
 [stacks]
 traefik = {}
 dozzle = {}
-komodo = {}
 servarr = {}
 
 [cpu]
@@ -31,6 +30,10 @@ dport = "6881"
 volume = "/void/media"
 mount_point = "/mnt/media"
 
+[[mount_points]]
+volume = "{{{@pve.lxc.app_data_dir}}}/servarr"
+mount_point = "/docker"
+
 [[provisioners]]
 type = "ansible"
 playbook = "provisioners/ansible/lxc-init.yaml"
@@ -39,10 +42,6 @@ replayable = false
 [[provisioners]]
 type = "script"
 script = "provisioners/scripts/install-docker.sh"
-
-[[provisioners]]
-type = "script"
-script = "provisioners/scripts/install-periphery.sh"
 
 [[provisioners]]
 type = "ansible"

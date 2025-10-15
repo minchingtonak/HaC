@@ -46,7 +46,7 @@ services:
       - traefik.tcp.routers.qbittorrent-bittorrent.service=qbittorrent-bittorrent
       - traefik.tcp.services.qbittorrent-bittorrent.loadbalancer.server.port=6881
       #
-      - traefik.http.routers.sabnzbd.rule=Host(`{{{SABNZBD_APP_DOMAIN}}}`)
+      - traefik.http.routers.sabnzbd.rule=Host(`{{{domainForApp "sabnzbd"}}}`)
       - traefik.http.routers.sabnzbd.entrypoints=https
       - traefik.http.routers.sabnzbd.tls=true
       - traefik.http.routers.sabnzbd.tls.certresolver=porkbun
@@ -160,7 +160,7 @@ services:
       - deunhealth.restart.on.unhealthy=true
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - traefik.http.routers.prowlarr.rule=Host(`{{{PROWLARR_APP_DOMAIN}}}`)
+      - traefik.http.routers.prowlarr.rule=Host(`{{{domainForApp "prowlarr"}}}`)
       - traefik.http.routers.prowlarr.entrypoints=https
       - traefik.http.routers.prowlarr.tls=true
       - traefik.http.routers.prowlarr.tls.certresolver=porkbun
@@ -210,7 +210,7 @@ services:
       - deunhealth.restart.on.unhealthy=true
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - traefik.http.routers.sonarr.rule=Host(`{{{SONARR_APP_DOMAIN}}}`)
+      - traefik.http.routers.sonarr.rule=Host(`{{{domainForApp "sonarr"}}}`)
       - traefik.http.routers.sonarr.entrypoints=https
       - traefik.http.routers.sonarr.tls=true
       - traefik.http.routers.sonarr.tls.certresolver=porkbun
@@ -260,7 +260,7 @@ services:
       - deunhealth.restart.on.unhealthy=true
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - traefik.http.routers.radarr.rule=Host(`{{{RADARR_APP_DOMAIN}}}`)
+      - traefik.http.routers.radarr.rule=Host(`{{{domainForApp "radarr"}}}`)
       - traefik.http.routers.radarr.entrypoints=https
       - traefik.http.routers.radarr.tls=true
       - traefik.http.routers.radarr.tls.certresolver=porkbun
@@ -307,7 +307,7 @@ services:
       - deunhealth.restart.on.unhealthy=true
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - traefik.http.routers.bazarr.rule=Host(`{{{BAZARR_APP_DOMAIN}}}`)
+      - traefik.http.routers.bazarr.rule=Host(`{{{domainForApp "bazarr"}}}`)
       - traefik.http.routers.bazarr.entrypoints=https
       - traefik.http.routers.bazarr.tls=true
       - traefik.http.routers.bazarr.tls.certresolver=porkbun
@@ -354,7 +354,7 @@ services:
       - deunhealth.restart.on.unhealthy=true
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - traefik.http.routers.profilarr.rule=Host(`{{{PROFILARR_APP_DOMAIN}}}`)
+      - traefik.http.routers.profilarr.rule=Host(`{{{domainForApp "profilarr"}}}`)
       - traefik.http.routers.profilarr.entrypoints=https
       - traefik.http.routers.profilarr.tls=true
       - traefik.http.routers.profilarr.tls.certresolver=porkbun
@@ -419,7 +419,7 @@ services:
       - deunhealth.restart.on.unhealthy=true
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - traefik.http.routers.cleanuparr.rule=Host(`{{{CLEANUPARR_APP_DOMAIN}}}`)
+      - traefik.http.routers.cleanuparr.rule=Host(`{{{domainForApp "cleanuparr"}}}`)
       - traefik.http.routers.cleanuparr.entrypoints=https
       - traefik.http.routers.cleanuparr.tls=true
       - traefik.http.routers.cleanuparr.tls.certresolver=porkbun
@@ -458,7 +458,7 @@ services:
       - deunhealth.restart.on.unhealthy=true
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - traefik.http.routers.huntarr.rule=Host(`{{{HUNTARR_APP_DOMAIN}}}`)
+      - traefik.http.routers.huntarr.rule=Host(`{{{domainForApp "huntarr"}}}`)
       - traefik.http.routers.huntarr.entrypoints=https
       - traefik.http.routers.huntarr.tls=true
       - traefik.http.routers.huntarr.tls.certresolver=porkbun

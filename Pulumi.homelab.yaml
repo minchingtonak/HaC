@@ -118,3 +118,10 @@ config:
   # windmill
   lxc#windmill#windmill:SECRET_DB_PASSWORD:
     secure: v1:o/l5rWI9Pdv7C2lQ:fktUJhe1pR3EcFvC/GoAGmqSJ9xSsQCGJycZYSMudmPe4yJupQKrUlX0OPAT7g==
+  # servarr
+  lxc#servarr#servarr:SECRET_WIREGUARD_PRIVATE_KEY:
+    secure: v1:ArRJkUDsRGGmEzuE:vy9pp4C9ZNzuhdttz5XOUrEJix0dKDRrHqQDJNe+7Wc/rTGIlE4e9vqvyIRjnhFWAnlEr1l6TmjEL+Pf
+  lxc#servarr#servarr:SECRET_WIREGUARD_PRESHARED_KEY:
+    secure: v1:cZSWFDKqB9Z5BmNz:FkQLV90mYNdrMYkIc06yBSPTInhQtojxr9NMxGdHLQvt6qMAJwwLktFCqqJI77nH2OXdEgOShlonUbeS
+  lxc#servarr#servarr:SECRET_WIREGUARD_ADDRESSES:
+    secure: v1:Eo7uReieV6Sx3xX9:grVPbB5e74eclBDVJbYKh0V0uVN2AHufs2rFcQ+XDVNZ
