@@ -23,7 +23,8 @@ import {
 
 const StackSchema = z
   .object({ subdomain_prefixes: z.record(z.string(), z.string()).optional() })
-  .strict();
+  .strict()
+  .readonly();
 
 const StackSchemaMap = z.record(z.string(), StackSchema);
 
@@ -101,7 +102,8 @@ export const LxcHostConfigSchema = z
     stacks: StackSchemaMap.optional(),
     provisioners: z.array(ProvisionerSchema).optional(),
   })
-  .strict();
+  .strict()
+  .readonly();
 
 export type LxcHostConfigToml = z.infer<typeof LxcHostConfigSchema>;
 export type LxcHostConfig = CamelCasedPropertiesDeep<LxcHostConfigToml>;

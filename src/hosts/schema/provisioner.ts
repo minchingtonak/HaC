@@ -3,10 +3,7 @@ import type { CamelCasedPropertiesDeep } from "type-fest";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { remote } from "@pulumi/command/types/input";
 import { LXC_DEFAULTS } from "./pve";
-import {
-  ScriptProvisionerRunOn,
-  ScriptProvisionerRunOnValue,
-} from "../../constants";
+import { ScriptProvisionerRunOn } from "../../constants";
 
 /**
  * @see {@link remote.ConnectionArgs}
@@ -21,7 +18,8 @@ export const AnsibleConnectionOverrideSchema = z
      */
     private_key_path: z.string().optional(),
   })
-  .strict();
+  .strict()
+  .readonly();
 
 /**
  * @see {@link remote.ConnectionArgs}
@@ -33,7 +31,8 @@ export const ScriptConnectionOverrideSchema = z
     port: z.number().positive().optional(),
     private_key: z.string().optional(),
   })
-  .strict();
+  .strict()
+  .readonly();
 
 export const ScriptProvisionerSchema = z
   .object({
@@ -50,18 +49,13 @@ export const ScriptProvisionerSchema = z
       .default(LXC_DEFAULTS.PROVISIONER.TIMEOUT_SECONDS),
     connection: ScriptConnectionOverrideSchema.optional(),
     run_on: z
-      .array(
-        z.enum(
-          Object.values(
-            ScriptProvisionerRunOn,
-          ) as ScriptProvisionerRunOnValue[],
-        ),
-      )
+      .array(z.enum(Object.values(ScriptProvisionerRunOn)))
       .optional()
       // @ts-expect-error allowing use of readonly type since LXC_DEFAULTS uses `as const`
       .default(LXC_DEFAULTS.PROVISIONER.RUN_ON),
   })
-  .strict();
+  .strict()
+  .readonly();
 
 /**
  * @see {@link PlaybookArgs}
@@ -82,7 +76,8 @@ export const AnsibleProvisionerSchema = z
       .default(LXC_DEFAULTS.PROVISIONER.ANSIBLE_REPLAYABLE),
     connection: AnsibleConnectionOverrideSchema.optional(),
   })
-  .strict();
+  .strict()
+  .readonly();
 
 export const ProvisionerSchema = z.discriminatedUnion("type", [
   ScriptProvisionerSchema,

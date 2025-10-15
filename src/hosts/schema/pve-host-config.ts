@@ -12,36 +12,43 @@ import {
 
 const StoragePoolSchema = z
   .object({ name: z.string().min(1), path: z.string().min(1) })
-  .strict();
+  .strict()
+  .readonly();
 
 const StorageConfigSchema = z
   .object({ mass: StoragePoolSchema, fast: StoragePoolSchema })
-  .strict();
+  .strict()
+  .readonly();
 
-const LxcAuthSchema = z.object({ password: z.string() }).strict();
+const LxcAuthSchema = z.object({ password: z.string() }).strict().readonly();
 
 const LxcSshSchema = z
   .object({ public_key: z.string(), private_key: z.string() })
-  .strict();
+  .strict()
+  .readonly();
 
 const PorkbunProviderSchema = z
   .object({ api_key: z.string(), secret_key: z.string() })
-  .strict();
+  .strict()
+  .readonly();
 
 const DnsProvidersSchema = z
   .object({ porkbun: PorkbunProviderSchema.optional() })
-  .strict();
+  .strict()
+  .readonly();
 
 const ProvidersSchema = z
   .object({ dns: DnsProvidersSchema.optional() })
-  .strict();
+  .strict()
+  .readonly();
 
 const LxcHostSchema = z
   .object({
     enabled: z.boolean().default(PVE_DEFAULTS.LXC_HOST.ENABLED),
     id: z.number().int().min(1).max(255),
   })
-  .strict();
+  .strict()
+  .readonly();
 
 const LxcHostsSchema = z.record(z.string(), LxcHostSchema);
 
@@ -51,7 +58,8 @@ const LxcNetworkSchema = z
     subnet: z.string().min(1),
     gateway: z.string().min(1),
   })
-  .strict();
+  .strict()
+  .readonly();
 
 const LxcConfigSchema = z
   .object({
@@ -61,7 +69,8 @@ const LxcConfigSchema = z
     auth: LxcAuthSchema,
     ssh: LxcSshSchema,
   })
-  .strict();
+  .strict()
+  .readonly();
 
 export const PveHostConfigSchema = z
   .object({
@@ -81,7 +90,8 @@ export const PveHostConfigSchema = z
     storage: StorageConfigSchema,
     providers: ProvidersSchema,
   })
-  .strict();
+  .strict()
+  .readonly();
 
 export type PveHostConfigToml = z.infer<typeof PveHostConfigSchema>;
 export type PveHostConfig = CamelCasedPropertiesDeep<PveHostConfigToml>;
