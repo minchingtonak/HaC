@@ -1,5 +1,4 @@
 # verified
-id = 213
 hostname = "admin"
 
 description = "homelab administration-related apps"

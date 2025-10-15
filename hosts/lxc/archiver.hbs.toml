@@ -1,5 +1,4 @@
 # verified
-id = 217
 hostname = "archiver"
 
 description = "worker for archive team warrior"

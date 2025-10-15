@@ -1,4 +1,3 @@
-id = 212
 hostname = "syncthing-pulumi"
 
 description = "simple file syncing across devices"

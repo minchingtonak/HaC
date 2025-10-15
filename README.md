@@ -293,8 +293,6 @@ See [`provisioners/scripts/`](provisioners/scripts/) for examples.
 
 - PVE host provisioners
   - can help for things like installing docker, creating app data dir
-- for now, have lxc provisioner to create named docker network. can take traefik as name arg
-- move lxc id to a field in the pve host hosts list, easier to see mapping and configurable between pve instances
 - would be nice to be able to have pve config field that allows setting fields for all lxcs (potentially stacks as well)
   - can extend this type of this for stacks within lxc config
 - add a transform to the top level lxc and pve schemas that does a recursive Object.freeze on the parsed result
@@ -306,6 +304,7 @@ See [`provisioners/scripts/`](provisioners/scripts/) for examples.
 - consider adding vm schema/vm support
   - can possibly create vms without root user password access, need to check. if so, add support for other auth methods
 - is .min(1) really necessary?
+- for now, have lxc provisioner to create named docker network. can take traefik as name arg
 - use zod schema for template context impl
 - better error handling for parser
 - error handling within template helpers
@@ -324,6 +323,7 @@ See [`provisioners/scripts/`](provisioners/scripts/) for examples.
 ### Dev Experience
 
 - refactor into a separate package that's imported and used in the deploy function
+- adda a readme section on setting up local repo for deploying
 
 ### Homelab
 

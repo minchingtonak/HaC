@@ -1,5 +1,4 @@
 # verified
-id = 211
 hostname = "tailscale-pulumi"
 
 description = "tailscale subnet router to enable easy remote access"

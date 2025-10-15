@@ -60,7 +60,18 @@ export class HomelabLxcHost extends pulumi.ComponentResource {
 
     const { lxcConfig, pveConfig } = args.context.get("lxcConfig", "pveConfig");
 
-    const ctAddress = pulumi.interpolate`${pveConfig.lxc.network.subnet}.${lxcConfig.id}`;
+    const result = Object.entries(pveConfig.lxc.hosts).find(
+      ([hostname]) => hostname === lxcConfig.hostname,
+    );
+    const lxcPveConfig = result?.[1];
+
+    if (!lxcPveConfig) {
+      throw new Error(
+        `Failed to find LXC host with hostname ${lxcConfig.hostname} in PVE host ${pveConfig.endpoint}`,
+      );
+    }
+
+    const ctAddress = pulumi.interpolate`${pveConfig.lxc.network.subnet}.${lxcPveConfig.id}`;
     const ctCidr = pulumi.interpolate`${ctAddress}/24`;
 
     const mountPoints =
@@ -81,7 +92,7 @@ export class HomelabLxcHost extends pulumi.ComponentResource {
       name,
       {
         nodeName: pveConfig.node,
-        vmId: lxcConfig.id,
+        vmId: lxcPveConfig.id,
         description: lxcConfig.description,
         tags: [...stackNames, ...(lxcConfig.tags ?? [])],
         unprivileged: lxcConfig.unprivileged,
@@ -122,7 +133,7 @@ export class HomelabLxcHost extends pulumi.ComponentResource {
       `${name}-fw-options`,
       {
         nodeName: pveConfig.node,
-        containerId: lxcConfig.id,
+        containerId: lxcPveConfig.id,
         ...lxcConfig.firewallOptions,
       },
       {
@@ -138,7 +149,7 @@ export class HomelabLxcHost extends pulumi.ComponentResource {
       fwAliasName,
       {
         nodeName: pveConfig.node,
-        containerId: lxcConfig.id,
+        containerId: lxcPveConfig.id,
         name: fwAliasName,
         cidr: ctCidr,
         comment: "created by pulumi",
@@ -163,7 +174,7 @@ export class HomelabLxcHost extends pulumi.ComponentResource {
       `${name}-fw-rules`,
       {
         nodeName: pveConfig.node,
-        containerId: lxcConfig.id,
+        containerId: lxcPveConfig.id,
         rules: [
           {
             enabled: true,

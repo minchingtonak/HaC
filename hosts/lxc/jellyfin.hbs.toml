@@ -1,5 +1,4 @@
 # verified
-id = 203
 hostname = "jellyfin"
 
 description = "jellyfin media player server"

@@ -1,5 +1,4 @@
 # verified
-id = 206
 hostname = "gitea"
 
 description = "lightweight private git server and github mirror"

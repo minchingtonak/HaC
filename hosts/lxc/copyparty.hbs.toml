@@ -1,5 +1,4 @@
 # verified
-id = 200
 hostname = "copyparty"
 
 description = "copyparty lightweight fileserver container"

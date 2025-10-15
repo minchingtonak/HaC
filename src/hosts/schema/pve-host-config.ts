@@ -37,7 +37,10 @@ const ProvidersSchema = z
   .strict();
 
 const LxcHostSchema = z
-  .object({ enabled: z.boolean().default(PVE_DEFAULTS.LXC_HOST.ENABLED) })
+  .object({
+    enabled: z.boolean().default(PVE_DEFAULTS.LXC_HOST.ENABLED),
+    id: z.number().int().min(1).max(255),
+  })
   .strict();
 
 const LxcHostsSchema = z.record(z.string(), LxcHostSchema);

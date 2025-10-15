@@ -1,6 +1,5 @@
 # verified
-id = 201
-hostname = "servarr-pulumi"
+hostname = "servarr"
 
 description = "servarr media stack"
 

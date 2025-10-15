@@ -1,5 +1,4 @@
 # verified
-id = 202
 hostname = "backup"
 
 description = "various backup-related services"
