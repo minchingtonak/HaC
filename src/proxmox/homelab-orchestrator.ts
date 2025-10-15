@@ -9,7 +9,9 @@ export function deployHomelab() {
 
   pulumi.all(pveConfigs).apply((configs) => {
     const enabledConfigs = configs.filter((c) => c.enabled);
-    const camelCasedEnabledConfigs = enabledConfigs.map(snakeToCamelKeys);
+    const camelCasedEnabledConfigs = enabledConfigs.map((config) =>
+      snakeToCamelKeys(config, ["variables", "environment"]),
+    );
     const context = new TemplateContext<HomelabPveHostContext>({
       enabled_pve_hosts: enabledConfigs,
       enabledPveHosts: camelCasedEnabledConfigs,

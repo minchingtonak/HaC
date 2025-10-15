@@ -122,7 +122,9 @@ export class HomelabPveHost extends pulumi.ComponentResource {
     });
 
     pulumi.all(enabledLxcConfigs).apply((hostConfigs) => {
-      const camelCasedConfigs = hostConfigs.map(snakeToCamelKeys);
+      const camelCasedConfigs = hostConfigs.map((config) =>
+        snakeToCamelKeys(config, ["variables", "environment"]),
+      );
       for (let i = 0; i < hostConfigs.length; ++i) {
         const config = hostConfigs[i];
         const camelCasedConfig = camelCasedConfigs[i];
