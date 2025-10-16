@@ -1,5 +1,5 @@
 # verified
-hostname = "tailscale-pulumi"
+hostname = "tailscale"
 
 description = "tailscale subnet router to enable easy remote access"
 
@@ -17,6 +17,10 @@ swap = 512
 
 [disk]
 size = 4
+
+[[mount_points]]
+volume = "{{{@pve.lxc.app_data_dir}}}/tailscale"
+mount_point = "/docker"
 
 [[provisioners]]
 type = "ansible"

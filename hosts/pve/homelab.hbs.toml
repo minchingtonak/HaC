@@ -33,6 +33,7 @@ gitea = { id = 206 }
 immich = { id = 207 }
 tools = { id = 208 }
 windmill = { id = 209 }
+tailscale = { id = 211 }
 admin = { id = 213 }
 paperless = { id = 214 }
 life = { id = 215 }
