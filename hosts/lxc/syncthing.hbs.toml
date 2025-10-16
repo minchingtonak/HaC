@@ -1,9 +1,10 @@
-hostname = "syncthing-pulumi"
+hostname = "syncthing"
 
 description = "simple file syncing across devices"
 
 [stacks]
 traefik = {}
+dozzle = {}
 syncthing = {}
 
 [cpu]
@@ -15,6 +16,34 @@ swap = 1024
 
 [disk]
 size = 8
+
+[[firewall_rules]]
+enabled = true
+type = "in"
+action = "ACCEPT"
+dport = "22000"
+proto = "tcp"
+comment = "syncthing-sync"
+
+[[firewall_rules]]
+enabled = true
+type = "in"
+action = "ACCEPT"
+dport = "22000"
+proto = "udp"
+comment = "syncthing-sync-quic"
+
+[[firewall_rules]]
+enabled = true
+type = "in"
+action = "ACCEPT"
+dport = "21027"
+proto = "udp"
+comment = "syncthing-local-discovery"
+
+[[mount_points]]
+volume = "{{{@pve.lxc.app_data_dir}}}/syncthing"
+mount_point = "/docker"
 
 [[mount_points]]
 volume = "/void/documents"
