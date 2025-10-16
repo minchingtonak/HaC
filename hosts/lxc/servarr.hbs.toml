@@ -27,12 +27,12 @@ comment = "qbittorrent bittorrent"
 dport = "6881"
 
 [[mount_points]]
-volume = "/void/media"
-mount_point = "/mnt/media"
-
-[[mount_points]]
 volume = "{{{@pve.lxc.app_data_dir}}}/servarr"
 mount_point = "/docker"
+
+[[mount_points]]
+volume = "/void/media"
+mount_point = "/mnt/media"
 
 [[provisioners]]
 type = "ansible"

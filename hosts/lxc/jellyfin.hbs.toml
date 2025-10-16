@@ -30,7 +30,7 @@ comment = "jellyfin service discovery"
 enabled = true
 type = "in"
 action = "ACCEPT"
-dport = "7369"
+dport = "7359"
 proto = "udp"
 comment = "jellyfin auto discovery"
 
