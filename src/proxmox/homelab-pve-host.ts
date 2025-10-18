@@ -1,6 +1,6 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as proxmox from "@muhlba91/pulumi-proxmoxve";
-import * as command from "@pulumi/command/remote";
+import * as command from "@pulumi/command";
 import { HomelabLxcHost, HomelabLxcHostContext } from "./homelab-lxc-host";
 import { HomelabPveProvider } from "./homelab-pve-provider";
 import { LxcHostConfigParser } from "../hosts/lxc-host-config-parser";
@@ -17,6 +17,10 @@ import {
 import { snakeToCamelKeys } from "../utils/schema-utils";
 import { type TemplateFileContext } from "../docker/compose-stack";
 import { TemplateProcessor } from "../templates/template-processor";
+import {
+  ProvisionerEngine,
+  ProvisionerResource,
+} from "../hosts/provisioner-engine";
 
 /**
  * a camelCase version of all properties is provided for ease of
@@ -48,6 +52,7 @@ export class HomelabPveHost extends pulumi.ComponentResource {
   public readonly firewall?: proxmox.network.Firewall;
   public readonly files?: proxmox.download.File[];
   public readonly metricsServers?: proxmox.metrics.MetricsServer[];
+  public readonly provisionerResources?: ProvisionerResource[];
   public readonly containers: HomelabLxcHost[] = [];
 
   constructor(
@@ -110,6 +115,21 @@ export class HomelabPveHost extends pulumi.ComponentResource {
       );
     });
 
+    const connection: command.types.input.remote.ConnectionArgs = {
+      host: pveConfig.ip,
+      user: pveConfig.ssh.user,
+      privateKey: pveConfig.ssh.privateKey,
+    };
+
+    if (pveConfig.provisioners && pveConfig.provisioners.length > 0) {
+      const provisionerEngine = new ProvisionerEngine({ name, connection });
+
+      this.provisionerResources = provisionerEngine.executeProvisioners(
+        pveConfig.provisioners,
+        this,
+      );
+    }
+
     const enabledHostnames = Object.keys(pveConfig.lxc.hosts).filter(
       (hostname) => pveConfig.lxc.hosts[hostname].enabled,
     );
@@ -134,17 +154,12 @@ export class HomelabPveHost extends pulumi.ComponentResource {
           config.hostname,
         );
 
-        const createAppDataDir = new command.Command(
+        const createAppDataDir = new command.remote.Command(
           `${name}-${config.hostname}-appdata-dir`,
           {
             create: `mkdir -p ${appDataDirPath} && chmod 777 ${appDataDirPath}`,
             delete: `rm -rf ${appDataDirPath}`,
-            connection: {
-              // TODO user: pve.auth.username,
-              user: "root",
-              host: pveConfig.ip,
-              privateKey: pveConfig.lxc.ssh.privateKey,
-            },
+            connection,
           },
           {
             parent: this,

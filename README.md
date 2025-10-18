@@ -288,9 +288,12 @@ See [`provisioners/scripts/`](provisioners/scripts/) for examples.
   - syncthing, jellyfin discovery
 - Restrict access to docker socket, use socket proxy
 - firewall and proxy for pve hosts
+- rootless docker/podman
 
 ### Usability
 
+- traefik proxy on pve host (requires provisioners)
+  - make sure to configure firewall rules as well when that's done
 - PVE host provisioners
   - can help for things like installing docker, creating app data dir
 - would be nice to be able to have pve config field that allows setting fields for all lxcs (potentially stacks as well)

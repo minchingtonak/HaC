@@ -12,6 +12,10 @@ config:
     secure: v1:0Misa7AjGbv6pgG8:935A2yNp0Wg+8fhzurcPkVotrLLvO5N9
   pve#homelab:SECRET_PASSWORD:
     secure: v1:GbPQcKh46iarDfCr:T4TFcWEZPQltXrTmcnfLm2q+0QKq78LPuYo=
+  pve#homelab:SECRET_SSH_USER:
+    secure: v1:r6aGEWaBvTh7Y/8R:PVR12CF9g69Lsy1MbD7haionF5c=
+  pve#homelab:SECRET_CONTAINER_SSH_USER:
+    secure: v1:t0CJNIKtQfZ2bgqm:eB/opz+Ok5B/i/VbMvRw/Rg4/OY=
   pve#homelab:SECRET_PORKBUN_API_KEY:
     secure: v1:qMaJLBiVmzRWZw12:x479dbNr4EjTlUOHEBpzcfST7vkd7OT67mIRb26cfjI/mu8gJLrKgWuxLoUAaXFyUUZdGaEplbDcwIGrvr4HvxC1PKiORpL52CIg7gu/hhk65lS3
   pve#homelab:SECRET_PORKBUN_SECRET_KEY:

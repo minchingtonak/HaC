@@ -7,6 +7,11 @@ username = "{{{SECRET_USERNAME}}}"
 password = "{{{SECRET_PASSWORD}}}"
 insecure = true
 
+[ssh]
+user = "{{{SECRET_SSH_USER}}}"
+public_key = "{{{SECRET_CONTAINER_SSH_PUBLIC_KEY}}}"
+private_key = """{{{SECRET_CONTAINER_SSH_PRIVATE_KEY}}}"""
+
 [storage]
 mass = { name = "void", path = "/void" }
 fast = { name = "fast", path = "/fast" }
@@ -19,6 +24,10 @@ checksum = "39f6d06e082d6a418438483da4f76092ebd0370a91bad30b82ab6d0f442234d63fe2
 checksum_algorithm = "sha512"
 overwrite_unmanaged = true
 retain_on_delete = true
+
+[[provisioners]]
+type = "script"
+script = "provisioners/scripts/install-docker.sh"
 
 [lxc]
 app_data_dir = "/fast/test-appdata"
@@ -50,6 +59,7 @@ gateway = "192.168.0.1"
 password = "{{{SECRET_CONTAINER_ROOT_PASSWORD}}}"
 
 [lxc.ssh]
+user = "{{{SECRET_CONTAINER_SSH_USER}}}"
 public_key = "{{{SECRET_CONTAINER_SSH_PUBLIC_KEY}}}"
 private_key = """{{{SECRET_CONTAINER_SSH_PRIVATE_KEY}}}"""
 

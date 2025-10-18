@@ -9,6 +9,7 @@ import {
   PVE_DEFAULTS,
   PveAuthSchema,
 } from "./pve";
+import { ProvisionerSchema } from "./provisioner";
 
 const StoragePoolSchema = z
   .object({ name: z.string().min(1), path: z.string().min(1) })
@@ -22,8 +23,8 @@ const StorageConfigSchema = z
 
 const LxcAuthSchema = z.object({ password: z.string() }).strict().readonly();
 
-const LxcSshSchema = z
-  .object({ public_key: z.string(), private_key: z.string() })
+const SshSchema = z
+  .object({ user: z.string(), public_key: z.string(), private_key: z.string() })
   .strict()
   .readonly();
 
@@ -67,7 +68,7 @@ const LxcConfigSchema = z
     hosts: LxcHostsSchema,
     network: LxcNetworkSchema,
     auth: LxcAuthSchema,
-    ssh: LxcSshSchema,
+    ssh: SshSchema,
   })
   .strict()
   .readonly();
@@ -86,9 +87,11 @@ export const PveHostConfigSchema = z
     // HaC custom fields
     enabled: z.boolean().default(PVE_DEFAULTS.HOST.ENABLED),
     ip: z.string().min(1),
+    ssh: SshSchema,
     lxc: LxcConfigSchema,
     storage: StorageConfigSchema,
     providers: ProvidersSchema,
+    provisioners: z.array(ProvisionerSchema).optional(),
   })
   .strict()
   .readonly();

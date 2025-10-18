@@ -44,25 +44,16 @@ export class HomelabLxcHost extends pulumi.ComponentResource {
 
   private static PROXY_STACK_NAME = "traefik";
 
-  container: proxmox.ct.Container;
-
-  firewallOptions: proxmox.network.FirewallOptions;
-
-  firewallAlias: proxmox.network.FirewallAlias;
-
-  firewallRules: proxmox.network.FirewallRules;
-
-  provisionerResources?: ProvisionerResource[] = [];
-
-  proxyNetwork?: command.remote.Command;
-
-  createRemoteOutputRootDir?: command.remote.Command;
-
-  stacks: ComposeStack[] = [];
-
-  baseDnsRecord: porkbun.DnsRecord;
-
-  wildcardDnsRecord: porkbun.DnsRecord;
+  public readonly container: proxmox.ct.Container;
+  public readonly firewallOptions: proxmox.network.FirewallOptions;
+  public readonly firewallAlias: proxmox.network.FirewallAlias;
+  public readonly firewallRules: proxmox.network.FirewallRules;
+  public readonly provisionerResources?: ProvisionerResource[] = [];
+  public readonly proxyNetwork?: command.remote.Command;
+  public readonly createRemoteOutputRootDir?: command.remote.Command;
+  public readonly stacks: ComposeStack[] = [];
+  public readonly baseDnsRecord: porkbun.DnsRecord;
+  public readonly wildcardDnsRecord: porkbun.DnsRecord;
 
   constructor(
     name: string,
@@ -254,6 +245,7 @@ export class HomelabLxcHost extends pulumi.ComponentResource {
 
     const connection: command.types.input.remote.ConnectionArgs = {
       host: ctAddress,
+      // user: pveConfig.lxc.ssh.user,
       user: LXC_DEFAULTS.USER,
       privateKey: pveConfig.lxc.ssh.privateKey,
     };
