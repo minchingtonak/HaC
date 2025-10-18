@@ -5,7 +5,10 @@ import { HandlebarsTemplateDirectory } from "../templates/handlebars-template-di
 import { ComposeStackUtils } from "./compose-file-processor";
 import { TemplateProcessor } from "../templates/template-processor";
 import { TemplateContext } from "../templates/template-context";
-import { type HomelabLxcHostContext } from "../proxmox/homelab-lxc-host";
+import {
+  HomelabLxcHost,
+  type HomelabLxcHostContext,
+} from "../proxmox/homelab-lxc-host";
 import { PveHostConfigToml } from "../hosts/schema/pve-host-config";
 import { LxcHostConfigToml } from "../hosts/schema/lxc-host-config";
 
@@ -220,10 +223,6 @@ export class ComposeStack extends pulumi.ComponentResource {
   }
 }
 
-function buildBaseDomain(context: TemplateFileContext): string {
-  return `${context.lxc.hostname}.pulumi.${context.pve.node}.${context.pve.lxc.network.domain}`;
-}
-
 TemplateProcessor.registerTemplateHelper(
   "domainForApp",
   (appName: string, options: Handlebars.HelperOptions) => {
@@ -232,15 +231,6 @@ TemplateProcessor.registerTemplateHelper(
       context.lxc.stacks?.[context.stack_name].subdomain_prefixes?.[appName] ??
       appName;
 
-    return `${subdomainPrefix}.${buildBaseDomain(context)}`;
-  },
-);
-
-TemplateProcessor.registerTemplateHelper(
-  "domainForContainer",
-  (options: Handlebars.HelperOptions) => {
-    const context = options.data as TemplateFileContext;
-
-    return buildBaseDomain(context);
+    return `${subdomainPrefix}.${HomelabLxcHost.CONTAINER_BASE_DOMAIN(context)}`;
   },
 );

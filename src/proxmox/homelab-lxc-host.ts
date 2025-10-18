@@ -3,7 +3,11 @@ import * as command from "@pulumi/command";
 import * as proxmox from "@muhlba91/pulumi-proxmoxve";
 import * as porkbun from "@pulumi/porkbun";
 import { HomelabPveProvider } from "./homelab-pve-provider";
-import { ComposeStack, ComposeStackContext } from "../docker/compose-stack";
+import {
+  ComposeStack,
+  ComposeStackContext,
+  TemplateFileContext,
+} from "../docker/compose-stack";
 import {
   ProvisionerEngine,
   ProvisionerResource,
@@ -26,8 +30,17 @@ export type HomelabLxcHostArgs = {
 export class HomelabLxcHost extends pulumi.ComponentResource {
   public static RESOURCE_TYPE = "HaC:proxmoxve:HomelabContainer";
 
-  private static CONTAINER_SUBDOMAIN = (hostname: string, nodeName: string) =>
-    `${hostname}.pulumi.${nodeName}`;
+  /**
+   * Returns the domain of the container, minus the root domain (i.e. test.com)
+   */
+  public static CONTAINER_SUBDOMAIN = (hostname: string, nodeName: string) =>
+    `${hostname}.${nodeName}`;
+
+  /**
+   * Returns the full domain of the container
+   */
+  public static CONTAINER_BASE_DOMAIN = (context: TemplateFileContext) =>
+    `${HomelabLxcHost.CONTAINER_SUBDOMAIN(context.lxc.hostname, context.pve.node)}.${context.pve.lxc.network.domain}`;
 
   private static PROXY_STACK_NAME = "traefik";
 
@@ -311,3 +324,12 @@ export class HomelabLxcHost extends pulumi.ComponentResource {
     this.registerOutputs();
   }
 }
+
+TemplateProcessor.registerTemplateHelper(
+  "domainForContainer",
+  (options: Handlebars.HelperOptions) => {
+    const context = options.data as TemplateFileContext;
+
+    return HomelabLxcHost.CONTAINER_BASE_DOMAIN(context);
+  },
+);
