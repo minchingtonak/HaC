@@ -193,6 +193,14 @@ export class TemplateProcessor {
     const ast = Handlebars.parse(templateContent);
     const variables = new Set<string>();
 
+    function isValidVariable(node: hbs.AST.PathExpression) {
+      return (
+        !node.original.startsWith("this.") &&
+        !node.original.startsWith("../") &&
+        !["if", "each"].includes(node.original)
+      );
+    }
+
     function walkAST(node: ASTNode): void;
     function walkAST(node: hbs.AST.Expression | hbs.AST.Expression[]): void;
     function walkAST(node: hbs.AST.Statement | hbs.AST.Statement[]): void {
@@ -209,7 +217,9 @@ export class TemplateProcessor {
 
       switch (astNode.type) {
         case "PathExpression": {
-          variables.add(astNode.original);
+          if (isValidVariable(astNode)) {
+            variables.add(astNode.original);
+          }
           break;
         }
 

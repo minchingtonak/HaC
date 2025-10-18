@@ -7,9 +7,9 @@ description = "homelab administration-related apps"
 traefik = {}
 dozzle = {}
 apprise = {}
-semaphore = {}
+homepage = {}
+# semaphore = {}
 # komodo = {}
-# glance = {}
 
 [cpu]
 cores = 2

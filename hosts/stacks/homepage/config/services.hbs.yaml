@@ -1,0 +1,11 @@
+# {{#each @lxc_hosts}}
+- "{{{this.hostname}}}":
+    # {{#if this.stacks}}
+    # {{#each this.stacks}}
+    - "{{{@key}}}":
+        href: https://{{{domainForApp @key hostname=../this.hostname}}}
+        siteMonitor: https://{{{domainForApp @key hostname=../this.hostname}}}
+        icon: "{{{@key}}}.png"
+    # {{/each}}
+    # {{/if}}
+# {{/each}}

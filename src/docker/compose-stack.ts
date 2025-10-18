@@ -223,10 +223,24 @@ export class ComposeStack extends pulumi.ComponentResource {
   }
 }
 
+// use with: {{{domainForApp "appName" hostname=other-lxc-hostname,node=other-pve-node}}}
+export type DomainForAppOptions = { hostname?: string; node?: string };
+
 TemplateProcessor.registerTemplateHelper(
   "domainForApp",
   (appName: string, options: Handlebars.HelperOptions) => {
-    const context = options.data as TemplateFileContext;
+    const context = structuredClone(options.data) as TemplateFileContext;
+
+    const { hostname, node } = options.hash as DomainForAppOptions;
+    if (hostname) {
+      // @ts-expect-error deliberately setting context property
+      context.lxc.hostname = hostname;
+    }
+    if (node) {
+      // @ts-expect-error deliberately setting context property
+      context.pve.node = node;
+    }
+
     const subdomainPrefix =
       context.lxc.stacks?.[context.stack_name].subdomain_prefixes?.[appName] ??
       appName;

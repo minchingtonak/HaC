@@ -1,0 +1,26 @@
+services:
+  homepage:
+    image: ghcr.io/gethomepage/homepage:v1.5.0@sha256:e7fc26f914cf5e7dcd6c566e24ca218addb879aa76478ad4a553b1f9ae48b1d7
+    container_name: homepage
+    # ports:
+    #   - 3000:3000
+    volumes:
+      - /docker/homepage:/app/config
+      - ./config:/app/config
+      - /var/run/docker.sock:/var/run/docker.sock # (optional) For docker integrations
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: "*"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.homepage.rule=Host(`{{{domainForApp "homepage"}}}`)
+      - traefik.http.routers.homepage.entrypoints=https
+      - traefik.http.routers.homepage.tls=true
+      - traefik.http.routers.homepage.tls.certresolver=porkbun
+      - traefik.http.routers.homepage.service=homepage
+      - traefik.http.services.homepage.loadbalancer.server.port=3000
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
