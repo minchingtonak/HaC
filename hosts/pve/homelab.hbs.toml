@@ -29,6 +29,10 @@ retain_on_delete = true
 type = "script"
 script = "provisioners/scripts/install-docker.sh"
 
+[stacks]
+traefik = {}
+dozzle = {}
+
 [lxc]
 app_data_dir = "/fast/test-appdata"
 

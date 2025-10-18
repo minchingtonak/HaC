@@ -14,6 +14,7 @@ import { LxcHostConfigToml } from "../hosts/schema/lxc-host-config";
 
 export type ComposeStackContext = HomelabLxcHostContext & {
   templateDirectory: string;
+  configNamespace: string;
 };
 
 export type TemplateFileContext = {
@@ -59,6 +60,7 @@ export class ComposeStack extends pulumi.ComponentResource {
 
     const contextData = args.context.get(
       "stackName",
+      "configNamespace",
       "lxcConfig",
       "lxc_config",
       "pveConfig",
@@ -96,7 +98,8 @@ export class ComposeStack extends pulumi.ComponentResource {
         `${name}-template-dir`,
         {
           templateDirectory: stackDirectory,
-          configNamespace: `lxc#${contextData.lxcConfig.hostname}#${contextData.stackName}`,
+          // configNamespace: `lxc#${contextData.lxcConfig.hostname}#${contextData.stackName}`,
+          configNamespace: contextData.configNamespace,
           templateContext: new TemplateContext<TemplateFileContext>({
             pve: contextData.pve_config,
             pve_hosts: contextData.enabled_pve_hosts,
@@ -227,6 +230,11 @@ TemplateProcessor.registerTemplateHelper(
   "domainForApp",
   (appName: string, options: Handlebars.HelperOptions) => {
     const context = options.data as TemplateFileContext;
+
+    // if (Object.keys(context.lxc).length === 0) {
+    //   return `${context.pve.}`
+    // }
+
     const subdomainPrefix =
       context.lxc.stacks?.[context.stack_name].subdomain_prefixes?.[appName] ??
       appName;

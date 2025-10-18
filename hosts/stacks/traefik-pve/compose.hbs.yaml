@@ -1,0 +1,91 @@
+services:
+  traefik:
+    image: traefik:v3.5.3@sha256:84eb6c0e67c99fa026bf1bf4b0afd9ad44350d375b4ebc5049c5f70543a729d6
+    container_name: traefik
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /docker/traefik/letsencrypt:/letsencrypt
+      - /docker/traefik:/etc/traefik
+    environment:
+      - PORKBUN_API_KEY={{{traefik:SECRET_PORKBUN_API_KEY}}}
+      - PORKBUN_SECRET_API_KEY={{{traefik:SECRET_PORKBUN_SECRET_API_KEY}}}
+    command: # traefik.yml (static) configuration goes below
+      - --api=true
+      - --api.dashboard=true
+      - --api.debug=true
+      - --log.level=debug
+      # - --log.filePath=/etc/traefik/traefik.log
+      - --entrypoints.http.address=:80
+      - --entrypoints.https.address=:443
+      - --entrypoints.http.http.redirections.entrypoint.to=https
+      - --entrypoints.http.http.redirections.entrypoint.scheme=https
+      - --entrypoints.ssh-222-tcp.address=:222
+      - --entrypoints.qbittorrent-6881-tcp.address=:6881
+      - --entrypoints.jellyfin-service-discovery-1900-udp.address=:1900/udp
+      - --entrypoints.jellyfin-auto-discovery-7359-udp.address=:7359/udp
+      - --entrypoints.syncthing-local-discovery-21027-udp.address=:21027/udp
+      - --entrypoints.syncthing-sync-22000-tcp.address=:22000
+      - --entrypoints.syncthing-sync-quic-22000-udp.address=:22000/udp
+      - --entrypoints.slskd-listen-50300-tcp.address=:50300
+      - --providers.docker.endpoint=unix:///var/run/docker.sock
+      - --providers.docker.exposedByDefault=false
+      - --certificatesresolvers.porkbun.acme.email={{{traefik:SECRET_ACME_EMAIL}}}
+      - --certificatesresolvers.porkbun.acme.storage=/letsencrypt/acme.json
+      - --certificatesresolvers.porkbun.acme.caserver=https://acme-v02.api.letsencrypt.org/directory # prod
+      # - --certificatesresolvers.porkbun.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory # staging
+      - --certificatesresolvers.porkbun.acme.dnschallenge.provider=porkbun
+      - --certificatesresolvers.porkbun.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53 # use public DNS servers for the check to avoid having to wait for the records to propagate to your router
+      # - --certificatesresolvers.porkbun.acme.dnschallenge.disablepropagationcheck=true # uncomment this if you have issues pulling certificates through cloudflare, By setting this flag to true disables the need to wait for the propagation of the TXT record to all authoritative name servers.
+      # - --certificatesresolvers.porkbun.acme.dnschallenge.delayBeforeCheck=60s # uncomment along with disablePropagationCheck if needed to ensure the TXT record is ready before verification is attempted
+    labels: # dynamic configuration
+      - traefik.enable=true
+      # misc
+      # generate credentials: echo $(htpasswd -nB akmin <password>) (or input password via stdin)
+      - traefik.http.middlewares.traefik-auth.basicauth.users={{{traefik:SECRET_DASHBOARD_CREDENTIALS}}}
+      - traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https
+      # http
+      - traefik.http.routers.traefik.entrypoints=http
+      - traefik.http.routers.traefik.middlewares=traefik-https-redirect
+      - traefik.http.routers.traefik.rule=Host(`{{{domainForApp "traefik"}}}`)
+      # https
+      - traefik.http.routers.traefik-secure.entrypoints=https
+      - traefik.http.routers.traefik-secure.middlewares=traefik-auth
+      - traefik.http.routers.traefik-secure.rule=Host(`{{{domainForApp "traefik"}}}`)
+      - traefik.http.routers.traefik-secure.tls=true
+      - traefik.http.routers.traefik-secure.tls.certresolver=porkbun
+      - traefik.http.routers.traefik-secure.tls.domains[0].main={{{domainForContainer}}}
+      - traefik.http.routers.traefik-secure.tls.domains[0].sans=*.{{{domainForContainer}}}
+      - traefik.http.routers.traefik-secure.service=api@internal
+      #
+      - "loggifly.monitor=true"
+      - "loggifly.attach_logfile=true"
+      - "loggifly.keywords.0.regex= ERR "
+      - "loggifly.keywords.0.notification_title={{{@lxc.hostname}}}#{container} - error"
+      - "loggifly.keywords.0.action=restart"
+      - "loggifly.keywords.0.action_cooldown=60"
+    networks:
+      - traefik
+
+  loggifly:
+    image: ghcr.io/clemcer/loggifly:v1.6.0@sha256:cf1968ac30dc34dd85a8358a48d0f9bb959cbbfe6b3beef6e7732ab703518812
+    container_name: traefik-loggifly
+    # It is recommended to run the container as the same UID/GID as the owner of your docker socket to avoid running as root.
+    # But you can also just comment out the user line and run as root.
+    # You can check the socket permissions with `ls -n /var/run/docker.sock`
+    # user: "0:996"
+    read_only: true
+    environment:
+      TZ: America/Los_Angeles
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./config:/config
+    restart: unless-stopped
+
+networks:
+  traefik:
+    external: true

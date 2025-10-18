@@ -15,7 +15,11 @@ import {
   LxcHostConfigToml,
 } from "../hosts/schema/lxc-host-config";
 import { snakeToCamelKeys } from "../utils/schema-utils";
-import { type TemplateFileContext } from "../docker/compose-stack";
+import {
+  ComposeStack,
+  ComposeStackContext,
+  type TemplateFileContext,
+} from "../docker/compose-stack";
 import { TemplateProcessor } from "../templates/template-processor";
 import {
   ProvisionerEngine,
@@ -44,6 +48,8 @@ export interface HomelabPveHostArgs {
 export class HomelabPveHost extends pulumi.ComponentResource {
   public static RESOURCE_TYPE = "HaC:proxmoxve:HomelabPveHost";
 
+  private static PROXY_STACK_NAME = "traefik";
+
   static LXC_HOST_CONFIG_PATH_FOR = (hostname: string) =>
     `./hosts/lxc/${hostname}.hbs.toml`;
 
@@ -53,6 +59,9 @@ export class HomelabPveHost extends pulumi.ComponentResource {
   public readonly files?: proxmox.download.File[];
   public readonly metricsServers?: proxmox.metrics.MetricsServer[];
   public readonly provisionerResources?: ProvisionerResource[];
+  public readonly proxyNetwork?: command.remote.Command;
+  public readonly createRemoteOutputRootDir?: command.remote.Command;
+  public readonly stacks: ComposeStack[] = [];
   public readonly containers: HomelabLxcHost[] = [];
 
   constructor(
@@ -130,6 +139,63 @@ export class HomelabPveHost extends pulumi.ComponentResource {
       );
     }
 
+    const stackNames = Object.keys(pveConfig.stacks ?? {});
+
+    const hasProxy = stackNames.includes(HomelabPveHost.PROXY_STACK_NAME);
+
+    if (pveConfig.stacks) {
+      if (hasProxy) {
+        this.proxyNetwork = new command.remote.Command(
+          `${name}-create-${HomelabPveHost.PROXY_STACK_NAME}-network`,
+          {
+            create: `if ! docker network ls --format "{{.Name}}" | grep -q "^${HomelabPveHost.PROXY_STACK_NAME}$"; then docker network create '${HomelabPveHost.PROXY_STACK_NAME}'; fi`,
+            delete: `if docker network ls --format "{{.Name}}" | grep -q "^${HomelabPveHost.PROXY_STACK_NAME}$"; then docker network rm '${HomelabPveHost.PROXY_STACK_NAME}'; fi`,
+            addPreviousOutputInEnv: false,
+            connection,
+          },
+          {
+            parent: this,
+            dependsOn: this.provisionerResources ?? this,
+            deleteBeforeReplace: true,
+          },
+        );
+      }
+
+      this.createRemoteOutputRootDir = new command.remote.Command(
+        `${name}-create-pulumi-root-output-dir`,
+        {
+          create: `mkdir -p ${TemplateProcessor.REMOTE_OUTPUT_FOLDER_ROOT}`,
+          delete: `rm -rf ${TemplateProcessor.REMOTE_OUTPUT_FOLDER_ROOT}`,
+          addPreviousOutputInEnv: false,
+          connection,
+        },
+        {
+          parent: this,
+          dependsOn: this.proxyNetwork ?? this.provisionerResources,
+        },
+      );
+
+      this.stacks = stackNames.map(
+        (stackName) =>
+          new ComposeStack(
+            `${name}-${stackName}`,
+            {
+              connection,
+              context: args.context.withData<ComposeStackContext>({
+                stackName,
+                configNamespace: `pve#${pveConfig.node}#${stackName}`,
+                // for now, stub out lxc context var
+                lxc_config: {} as LxcHostConfigToml,
+                enabled_lxc_hosts: [],
+                lxcConfig: {} as LxcHostConfig,
+                enabledLxcHosts: [],
+              }),
+            },
+            { parent: this, dependsOn: this.createRemoteOutputRootDir },
+          ),
+      );
+    }
+
     const enabledHostnames = Object.keys(pveConfig.lxc.hosts).filter(
       (hostname) => pveConfig.lxc.hosts[hostname].enabled,
     );
@@ -163,7 +229,8 @@ export class HomelabPveHost extends pulumi.ComponentResource {
           },
           {
             parent: this,
-            dependsOn: this.metricsServers ?? this.files ?? this.dns,
+            dependsOn:
+              this.stacks ?? this.metricsServers ?? this.files ?? this.dns,
             retainOnDelete: true,
           },
         );

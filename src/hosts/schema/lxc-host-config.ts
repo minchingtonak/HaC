@@ -20,13 +20,7 @@ import {
   FirewallOptionsSchema,
   FirewallRuleSchema,
 } from "./pve";
-
-const StackSchema = z
-  .object({ subdomain_prefixes: z.record(z.string(), z.string()).optional() })
-  .strict()
-  .readonly();
-
-const StackSchemaMap = z.record(z.string(), StackSchema);
+import { StackSchemaMap } from "./stack";
 
 /**
  * @see {@link ct.ContainerArgs}

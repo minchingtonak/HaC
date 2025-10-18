@@ -299,15 +299,12 @@ export class HomelabLxcHost extends pulumi.ComponentResource {
               connection,
               context: args.context.withData<ComposeStackContext>({
                 stackName,
+                configNamespace: `lxc#${lxcConfig.hostname}#${stackName}`,
               }),
             },
             {
               parent: this.container,
               dependsOn: this.createRemoteOutputRootDir,
-              // hooks: {
-              //   afterCreate: [(args) => console.dir(args, { depth: Infinity })],
-              //   afterUpdate: [(args) => console.dir(args, { depth: Infinity })]
-              // }
             },
           ),
       );

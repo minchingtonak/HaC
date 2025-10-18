@@ -10,6 +10,7 @@ import {
   PveAuthSchema,
 } from "./pve";
 import { ProvisionerSchema } from "./provisioner";
+import { StackSchemaMap } from "./stack";
 
 const StoragePoolSchema = z
   .object({ name: z.string().min(1), path: z.string().min(1) })
@@ -92,6 +93,7 @@ export const PveHostConfigSchema = z
     storage: StorageConfigSchema,
     providers: ProvidersSchema,
     provisioners: z.array(ProvisionerSchema).optional(),
+    stacks: StackSchemaMap.optional(),
   })
   .strict()
   .readonly();
