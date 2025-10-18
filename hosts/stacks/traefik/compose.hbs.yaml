@@ -45,7 +45,7 @@ services:
       - traefik.enable=true
       # misc
       # generate credentials: echo $(htpasswd -nB akmin <password>) (or input password via stdin)
-      - traefik.http.middlewares.traefik-auth.basicauth.users={{{traefik:SECRET_DASHBOARD_CREDENTIALS}}}
+      # - traefik.http.middlewares.traefik-auth.basicauth.users={{{traefik:SECRET_DASHBOARD_CREDENTIALS}}}
       - traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https
       - traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https
       # http
@@ -54,7 +54,7 @@ services:
       - traefik.http.routers.traefik.rule=Host(`{{{domainForApp "traefik"}}}`)
       # https
       - traefik.http.routers.traefik-secure.entrypoints=https
-      - traefik.http.routers.traefik-secure.middlewares=traefik-auth
+      # - traefik.http.routers.traefik-secure.middlewares=traefik-auth
       - traefik.http.routers.traefik-secure.rule=Host(`{{{domainForApp "traefik"}}}`)
       - traefik.http.routers.traefik-secure.tls=true
       - traefik.http.routers.traefik-secure.tls.certresolver=porkbun
