@@ -7,47 +7,6 @@
         href: https://{{{domainForApp @key hostname=../this.hostname}}}
         siteMonitor: https://{{{domainForApp @key hostname=../this.hostname}}}
         icon: "{{{@key}}}.png"
-        # {{#ifeq @key "jellyfin"}}
-        widget:
-          type: jellyfin
-          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
-          key: "{{{SECRET_JELLYFIN_API_KEY}}}"
-          enableBlocks: true
-          enableNowPlaying: true
-          enableUser: true
-          showEpisodeNumber: true
-          expandOneStreamToTwoRows: false
-        # {{/ifeq}}
-        # {{#ifeq @key "jellyseerr"}}
-        widget:
-          type: jellyseerr
-          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
-          key: "{{{SECRET_JELLYSEERR_API_KEY}}}"
-        # {{/ifeq}}
-        # {{#ifeq @key "immich"}}
-        widget:
-          type: immich
-          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
-          key: "{{{SECRET_IMMICH_API_KEY}}}"
-        # {{/ifeq}}
-        # {{#ifeq @key "tailscale"}}
-        widget:
-          type: tailscale
-          deviceid: "{{{SECRET_TAILSCALE_DEVICE_ID}}}"
-          key: "{{{SECRET_TAILSCALE_API_KEY}}}"
-        # {{/ifeq}}
-        # {{#ifeq @key "paperless-ngx"}}
-        widget:
-          type: paperlessngx
-          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
-          username: "{{{SECRET_PAPERLESS_USERNAME}}}"
-          password: "{{{SECRET_PAPERLESS_PASSWORD}}}"
-        # {{/ifeq}}
-        # {{#ifeq @key "traefik"}}
-        widget:
-          type: traefik
-          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
-        # {{/ifeq}}
         # {{#ifeq @key "audiobookshelf"}}
         widget:
           type: audiobookshelf
@@ -67,6 +26,30 @@
           url: https://{{{domainForApp @key hostname=../../this.hostname}}}
           key: "{{{SECRET_GITEA_API_TOKEN}}}"
         # {{/ifeq}}
+        # {{#ifeq @key "immich"}}
+        widget:
+          type: immich
+          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
+          key: "{{{SECRET_IMMICH_API_KEY}}}"
+          version: 2
+        # {{/ifeq}}
+        # {{#ifeq @key "jellyfin"}}
+        widget:
+          type: jellyfin
+          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
+          key: "{{{SECRET_JELLYFIN_API_KEY}}}"
+          enableBlocks: true
+          enableNowPlaying: true
+          enableUser: true
+          showEpisodeNumber: true
+          expandOneStreamToTwoRows: false
+        # {{/ifeq}}
+        # {{#ifeq @key "jellyseerr"}}
+        widget:
+          type: jellyseerr
+          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
+          key: "{{{SECRET_JELLYSEERR_API_KEY}}}"
+        # {{/ifeq}}
         # {{#ifeq @key "mealie"}}
         widget:
           type: mealie
@@ -82,11 +65,29 @@
           token: "{{{SECRET_NAVIDROME_TOKEN}}}" #md5(password + salt)
           salt: "{{{SECRET_NAVIDROME_SALT}}}"
         # {{/ifeq}}
+        # {{#ifeq @key "paperless-ngx"}}
+        widget:
+          type: paperlessngx
+          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
+          username: "{{{SECRET_PAPERLESS_USERNAME}}}"
+          password: "{{{SECRET_PAPERLESS_PASSWORD}}}"
+        # {{/ifeq}}
         # {{#ifeq @key "slskd"}}
         widget:
           type: slskd
           url: https://{{{domainForApp @key hostname=../../this.hostname}}}
           key: "{{{SECRET_SLSKD_API_KEY}}}"
+        # {{/ifeq}}
+        # {{#ifeq @key "tailscale"}}
+        widget:
+          type: tailscale
+          deviceid: "{{{SECRET_TAILSCALE_DEVICE_ID}}}"
+          key: "{{{SECRET_TAILSCALE_API_KEY}}}"
+        # {{/ifeq}}
+        # {{#ifeq @key "traefik"}}
+        widget:
+          type: traefik
+          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
         # {{/ifeq}}
         # {{#ifeq @key "wallos"}}
         widget:
