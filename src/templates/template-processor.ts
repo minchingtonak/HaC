@@ -10,23 +10,6 @@ export interface RenderedTemplateFile {
   content: pulumi.Output<string>;
 }
 
-export type ASTNode =
-  | hbs.AST.MustacheStatement
-  | hbs.AST.BlockStatement
-  | hbs.AST.PartialStatement
-  | hbs.AST.PartialBlockStatement
-  | hbs.AST.ContentStatement
-  | hbs.AST.CommentStatement
-  | hbs.AST.SubExpression
-  | hbs.AST.PathExpression
-  | hbs.AST.StringLiteral
-  | hbs.AST.BooleanLiteral
-  | hbs.AST.NumberLiteral
-  | hbs.AST.UndefinedLiteral
-  | hbs.AST.NullLiteral
-  | hbs.AST.Hash
-  | hbs.AST.HashPair;
-
 export class TemplateProcessor {
   public static readonly REMOTE_OUTPUT_FOLDER_ROOT = "/etc/pulumi";
 
@@ -99,13 +82,13 @@ export class TemplateProcessor {
   static processTemplate(
     templatePath: string,
     config: pulumi.Config,
-    dataVariables?: unknown,
+    dataVariables?: object,
   ): RenderedTemplateFile {
     const templateContent = fs.readFileSync(templatePath, "utf-8");
 
-    const variables = TemplateProcessor.discoverVariables(templateContent);
-
     const idSafeName = TemplateProcessor.buildSanitizedNameForId(templatePath);
+
+    const variables = TemplateProcessor.discoverVariables(templateContent);
 
     if (variables.length === 0) {
       return {
@@ -115,6 +98,43 @@ export class TemplateProcessor {
       };
     }
 
+    const resolvedVariables = TemplateProcessor.resolveAllVariables(
+      config,
+      variables,
+      dataVariables,
+    );
+
+    const content = TemplateProcessor.renderTemplate(
+      resolvedVariables,
+      templateContent,
+      dataVariables,
+    );
+
+    return { content, idSafeName, templatePath };
+  }
+
+  public static renderTemplate(
+    resolvedVariables: ReturnType<typeof TemplateProcessor.resolveAllVariables>,
+    templateContent: string,
+    dataVariables?: object,
+  ) {
+    const template = Handlebars.compile<Record<string, string>>(
+      templateContent,
+      {},
+    );
+
+    const content = resolvedVariables.apply((vars) =>
+      template(vars, { data: { ...dataVariables, resolvedVariables: vars } }),
+    );
+
+    return content;
+  }
+
+  private static resolveAllVariables(
+    config: pulumi.Config,
+    variables: string[],
+    dataVariables?: object,
+  ) {
     const initialVarValueMap = EnvUtils.assembleVariableMapFromConfig(
       config,
       variables,
@@ -170,7 +190,9 @@ export class TemplateProcessor {
         for (const [varName, varValue] of Object.entries(merged)) {
           const template = Handlebars.compile<Record<string, string>>(varValue);
 
-          const newVariableValue = template(result, { data: dataVariables });
+          const newVariableValue = template(result, {
+            data: { ...dataVariables, resolvedVariables: result },
+          });
 
           result[varName] = newVariableValue;
         }
@@ -179,27 +201,29 @@ export class TemplateProcessor {
       return result;
     });
 
-    const template =
-      Handlebars.compile<Record<string, string>>(templateContent);
-
-    const content = resolvedVariables.apply((vars) =>
-      template(vars, { data: dataVariables }),
-    );
-
-    return { content, idSafeName, templatePath };
+    return resolvedVariables;
   }
 
-  private static discoverVariables(templateContent: string): string[] {
+  public static discoverVariables(templateContent: string): string[] {
     const ast = Handlebars.parse(templateContent);
     const variables = new Set<string>();
 
-    function isValidVariable(node: hbs.AST.PathExpression) {
-      return (
-        !node.original.startsWith("this.") &&
-        !node.original.startsWith("../") &&
-        !["if", "each"].includes(node.original)
-      );
-    }
+    type ASTNode =
+      | hbs.AST.MustacheStatement
+      | hbs.AST.BlockStatement
+      | hbs.AST.PartialStatement
+      | hbs.AST.PartialBlockStatement
+      | hbs.AST.ContentStatement
+      | hbs.AST.CommentStatement
+      | hbs.AST.SubExpression
+      | hbs.AST.PathExpression
+      | hbs.AST.StringLiteral
+      | hbs.AST.BooleanLiteral
+      | hbs.AST.NumberLiteral
+      | hbs.AST.UndefinedLiteral
+      | hbs.AST.NullLiteral
+      | hbs.AST.Hash
+      | hbs.AST.HashPair;
 
     function walkAST(node: ASTNode): void;
     function walkAST(node: hbs.AST.Expression | hbs.AST.Expression[]): void;
@@ -217,9 +241,7 @@ export class TemplateProcessor {
 
       switch (astNode.type) {
         case "PathExpression": {
-          if (isValidVariable(astNode)) {
-            variables.add(astNode.original);
-          }
+          variables.add(astNode.original);
           break;
         }
 
@@ -349,7 +371,36 @@ export class TemplateProcessor {
 TemplateProcessor.registerTemplateHelper(
   "raw",
   (options: Handlebars.HelperOptions) => {
+    // render with an empty context
     return options.fn({});
+  },
+);
+
+TemplateProcessor.registerTemplateHelper(
+  "ifeq",
+  (a: unknown, b: unknown, options: Handlebars.HelperOptions) => {
+    if (!options.data.resolvedVariables) {
+      throw new Error("Expected resolvedVariables to be set");
+    }
+
+    if (a === b) {
+      return options.fn(options.data.resolvedVariables);
+    }
+    return options.inverse(options.data.resolvedVariables);
+  },
+);
+
+TemplateProcessor.registerTemplateHelper(
+  "ifnoteq",
+  (a: unknown, b: unknown, options: Handlebars.HelperOptions) => {
+    if (!options.data.resolvedVariables) {
+      throw new Error("Expected resolvedVariables to be set");
+    }
+
+    if (a !== b) {
+      return options.fn(options.data.resolvedVariables);
+    }
+    return options.inverse(options.data.resolvedVariables);
   },
 );
 

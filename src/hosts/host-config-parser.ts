@@ -18,7 +18,7 @@ export abstract class HostConfigParser<TConfig> {
    */
   public loadAllConfigs(
     hostsDir: string,
-    extraData?: unknown,
+    extraData?: object,
   ): (TConfig | pulumi.Output<TConfig>)[] {
     const configs: (TConfig | pulumi.Output<TConfig>)[] = [];
     const configFiles = TemplateProcessor.discoverTemplateFiles(hostsDir);
@@ -45,7 +45,7 @@ export abstract class HostConfigParser<TConfig> {
    */
   public parseConfigFile(
     filePath: string,
-    extraData?: unknown,
+    extraData?: object,
   ): TConfig | pulumi.Output<TConfig> {
     const fileName = path.basename(filePath);
     const identifier = `${this.getConfig().type}#${fileName.substring(0, fileName.indexOf("."))}`;

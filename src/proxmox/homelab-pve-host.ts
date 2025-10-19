@@ -15,7 +15,6 @@ import {
   LxcHostConfigToml,
 } from "../hosts/schema/lxc-host-config";
 import { snakeToCamelKeys } from "../utils/schema-utils";
-import { type TemplateFileContext } from "../docker/compose-stack";
 import { TemplateProcessor } from "../templates/template-processor";
 import {
   ProvisionerEngine,
@@ -136,9 +135,10 @@ export class HomelabPveHost extends pulumi.ComponentResource {
 
     const enabledLxcConfigs = enabledHostnames.map((hostname) => {
       const hostConfigPath = HomelabPveHost.LXC_HOST_CONFIG_PATH_FOR(hostname);
-      return LxcHostConfigParser.parseHostConfigFile<
-        Pick<TemplateFileContext, "pve" | "pve_hosts">
-      >(hostConfigPath, { pve: pve_config, pve_hosts: enabled_pve_hosts });
+      return LxcHostConfigParser.parseHostConfigFile(hostConfigPath, {
+        pve: pve_config,
+        pve_hosts: enabled_pve_hosts,
+      });
     });
 
     pulumi.all(enabledLxcConfigs).apply((hostConfigs) => {

@@ -24,13 +24,18 @@ export class EnvUtils {
 
   private static readonly PARENT_NAMESPACE_PREFIX = "parent:";
 
-  private static resolveVariable(varName: string, config: pulumi.Config) {
-    // data variable, do not fetch from config
-    if (varName.startsWith("@")) {
-      return {};
-    }
+  private static isInvalidVariable(varName: string) {
+    return (
+      EnvUtils.IGNORED_VARIABLES.has(varName) ||
+      varName.startsWith("@") ||
+      varName.startsWith("this.") ||
+      varName.startsWith("../") ||
+      ["if", "each", "eq"].includes(varName)
+    );
+  }
 
-    if (EnvUtils.IGNORED_VARIABLES.has(varName)) {
+  public static resolveVariable(varName: string, config: pulumi.Config) {
+    if (EnvUtils.isInvalidVariable(varName)) {
       return {};
     }
 

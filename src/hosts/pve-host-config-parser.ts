@@ -21,9 +21,9 @@ export class PveHostConfigParser extends HostConfigParser<PveHostConfigToml> {
     return parser.loadAllConfigs(pveHostsDir);
   }
 
-  static parsePveHostConfigFile<TExtraData = unknown>(
+  static parsePveHostConfigFile(
     filePath: string,
-    extraData?: TExtraData,
+    extraData?: object,
   ): PveHostConfigToml | pulumi.Output<PveHostConfigToml> {
     const parser = new PveHostConfigParser();
     return parser.parseConfigFile(filePath, extraData);

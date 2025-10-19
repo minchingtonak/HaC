@@ -21,9 +21,9 @@ export class LxcHostConfigParser extends HostConfigParser<LxcHostConfigToml> {
     return parser.loadAllConfigs(hostsDir);
   }
 
-  static parseHostConfigFile<TExtraData = unknown>(
+  static parseHostConfigFile(
     filePath: string,
-    extraData?: TExtraData,
+    extraData?: object,
   ): LxcHostConfigToml | pulumi.Output<LxcHostConfigToml> {
     const parser = new LxcHostConfigParser();
     return parser.parseConfigFile(filePath, extraData);
