@@ -292,6 +292,11 @@ See [`provisioners/scripts/`](provisioners/scripts/) for examples.
 
 ### Usability
 
+- paperless, immich -> life lxc
+- look into adding other services (PVE, PBS) and static widgets (resources, date, time, etc)
+- allow multi-application hosts in dashboard template
+  - requires field in stack object in lxc config?
+    - can have service_names array that lists out ["bazarr", "radarr", "sonarr" "qbittorrent", etc] and the template will iterate thru that if it exists
 - traefik proxy on pve host (requires provisioners)
   - make sure to configure firewall rules as well when that's done
 - PVE host provisioners

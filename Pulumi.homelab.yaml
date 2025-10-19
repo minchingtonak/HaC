@@ -100,7 +100,7 @@ config:
   lxc#admin#homepage:SECRET_GITEA_API_TOKEN:
     secure: v1:5KfmwGGoaOyBKL5s:Zuk9MOw1lx6DfNBCX2c70GNrPqT840ddFyNUDHRkzWWjOZGwatk72+m+NFqDDrE6K2PfT6Vtvj0=
   lxc#admin#homepage:SECRET_MEALIE_API_TOKEN:
-    secure: v1:WyBCl73Ql4h4LY6o:Pm455pLcRiWCa2BHPTQ7BixRm07pCA==
+    secure: v1:C7SNLy5ogHYXtrOT:85BPPgDrutFBJN5UGatLmPmHA4a8dIDnooH5o9SqM96ifq4RUmNutunijsMnznd9TDHRwUuwPsynr7vPRJvBHnA7fib9rsc0qx2qmIkHBiCWIcRvdsJbVX1dlf4JZ0zCiXhb9WxZHSEcpMj6Rh93qhGOUlh/nxNWmBxc5GvZFVB+ukax9FlZXVjWUYhjQMWALSaxs606iOv5gHmMaUp1rFDtkD5EAAVIVVIdY4OcG/N1glu2E223IOteAICQdjSz9WQoS0y4lA8eRvM6zhqxo5/SXlpIDm+7SUQGwpqmfEA4L6qtK20sAfRlkIKvRVkX4W5Uq0gr7BucNghlr6SxuISRwv6knUmX5FGv3qMZpuBav0QUcQ==
   lxc#admin#homepage:SECRET_NAVIDROME_USERNAME:
     secure: v1:7JfkaZCcDCng579A:U4LxFBBapLtmI15JPaWxjPJkrD/w
   lxc#admin#homepage:SECRET_NAVIDROME_TOKEN:
@@ -110,7 +110,7 @@ config:
   lxc#admin#homepage:SECRET_SLSKD_API_KEY:
     secure: v1:aPIiBduuGKc7EB0e:VsvhB3g5jPXDtbI3/Nr3TZlaM7or3Q==
   lxc#admin#homepage:SECRET_WALLOS_API_KEY:
-    secure: v1:uGgmnJs8Uz5I3buT:8hr+QdDb16M2wFqXX5a1bNWDzgK+1A==
+    secure: v1:aws4TYDWrB9UVxRT:dub+Xq4RrauOdGTkZkIBG4IIeiT2T2RiJC6YNTS+WOP8ZNl3WSDtbt9A04G0Zp1ric4PydT7EFs8Lncs6S/VtmQ+A092DeHfIfRUzf8Heag=
   # immich
   lxc#immich#immich:SECRET_DB_PASSWORD:
     secure: v1:ECc5/vJz6VnDlxsj:xgdWvCAj0NxBmWNBrAg4cP+l8j7DAk9cij/mO/JSNm+S8zVq
