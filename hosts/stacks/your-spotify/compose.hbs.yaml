@@ -6,7 +6,7 @@ services:
       # cannot use root user for this image
       - PUID=1000
       - PGID=1000
-      - TZ=America/Los_Angeles
+      - TZ={{{global:TIMEZONE}}}
       - APP_URL=https://{{{domainForApp "your-spotify"}}}
       - SPOTIFY_PUBLIC={{{SECRET_SPOTIFY_CLIENT_ID}}}
       - SPOTIFY_SECRET={{{SECRET_SPOTIFY_CLIENT_SECRET}}}

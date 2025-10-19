@@ -5,7 +5,7 @@ services:
     environment:
       - PUID=0
       - PGID=0
-      - TZ=America/Los_Angeles
+      - TZ={{{global:TIMEZONE}}}
       # - PASSWORD=password #optional
       # - HASHED_PASSWORD= #optional
       - SUDO_PASSWORD=password #optional

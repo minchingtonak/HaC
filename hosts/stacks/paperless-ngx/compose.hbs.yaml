@@ -43,7 +43,7 @@ services:
       PAPERLESS_URL: https://{{{domainForApp "paperless-ngx"}}}
       PAPERLESS_REDIS: redis://broker:6379
       PAPERLESS_DBHOST: db
-      PAPERLESS_TIME_ZONE: America/Los_Angeles
+      PAPERLESS_TIME_ZONE: "{{{global:TIMEZONE}}}"
       PAPERLESS_CONSUMPTION_DIR: /usr/src/paperless/consume
       PAPERLESS_CONSUMER_RECURSIVE: true
       PAPERLESS_DATA_DIR: /usr/src/paperless/data

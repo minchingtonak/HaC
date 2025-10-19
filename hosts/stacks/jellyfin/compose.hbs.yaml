@@ -5,7 +5,7 @@ services:
     environment:
       - PUID=0
       - PGID=0
-      - TZ=America/Los_Angeles
+      - TZ={{{global:TIMEZONE}}}
       - JELLYFIN_PublishedServerUrl=https://{{{domainForApp "jellyfin"}}}
     volumes:
       - /docker/jellyfin:/config

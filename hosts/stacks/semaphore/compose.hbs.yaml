@@ -6,7 +6,7 @@ services:
     # ports:
     #   - 3000:3000
     environment:
-      SEMAPHORE_SCHEDULE_TIMEZONE: "America/Los_Angeles"
+      SEMAPHORE_SCHEDULE_TIMEZONE: "{{{global:TIMEZONE}}}"
       SEMAPHORE_DB_DIALECT: bolt
       SEMAPHORE_ADMIN: "{{{SECRET_ADMIN_USERNAME}}}"
       SEMAPHORE_ADMIN_PASSWORD: "{{{SECRET_ADMIN_PASSWORD}}}"

@@ -6,7 +6,7 @@ services:
     environment:
       - PUID=0
       - PGID=0
-      - TZ=America/Los_Angeles
+      - TZ={{{global:TIMEZONE}}}
     volumes:
       - /docker/syncthing:/config # ensure syncthing folder is owned by lxc-root
       - /mnt:/mnt

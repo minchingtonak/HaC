@@ -10,7 +10,7 @@ services:
       - /docker/audiobookshelf/config:/config
       - /docker/audiobookshelf/metadata:/metadata
     environment:
-      - TZ=America/Los_Angeles
+      - TZ={{{global:TIMEZONE}}}
     restart: unless-stopped
     labels:
       - traefik.enable=true

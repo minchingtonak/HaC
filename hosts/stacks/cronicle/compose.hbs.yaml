@@ -5,7 +5,7 @@ services:
     hostname: cronicle
     user: "0:10000"
     environment:
-      - TZ=America/Los_Angeles
+      - TZ={{{global:TIMEZONE}}}
       - CRONICLE_base_app_url=https://{{{domainForApp "cronicle"}}}
       - CRONICLE_custom_live_log_socket_url=https://{{{domainForApp "cronicle"}}}
       - CRONICLE_universal_web_hook={{{SECRET_CRONICLE_UNIVERSAL_WEB_HOOK}}}

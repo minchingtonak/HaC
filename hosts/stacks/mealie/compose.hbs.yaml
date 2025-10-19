@@ -15,7 +15,7 @@ services:
       PUID: 0
       PGID: 0
       ALLOW_SIGNUP: "false"
-      TZ: America/Los_Angeles
+      TZ: "{{{global:TIMEZONE}}}"
       BASE_URL: '{{{domainForApp "mealie"}}}'
     labels:
       - traefik.enable=true

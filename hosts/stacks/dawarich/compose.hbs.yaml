@@ -65,7 +65,7 @@ services:
       DATABASE_NAME: dawarich_development
       MIN_MINUTES_SPENT_IN_CITY: 60
       APPLICATION_HOSTS: "{{{domainForApp 'dawarich'}}}"
-      TIME_ZONE: America/Los_Angeles
+      TIME_ZONE: "{{{global:TIMEZONE}}}"
       APPLICATION_PROTOCOL: http
       PROMETHEUS_EXPORTER_ENABLED: "false"
       PROMETHEUS_EXPORTER_HOST: 0.0.0.0

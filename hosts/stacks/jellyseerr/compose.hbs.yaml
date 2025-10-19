@@ -4,7 +4,7 @@ services:
     container_name: jellyseerr
     environment:
       - LOG_LEVEL=debug
-      - TZ=America/Los_Angeles
+      - TZ={{{global:TIMEZONE}}}
       - PORT=5055
     # ports:
     #   - 5055:5055

@@ -1,5 +1,6 @@
 encryptionsalt: v1:La9ewCKaH1M=:v1:gGxhP+gJa+ava6K3:01DP1sSJVBgXXyvdrsmPjb+wDq7NTw==
 config:
+  global:TIMEZONE: America/New_York
   # homelab pve
   pve#homelab:SECRET_CONTAINER_ROOT_PASSWORD:
     secure: v1:ZJ92yyCqUP+gpGJe:ddDt5e1UcePAFSUNGp7oJjlqK4to

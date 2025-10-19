@@ -62,7 +62,7 @@ services:
     environment:
       - LOG_LEVEL=info
       - HEALTH_SERVER_ADDRESS=127.0.0.1:9999
-      - TZ=America/Los_Angeles
+      - TZ={{{global:TIMEZONE}}}
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -80,7 +80,7 @@ services:
     environment:
       - PUID=0
       - PGID=0
-      - TZ=America/Los_Angeles
+      - TZ={{{global:TIMEZONE}}}
       - WEBUI_PORT=8081
       - TORRENTING_PORT=29730
     volumes:
@@ -100,7 +100,7 @@ services:
     environment:
       - PUID=0
       - PGID=0
-      - TZ=America/Los_Angeles
+      - TZ={{{global:TIMEZONE}}}
     volumes:
       - /docker/sabnzbd:/config
       - /mnt/media:/data
@@ -132,7 +132,7 @@ services:
     environment:
       - PUID=0
       - PGID=0
-      - TZ=America/Los_Angeles
+      - TZ={{{global:TIMEZONE}}}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /docker/prowlarr:/config
@@ -176,7 +176,7 @@ services:
     environment:
       - PUID=0
       - PGID=0
-      - TZ=America/Los_Angeles
+      - TZ={{{global:TIMEZONE}}}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /docker/sonarr:/config
@@ -226,7 +226,7 @@ services:
     environment:
       - PUID=0
       - PGID=0
-      - TZ=America/Los_Angeles
+      - TZ={{{global:TIMEZONE}}}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /docker/radarr:/config
@@ -276,7 +276,7 @@ services:
     environment:
       - PUID=0
       - PGID=0
-      - TZ=America/Los_Angeles
+      - TZ={{{global:TIMEZONE}}}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /docker/bazarr:/config
@@ -325,7 +325,7 @@ services:
       - /mnt/media/tv:/tv
     restart: unless-stopped
     environment:
-      - TZ=America/Los_Angeles
+      - TZ={{{global:TIMEZONE}}}
       - CRON_SCHEDULE=0 0 * * *
       - SCAN_PATHS=/movies,/tv # Remember to mount these as volumes. Must begin with /. Default value is '/scan_dir'
       # - EXCLUDE_PATHS=/movies/temp,/tv/downloads # Exclude certain sub-directories from the scan
@@ -341,7 +341,7 @@ services:
     volumes:
       - /docker/profilarr:/config
     environment:
-      - TZ=America/Los_Angeles
+      - TZ={{{global:TIMEZONE}}}
     restart: unless-stopped
     depends_on:
       sonarr:
@@ -408,7 +408,7 @@ services:
       - PUID=0
       - PGID=0
       - UMASK=022
-      - TZ=America/Los_Angeles
+      - TZ={{{global:TIMEZONE}}}
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:11011/health"]
       interval: 30s
@@ -453,7 +453,7 @@ services:
     volumes:
       - /docker/huntarr:/config
     environment:
-      - TZ=America/Los_Angeles
+      - TZ={{{global:TIMEZONE}}}
     labels:
       - deunhealth.restart.on.unhealthy=true
       - traefik.enable=true

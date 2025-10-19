@@ -8,7 +8,7 @@ services:
     # user: "0:996"
     read_only: true
     environment:
-      TZ: America/Los_Angeles
+      TZ: "{{{global:TIMEZONE}}}"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./config:/config

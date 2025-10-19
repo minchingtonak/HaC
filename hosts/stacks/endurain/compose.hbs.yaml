@@ -3,7 +3,7 @@ services:
     container_name: endurain
     image: ghcr.io/joaovitoriasilva/endurain:v0.15.1@sha256:c0d7c19ccf729f68ba90327022100df4b2d01b1747fb78a73a45a764258c84d1
     environment:
-      - TZ=America/Los_Angeles
+      - TZ={{{global:TIMEZONE}}}
       - DB_TYPE=postgres
       - DB_HOST=postgres
       - DB_PORT=5432
