@@ -1,0 +1,28 @@
+---
+- homelab:
+    - pve webu ui:
+        - icon: proxmox.png
+          href: "{{{@pve.endpoint}}}"
+    - edsac pbs:
+        - abbr: PBS
+          href: "{{{SECRET_EDSAC_PBS_URL}}}"
+    - cloud pbs:
+        - abbr: PBS
+          href: "{{{SECRET_CLOUD_PBS_URL}}}"
+    - home labs slack:
+        - icon: slack.png
+          href: "{{{SECRET_SLACK_WEBUI_URL}}}"
+    - slack api:
+        - icon: slack.png
+          href: https://api.slack.com/apps/
+    - nextcloud:
+        - icon: nextcloud.png
+          href: "{{{SECRET_NEXTCLOUD_URL}}}"
+
+- etc:
+    - HaC Github:
+        - abbr: HaC
+          href: https://github.com/minchingtonak/HaC
+    - r/selfhosted:
+        - icon: reddit.png
+          href: https://reddit.com/r/selfhosted

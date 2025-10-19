@@ -2,3 +2,6 @@ build
 coverage
 
 sdks/
+
+# stack-specific ignores, for when prettier gets confused
+hosts/stacks/homepage/**/services.hbs.yaml

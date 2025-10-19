@@ -68,6 +68,48 @@ config:
     secure: v1:TssVt21kCosYCKbY:vFlhMwP39dCP7Uf8R87YdMM88+lXSDYL1nyGb8KTgpwY/N9Pu6lDPPfuajwhCycV1wf9PxxBscwbkPc3nCHA8+Vgnhc9fHSw+Q1a8RgApZTCAZksNuGLKMZjDaS0ZZMY/A==
   lxc#admin#apprise:SECRET_SERVARR_SLACK_WEBHOOK:
     secure: v1:WsS7ZU2EH2dvJwmu:nrRyndrzO45Te8/ARtzdo3bDzdc3jRDoZNWUNyO7qWcV/AFTRVhO+bNRMoc3VWyTz2e8abYC3aUYy474nnzTpUgs62S/SMI0cBLagEDf/YExO/QvpZ/KXTC6cca4ea8jsw==
+  lxc#admin#homepage:SECRET_JELLYFIN_API_KEY:
+    secure: v1:uqGGAqLhLWUdx3+R:QT5rQMMIBUhkr4A1EUrCi2xhdmUMFvX9Srbb7aHFAnhzI8U0PPl/U779stnmAuS+
+  lxc#admin#homepage:SECRET_IMMICH_API_KEY:
+    secure: v1:lp4auliCGNf6VjUE:CL2JM6S7jzmILxnO3211UvB191Em5Dm7s+MpkQLHoQyUcHc/IdBe3BEy5WnY8ihnnghRc75i9iVY5KM=
+  lxc#admin#homepage:SECRET_JELLYSEERR_API_KEY:
+    secure: v1:Vaa55qDCwBiM0EkM:5ED/Xznd7JKBBtsNc7sSayfI2LckX/unfHPeg5DxCjUu9UgchgWZrRGxTaw/GNhd2iozU+wSw98Cq/pYoHLOvCpboYmHvhPvRhtd5eTRuYrp15ko
+  lxc#admin#homepage:SECRET_TAILSCALE_API_KEY:
+    secure: v1:qhpND82hNZ/BJZMk:VuNJ9lGokAE8LdALXawjXaeoVH5Uj/YhEcBf1Z0ETg/aH0yrXx9D4AcPKlp40mf9QW+p6py+ZA0zgdqhyXRJxuo0leASVpITs/Qe8w==
+  lxc#admin#homepage:SECRET_TAILSCALE_DEVICE_ID:
+    secure: v1:dqN6stIt3ZVU3fem:HFvnzhAnwJvN/7CJWsJ6prvC2TptY6NCsoO+ebhQSu1T
+  lxc#admin#homepage:SECRET_EDSAC_PBS_URL:
+    secure: v1:MLE5HIZp4zT6rbW6:Kh/aCg3qjT44XNbXSXdjOd2+9LetPa3StK4PETWYuUQ8ZS3fTyOVH+TJ
+  lxc#admin#homepage:SECRET_CLOUD_PBS_URL:
+    secure: v1:VVq9lruV1qEC+o/Y:kOEYDJVxy+3KD6xAgaXPZlHYZLPP3mcRo9lxQzg6mscCPhk+wUz785HPqtO3we7L/QU4eylQtY0=
+  lxc#admin#homepage:SECRET_SLACK_WEBUI_URL:
+    secure: v1:mRoTt3uNsivE9mYD:LXztsdtoGTI47vEI2VdknDRSm1ENN8zzTdb8HhZxWZV6vB5/HG1KYSP73AVyqQPc1ATPuVVR7H8=
+  lxc#admin#homepage:SECRET_PAPERLESS_USERNAME:
+    secure: v1:eFf1FQuC62QFebjs:jqNEVbD8gBQGBo5TefZ2Y9YZKgD6
+  lxc#admin#homepage:SECRET_PAPERLESS_PASSWORD:
+    secure: v1:/7JpioZbJm8soca3:jxEbpFz88YOZAu98f1/88FhjzBywRXSrtezVUwuji+/0CMbd
+  lxc#admin#homepage:SECRET_NEXTCLOUD_URL:
+    secure: v1:odTUK2LH3vqyGTTj:OWfJ+DqxTpOkEAjEXTomWRvF2C4UbzCIUONLxnqLr4xTzY0kNwODQ/QxfNBq+Uc=
+  lxc#admin#homepage:SECRET_AUDIOBOOKSHELF_API_KEY:
+    secure: v1:t6skwFXwIwjucJxE:/FBxT5jHiWc6AG6so9Xlat8khjLfpg==
+  lxc#admin#homepage:SECRET_BACKREST_USERNAME:
+    secure: v1:aNlLdTaodZCzawWw:jebOPu+KpfwQN/N2bzdCM3M/i3n9
+  lxc#admin#homepage:SECRET_BACKREST_PASSWORD:
+    secure: v1:DND+JfdnX++c3mQ1:GE068LcoUaSk+I706+OVFqQ+hhBxYnlpC2vLWUbQb7Niz379
+  lxc#admin#homepage:SECRET_GITEA_API_TOKEN:
+    secure: v1:kJ+ucinEjXSLzdJ9:ID7OViPW3J1/LWIc9myo6rptd/cHZQ==
+  lxc#admin#homepage:SECRET_MEALIE_API_TOKEN:
+    secure: v1:WyBCl73Ql4h4LY6o:Pm455pLcRiWCa2BHPTQ7BixRm07pCA==
+  lxc#admin#homepage:SECRET_NAVIDROME_USERNAME:
+    secure: v1:7JfkaZCcDCng579A:U4LxFBBapLtmI15JPaWxjPJkrD/w
+  lxc#admin#homepage:SECRET_NAVIDROME_TOKEN:
+    secure: v1:c4ix4EQzclBGBBX7:3BWPGaFxSLeqTYPIsvn8MITiiWsLBA==
+  lxc#admin#homepage:SECRET_NAVIDROME_SALT:
+    secure: v1:+w75y1XMhOP6myX/:u95L6Z3axa9/LG2gOfoVefuvHGTDug==
+  lxc#admin#homepage:SECRET_SLSKD_API_KEY:
+    secure: v1:aPIiBduuGKc7EB0e:VsvhB3g5jPXDtbI3/Nr3TZlaM7or3Q==
+  lxc#admin#homepage:SECRET_WALLOS_API_KEY:
+    secure: v1:uGgmnJs8Uz5I3buT:8hr+QdDb16M2wFqXX5a1bNWDzgK+1A==
   # immich
   lxc#immich#immich:SECRET_DB_PASSWORD:
     secure: v1:ECc5/vJz6VnDlxsj:xgdWvCAj0NxBmWNBrAg4cP+l8j7DAk9cij/mO/JSNm+S8zVq
