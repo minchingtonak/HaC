@@ -1,7 +1,6 @@
-# verified
 hostname = "tools"
-
 description = "swiss army knife of utility tools"
+start_on_boot = false
 
 [stacks]
 traefik = {}

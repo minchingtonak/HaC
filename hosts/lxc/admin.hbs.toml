@@ -1,6 +1,4 @@
-# verified
 hostname = "admin"
-
 description = "homelab administration-related apps"
 
 [stacks]

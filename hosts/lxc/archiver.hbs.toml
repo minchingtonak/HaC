@@ -1,7 +1,6 @@
-# verified
 hostname = "archiver"
-
 description = "worker for archive team warrior"
+start_on_boot = false
 
 [stacks]
 traefik = {}

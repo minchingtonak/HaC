@@ -1,7 +1,6 @@
-# verified
 hostname = "backup"
-
 description = "various backup-related services"
+start_on_boot = false
 
 [stacks]
 traefik = {}

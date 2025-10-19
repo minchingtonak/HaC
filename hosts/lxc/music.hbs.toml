@@ -1,6 +1,6 @@
 hostname = "music"
-
 description = "assorted audio management apps"
+start_on_boot = false
 
 [stacks]
 traefik = {}

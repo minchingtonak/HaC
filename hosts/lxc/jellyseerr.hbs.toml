@@ -1,7 +1,6 @@
-# verified
 hostname = "jellyseerr"
-
 description = "easy to use media recommendation and request app"
+start_on_boot = false
 
 [stacks]
 traefik = {}

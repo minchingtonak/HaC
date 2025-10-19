@@ -1,7 +1,6 @@
-# verified
 hostname = "jellyfin"
-
 description = "jellyfin media player server"
+start_on_boot = false
 
 [stacks]
 traefik = {}
@@ -16,7 +15,7 @@ dedicated = 4096
 swap = 2048
 
 [disk]
-size = 16
+size = 8
 
 [[firewall_rules]]
 enabled = true

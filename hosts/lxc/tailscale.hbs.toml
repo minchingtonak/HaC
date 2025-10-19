@@ -1,7 +1,6 @@
-# verified
 hostname = "tailscale"
-
 description = "tailscale subnet router to enable easy remote access"
+start_on_boot = false
 
 [stacks]
 traefik = {}
