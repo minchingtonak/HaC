@@ -35,7 +35,7 @@ proto = "udp"
 comment = "jellyfin auto discovery"
 
 [[device_passthroughs]]
-path = "/dev/dri/card1"
+path = "/dev/dri/card0"
 uid = 0
 gid = 44
 mode = "0660"
