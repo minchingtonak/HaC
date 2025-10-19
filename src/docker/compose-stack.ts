@@ -1,6 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as command from "@pulumi/command";
 import * as path from "node:path";
+import * as crypto from "node:crypto";
 import { HandlebarsTemplateDirectory } from "../templates/handlebars-template-directory";
 import { ComposeStackUtils } from "./compose-file-processor";
 import { TemplateProcessor } from "../templates/template-processor";
@@ -48,7 +49,7 @@ export class ComposeStack extends pulumi.ComponentResource {
     [templatePath: string]: command.remote.CopyToRemote;
   } = {};
 
-  deployStack: command.remote.Command;
+  deployStack: pulumi.Output<command.remote.Command>;
 
   constructor(
     name: string,
@@ -139,55 +140,68 @@ export class ComposeStack extends pulumi.ComponentResource {
       { parent: this, dependsOn: this.copyStackToRemote },
     );
 
-    // commands that run an image prune use locking to prevent multiple prunes running at once and to prevent a prune deleting an image that is in the processing of starting up
-    // wait for the lock: flock -w <timeout-seconds> <lockfile-path> -c "true"
-    // open the lock: exec <fd-N>>"<lockfile-path>"
-    // acquire the lock: flock -x <fd-N>
-    // release the lock: exec <fd-N>>&- (also released when the shell terminates)
-    const waitForAndAcquireLock = [
-      `flock -w 300 "${ComposeStack.PRUNE_LOCKFILE_PATH}" -c "true"`,
-      `exec 226>"${ComposeStack.PRUNE_LOCKFILE_PATH}"`,
-      `flock -x 226`,
-    ];
+    this.deployStack = pulumi
+      .all(
+        Object.values(this.handlebarsTemplateDirectory.templateFiles).map(
+          (tf) =>
+            tf.processedTemplate.content.apply(
+              (content) =>
+                // use idSafeName:contentMd5 as the trigger value for better readability in cli diffs
+                `${tf.processedTemplate.idSafeName}:${crypto.createHash("md5").update(content).digest("hex")}`,
+            ),
+        ),
+      )
+      .apply((templateFileContents) => {
+        // commands that run an image prune use locking to prevent multiple prunes running at once and to prevent a prune deleting an image that is in the processing of starting up
+        // wait for the lock: flock -w <timeout-seconds> <lockfile-path> -c "true"
+        // open the lock: exec <fd-N>>"<lockfile-path>"
+        // acquire the lock: flock -x <fd-N>
+        // release the lock: exec <fd-N>>&- (also released when the shell terminates)
+        const waitForAndAcquireLock = [
+          `flock -w 300 "${ComposeStack.PRUNE_LOCKFILE_PATH}" -c "true"`,
+          `exec 226>"${ComposeStack.PRUNE_LOCKFILE_PATH}"`,
+          `flock -x 226`,
+        ];
 
-    this.deployStack = new command.remote.Command(
-      `${name}-deploy-stack`,
-      {
-        create: [
-          `cd ${remoteStackDirectory}`,
-          "docker compose pull",
-          ...waitForAndAcquireLock,
-          "docker compose up -d --force-recreate",
-        ].join(" && "),
-        update: [
-          `cd ${remoteStackDirectory}`,
-          "docker compose pull",
-          ...waitForAndAcquireLock,
-          "docker compose down --remove-orphans",
-          "docker compose up -d --force-recreate",
-          "docker image prune -a -f",
-        ].join(" && "),
-        delete: [
-          `cd ${remoteStackDirectory}`,
-          ...waitForAndAcquireLock,
-          "docker compose down --remove-orphans",
-          "docker image prune -a -f",
-        ].join(" && "),
-        addPreviousOutputInEnv: false,
-        triggers: [this.stackDirectoryAsset],
-        connection: args.connection,
-      },
-      {
-        parent: this,
-        dependsOn: this.deleteStackFolder,
-        hooks: {
-          afterCreate: [ComposeStackUtils.checkForMissingVariables],
-          afterUpdate: [ComposeStackUtils.checkForMissingVariables],
-        },
-        deleteBeforeReplace: true,
-        additionalSecretOutputs: ["stdout", "stderr"],
-      },
-    );
+        return new command.remote.Command(
+          `${name}-deploy-stack`,
+          {
+            create: [
+              `cd ${remoteStackDirectory}`,
+              "docker compose pull",
+              ...waitForAndAcquireLock,
+              "docker compose up -d --force-recreate",
+            ].join(" && "),
+            update: [
+              `cd ${remoteStackDirectory}`,
+              "docker compose pull",
+              ...waitForAndAcquireLock,
+              "docker compose down --remove-orphans",
+              "docker compose up -d --force-recreate",
+              "docker image prune -a -f",
+            ].join(" && "),
+            delete: [
+              `cd ${remoteStackDirectory}`,
+              ...waitForAndAcquireLock,
+              "docker compose down --remove-orphans",
+              "docker image prune -a -f",
+            ].join(" && "),
+            addPreviousOutputInEnv: false,
+            triggers: [this.stackDirectoryAsset, templateFileContents],
+            connection: args.connection,
+          },
+          {
+            parent: this,
+            dependsOn: this.deleteStackFolder,
+            hooks: {
+              afterCreate: [ComposeStackUtils.checkForMissingVariables],
+              afterUpdate: [ComposeStackUtils.checkForMissingVariables],
+            },
+            deleteBeforeReplace: true,
+            additionalSecretOutputs: ["stdout", "stderr"],
+          },
+        );
+      });
 
     this.registerOutputs({
       deployCommand: this.deployStack.create,

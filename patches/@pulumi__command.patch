@@ -1,0 +1,26 @@
+diff --git a/local/command.js b/local/command.js
+index b50c382152254c4b3ddfa157e4bffd57cb266b9a..3958a38c84dd291fca7ba6a7183fe10b1e3a55b9 100644
+--- a/local/command.js
++++ b/local/command.js
+@@ -152,8 +152,6 @@ class Command extends pulumi.CustomResource {
+             resourceInputs["update"] = undefined /*out*/;
+         }
+         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
+-        const replaceOnChanges = { replaceOnChanges: ["triggers[*]"] };
+-        opts = pulumi.mergeOptions(opts, replaceOnChanges);
+         super(Command.__pulumiType, name, resourceInputs, opts);
+     }
+ }
+diff --git a/remote/command.js b/remote/command.js
+index fd333881fc05faac3d0205907cce9ddff14b43a2..a10e79efc99bc5ac1e674b2ce63c60111c14a347 100644
+--- a/remote/command.js
++++ b/remote/command.js
+@@ -129,8 +129,6 @@ class Command extends pulumi.CustomResource {
+         opts = pulumi.mergeOptions(utilities.resourceOptsDefaults(), opts);
+         const secretOpts = { additionalSecretOutputs: ["connection"] };
+         opts = pulumi.mergeOptions(opts, secretOpts);
+-        const replaceOnChanges = { replaceOnChanges: ["triggers[*]"] };
+-        opts = pulumi.mergeOptions(opts, replaceOnChanges);
+         super(Command.__pulumiType, name, resourceInputs, opts);
+     }
+ }
