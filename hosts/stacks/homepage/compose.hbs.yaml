@@ -18,6 +18,7 @@ services:
       - traefik.http.routers.homepage.tls.certresolver=porkbun
       - traefik.http.routers.homepage.service=homepage
       - traefik.http.services.homepage.loadbalancer.server.port=3000
+    restart: unless-stopped
     networks:
       - traefik
 

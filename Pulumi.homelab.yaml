@@ -97,7 +97,7 @@ config:
   lxc#admin#homepage:SECRET_BACKREST_PASSWORD:
     secure: v1:DND+JfdnX++c3mQ1:GE068LcoUaSk+I706+OVFqQ+hhBxYnlpC2vLWUbQb7Niz379
   lxc#admin#homepage:SECRET_GITEA_API_TOKEN:
-    secure: v1:kJ+ucinEjXSLzdJ9:ID7OViPW3J1/LWIc9myo6rptd/cHZQ==
+    secure: v1:5KfmwGGoaOyBKL5s:Zuk9MOw1lx6DfNBCX2c70GNrPqT840ddFyNUDHRkzWWjOZGwatk72+m+NFqDDrE6K2PfT6Vtvj0=
   lxc#admin#homepage:SECRET_MEALIE_API_TOKEN:
     secure: v1:WyBCl73Ql4h4LY6o:Pm455pLcRiWCa2BHPTQ7BixRm07pCA==
   lxc#admin#homepage:SECRET_NAVIDROME_USERNAME:

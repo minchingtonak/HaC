@@ -8,7 +8,7 @@ services:
     #   - 8090:80
     labels:
       - traefik.enable=true
-      - traefik.http.routers.ittools.rule=Host(`{{{domainForApp "ittools"}}}`)
+      - traefik.http.routers.ittools.rule=Host(`{{{domainForApp "it-tools"}}}`)
       - traefik.http.routers.ittools.entrypoints=https
       - traefik.http.routers.ittools.tls=true
       - traefik.http.routers.ittools.tls.certresolver=porkbun
