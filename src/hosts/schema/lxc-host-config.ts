@@ -39,7 +39,7 @@ export const LxcHostConfigSchema = z
     start_on_boot: z.boolean().default(LXC_DEFAULTS.START_ON_BOOT),
     protection: z.boolean().default(LXC_DEFAULTS.PROTECTION),
     tags: z.array(z.string()).optional(),
-    started: z.boolean().default(LXC_DEFAULTS.STARTED),
+    started: z.boolean().optional(),
     startup: StartupConfigSchema.optional(),
     hook_script_file_id: z.string().optional(),
     pool_id: z.string().optional(),
