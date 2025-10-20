@@ -5,7 +5,18 @@ start_on_boot = false
 [stacks]
 traefik = {}
 dozzle = {}
-servarr = {}
+[stacks.servarr]
+subdomains = [
+    "qbittorrent",
+    "sabnzbd",
+    "radarr",
+    "sonarr",
+    "prowlarr",
+    "bazarr",
+    "profilarr",
+    "cleanuparr",
+    "huntarr",
+]
 
 [cpu]
 cores = 2

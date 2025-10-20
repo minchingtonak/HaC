@@ -1,101 +1,114 @@
 ---
+# {{#partial "widgets"}}
+# {{#ifeq serviceName "audiobookshelf"}}
+widget:
+  type: audiobookshelf
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+  key: "{{{SECRET_AUDIOBOOKSHELF_API_KEY}}}"
+# {{/ifeq}}
+# {{#ifeq serviceName "backrest"}}
+widget:
+  type: backrest
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+  username: "{{{SECRET_BACKREST_USERNAME}}}" # optional if auth is enabled in Backrest
+  password: "{{{SECRET_BACKREST_PASSWORD}}}" # optional if auth is enabled in Backrest
+# {{/ifeq}}
+# {{#ifeq serviceName "gitea"}}
+widget:
+  type: gitea
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+  key: "{{{SECRET_GITEA_API_TOKEN}}}"
+# {{/ifeq}}
+# {{#ifeq serviceName "immich"}}
+widget:
+  type: immich
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+  key: "{{{SECRET_IMMICH_API_KEY}}}"
+  version: 2
+# {{/ifeq}}
+# {{#ifeq serviceName "jellyfin"}}
+widget:
+  type: jellyfin
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+  key: "{{{SECRET_JELLYFIN_API_KEY}}}"
+  enableBlocks: true
+  enableNowPlaying: true
+  enableUser: true
+  showEpisodeNumber: true
+  expandOneStreamToTwoRows: false
+# {{/ifeq}}
+# {{#ifeq serviceName "jellyseerr"}}
+widget:
+  type: jellyseerr
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+  key: "{{{SECRET_JELLYSEERR_API_KEY}}}"
+# {{/ifeq}}
+# {{#ifeq serviceName "mealie"}}
+widget:
+  type: mealie
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+  key: "{{{SECRET_MEALIE_API_TOKEN}}}"
+  version: 2 # only required if version > 1, defaults to 1
+# {{/ifeq}}
+# {{#ifeq serviceName "navidrome"}}
+widget:
+  type: navidrome
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+  user: "{{{SECRET_NAVIDROME_USERNAME}}}"
+  token: "{{{SECRET_NAVIDROME_TOKEN}}}" #md5(password + salt)
+  salt: "{{{SECRET_NAVIDROME_SALT}}}"
+# {{/ifeq}}
+# {{#ifeq serviceName "paperless-ngx"}}
+widget:
+  type: paperlessngx
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+  username: "{{{SECRET_PAPERLESS_USERNAME}}}"
+  password: "{{{SECRET_PAPERLESS_PASSWORD}}}"
+# {{/ifeq}}
+# {{#ifeq serviceName "slskd"}}
+widget:
+  type: slskd
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+  key: "{{{SECRET_SLSKD_API_KEY}}}"
+# {{/ifeq}}
+# {{#ifeq serviceName "tailscale"}}
+widget:
+  type: tailscale
+  deviceid: "{{{SECRET_TAILSCALE_DEVICE_ID}}}"
+  key: "{{{SECRET_TAILSCALE_API_KEY}}}"
+# {{/ifeq}}
+# {{#ifeq serviceName "traefik"}}
+widget:
+  type: traefik
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+# {{/ifeq}}
+# {{#ifeq serviceName "wallos"}}
+widget:
+  type: wallos
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+  key: "{{{SECRET_WALLOS_API_KEY}}}"
+# {{/ifeq}}
+# {{/partial}}
+
 # {{#each @lxc_hosts}}
 - "{{{this.hostname}}}":
     # {{#if this.stacks}}
     # {{#each this.stacks}}
+    # {{#if this.subdomains}}
+    # {{#each this.subdomains}}
+    - "{{{this}}}":
+        href: https://{{{domainForApp this hostname=../../this.hostname}}}
+        siteMonitor: https://{{{domainForApp this hostname=../../this.hostname}}}
+        icon: "{{{this}}}.png"
+        {{> widgets serviceName=this hostname=../../this.hostname}}
+    # {{/each}}
+    # {{else}}
     - "{{{@key}}}":
         href: https://{{{domainForApp @key hostname=../this.hostname}}}
         siteMonitor: https://{{{domainForApp @key hostname=../this.hostname}}}
         icon: "{{{@key}}}.png"
-        # {{#ifeq @key "audiobookshelf"}}
-        widget:
-          type: audiobookshelf
-          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
-          key: "{{{SECRET_AUDIOBOOKSHELF_API_KEY}}}"
-        # {{/ifeq}}
-        # {{#ifeq @key "backrest"}}
-        widget:
-          type: backrest
-          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
-          username: "{{{SECRET_BACKREST_USERNAME}}}" # optional if auth is enabled in Backrest
-          password: "{{{SECRET_BACKREST_PASSWORD}}}" # optional if auth is enabled in Backrest
-        # {{/ifeq}}
-        # {{#ifeq @key "gitea"}}
-        widget:
-          type: gitea
-          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
-          key: "{{{SECRET_GITEA_API_TOKEN}}}"
-        # {{/ifeq}}
-        # {{#ifeq @key "immich"}}
-        widget:
-          type: immich
-          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
-          key: "{{{SECRET_IMMICH_API_KEY}}}"
-          version: 2
-        # {{/ifeq}}
-        # {{#ifeq @key "jellyfin"}}
-        widget:
-          type: jellyfin
-          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
-          key: "{{{SECRET_JELLYFIN_API_KEY}}}"
-          enableBlocks: true
-          enableNowPlaying: true
-          enableUser: true
-          showEpisodeNumber: true
-          expandOneStreamToTwoRows: false
-        # {{/ifeq}}
-        # {{#ifeq @key "jellyseerr"}}
-        widget:
-          type: jellyseerr
-          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
-          key: "{{{SECRET_JELLYSEERR_API_KEY}}}"
-        # {{/ifeq}}
-        # {{#ifeq @key "mealie"}}
-        widget:
-          type: mealie
-          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
-          key: "{{{SECRET_MEALIE_API_TOKEN}}}"
-          version: 2 # only required if version > 1, defaults to 1
-        # {{/ifeq}}
-        # {{#ifeq @key "navidrome"}}
-        widget:
-          type: navidrome
-          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
-          user: "{{{SECRET_NAVIDROME_USERNAME}}}"
-          token: "{{{SECRET_NAVIDROME_TOKEN}}}" #md5(password + salt)
-          salt: "{{{SECRET_NAVIDROME_SALT}}}"
-        # {{/ifeq}}
-        # {{#ifeq @key "paperless-ngx"}}
-        widget:
-          type: paperlessngx
-          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
-          username: "{{{SECRET_PAPERLESS_USERNAME}}}"
-          password: "{{{SECRET_PAPERLESS_PASSWORD}}}"
-        # {{/ifeq}}
-        # {{#ifeq @key "slskd"}}
-        widget:
-          type: slskd
-          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
-          key: "{{{SECRET_SLSKD_API_KEY}}}"
-        # {{/ifeq}}
-        # {{#ifeq @key "tailscale"}}
-        widget:
-          type: tailscale
-          deviceid: "{{{SECRET_TAILSCALE_DEVICE_ID}}}"
-          key: "{{{SECRET_TAILSCALE_API_KEY}}}"
-        # {{/ifeq}}
-        # {{#ifeq @key "traefik"}}
-        widget:
-          type: traefik
-          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
-        # {{/ifeq}}
-        # {{#ifeq @key "wallos"}}
-        widget:
-          type: wallos
-          url: https://{{{domainForApp @key hostname=../../this.hostname}}}
-          key: "{{{SECRET_WALLOS_API_KEY}}}"
-        # {{/ifeq}}
+        {{> widgets serviceName=@key hostname=../this.hostname}}
+    # {{/if}}
     # {{/each}}
     # {{/if}}
 # {{/each}}
-

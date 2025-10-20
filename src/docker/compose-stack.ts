@@ -255,10 +255,6 @@ TemplateProcessor.registerTemplateHelper(
       context.pve.node = node;
     }
 
-    const subdomainPrefix =
-      context.lxc.stacks?.[context.stack_name].subdomain_prefixes?.[appName] ??
-      appName;
-
-    return `${subdomainPrefix}.${HomelabLxcHost.CONTAINER_BASE_DOMAIN(context)}`;
+    return `${appName}.${HomelabLxcHost.CONTAINER_BASE_DOMAIN(context)}`;
   },
 );

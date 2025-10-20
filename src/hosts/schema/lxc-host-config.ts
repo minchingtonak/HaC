@@ -22,7 +22,7 @@ import {
 } from "./pve";
 
 const StackSchema = z
-  .object({ subdomain_prefixes: z.record(z.string(), z.string()).optional() })
+  .object({ subdomains: z.array(z.string()).optional() })
   .strict()
   .readonly();
 

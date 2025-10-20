@@ -383,10 +383,16 @@ TemplateProcessor.registerTemplateHelper(
       throw new Error("Expected resolvedVariables to be set");
     }
 
-    if (a === b) {
-      return options.fn(options.data.resolvedVariables);
+    if (Object.keys(options.data.resolvedVariables).length === 0) {
+      pulumi.log.warn("resolvedVariables is empty");
     }
-    return options.inverse(options.data.resolvedVariables);
+
+    if (a === b) {
+      return options.fn(options.data.resolvedVariables, { data: options.data });
+    }
+    return options.inverse(options.data.resolvedVariables, {
+      data: options.data,
+    });
   },
 );
 
@@ -397,10 +403,33 @@ TemplateProcessor.registerTemplateHelper(
       throw new Error("Expected resolvedVariables to be set");
     }
 
-    if (a !== b) {
-      return options.fn(options.data.resolvedVariables);
+    if (Object.keys(options.data.resolvedVariables).length === 0) {
+      pulumi.log.warn("resolvedVariables is empty");
     }
-    return options.inverse(options.data.resolvedVariables);
+
+    if (a !== b) {
+      return options.fn(options.data.resolvedVariables, { data: options.data });
+    }
+    return options.inverse(options.data.resolvedVariables, {
+      data: options.data,
+    });
+  },
+);
+
+TemplateProcessor.registerTemplateHelper(
+  "partial",
+  (name: string, options: Handlebars.HelperOptions) => {
+    if (typeof name !== "string") {
+      throw new Error(
+        "regpartial helper requires a string name as the first argument",
+      );
+    }
+    if (options.fn) {
+      Handlebars.registerPartial(name, options.fn);
+    }
+
+    // return empty string since this helper is used for registration, not output
+    return "";
   },
 );
 

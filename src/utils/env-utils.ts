@@ -29,8 +29,7 @@ export class EnvUtils {
       EnvUtils.IGNORED_VARIABLES.has(varName) ||
       varName.startsWith("@") ||
       varName.startsWith("this.") ||
-      varName.startsWith("../") ||
-      ["if", "each", "eq"].includes(varName)
+      varName.startsWith("../")
     );
   }
 
@@ -60,6 +59,11 @@ export class EnvUtils {
       const [namespace, configVarName] = varName.split(":");
       resolvedConfig = new pulumi.Config(namespace);
       resolvedConfigKey = configVarName;
+    }
+
+    // only ALL_CAPS variable names are allowed
+    if (resolvedConfigKey.toLocaleUpperCase() !== resolvedConfigKey) {
+      return {};
     }
 
     const isSecret = resolvedConfigKey
