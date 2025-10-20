@@ -13,7 +13,7 @@ services:
       - /mnt/media/music:/app/downloads
       - /docker/slskd/incomplete:/app/incomplete
       - /docker/slskd/scripts:/app/scripts
-      - /docker/slskd/slskd.yml:/app/data/slskd.yml
+      - ./config/slskd.yml:/app/slskd.yml
     restart: always
     labels:
       - traefik.enable=true

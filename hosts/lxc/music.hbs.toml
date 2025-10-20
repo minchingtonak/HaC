@@ -1,6 +1,6 @@
 hostname = "music"
 description = "assorted audio management apps"
-start_on_boot = false
+start_on_boot = true
 
 [stacks]
 traefik = {}
@@ -19,6 +19,14 @@ swap = 4096
 
 [disk]
 size = 16
+
+[[firewall_rules]]
+enabled = true
+type = "in"
+action = "ACCEPT"
+dport = "50300"
+proto = "tcp"
+comment = "slskd-listen"
 
 [[mount_points]]
 volume = "{{{@pve.lxc.app_data_dir}}}/music"

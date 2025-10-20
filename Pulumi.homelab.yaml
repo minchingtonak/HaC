@@ -92,7 +92,7 @@ config:
   lxc#admin#homepage:SECRET_NEXTCLOUD_URL:
     secure: v1:odTUK2LH3vqyGTTj:OWfJ+DqxTpOkEAjEXTomWRvF2C4UbzCIUONLxnqLr4xTzY0kNwODQ/QxfNBq+Uc=
   lxc#admin#homepage:SECRET_AUDIOBOOKSHELF_API_KEY:
-    secure: v1:t6skwFXwIwjucJxE:/FBxT5jHiWc6AG6so9Xlat8khjLfpg==
+    secure: v1:5GDkUhk7D4b8u09W:N7gx/fSwTdajKpw1T/u25xGvr0khdCpNrVCg+HDBVcesHSCM/KmZnA+UfVog36EjD4Oc82VSD9oJ6OiemFHiwvIshbTxw99gO1t9z7rgg8onYzeIg1HsKqHEBeZOLp7eU20JrxIp/IfrFJiGOdhMKo+c04WcuTEGT1qY1X2wA+bWOhBHzQ6ehPoXBILjXVSS4m1m3/yE+/JeLB5XjGdXQKTz4zhCPYhS9UjC33gTyYCZG0CZmk8Y1xgM5WE3XJfnQyiiAm2XQUHNfqXIrHbtjmO5Z0NW353XZQPjxBRm0QVCjxtuH18MO1OEDKAJimo=
   lxc#admin#homepage:SECRET_BACKREST_USERNAME:
     secure: v1:aNlLdTaodZCzawWw:jebOPu+KpfwQN/N2bzdCM3M/i3n9
   lxc#admin#homepage:SECRET_BACKREST_PASSWORD:
@@ -104,11 +104,11 @@ config:
   lxc#admin#homepage:SECRET_NAVIDROME_USERNAME:
     secure: v1:7JfkaZCcDCng579A:U4LxFBBapLtmI15JPaWxjPJkrD/w
   lxc#admin#homepage:SECRET_NAVIDROME_TOKEN:
-    secure: v1:c4ix4EQzclBGBBX7:3BWPGaFxSLeqTYPIsvn8MITiiWsLBA==
+    secure: v1:d3PpejzMl7YEwbr5:oarJnPqS6HoAJNkHq/3SYP51ar28bQyu/93k+6KtcRgw3vW4ww+CToFR4LEswaBN
   lxc#admin#homepage:SECRET_NAVIDROME_SALT:
-    secure: v1:+w75y1XMhOP6myX/:u95L6Z3axa9/LG2gOfoVefuvHGTDug==
+    secure: v1:NmJEAkCmoZGmfRHX:Mi2zws0UGFNS2uTC1XZjFRHmbIWzYqwKKxMd8mb0PTI=
   lxc#admin#homepage:SECRET_SLSKD_API_KEY:
-    secure: v1:aPIiBduuGKc7EB0e:VsvhB3g5jPXDtbI3/Nr3TZlaM7or3Q==
+    secure: v1:aoV+4I3byA9PZK+m:8rg8TmAjacreWhPvvNUniSx9ds41PS0wyZa+dD23szDVfsiq8+qOcwH/+e7/Yqa7/6WMX5mPbmXNV7MEWNnslhsQonhG5KoTwA+97y8l+ls=
   lxc#admin#homepage:SECRET_WALLOS_API_KEY:
     secure: v1:aws4TYDWrB9UVxRT:dub+Xq4RrauOdGTkZkIBG4IIeiT2T2RiJC6YNTS+WOP8ZNl3WSDtbt9A04G0Zp1ric4PydT7EFs8Lncs6S/VtmQ+A092DeHfIfRUzf8Heag=
   # immich
@@ -158,6 +158,16 @@ config:
     secure: v1:gvt3vIfX9NTkf9tQ:8bIKcNzkJtSvd/R/h2A8wHq1xPqQHTurz8JrlxXHj1DStEyU0030sx1u0K1qlga7
   lxc#music#navidrome:SECRET_LASTFM_SECRET:
     secure: v1:FZ5g3LGrRrEiTcJb:d+KvrmDiHbcaltG5xuUE1s3XjkwJyHZ6Pfwv9xc2OhPPl0ENuHnGergBhe/UxLbU
+  lxc#music#slskd:SECRET_SOULSEEK_USER:
+    secure: v1:05ba1gjzluVulIkx:TGQmkQMSulxl9MhgolucXA2/ZATE4A==
+  lxc#music#slskd:SECRET_SOULSEEK_PASSWORD:
+    secure: v1:SEmgoMTywtlMY+Dw:3psHtlLm4on/ynkjixDQ+dW/hMNGNl0W1z3s+w3JU8aC/B6U
+  lxc#music#slskd:SECRET_SLSKD_USERNAME:
+    secure: v1:Khms6meSimnEELVh:JZJTsYoW3vcvxDp/eFWHDBvQVa+6
+  lxc#music#slskd:SECRET_SLSKD_PASSWORD:
+    secure: v1:mLcvvhwkReE+AYUQ:lq1bSqqZumiouMHoZB9gIA8YkW7z
+  lxc#music#slskd:SECRET_SLSKD_API_KEY:
+    secure: v1:tievgzN+s8hRWDeq:WaQHm/1SxBNxW8JNiI69WBo1cEN/WJB7mJBEsfG+Hv6onaWrFytXE8wz+Mkt5brEUAX0Gq03fI9DkTlQTsp3cu8sfgldIHWlawNWl9KaYNY=
   lxc#music#your-spotify:SECRET_SPOTIFY_CLIENT_ID:
     secure: v1:w/o6ZsYbS5sUTcQC:DNy5wi+ud/rWyPqDiqpE8Kcbo6WrrVrz3JymjQqW+/Mie7RT5THNvbEAI4y439m2
   lxc#music#your-spotify:SECRET_SPOTIFY_CLIENT_SECRET:
