@@ -25,10 +25,6 @@ checksum_algorithm = "sha512"
 overwrite_unmanaged = true
 retain_on_delete = true
 
-[[provisioners]]
-type = "script"
-script = "provisioners/scripts/install-docker.sh"
-
 [lxc]
 app_data_dir = "/fast/test-appdata"
 
