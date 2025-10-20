@@ -11,7 +11,7 @@ services:
     environment:
       - DOZZLE_ENABLE_ACTIONS=true
       - DOZZLE_ENABLE_SHELL=true
-      - DOZZLE_AUTH_PROVIDER=simple
+      # - DOZZLE_AUTH_PROVIDER=simple # uncomment to enable username/pw auth
       - DOZZLE_NO_ANALYTICS
     labels:
       - traefik.enable=true
