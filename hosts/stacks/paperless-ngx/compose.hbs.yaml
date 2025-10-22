@@ -1,28 +1,7 @@
 services:
-  broker:
-    # pinned
-    image: docker.io/library/redis:7@sha256:4a36f83c7f44b96953a7691b949ec77d8b96723623dd0b984c63d8615accb99c
-    restart: unless-stopped
-    volumes:
-      - /docker/paperless-ngx/redisdata:/data
-    networks:
-      - paperless
-
-  db:
-    # pinned
-    image: docker.io/library/postgres:16@sha256:fd4208c8aadb92850e7e86a584fe8b1f2a6af8949feeb1ac8e12e72324573676
-    restart: unless-stopped
-    volumes:
-      - /docker/paperless-ngx/postgres:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: paperless
-      POSTGRES_USER: paperless
-      POSTGRES_PASSWORD: paperless
-    networks:
-      - paperless
-
   webserver:
     image: ghcr.io/paperless-ngx/paperless-ngx:2.19.0@sha256:78b58e99db2edf106a28257fb8f71138c6a3be637bb84ae1eabc71f1ec6d59ba
+    container_name: paperless-webserver
     restart: unless-stopped
     depends_on:
       - db
@@ -82,9 +61,34 @@ services:
       - paperless
       - traefik
 
+  broker:
+    # pinned
+    image: docker.io/library/redis:7@sha256:4a36f83c7f44b96953a7691b949ec77d8b96723623dd0b984c63d8615accb99c
+    container_name: paperless-broker
+    restart: unless-stopped
+    volumes:
+      - /docker/paperless-ngx/redisdata:/data
+    networks:
+      - paperless
+
+  db:
+    # pinned
+    image: docker.io/library/postgres:16@sha256:fd4208c8aadb92850e7e86a584fe8b1f2a6af8949feeb1ac8e12e72324573676
+    container_name: paperless-db
+    restart: unless-stopped
+    volumes:
+      - /docker/paperless-ngx/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: paperless
+      POSTGRES_USER: paperless
+      POSTGRES_PASSWORD: paperless
+    networks:
+      - paperless
+
   gotenberg:
     # pinned
     image: docker.io/gotenberg/gotenberg:8.20@sha256:cda4386c7ed38f18bc6897828be01ba7361c99929a5c84ec5e293d7916e29bac
+    container_name: paperless-gotenberg
     restart: unless-stopped
     # The gotenberg chromium route is used to convert .eml files. We do not
     # want to allow external content like tracking pixels or even javascript.
@@ -98,6 +102,7 @@ services:
 
   tika:
     image: docker.io/apache/tika:3.2.3.0@sha256:c0154cb95587cde64be74f35ada1a2bd7892219f3f0ac3c9dc6cab34046b3573
+    container_name: paperless-tika
     restart: unless-stopped
     networks:
       - paperless
