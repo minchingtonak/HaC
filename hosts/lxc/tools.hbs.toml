@@ -22,6 +22,10 @@ swap = 4096
 [disk]
 size = 32
 
+[[mount_points]]
+volume = "{{{@pve.lxc.app_data_dir}}}/tools"
+mount_point = "/docker"
+
 [[provisioners]]
 type = "ansible"
 playbook = "provisioners/ansible/lxc-init.yaml"
