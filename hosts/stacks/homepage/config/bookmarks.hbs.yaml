@@ -12,17 +12,17 @@
     - home labs slack:
         - icon: slack.png
           href: "{{{SECRET_SLACK_WEBUI_URL}}}"
+
+- etc:
+    - HaC Github:
+        - abbr: HaC
+          href: https://github.com/minchingtonak/HaC
     - slack api:
         - icon: slack.png
           href: https://api.slack.com/apps/
     - nextcloud:
         - icon: nextcloud.png
           href: "{{{SECRET_NEXTCLOUD_URL}}}"
-
-- etc:
-    - HaC Github:
-        - abbr: HaC
-          href: https://github.com/minchingtonak/HaC
-    - r/selfhosted:
-        - icon: reddit.png
-          href: https://reddit.com/r/selfhosted
+    - healthchecksio:
+        - icon: healthchecks.png
+          href: https://healthchecks.io
