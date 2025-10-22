@@ -68,7 +68,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   qbittorrent:
-    image: ghcr.io/linuxserver/qbittorrent:5.1.2@sha256:5f3785f8d8cd27d509cd948a06195306c3d951b1e1e123e46c7be40ecfb6965f
+    image: ghcr.io/linuxserver/qbittorrent:5.1.2@sha256:51dd497bd9b1de06fc1f9c9753297fae1e7445ad817e4528ee3f84c9c3122c7d
     container_name: qbittorrent
     restart: unless-stopped
     labels:
