@@ -298,6 +298,10 @@ See [`provisioners/scripts/`](provisioners/scripts/) for examples.
 - firewall and proxy for pve hosts
 - rootless docker/podman
 
+### Bugs
+
+- Replacing a CT (due to config change) does not replacing all children resources, leading to broken deployment
+
 ### Usability
 
 - implement stack configs. can be stack.toml or config.toml or smth with a zod schema
