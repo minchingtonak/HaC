@@ -69,6 +69,42 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         id: check-for-changes
 
+      - name: Add infra diff label
+        if: github.event_name == 'pull_request' && steps.check-for-changes.outcome == 'failure'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // Create or update the label with a specific color
+            try {
+              await github.rest.issues.createLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'infra diff',
+                color: '6F7C00',
+                description: 'infrastructure changes detected by Pulumi'
+              });
+            } catch (error) {
+              // Label might already exist, update it
+              if (error.status === 422) {
+                await github.rest.issues.updateLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: 'infra diff',
+                  color: '6F7C00',
+                  description: 'infrastructure changes detected by Pulumi'
+                });
+              }
+            }
+
+            // Add the label to the PR
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['infra diff']
+            });
+
   pulumi-deploy:
     runs-on: ubuntu-latest
     needs: pulumi-preview
