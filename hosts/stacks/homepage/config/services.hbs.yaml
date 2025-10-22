@@ -1,4 +1,8 @@
 ---
+# https://gethomepage.dev/configs/services/
+# https://gethomepage.dev/widgets/
+# https://dashboardicons.com/icons
+
 # {{#partial "widgets"}}
 # {{#ifeq serviceName "audiobookshelf"}}
 widget:
