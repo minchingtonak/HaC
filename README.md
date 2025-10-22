@@ -282,6 +282,14 @@ See [`provisioners/scripts/`](provisioners/scripts/) for examples.
 
 ## TODO
 
+### Ideas
+
+- self hosted proxmox-backup-client ui, similar idea to backrest
+  - can create/manage keys
+  - can create/manage remote pbs servers
+  - can create/manage backup jobs
+  - can create/manage schedules for backup jobs
+
 ### Security
 
 - test tcp/udp proxying from traefik
@@ -292,15 +300,18 @@ See [`provisioners/scripts/`](provisioners/scripts/) for examples.
 
 ### Usability
 
-- paperless, immich -> life lxc
+- implement stack configs. can be stack.toml or config.toml or smth with a zod schema
+  - can use this to define stack-specific properties
+    - subdomains for multi-domain stacks
+    - provisioners (setting up traefik network, for example)
+    - lxc/pve config overrides - for example, can move lxc firewall rule defs to stack configs since it depends on the stack being deployed, not the lxc
+  - simple stack dependencies via priority field (lower = first)
+    - FIXME can probably find a way to encode dependencies in the [stacks] section in lxc config
+    - can probably use pulumi dependency mechanism to execute them in order
+      - can have compose-stack execute provisioners as first step before rendering/deployment
 - look into adding other services (PVE, PBS) and static widgets (resources, date, time, etc)
-- allow multi-application hosts in dashboard template
-  - requires field in stack object in lxc config?
-    - can have service_names array that lists out ["bazarr", "radarr", "sonarr" "qbittorrent", etc] and the template will iterate thru that if it exists
-- traefik proxy on pve host (requires provisioners)
+- traefik proxy on pve host (requires provisioners, stacks)
   - make sure to configure firewall rules as well when that's done
-- PVE host provisioners
-  - can help for things like installing docker, creating app data dir
 - would be nice to be able to have pve config field that allows setting fields for all lxcs (potentially stacks as well)
   - can extend this type of this for stacks within lxc config
 - add a transform to the top level lxc and pve schemas that does a recursive Object.freeze on the parsed result
