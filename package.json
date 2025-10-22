@@ -13,7 +13,7 @@
     "@hanseltime/pulumi-file-utils": "1.2.0",
     "@muhlba91/pulumi-proxmoxve": "^7.6.0",
     "@pulumi/ansible": "file:sdks/ansible",
-    "@pulumi/command": "^1.1.1",
+    "@pulumi/command": "^1.1.3",
     "@pulumi/porkbun": "file:sdks/porkbun",
     "@pulumi/pulumi": "^3.202.0",
     "handlebars": "^4.7.8",
