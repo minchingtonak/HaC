@@ -33,7 +33,7 @@ services:
       - windmill
 
   windmill_server:
-    image: ghcr.io/windmill-labs/windmill:1.555.1@sha256:ffc2d27ca9b090820c94c3180578d81c10896e5e88d6a6d2af4ab7060cb21ea9
+    image: ghcr.io/windmill-labs/windmill:1.564.0@sha256:f9171503207f6a0b6c19562044870a410f336f6a51dbde4d6dc093c78c4942d5
     container_name: windmill-server
     pull_policy: always
     deploy:
@@ -67,7 +67,7 @@ services:
       - traefik
 
   windmill_worker:
-    image: ghcr.io/windmill-labs/windmill:1.555.1@sha256:ffc2d27ca9b090820c94c3180578d81c10896e5e88d6a6d2af4ab7060cb21ea9
+    image: ghcr.io/windmill-labs/windmill:1.564.0@sha256:f9171503207f6a0b6c19562044870a410f336f6a51dbde4d6dc093c78c4942d5
     container_name: windmill-worker
     pull_policy: always
     deploy:
@@ -97,7 +97,7 @@ services:
 
   ## This worker is specialized for "native" jobs. Native jobs run in-process and thus are much more lightweight than other jobs
   windmill_worker_native:
-    image: ghcr.io/windmill-labs/windmill:1.555.1@sha256:ffc2d27ca9b090820c94c3180578d81c10896e5e88d6a6d2af4ab7060cb21ea9
+    image: ghcr.io/windmill-labs/windmill:1.564.0@sha256:f9171503207f6a0b6c19562044870a410f336f6a51dbde4d6dc093c78c4942d5
     container_name: windmill-worker-native
     pull_policy: always
     deploy:
@@ -125,7 +125,7 @@ services:
 
   # This worker is specialized for reports or scraping jobs. It is assigned the "reports" worker group which has an init script that installs chromium and can be targeted by using the "chromium" worker tag.
   windmill_worker_reports:
-    image: ghcr.io/windmill-labs/windmill:1.555.1@sha256:ffc2d27ca9b090820c94c3180578d81c10896e5e88d6a6d2af4ab7060cb21ea9
+    image: ghcr.io/windmill-labs/windmill:1.564.0@sha256:f9171503207f6a0b6c19562044870a410f336f6a51dbde4d6dc093c78c4942d5
     container_name: windmill-worker-reports
     pull_policy: always
     deploy:
