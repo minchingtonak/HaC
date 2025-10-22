@@ -7,6 +7,7 @@ traefik = {}
 dozzle = {}
 backrest = {}
 cronicle = {}
+dagu = {}
 
 [cpu]
 cores = 4
@@ -16,7 +17,7 @@ dedicated = 8192
 swap = 4096
 
 [disk]
-size = 4
+size = 8
 
 [[mount_points]]
 volume = "{{{@pve.lxc.app_data_dir}}}/backup"
@@ -46,6 +47,15 @@ mount_point = "/mnt/repos"
 type = "ansible"
 playbook = "provisioners/ansible/lxc-init.yaml"
 replayable = false
+
+[[provisioners]]
+type = "ansible"
+playbook = "provisioners/ansible/create-ssh-key.yaml"
+replayable = false
+
+[provisioners.variables]
+public_key = "{{{@pve.ssh.public_key}}}"
+private_key = """{{{@pve.ssh.private_key}}}"""
 
 [[provisioners]]
 type = "script"

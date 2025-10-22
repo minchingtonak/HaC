@@ -1,0 +1,32 @@
+services:
+  dagu:
+    image: ghcr.io/dagu-org/dagu:1.23.0@sha256:045da118a2ce6c8c6c55b7b6558c2200196a29576d315c6fdbf592e435c9f2e1
+    container_name: dagu
+    restart: unless-stopped
+    # ports:
+    #   - "8080:8080"
+    environment:
+      - DAGU_TZ={{{global:TIMEZONE}}}
+      - DAGU_PORT=8080 # optional. default is 8080
+      - DAGU_HOME=/dagu # optional.
+      - PUID=0 # optional. default is 1000
+      - PGID=0 # optional. default is 1000
+    volumes:
+      - /docker/dagu:/dagu
+      - /root/.ssh:/root/.ssh
+      - /root/.ssh:/home/dagu/.ssh
+      - ./dags:/dagu/dags
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dagu.rule=Host(`{{{domainForApp "dagu"}}}`)
+      - traefik.http.routers.dagu.entrypoints=https
+      - traefik.http.routers.dagu.tls=true
+      - traefik.http.routers.dagu.tls.certresolver=porkbun
+      - traefik.http.routers.dagu.service=dagu
+      - traefik.http.services.dagu.loadbalancer.server.port=8080
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

@@ -1,0 +1,62 @@
+description: execute appdata + personal files backup scripts
+schedule: "0 0 * * *" # 12:00am
+
+handlerOn:
+  exit: # always runs
+    command: rm -rf /tmp/dag-${DAG_RUN_ID}
+    executor:
+      type: ssh
+      config:
+        user: "{{{@pve.ssh.user}}}"
+        host: "{{{@pve.ip}}}"
+        # key: https://docs.dagu.io/features/executors/ssh#ssh-key-auto-detection
+        port: 22
+        strictHostKey: false
+
+steps:
+  - name: setup
+    script: |
+      #!/bin/bash
+      set -Eeuxo pipefail
+
+      apt-get -qq update
+      # install scp
+      DEBIAN_FRONTEND=noninteractive apt-get -y -qq install openssh-client
+
+      WORK_DIR="/tmp/dag-${DAG_RUN_ID}"
+
+      scp -r \
+        -o StrictHostKeyChecking=no \
+        -o UserKnownHostsFile=/dev/null \
+        ./scripts/* {{{@pve.ssh.user}}}@{{{@pve.ip}}}:$WORK_DIR
+
+      ssh \
+        -o StrictHostKeyChecking=no \
+        -o UserKnownHostsFile=/dev/null \
+        {{{@pve.ssh.user}}}@{{{@pve.ip}}} "chmod +x $WORK_DIR/*.sh"
+
+  - name: run-app-data-backup-script
+    command: cd /tmp/dag-${DAG_RUN_ID} && ./app-data-backup.sh
+    shell: bash
+    continueOn:
+      failure: true
+    executor:
+      type: ssh
+      config:
+        user: "{{{@pve.ssh.user}}}"
+        host: "{{{@pve.ip}}}"
+        # key: https://docs.dagu.io/features/executors/ssh#ssh-key-auto-detection
+        port: 22
+        strictHostKey: false
+
+  - name: run-personal-files-backup-script
+    command: cd /tmp/dag-${DAG_RUN_ID} && ./personal-files-backup.sh
+    shell: bash
+    executor:
+      type: ssh
+      config:
+        user: "{{{@pve.ssh.user}}}"
+        host: "{{{@pve.ip}}}"
+        # key: https://docs.dagu.io/features/executors/ssh#ssh-key-auto-detection
+        port: 22
+        strictHostKey: false

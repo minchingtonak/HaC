@@ -1,0 +1,40 @@
+---
+- name: Create SSH key on host
+  hosts: all
+  become: true
+  vars:
+    ssh_key_user: "root"
+    ssh_private_key_content: "{{ private_key }}"
+    ssh_public_key_content: "{{ public_key }}"
+    ssh_key_path: "/{{ ssh_key_user }}/.ssh/id_ed25519"
+
+  tasks:
+    - name: Ensure .ssh directory exists
+      ansible.builtin.file:
+        path: "/{{ ssh_key_user }}/.ssh"
+        state: directory
+        mode: "0700"
+        owner: "{{ ssh_key_user }}"
+        group: "{{ ssh_key_user }}"
+
+    - name: Copy private key to host
+      ansible.builtin.copy:
+        content: "{{ ssh_private_key_content }}\n"
+        dest: "{{ ssh_key_path }}"
+        mode: "0600"
+        owner: "{{ ssh_key_user }}"
+        group: "{{ ssh_key_user }}"
+
+    - name: Copy public key to host
+      ansible.builtin.copy:
+        content: "{{ ssh_public_key_content }}\n"
+        dest: "{{ ssh_key_path }}.pub"
+        mode: "0644"
+        owner: "{{ ssh_key_user }}"
+        group: "{{ ssh_key_user }}"
+
+    - name: Add public key to authorized_keys
+      ansible.posix.authorized_key:
+        user: "{{ ssh_key_user }}"
+        key: "{{ ssh_public_key_content }}"
+        state: present
