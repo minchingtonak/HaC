@@ -105,6 +105,27 @@ jobs:
               labels: ['infra diff']
             });
 
+      - name: Remove infra diff label
+        if: github.event_name == 'pull_request' && steps.check-for-changes.outcome == 'success'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // Remove the label from the PR if it exists
+            try {
+              await github.rest.issues.removeLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                name: 'infra diff'
+              });
+            } catch (error) {
+              // Label might not exist on the PR, which is fine
+              if (error.status !== 404) {
+                throw error;
+              }
+            }
+
   pulumi-deploy:
     runs-on: ubuntu-latest
     needs: pulumi-preview
