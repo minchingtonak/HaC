@@ -10,7 +10,7 @@
   // Run on a monthly schedule to keep interruptions to a minimum,
   //  but always open vulnerability-fixing pull requests immediately
   schedule: "on saturday",
-  timezone: "America/Los_Angeles",
+  timezone: "America/New_York",
   vulnerabilityAlerts: { labels: ["security"], schedule: "at any time" },
 
   ignoreUnstable: true,
