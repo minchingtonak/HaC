@@ -111,6 +111,9 @@ config:
     secure: v1:aoV+4I3byA9PZK+m:8rg8TmAjacreWhPvvNUniSx9ds41PS0wyZa+dD23szDVfsiq8+qOcwH/+e7/Yqa7/6WMX5mPbmXNV7MEWNnslhsQonhG5KoTwA+97y8l+ls=
   lxc#admin#homepage:SECRET_WALLOS_API_KEY:
     secure: v1:aws4TYDWrB9UVxRT:dub+Xq4RrauOdGTkZkIBG4IIeiT2T2RiJC6YNTS+WOP8ZNl3WSDtbt9A04G0Zp1ric4PydT7EFs8Lncs6S/VtmQ+A092DeHfIfRUzf8Heag=
+  lxc#admin#tailscale:SECRET_TAILSCALE_AUTHKEY:
+    secure: v1:WzqZRv9cGYpzab5r:QmAK2vrwxNtPNZwMv0k/uWlnHT/nqKb+yGXPiRdSl83AhTm2SusJhSf03MEDGUIxZFe+9oF7R5POga0vC8k2JiRSvcmlVjRSTHlWkYae
+  lxc#admin#tailscale:TAILSCALE_SUBNET_ROUTES: 192.168.0.0/24
   # immich
   lxc#immich#immich:SECRET_DB_PASSWORD:
     secure: v1:ECc5/vJz6VnDlxsj:xgdWvCAj0NxBmWNBrAg4cP+l8j7DAk9cij/mO/JSNm+S8zVq
@@ -169,10 +172,6 @@ config:
     secure: v1:CmV+NG1VGxbL5T/i:m1wYPbD7ZB+8Qx3WH++xmSK4X+/hV0rMulX8LygT3j8amy9TRJVhAYSTz9w9DwCvL+ppRJahFuNLyGU0
   lxc#servarr-pulumi#servarr:SECRET_WIREGUARD_ADDRESSES:
     secure: v1:rj2ol6IXhUc4+sPx:1Adqh3BT4b1YL28YBXYS1OUDmohdq6woRcU2CxemVCMd
-  # tailscale
-  lxc#tailscale#tailscale:SECRET_TAILSCALE_AUTHKEY:
-    secure: v1:WzqZRv9cGYpzab5r:QmAK2vrwxNtPNZwMv0k/uWlnHT/nqKb+yGXPiRdSl83AhTm2SusJhSf03MEDGUIxZFe+9oF7R5POga0vC8k2JiRSvcmlVjRSTHlWkYae
-  lxc#tailscale#tailscale:TAILSCALE_SUBNET_ROUTES: 192.168.0.0/24
   # music
   lxc#music#navidrome:SECRET_LASTFM_APIKEY:
     secure: v1:gvt3vIfX9NTkf9tQ:8bIKcNzkJtSvd/R/h2A8wHq1xPqQHTurz8JrlxXHj1DStEyU0030sx1u0K1qlga7

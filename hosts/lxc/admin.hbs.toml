@@ -6,8 +6,7 @@ traefik = {}
 dozzle = {}
 apprise = {}
 homepage = {}
-# semaphore = {}
-# komodo = {}
+tailscale = {}
 
 [cpu]
 cores = 2
