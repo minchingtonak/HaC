@@ -31,7 +31,7 @@ app_data_dir = "/fast/test-appdata"
 [lxc.hosts]
 # copyparty = { id = 200 }
 # servarr = { id = 201 }
-# backup = { id = 202 }
+backup = { id = 202 }
 # jellyfin = { id = 203 }
 # jellyseerr = { id = 204 }
 # gitea = { id = 206 }
@@ -43,7 +43,7 @@ tools = { id = 208 }
 admin = { id = 213 }
 # paperless = { id = 214 }
 # life = { id = 215 }
-music = { id = 216 }
+# music = { id = 216 }
 # archiver = { id = 217 }
 
 [lxc.network]
