@@ -15,7 +15,7 @@ dedicated = 4096
 swap = 2048
 
 [disk]
-size = 4
+size = 8
 
 [[mount_points]]
 volume = "{{{@pve.lxc.app_data_dir}}}/paperless"
