@@ -42,7 +42,7 @@ tools = { id = 208 }
 # syncthing = { id = 212 }
 admin = { id = 213 }
 paperless = { id = 214 }
-# life = { id = 215 }
+life = { id = 215 }
 # music = { id = 216 }
 # archiver = { id = 217 }
 
