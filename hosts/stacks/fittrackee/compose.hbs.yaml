@@ -27,7 +27,7 @@ services:
 
   fittrackee:
     container_name: fittrackee
-    image: fittrackee/fittrackee:v0.12.2@sha256:f21bea6b3e36f3c63fea705276ec5ccccbd3fe2040c7d93f7451defee36bf99b
+    image: fittrackee/fittrackee:v1.0.0@sha256:00fe5193ff41317404621c80d050a4bdd1a103bec4eae5c02f30b1ef08b86e7f
     volumes:
       - /docker/fittrackee/uploads:/usr/src/app/uploads
       - /docker/fittrackee/logs:/usr/src/app/logs
