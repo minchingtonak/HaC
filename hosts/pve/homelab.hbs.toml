@@ -31,17 +31,17 @@ app_data_dir = "/fast/test-appdata"
 [lxc.hosts]
 # copyparty = { id = 200 }
 # servarr = { id = 201 }
-backup = { id = 202 }
+# backup = { id = 202 }
 # jellyfin = { id = 203 }
 # jellyseerr = { id = 204 }
 # gitea = { id = 206 }
 # immich = { id = 207 }
-tools = { id = 208 }
+# tools = { id = 208 }
 # windmill = { id = 209 }
 # tailscale = { id = 211 }
 # syncthing = { id = 212 }
 admin = { id = 213 }
-paperless = { id = 214 }
+# paperless = { id = 214 }
 life = { id = 215 }
 # music = { id = 216 }
 # archiver = { id = 217 }
