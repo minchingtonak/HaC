@@ -1,0 +1,36 @@
+services:
+  pulse:
+    image: rcourtman/pulse:v4.25.0@sha256:62e2a2b258827fdf2ced0806469951eed7885964f47ba4086807dbefa5113796
+    container_name: pulse
+    # ports:
+    #   - "7655:7655"
+    volumes:
+      - /docker/pulse:/data
+    environment:
+      # NOTE: Env vars override UI settings. Remove env var to allow UI configuration.
+      - PORT=7655 # Backend port (default: 7655)
+      - FRONTEND_PORT=7655 # Frontend port (default: 7655)
+      - CONNECTION_TIMEOUT=10 # Connection timeout in seconds (default: 10)
+      - LOG_LEVEL=info # Log level: debug/info/warn/error (default: info)
+
+      # Security (all optional - runs open by default)
+      - PULSE_AUTH_USER={{{SECRET_PULSE_USERNAME}}} # Username for web UI login
+      - PULSE_AUTH_PASS={{{SECRET_PULSE_PASSWORD}}} # Plain text or bcrypt hash (auto-hashed if plain)
+      - API_TOKENS={{{SECRET_PULSE_PVE_API_TOKEN}}},{{{SECRET_PULSE_DOCKER_API_TOKEN}}} # Comma-separated tokens (plain or SHA3-256 hashed)
+      - ALLOW_UNPROTECTED_EXPORT=false # Allow export without auth (default: false)
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.pulse.rule=Host(`{{{domainForApp "pulse"}}}`)
+      - traefik.http.routers.pulse.entrypoints=https
+      - traefik.http.routers.pulse.tls=true
+      - traefik.http.routers.pulse.tls.certresolver=porkbun
+      - traefik.http.routers.pulse.service=pulse
+      - traefik.http.services.pulse.loadbalancer.server.port=7655
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

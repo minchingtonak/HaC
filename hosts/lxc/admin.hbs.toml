@@ -5,6 +5,7 @@ description = "homelab administration-related apps"
 traefik = {}
 dozzle = {}
 apprise = {}
+# pulse = {}
 homepage = {}
 tailscale = {}
 
@@ -30,3 +31,13 @@ replayable = false
 [[provisioners]]
 type = "script"
 script = "provisioners/scripts/install-docker.sh"
+
+# [[provisioners]]
+# type = "script"
+# script = "provisioners/scripts/pulse-register-pve-host.sh"
+
+# [provisioners.variables]
+# lxc_id = 201
+
+# [provisioners.connection]
+# host = "{{{@pve.ip}}}"
