@@ -304,11 +304,32 @@ See [`provisioners/scripts/`](provisioners/scripts/) for examples.
 
 ### Usability
 
+- stacks for PVE hosts
+  - need to consider implications of rendering templates in a different context
+    - mainly the lxc config fields will not be available
+    - how do we handle references to context fields that do not exist?
+      - currrently i think it would fail silently and render "undefined" as the value or an empty string
+    - i can write my templates to have logic to use lxc first, then fall back to pve if necessary
+    - but proably would be better to have a helper for it so the logic is deduplicated
+    - and anywhere you're getting an lxc property its ususally in a context that would eb fine to swap out with the pve equiavalent (i.e. address or hostname, just common host metadata)
+    - in that vein, maybe it would be easier to provide a new field that will always have the metedata of whatever host the stack is being deployed on
+      - `{{{@host.ip}}}`
+      - hostname
+      - ssh
+        - user
+        - publickey
+        - privatekey
+- see if there's a good way to add runtime checking of @data variable references in templates to avoid undefined vars
+  - augment context to return object proxy where gets are validated
+  - empty strings should generate a warning but probably not throw an error in case there's a valid use case for empty string
+    - throw error for null, undefined
+- lifecycle for provisioners (i.e. when to run). for now can be before-stacks or after-stacks. should be able to provide optional list of domains to ping and wait on to be up?
 - implement stack configs. can be stack.toml or config.toml or smth with a zod schema
   - can use this to define stack-specific properties
     - subdomains for multi-domain stacks
     - provisioners (setting up traefik network, for example)
     - lxc/pve config overrides - for example, can move lxc firewall rule defs to stack configs since it depends on the stack being deployed, not the lxc
+  - would be cool if stacks can define their own template helpers. have an array that maps to TS files in the stack folder that do TemplateProcessor.addTemplateHelper calls
   - simple stack dependencies via priority field (lower = first)
     - FIXME can probably find a way to encode dependencies in the [stacks] section in lxc config
     - can probably use pulumi dependency mechanism to execute them in order
