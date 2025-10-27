@@ -17,6 +17,7 @@
     "@pulumi/porkbun": "file:sdks/porkbun",
     "@pulumi/pulumi": "^3.203.0",
     "handlebars": "^4.7.8",
+    "lodash.clonedeep": "^4.5.0",
     "smol-toml": "^1.4.2",
     "ts-node": "^10.9.2",
     "type-fest": "^5.1.0",

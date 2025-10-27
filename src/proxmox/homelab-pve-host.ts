@@ -1,6 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as proxmox from "@muhlba91/pulumi-proxmoxve";
 import * as command from "@pulumi/command";
+import { z } from "zod";
 import { HomelabLxcHost, HomelabLxcHostContext } from "./homelab-lxc-host";
 import { HomelabPveProvider } from "./homelab-pve-provider";
 import { LxcHostConfigParser } from "../hosts/lxc-host-config-parser";
@@ -8,6 +9,7 @@ import path from "node:path";
 import { TemplateContext } from "../templates/template-context";
 import {
   PveHostConfig,
+  PveHostConfigSchema,
   PveHostConfigToml,
 } from "../hosts/schema/pve-host-config";
 import {
@@ -25,8 +27,8 @@ import {
  * a camelCase version of all properties is provided for ease of
  * interoperability with the Pulumi pve resource APIs
  */
-export type HomelabPveHostContext = {
-  pve_config: PveHostConfigToml;
+export const HomelabPveHostContext = z.object( {
+  pve_config: PveHostConfigSchema;
   pveConfig: PveHostConfig;
   enabled_pve_hosts: PveHostConfigToml[];
   enabledPveHosts: PveHostConfig[];
@@ -34,7 +36,7 @@ export type HomelabPveHostContext = {
   lxcConfig: LxcHostConfig;
   enabled_lxc_hosts: LxcHostConfigToml[];
   enabledLxcHosts: LxcHostConfig[];
-};
+});
 
 export interface HomelabPveHostArgs {
   context: TemplateContext<HomelabPveHostContext>;
@@ -140,6 +142,11 @@ export class HomelabPveHost extends pulumi.ComponentResource {
         pve_hosts: enabled_pve_hosts,
       });
     });
+
+    // TODO!!!!!!
+    // ill need to implement a function to transform zod object schema using arbitrary funciton
+    // can use that to transform all schemas to camel case, then use in new context impl
+    // should be able to do this with already snakeToCamel + camelcase type
 
     pulumi.all(enabledLxcConfigs).apply((hostConfigs) => {
       const camelCasedConfigs = hostConfigs.map((config) =>

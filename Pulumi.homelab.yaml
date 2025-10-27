@@ -201,3 +201,9 @@ config:
     secure: v1:cZSWFDKqB9Z5BmNz:FkQLV90mYNdrMYkIc06yBSPTInhQtojxr9NMxGdHLQvt6qMAJwwLktFCqqJI77nH2OXdEgOShlonUbeS
   lxc#servarr#servarr:SECRET_WIREGUARD_ADDRESSES:
     secure: v1:Eo7uReieV6Sx3xX9:grVPbB5e74eclBDVJbYKh0V0uVN2AHufs2rFcQ+XDVNZ
+  lxc#admin#pulse:SECRET_PULSE_USERNAME:
+    secure: v1:/JP4pM5y9WTu1bDW:uoNbTqM/oPdewJ15JH3BTYNpTRt3
+  lxc#admin#pulse:SECRET_PULSE_PASSWORD:
+    secure: v1:elHAeSJRXJjdLj2L:Up+CU4NRYpqI8ZVvdIpSZ6k8in2aSAHVImvrsI5nyJfOQF7N
+  lxc#admin#pulse:SECRET_PULSE_API_PVE_TOKEN:
+    secure: v1:SdYOyYLdiDCcM9P0:RIHy2tP0BBstWIpU2Ww0WduXsRgyWyoASL+kWHTFQ93qIrVudzXgbr6tCTO8xHpXkdsA+ugK4fo=

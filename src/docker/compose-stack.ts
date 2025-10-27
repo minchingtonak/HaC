@@ -243,17 +243,14 @@ export type DomainForAppOptions = { hostname?: string; node?: string };
 TemplateProcessor.registerTemplateHelper(
   "domainForApp",
   (appName: string, options: Handlebars.HelperOptions) => {
-    const context = structuredClone(options.data) as TemplateFileContext;
-
     const { hostname, node } = options.hash as DomainForAppOptions;
-    if (hostname) {
-      // @ts-expect-error deliberately setting context property
-      context.lxc.hostname = hostname;
-    }
-    if (node) {
-      // @ts-expect-error deliberately setting context property
-      context.pve.node = node;
-    }
+    console.log("GRAVY compose-stack.ts:247 -", options.hash);
+
+    const rawContext = options.data as TemplateFileContext;
+    const context = TemplateContext.withOverride(rawContext, {
+      lxc: { hostname },
+      pve: { node },
+    });
 
     return `${appName}.${HomelabLxcHost.CONTAINER_BASE_DOMAIN(context)}`;
   },

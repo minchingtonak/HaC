@@ -30,7 +30,7 @@ export class HandlebarsTemplateFile<
     this.processedTemplate = TemplateProcessor.processTemplate(
       args.templatePath,
       new pulumi.Config(args.configNamespace),
-      args.templateContext.get(),
+      args.templateContext.getValidated(),
     );
 
     this.asset = new CopyableAsset(
