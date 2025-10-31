@@ -23,25 +23,25 @@ size = 8
 volume = "{{{@pve.lxc.app_data_dir}}}/backup"
 mount_point = "/docker"
 
-[[mount_points]]
-volume = "/void/backups"
-mount_point = "/mnt/backup-data/backups"
+# [[mount_points]]
+# volume = "/void/backups"
+# mount_point = "/mnt/backup-data/backups"
 
-[[mount_points]]
-volume = "/void/documents"
-mount_point = "/mnt/backup-data/documents"
+# [[mount_points]]
+# volume = "/void/documents"
+# mount_point = "/mnt/backup-data/documents"
 
-[[mount_points]]
-volume = "/void/drive"
-mount_point = "/mnt/backup-data/drive"
+# [[mount_points]]
+# volume = "/void/drive"
+# mount_point = "/mnt/backup-data/drive"
 
-[[mount_points]]
-volume = "/void/photos"
-mount_point = "/mnt/backup-data/photos"
+# [[mount_points]]
+# volume = "/void/photos"
+# mount_point = "/mnt/backup-data/photos"
 
-[[mount_points]]
-volume = "/void/restic/repos"
-mount_point = "/mnt/repos"
+# [[mount_points]]
+# volume = "/void/restic/repos"
+# mount_point = "/mnt/repos"
 
 [[provisioners]]
 type = "ansible"

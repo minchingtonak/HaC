@@ -1,6 +1,6 @@
-node = "homelab"
-endpoint = "https://192.168.0.89:8006"
-ip = "192.168.0.89"
+node = "t480"
+endpoint = "https://192.168.0.90:8006"
+ip = "192.168.0.90"
 
 [auth]
 username = "{{{SECRET_USERNAME}}}"
@@ -13,7 +13,6 @@ public_key = "{{{SECRET_CONTAINER_SSH_PUBLIC_KEY}}}"
 private_key = """{{{SECRET_CONTAINER_SSH_PRIVATE_KEY}}}"""
 
 [storage]
-mass = { name = "void", path = "/void" }
 fast = { name = "fast", path = "/fast" }
 
 [[files]]
@@ -26,25 +25,24 @@ overwrite_unmanaged = true
 retain_on_delete = true
 
 [lxc]
-app_data_dir = "/fast/test-appdata"
+app_data_dir = "/fast/appdata"
 
 [lxc.hosts]
-# copyparty = { id = 200 }
-# servarr = { id = 201 }
-backup = { id = 202 }
-# jellyfin = { id = 203 }
-# jellyseerr = { id = 204 }
-# gitea = { id = 206 }
-# immich = { id = 207 }
-# tools = { id = 208 }
-# windmill = { id = 209 }
-# tailscale = { id = 211 }
-# syncthing = { id = 212 }
+# backup = { id = 202 }
+[lxc.hosts.backup]
+id = 202
+[[lxc.hosts.backup.mount_points]]
+volume = "/void/backups"
+mount_point = "/mnt/backup-data/backups"
+
+gitea = { id = 206 }
+immich = { id = 207 }
+tools = { id = 208 }
+windmill = { id = 209 }
+tailscale = { id = 211 }
 admin = { id = 213 }
-# paperless = { id = 214 }
+paperless = { id = 214 }
 life = { id = 215 }
-# music = { id = 216 }
-# archiver = { id = 217 }
 
 [lxc.network]
 domain = "akmin.dev"
