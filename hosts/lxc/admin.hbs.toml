@@ -4,7 +4,6 @@ description = "homelab administration-related apps"
 [stacks]
 traefik = {}
 dozzle = {}
-apprise = {}
 homepage = {}
 tailscale = {}
 
