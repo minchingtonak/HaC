@@ -1,6 +1,5 @@
 hostname = "immich"
 description = "private image server"
-start_on_boot = false
 
 [stacks]
 traefik = {}

@@ -1,6 +1,5 @@
 hostname = "jellyfin"
 description = "jellyfin media player server"
-start_on_boot = false
 
 [stacks]
 traefik = {}
@@ -34,7 +33,7 @@ proto = "udp"
 comment = "jellyfin auto discovery"
 
 [[device_passthroughs]]
-path = "/dev/dri/card0"
+path = "/dev/dri/card1"
 uid = 0
 gid = 44
 mode = "0660"

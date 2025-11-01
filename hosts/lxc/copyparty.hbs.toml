@@ -1,6 +1,5 @@
 hostname = "copyparty"
 description = "copyparty lightweight fileserver container"
-start_on_boot = false
 
 [stacks]
 traefik = {}

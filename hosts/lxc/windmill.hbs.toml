@@ -1,6 +1,5 @@
 hostname = "windmill"
 description = "windmill code-first automation platform, mostly used for spotify automation"
-start_on_boot = false
 
 [stacks]
 traefik = {}
