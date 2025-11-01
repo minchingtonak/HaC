@@ -1,6 +1,5 @@
 hostname = "gitea"
 description = "lightweight private git server and github mirror"
-start_on_boot = false
 
 [stacks]
 traefik = {}

@@ -1,6 +1,5 @@
 hostname = "syncthing"
 description = "simple file syncing across devices"
-start_on_boot = false
 
 [stacks]
 traefik = {}

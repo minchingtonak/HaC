@@ -1,12 +1,11 @@
 hostname = "archiver"
 description = "worker for archive team warrior"
-start_on_boot = false
 
 [stacks]
 traefik = {}
 dozzle = {}
 archiveteam-warrior = {}
-ytptube = {}
+# ytptube = {}
 
 [cpu]
 cores = 2

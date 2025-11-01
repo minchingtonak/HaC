@@ -1,6 +1,5 @@
 hostname = "paperless"
 description = "paperless document management systems"
-start_on_boot = false
 
 [stacks]
 traefik = {}

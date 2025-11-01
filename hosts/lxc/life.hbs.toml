@@ -1,6 +1,5 @@
 hostname = "life"
 description = "life tracking apps"
-start_on_boot = false
 
 [stacks]
 traefik = {}

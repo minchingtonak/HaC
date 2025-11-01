@@ -1,6 +1,5 @@
 hostname = "servarr"
 description = "servarr media stack"
-start_on_boot = false
 
 [stacks]
 traefik = {}
