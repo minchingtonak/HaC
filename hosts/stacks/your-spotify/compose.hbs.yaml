@@ -1,6 +1,6 @@
 services:
   your_spotify:
-    image: ghcr.io/linuxserver/your_spotify:1.14.0@sha256:e3806a24ebd6e8f98f55421d78cfc54b8682e4f0198df2b2e9cfa85e656b508f
+    image: ghcr.io/linuxserver/your_spotify:1.14.0@sha256:dda73d84062f5101724bce0ea5b0acfc99255e87bead962ab6605e323f525cd8
     container_name: your_spotify
     environment:
       # cannot use root user for this image
