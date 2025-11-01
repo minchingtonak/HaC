@@ -67,6 +67,35 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
+  apprise:
+    image: caronc/apprise:1.2.2@sha256:0d74af8c1df9cf1de91f20f46d00ddee3a3efa15be179f9dbbe8a0f99d64268f
+    environment:
+      - APPRISE_WORKER_COUNT=1
+      - APPRISE_STATEFUL_MODE=simple
+      - APPRISE_DEFAULT_THEME=dark
+      - APPRISE_DEFAULT_CONFIG_ID=homelab
+      - APPRISE_CONFIG_LOCK=yes # should not be able to edit through UI
+      - PGID=0
+      - PUID=0
+    volumes:
+      - /docker/apprise/attach:/attach
+      - /docker/apprise/plugin:/plugin
+      - ./config:/config
+    restart: unless-stopped
+    # ports:
+    #   - 8000:8000
+    container_name: apprise
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.apprise.rule=Host(`{{{domainForApp "apprise"}}}`)
+      - traefik.http.routers.apprise.entrypoints=https
+      - traefik.http.routers.apprise.tls=true
+      - traefik.http.routers.apprise.tls.certresolver=porkbun
+      - traefik.http.routers.apprise.service=apprise
+      - traefik.http.services.apprise.loadbalancer.server.port=8000
+    networks:
+      - traefik
+
   qbittorrent:
     image: ghcr.io/linuxserver/qbittorrent:5.1.2@sha256:098d4340c0709a9ddbc7010ca21900238388454e20182d52b9723b40a2a44293
     container_name: qbittorrent

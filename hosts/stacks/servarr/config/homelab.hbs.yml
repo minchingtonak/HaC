@@ -3,4 +3,4 @@ tag:
 
 urls:
   - "{{{SECRET_SERVARR_SLACK_WEBHOOK}}}":
-      - tag: servarrroot
+      - tag: servarr

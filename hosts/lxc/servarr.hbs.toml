@@ -6,6 +6,7 @@ traefik = {}
 dozzle = {}
 [stacks.servarr]
 subdomains = [
+    "apprise",
     "qbittorrent",
     "sabnzbd",
     "radarr",

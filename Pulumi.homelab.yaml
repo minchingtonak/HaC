@@ -67,8 +67,6 @@ config:
     secure: v1:Ioz4e16dxqVtKDDV:1wWrm9MhEPGtfApKyGSQQFWBJMM+JWyqUAU1jU423dk1ZA==
   lxc#admin#semaphore:SECRET_SLACK_WEBHOOK_URL:
     secure: v1:TssVt21kCosYCKbY:vFlhMwP39dCP7Uf8R87YdMM88+lXSDYL1nyGb8KTgpwY/N9Pu6lDPPfuajwhCycV1wf9PxxBscwbkPc3nCHA8+Vgnhc9fHSw+Q1a8RgApZTCAZksNuGLKMZjDaS0ZZMY/A==
-  lxc#admin#apprise:SECRET_SERVARR_SLACK_WEBHOOK:
-    secure: v1:WsS7ZU2EH2dvJwmu:nrRyndrzO45Te8/ARtzdo3bDzdc3jRDoZNWUNyO7qWcV/AFTRVhO+bNRMoc3VWyTz2e8abYC3aUYy474nnzTpUgs62S/SMI0cBLagEDf/YExO/QvpZ/KXTC6cca4ea8jsw==
   lxc#admin#homepage:SECRET_JELLYFIN_API_KEY:
     secure: v1:uqGGAqLhLWUdx3+R:QT5rQMMIBUhkr4A1EUrCi2xhdmUMFvX9Srbb7aHFAnhzI8U0PPl/U779stnmAuS+
   lxc#admin#homepage:SECRET_IMMICH_API_KEY:
@@ -165,13 +163,6 @@ config:
     secure: v1:ZN1VLNMSu60BAhxf:okOhImt9d3D9NVlmztIPHDRv9noH
   lxc#paperless#paperless-ngx:SECRET_ADMIN_PASSWORD:
     secure: v1:0NpMQ0oelz/GSKbW:LNPX/H4nomIsrwR7uH0med0p02S2vEf7VPfOZaqiTe441JqS
-  # servarr
-  lxc#servarr-pulumi#servarr:SECRET_WIREGUARD_PRIVATE_KEY:
-    secure: v1:UpuGbhyPZJ7MMwcf:YwNSmcYTs321qZW3Bh0Oh0WRvthVuZ4A0jkqd5pV2w53RZEE5ReQ5WXkF4+EWy/RIy5vWv8tnV+TKcZi
-  lxc#servarr-pulumi#servarr:SECRET_WIREGUARD_PRESHARED_KEY:
-    secure: v1:CmV+NG1VGxbL5T/i:m1wYPbD7ZB+8Qx3WH++xmSK4X+/hV0rMulX8LygT3j8amy9TRJVhAYSTz9w9DwCvL+ppRJahFuNLyGU0
-  lxc#servarr-pulumi#servarr:SECRET_WIREGUARD_ADDRESSES:
-    secure: v1:rj2ol6IXhUc4+sPx:1Adqh3BT4b1YL28YBXYS1OUDmohdq6woRcU2CxemVCMd
   # music
   lxc#music#navidrome:SECRET_LASTFM_APIKEY:
     secure: v1:gvt3vIfX9NTkf9tQ:8bIKcNzkJtSvd/R/h2A8wHq1xPqQHTurz8JrlxXHj1DStEyU0030sx1u0K1qlga7
@@ -201,3 +192,5 @@ config:
     secure: v1:cZSWFDKqB9Z5BmNz:FkQLV90mYNdrMYkIc06yBSPTInhQtojxr9NMxGdHLQvt6qMAJwwLktFCqqJI77nH2OXdEgOShlonUbeS
   lxc#servarr#servarr:SECRET_WIREGUARD_ADDRESSES:
     secure: v1:Eo7uReieV6Sx3xX9:grVPbB5e74eclBDVJbYKh0V0uVN2AHufs2rFcQ+XDVNZ
+  lxc#servarr#servarr:SECRET_SERVARR_SLACK_WEBHOOK:
+    secure: v1:WsS7ZU2EH2dvJwmu:nrRyndrzO45Te8/ARtzdo3bDzdc3jRDoZNWUNyO7qWcV/AFTRVhO+bNRMoc3VWyTz2e8abYC3aUYy474nnzTpUgs62S/SMI0cBLagEDf/YExO/QvpZ/KXTC6cca4ea8jsw==
