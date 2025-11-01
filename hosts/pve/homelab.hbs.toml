@@ -26,7 +26,7 @@ overwrite_unmanaged = true
 retain_on_delete = true
 
 [lxc]
-app_data_dir = "/fast/test-appdata"
+app_data_dir = "/fast/appdata"
 
 [lxc.hosts]
 copyparty = { id = 200 }
