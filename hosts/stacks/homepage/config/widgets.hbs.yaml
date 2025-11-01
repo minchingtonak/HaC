@@ -1,0 +1,14 @@
+---
+- datetime:
+    text_size: l
+    format:
+      dateStyle: long
+      timeStyle: short
+      hour12: false
+
+- search:
+    provider: custom
+    url: https://kagi.com/search?q=
+    target: _blank
+    suggestionUrl: https://kagi.com/api/autosuggest?q=
+    showSearchSuggestions: true
