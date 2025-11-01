@@ -1,6 +1,6 @@
 services:
   webserver:
-    image: ghcr.io/paperless-ngx/paperless-ngx:2.19.0@sha256:78b58e99db2edf106a28257fb8f71138c6a3be637bb84ae1eabc71f1ec6d59ba
+    image: ghcr.io/paperless-ngx/paperless-ngx:2.19.3@sha256:321ca858e4b6ce9dc416dbcb7c0691d545e3e9b0f44cf420f75c22098854ca25
     container_name: paperless-webserver
     restart: unless-stopped
     depends_on:
