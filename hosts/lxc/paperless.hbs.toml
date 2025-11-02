@@ -7,14 +7,14 @@ dozzle = {}
 paperless-ngx = {}
 
 [cpu]
-cores = 2
+cores = 4
 
 [memory]
-dedicated = 4096
-swap = 2048
+dedicated = 8192
+swap = 4096
 
 [disk]
-size = 8
+size = 16
 
 [[mount_points]]
 volume = "{{{@pve.lxc.app_data_dir}}}/paperless"
