@@ -56,8 +56,8 @@
     },
     // fittrackee
     {
-      matchPackageNames: "postgres",
-      matchCurrentVersion: "17-alpine",
+      matchPackageNames: "postgis/postgis",
+      matchCurrentVersion: "17-3.5-alpine",
       enabled: false,
     },
     // immich
@@ -103,6 +103,5 @@
     { matchPackageNames: "mongo", matchCurrentVersion: "6", enabled: false },
   ],
 
-  // docker:pinDigests preset, this allows for reproducible builds
   docker: { pinDigests: true },
 }
