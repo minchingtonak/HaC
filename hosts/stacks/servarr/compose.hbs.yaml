@@ -349,13 +349,14 @@ services:
     image: mrorbitman/subsyncarr:0.0.8@sha256:5185ff4d403e1267fc38a30dcf13c631ebf4ff0e56a8bbb1dc1da70996bf2b83
     container_name: subsyncarr
     user: 0:0
+    # run every 30 minutes (1800 seconds). workaround since builtin cron functionality doesn't work
+    command: "sh -c 'set -x && while true; do /app/startup.sh & sleep 1800 && killall startup.sh tail; done'"
     volumes:
       - /mnt/media/movies:/movies
       - /mnt/media/tv:/tv
     restart: unless-stopped
     environment:
       - TZ={{{global:TIMEZONE}}}
-      - CRON_SCHEDULE=0 0 * * *
       - SCAN_PATHS=/movies,/tv # Remember to mount these as volumes. Must begin with /. Default value is '/scan_dir'
       # - EXCLUDE_PATHS=/movies/temp,/tv/downloads # Exclude certain sub-directories from the scan
       - MAX_CONCURRENT_SYNC_TASKS=1 # Defaults to 1 if not set. Higher number will consume more CPU but sync your library faster
