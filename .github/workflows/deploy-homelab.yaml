@@ -24,6 +24,10 @@ jobs:
           POLL_INTERVAL=10
           elapsed=0
 
+          # wait to allow any queued writers grab the lock first
+          echo "sleep 20"
+          sleep 20
+
           echo "Checking for writer lock..."
           while [ $elapsed -lt $MAX_WAIT_TIME ]; do
             if curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
