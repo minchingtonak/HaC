@@ -1,0 +1,140 @@
+name: RW Lock
+on:
+  push:
+    branches: [rw]
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  writer-job:
+    if: github.ref == 'refs/heads/rw'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: writer
+      cancel-in-progress: false
+    steps:
+      - name: Wait for active readers to complete
+        run: |
+          MAX_WAIT_TIME=900
+          POLL_INTERVAL=10
+          elapsed=0
+
+          echo "Checking for active readers..."
+          while [ $elapsed -lt $MAX_WAIT_TIME ]; do
+            reader_count=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+               "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" | \
+               grep -c "reader-state-" || echo "0")
+
+            if [ "$reader_count" -gt 0 ]; then
+              echo "Found ${reader_count} active reader(s). Waiting... (${elapsed}s elapsed)"
+              sleep $POLL_INTERVAL
+              elapsed=$((elapsed + POLL_INTERVAL))
+            else
+              echo "No active readers found. Proceeding with writer lock."
+              break
+            fi
+          done
+
+          if [ $elapsed -ge $MAX_WAIT_TIME ]; then
+            echo "Timeout reached after ${MAX_WAIT_TIME}s. ${reader_count} reader(s) still active."
+            exit 1
+          fi
+
+      - name: Create writer lock
+        run: |
+          echo '{"status": "writing", "owner": "${{ github.run_id }}", "branch": "${{ github.ref_name }}", "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"}' > writer-lock.json
+
+      - name: Upload writer lock
+        uses: actions/upload-artifact@v4
+        with:
+          name: writer-lock
+          path: writer-lock.json
+          retention-days: 1
+
+      - name: Execute writer operations
+        run: |
+          echo "Writer running with exclusive access"
+          sleep 10
+          echo 'waiting...'
+          sleep 10
+          echo 'waiting...'
+          sleep 10
+          echo 'waiting...'
+          sleep 10
+          echo 'waiting...'
+          sleep 10
+          echo 'waiting...'
+          sleep 10
+          echo 'done'
+
+      - name: Remove writer lock
+        if: always()
+        uses: geekyeggo/delete-artifact@v4
+        with:
+          name: writer-lock
+          failOnError: false
+
+  reader-job:
+    if: github.ref == 'refs/heads/other'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for writer lock to be released
+        run: |
+          MAX_WAIT_TIME=900
+          POLL_INTERVAL=10
+          elapsed=0
+
+          echo "Checking for writer lock..."
+          while [ $elapsed -lt $MAX_WAIT_TIME ]; do
+            if curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+               "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" | \
+               grep -q "writer-lock"; then
+              echo "Writer lock detected. Waiting... (${elapsed}s elapsed)"
+              sleep $POLL_INTERVAL
+              elapsed=$((elapsed + POLL_INTERVAL))
+            else
+              echo "No writer lock found. Proceeding with reader operations."
+              break
+            fi
+          done
+
+          if [ $elapsed -ge $MAX_WAIT_TIME ]; then
+            echo "Timeout reached after ${MAX_WAIT_TIME}s. Writer lock still present."
+            exit 1
+          fi
+
+      - name: Register reader state
+        run: |
+          echo '{"status": "reading", "owner": "${{ github.run_id }}", "branch": "${{ github.ref_name }}", "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"}' > reader-state.json
+
+      - name: Upload reader state
+        uses: actions/upload-artifact@v4
+        with:
+          name: reader-state-${{ github.run_id }}
+          path: reader-state.json
+          retention-days: 1
+
+      - name: Execute reader operations
+        run: |
+          echo "Reader running with shared access (ID: ${{ github.run_id }})"
+          sleep 10
+          echo 'reader working...'
+          sleep 10
+          echo 'reader working...'
+          sleep 10
+          echo 'reader working...'
+          sleep 10
+          echo 'reader working...'
+          sleep 10
+          echo 'reader working...'
+          sleep 10
+          echo 'done'
+
+      - name: Unregister reader state
+        if: always()
+        uses: geekyeggo/delete-artifact@v4
+        with:
+          name: reader-state-${{ github.run_id }}
+          failOnError: false
