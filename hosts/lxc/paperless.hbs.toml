@@ -7,7 +7,7 @@ dozzle = {}
 paperless-ngx = {}
 
 [cpu]
-cores = 4
+cores = 8
 
 [memory]
 dedicated = 8192
