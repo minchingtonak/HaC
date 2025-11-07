@@ -1,7 +1,7 @@
 services:
   endurain:
     container_name: endurain
-    image: ghcr.io/joaovitoriasilva/endurain:v0.15.5@sha256:a13d34314f2d665d57bc33a51b65f914a06a8226ca561b9ed4419c370d8a69b2
+    image: ghcr.io/joaovitoriasilva/endurain:v0.15.6@sha256:f53d7103446ba6e489f4471d5c324e9b5aa07dbcb87f0d98133e5ccedab12f57
     environment:
       - TZ={{{global:TIMEZONE}}}
       - DB_TYPE=postgres
