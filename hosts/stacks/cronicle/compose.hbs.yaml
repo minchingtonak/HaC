@@ -1,6 +1,6 @@
 services:
   cronicle:
-    image: bluet/cronicle-docker:0.9.77@sha256:e00ad0cde51ef3212041f1ceaef0ae515f7e2e40b43f4fe1b34e9be84152126c
+    image: bluet/cronicle-docker:0.9.99@sha256:8bff24c4dc212866233ed17a83783721cd164722a4abdd497bfb87301ab02cba
     container_name: cronicle
     hostname: cronicle
     user: "0:10000"
