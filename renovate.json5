@@ -16,6 +16,8 @@
   ignoreUnstable: true,
   minimumReleaseAge: "5 days",
 
+  prHourlyLimit: 10,
+
   ignorePaths: ["sdks/**"],
 
   rangeStrategy: "bump",
