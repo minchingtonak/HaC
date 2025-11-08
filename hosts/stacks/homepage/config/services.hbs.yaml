@@ -133,6 +133,14 @@ widget:
   url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
   key: "{{{SECRET_WALLOS_API_KEY}}}"
 # {{/ifeq}}
+# {{#ifeq serviceName "your-spotify"}}
+widget:
+  type: yourspotify
+  # must point at API endpoint, not web
+  url: https://{{{domainForApp "your-spotify-api" hostname=../hostname}}}
+  key: "{{{SECRET_YOUR_SPOTIFY_TOKEN}}}"
+  interval: all
+# {{/ifeq}}
 # {{/partial}}
 
 # {{#each @lxc_hosts}}
