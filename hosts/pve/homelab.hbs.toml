@@ -29,20 +29,20 @@ retain_on_delete = true
 app_data_dir = "/fast/appdata"
 
 [lxc.hosts]
-copyparty = { id = 200 }
-servarr = { id = 201 }
-backup = { id = 202 }
 jellyfin = { id = 203 }
 jellyseerr = { id = 204 }
-gitea = { id = 206 }
 immich = { id = 207 }
+paperless = { id = 214 }
+servarr = { id = 201 }
+music = { id = 216 }
+life = { id = 215 }
 tools = { id = 208 }
+admin = { id = 213 }
+copyparty = { id = 200 }
+backup = { id = 202 }
+gitea = { id = 206 }
 windmill = { id = 209 }
 syncthing = { id = 212 }
-admin = { id = 213 }
-paperless = { id = 214 }
-life = { id = 215 }
-music = { id = 216 }
 archiver = { id = 217 }
 
 [lxc.network]
