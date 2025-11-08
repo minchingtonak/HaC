@@ -17,6 +17,12 @@ widget:
   username: "{{{SECRET_BACKREST_USERNAME}}}" # optional if auth is enabled in Backrest
   password: "{{{SECRET_BACKREST_PASSWORD}}}" # optional if auth is enabled in Backrest
 # {{/ifeq}}
+# {{#ifeq serviceName "bazarr"}}
+widget:
+  type: bazarr
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+  key: "{{{SECRET_BAZARR_API_KEY}}}"
+# {{/ifeq}}
 # {{#ifeq serviceName "gitea"}}
 widget:
   type: gitea
@@ -69,11 +75,46 @@ widget:
   username: "{{{SECRET_PAPERLESS_USERNAME}}}"
   password: "{{{SECRET_PAPERLESS_PASSWORD}}}"
 # {{/ifeq}}
+# {{#ifeq serviceName "prowlarr"}}
+widget:
+  type: prowlarr
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+  key: "{{{SECRET_PROWLARR_API_KEY}}}"
+# {{/ifeq}}
+# {{#ifeq serviceName "qbittorrent"}}
+widget:
+  type: qbittorrent
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+  username: "{{{SECRET_QBITTORRENT_USERNAME}}}"
+  password: "{{{SECRET_QBITTORRENT_PASSWORD}}}"
+  enableLeechProgress: true # optional, defaults to false
+  enableLeechSize: true # optional, defaults to false
+# {{/ifeq}}
+# {{#ifeq serviceName "radarr"}}
+widget:
+  type: radarr
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+  key: "{{{SECRET_RADARR_API_KEY}}}"
+  enableQueue: true # optional, defaults to false
+# {{/ifeq}}
+# {{#ifeq serviceName "sabnzbd"}}
+widget:
+  type: sabnzbd
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+  key: "{{{SECRET_SABNZBD_API_KEY}}}"
+# {{/ifeq}}
 # {{#ifeq serviceName "slskd"}}
 widget:
   type: slskd
   url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
   key: "{{{SECRET_SLSKD_API_KEY}}}"
+# {{/ifeq}}
+# {{#ifeq serviceName "sonarr"}}
+widget:
+  type: sonarr
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+  key: "{{{SECRET_SONARR_API_KEY}}}"
+  enableQueue: true # optional, defaults to false
 # {{/ifeq}}
 # {{#ifeq serviceName "tailscale"}}
 widget:

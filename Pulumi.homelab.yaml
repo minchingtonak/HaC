@@ -109,6 +109,20 @@ config:
     secure: v1:aoV+4I3byA9PZK+m:8rg8TmAjacreWhPvvNUniSx9ds41PS0wyZa+dD23szDVfsiq8+qOcwH/+e7/Yqa7/6WMX5mPbmXNV7MEWNnslhsQonhG5KoTwA+97y8l+ls=
   lxc#admin#homepage:SECRET_WALLOS_API_KEY:
     secure: v1:aws4TYDWrB9UVxRT:dub+Xq4RrauOdGTkZkIBG4IIeiT2T2RiJC6YNTS+WOP8ZNl3WSDtbt9A04G0Zp1ric4PydT7EFs8Lncs6S/VtmQ+A092DeHfIfRUzf8Heag=
+  lxc#admin#homepage:SECRET_BAZARR_API_KEY:
+    secure: v1:oQK015JyY5B9+P5X:bKUykDQJmVLneqT4EkNm9YXkQ3rmiC3qABu0wofE39gL3lBYRTf3zm+nb2I/hrf4
+  lxc#admin#homepage:SECRET_PROWLARR_API_KEY:
+    secure: v1:O9oK7eeUI7jQL6l5:ipSbUpHGvTMROUqu+c+AQ2+tgWn/tUkU6Uogp8RxFkiEtigi9xHXsate/GVPHMUH
+  lxc#admin#homepage:SECRET_QBITTORRENT_USERNAME:
+    secure: v1:KJQH1U4s4i1odR4T:xhhLKwzvjPJxMjHIydCStqcsD2MI
+  lxc#admin#homepage:SECRET_QBITTORRENT_PASSWORD:
+    secure: v1:jg6wteqnqhXa7ltz:KkAX2v2UEM2j4h9AKfkjYidcWf7v/D+PmHYxvWM1W6U/w2vo
+  lxc#admin#homepage:SECRET_RADARR_API_KEY:
+    secure: v1:OxODTWdhy6WBuEBl:DWCv4tBSS7vgD6k2YzpoCgAeZ+idoTw+f207czvb1sF50MqskLXqVoGRAVqaYjS5
+  lxc#admin#homepage:SECRET_SABNZBD_API_KEY:
+    secure: v1:QkZ0ABSC7J3ym1XL:a+ywy7Rme8Huqftj6mJWBDa/sqXLwrCGl7vUTLDkM3bu7v4cmsrvI3fGRXFgYF5Z
+  lxc#admin#homepage:SECRET_SONARR_API_KEY:
+    secure: v1:m/vA/9Wc4hSntzRX:+eD4l/+8jELSnPfGMHXFlxXkMYnKK7ThoWjoEirpebZ2de5yrl58IC0mobBSKXLV
   lxc#admin#tailscale:SECRET_TAILSCALE_AUTHKEY:
     secure: v1:WzqZRv9cGYpzab5r:QmAK2vrwxNtPNZwMv0k/uWlnHT/nqKb+yGXPiRdSl83AhTm2SusJhSf03MEDGUIxZFe+9oF7R5POga0vC8k2JiRSvcmlVjRSTHlWkYae
   lxc#admin#tailscale:TAILSCALE_SUBNET_ROUTES: 192.168.0.0/24
