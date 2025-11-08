@@ -186,7 +186,7 @@ jobs:
     environment: homelab
     concurrency:
       group: writer
-      cancel-in-progress: false
+      cancel-in-progress: true
     steps:
       # writer lock
       - name: Wait for active readers to complete
