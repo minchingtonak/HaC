@@ -14,9 +14,9 @@
   vulnerabilityAlerts: { labels: ["security"], schedule: "at any time" },
 
   ignoreUnstable: true,
-  minimumReleaseAge: "5 days",
+  minimumReleaseAge: "7 days",
 
-  prHourlyLimit: 10,
+  prHourlyLimit: 0,
 
   ignorePaths: ["sdks/**"],
 
