@@ -123,6 +123,8 @@ config:
     secure: v1:QkZ0ABSC7J3ym1XL:a+ywy7Rme8Huqftj6mJWBDa/sqXLwrCGl7vUTLDkM3bu7v4cmsrvI3fGRXFgYF5Z
   lxc#admin#homepage:SECRET_SONARR_API_KEY:
     secure: v1:m/vA/9Wc4hSntzRX:+eD4l/+8jELSnPfGMHXFlxXkMYnKK7ThoWjoEirpebZ2de5yrl58IC0mobBSKXLV
+  lxc#admin#homepage:SECRET_YOUR_SPOTIFY_TOKEN:
+    secure: v1:KwttXGbRHvKgLL4w:VPVxFmym/TbBWSxRcho3kQlg/VCF7M93XTPAeDfg6+ZZTYZYL3jOX+frT51BRBHm+dBu8g==
   lxc#admin#tailscale:SECRET_TAILSCALE_AUTHKEY:
     secure: v1:WzqZRv9cGYpzab5r:QmAK2vrwxNtPNZwMv0k/uWlnHT/nqKb+yGXPiRdSl83AhTm2SusJhSf03MEDGUIxZFe+9oF7R5POga0vC8k2JiRSvcmlVjRSTHlWkYae
   lxc#admin#tailscale:TAILSCALE_SUBNET_ROUTES: 192.168.0.0/24
