@@ -172,7 +172,7 @@ jobs:
       # reader lock
       - name: Unregister reader state
         if: always()
-        uses: geekyeggo/delete-artifact@v4
+        uses: geekyeggo/delete-artifact@v5
         with:
           name: reader-state-${{ github.run_id }}
           failOnError: false
@@ -273,7 +273,7 @@ jobs:
       # writer lock
       - name: Remove writer lock
         if: always()
-        uses: geekyeggo/delete-artifact@v4
+        uses: geekyeggo/delete-artifact@v5
         with:
           name: writer-lock
           failOnError: false
