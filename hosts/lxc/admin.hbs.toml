@@ -8,6 +8,7 @@ apprise = {}
 # pulse = {}
 homepage = {}
 tailscale = {}
+copyparty = {}
 
 [cpu]
 cores = 2
@@ -22,6 +23,38 @@ size = 8
 [[mount_points]]
 volume = "{{{@pve.lxc.app_data_dir}}}/admin"
 mount_point = "/docker"
+
+[[mount_points]]
+volume = "{{{@pve.storage.mass.path}}}/audiobooks"
+mount_point = "/mnt/audiobooks"
+
+[[mount_points]]
+volume = "{{{@pve.storage.mass.path}}}/backups"
+mount_point = "/mnt/backups"
+
+[[mount_points]]
+volume = "{{{@pve.storage.mass.path}}}/documents"
+mount_point = "/mnt/documents"
+
+[[mount_points]]
+volume = "{{{@pve.storage.mass.path}}}/drive"
+mount_point = "/mnt/drive"
+
+[[mount_points]]
+volume = "{{{@pve.storage.mass.path}}}/media"
+mount_point = "/mnt/media"
+
+[[mount_points]]
+volume = "{{{@pve.storage.mass.path}}}/photos"
+mount_point = "/mnt/photos"
+
+[[mount_points]]
+volume = "{{{@pve.storage.mass.path}}}/podcasts"
+mount_point = "/mnt/podcasts"
+
+[[mount_points]]
+volume = "{{{@pve.storage.mass.path}}}/restic"
+mount_point = "/mnt/restic"
 
 [[provisioners]]
 type = "ansible"
