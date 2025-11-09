@@ -35,8 +35,8 @@ steps:
         -o UserKnownHostsFile=/dev/null \
         {{{@pve.ssh.user}}}@{{{@pve.ip}}} "chmod +x $WORK_DIR/*.sh"
 
-  - name: run-app-data-backup-script
-    command: cd /tmp/dag-${DAG_RUN_ID} && ./app-data-backup.sh
+  - name: run-local-pbs-backup-script
+    command: cd /tmp/dag-${DAG_RUN_ID} && ./local-pbs-backup.sh
     shell: bash
     continueOn:
       failure: true
@@ -49,8 +49,8 @@ steps:
         port: 22
         strictHostKey: false
 
-  - name: run-personal-files-backup-script
-    command: cd /tmp/dag-${DAG_RUN_ID} && ./personal-files-backup.sh
+  - name: run-cloud-pbs-backup-script
+    command: cd /tmp/dag-${DAG_RUN_ID} && ./cloud-pbs-backup.sh
     shell: bash
     executor:
       type: ssh
