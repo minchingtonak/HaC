@@ -38,7 +38,6 @@ music = { id = 216 }
 life = { id = 215 }
 tools = { id = 208 }
 admin = { id = 213 }
-copyparty = { id = 200 }
 backup = { id = 202 }
 gitea = { id = 206 }
 windmill = { id = 209 }
