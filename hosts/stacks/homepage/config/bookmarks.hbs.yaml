@@ -1,6 +1,6 @@
 ---
 - homelab:
-    - pve webu ui:
+    - pve web ui:
         - icon: proxmox.png
           href: "{{{@pve.endpoint}}}"
     - edsac pbs:
