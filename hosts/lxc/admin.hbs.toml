@@ -4,6 +4,7 @@ description = "homelab administration-related apps"
 [stacks]
 traefik = {}
 dozzle = {}
+komodo = {}
 homepage = {}
 tailscale = {}
 copyparty = {}
@@ -62,3 +63,7 @@ replayable = false
 [[provisioners]]
 type = "script"
 script = "provisioners/scripts/install-docker.sh"
+
+[[provisioners]]
+type = "script"
+script = "provisioners/scripts/install-periphery.sh"

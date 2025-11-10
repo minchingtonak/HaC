@@ -1,0 +1,55 @@
+http:
+  middlewares:
+    # Generate credentials: echo $(htpasswd -nB akmin <password>)
+    # traefik-auth:
+    #   basicAuth:
+    #     users:
+    #       - "{{{traefik:SECRET_DASHBOARD_CREDENTIALS}}}"
+
+    traefik-https-redirect:
+      redirectScheme:
+        scheme: https
+
+    sslheader:
+      headers:
+        customRequestHeaders:
+          X-Forwarded-Proto: "https"
+
+  routers:
+    # Traefik Dashboard - HTTP (redirect to HTTPS)
+    traefik:
+      entryPoints:
+        - http
+      rule: "Host(`{{{domainForApp 'traefik'}}}`)"
+      middlewares:
+        - traefik-https-redirect
+      service: api@internal
+
+    # Traefik Dashboard - HTTPS
+    traefik-secure:
+      entryPoints:
+        - https
+      rule: "Host(`{{{domainForApp 'traefik'}}}`)"
+      # middlewares:
+      #   - traefik-auth
+      tls:
+        certResolver: porkbun
+        domains:
+          - main: "{{{domainForContainer}}}"
+            sans:
+              - "*.{{{domainForContainer}}}"
+      service: api@internal
+
+    periphery:
+      entryPoints:
+        - https
+      rule: "Host(`{{{domainForApp 'periphery'}}}`)"
+      tls:
+        certResolver: porkbun
+      service: periphery
+
+  services:
+    periphery:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:8120"

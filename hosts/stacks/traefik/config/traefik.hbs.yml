@@ -1,0 +1,67 @@
+api:
+  dashboard: true
+  debug: true
+
+log:
+  level: DEBUG
+  # filePath: /etc/traefik/traefik.log
+
+entryPoints:
+  http:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: https
+          scheme: https
+
+  https:
+    address: ":443"
+
+  ssh-222-tcp:
+    address: ":222"
+
+  qbittorrent-6881-tcp:
+    address: ":6881"
+
+  jellyfin-service-discovery-1900-udp:
+    address: ":1900/udp"
+
+  jellyfin-auto-discovery-7359-udp:
+    address: ":7359/udp"
+
+  syncthing-local-discovery-21027-udp:
+    address: ":21027/udp"
+
+  syncthing-sync-22000-tcp:
+    address: ":22000"
+
+  syncthing-sync-quic-22000-udp:
+    address: ":22000/udp"
+
+  slskd-listen-50300-tcp:
+    address: ":50300"
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+
+  file:
+    filename: /etc/traefik/dynamic.yml
+    watch: true
+
+certificatesResolvers:
+  porkbun:
+    acme:
+      email: "{{{traefik:SECRET_ACME_EMAIL}}}"
+      storage: /letsencrypt/acme.json
+      caServer: https://acme-v02.api.letsencrypt.org/directory # prod
+      # caServer: https://acme-staging-v02.api.letsencrypt.org/directory # staging
+      dnsChallenge:
+        provider: porkbun
+        resolvers:
+          - "1.1.1.1:53"
+          - "1.0.0.1:53"
+        # disablePropagationCheck: true # uncomment this if you have issues pulling certificates through cloudflare
+        # delayBeforeCheck: 60s # uncomment along with disablePropagationCheck if needed

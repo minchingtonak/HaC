@@ -9,6 +9,9 @@ services:
       - /docker/beszel/data:/beszel_data
       - ./config.yml:/beszel_data/config.yml
       - /docker/beszel/socket:/beszel_socket
+    environment:
+      USER_EMAIL: "{{{SECRET_USER_EMAIL}}}"
+      USER_PASSWORD: "{{{SECRET_USER_PASSWORD}}}"
     labels:
       - traefik.enable=true
       - traefik.http.routers.beszel.rule=Host(`{{{domainForApp "beszel"}}}`)

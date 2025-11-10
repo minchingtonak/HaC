@@ -1,0 +1,47 @@
+services:
+  server:
+    image: ghcr.io/bluewave-labs/checkmate-backend-mono:v3.2.0@sha256:c0e37c967f11ac8dc352f2e86d0be78157f50e8bf9d4ca05b44adf6b334a8034
+    container_name: checkmate
+    pull_policy: always
+    restart: always
+    # ports:
+    #   - "52345:52345"
+    environment:
+      - UPTIME_APP_API_BASE_URL=https://{{{domainForApp "checkmate"}}}/api/v1
+      - UPTIME_APP_CLIENT_HOST=https://{{{domainForApp "checkmate"}}}
+      - DB_CONNECTION_STRING=mongodb://mongodb:27017/uptime_db
+      - CLIENT_HOST=https://{{{domainForApp "checkmate"}}}
+      - JWT_SECRET={{{SECRET_JWT_SECRET}}}
+    depends_on:
+      - mongodb
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.checkmate.rule=Host(`{{{domainForApp "checkmate"}}}`)
+      - traefik.http.routers.checkmate.entrypoints=https
+      - traefik.http.routers.checkmate.tls=true
+      - traefik.http.routers.checkmate.tls.certresolver=porkbun
+      - traefik.http.routers.checkmate.service=checkmate
+      - traefik.http.services.checkmate.loadbalancer.server.port=52345
+    networks:
+      - traefik
+
+  mongodb:
+    image: ghcr.io/bluewave-labs/checkmate-mongo:v3.2.0@sha256:32e1f3953e1da3d4a09981a5314e1966c6c970747ee10e75b8df28cee8d2dab5
+    container_name: checkmate-mongo
+    restart: always
+    command: ["mongod", "--quiet", "--bind_ip_all"]
+    volumes:
+      - /docker/checkmate/db:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')", "--quiet"]
+      interval: 5s
+      timeout: 30s
+      start_period: 0s
+      start_interval: 1s
+      retries: 30
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
