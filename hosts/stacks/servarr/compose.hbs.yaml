@@ -9,7 +9,7 @@ services:
     # ports:
     #   - 8081:8081 # qbittorrent web interface
     #   - 6881:6881 # qbittorrent torrent port
-    #   - 8080:8080 # sabnzbd
+    #   - 6789:6789 # nzbget
     volumes:
       - /docker/gluetun:/gluetun
     environment:
@@ -46,12 +46,12 @@ services:
       - traefik.tcp.routers.qbittorrent-bittorrent.service=qbittorrent-bittorrent
       - traefik.tcp.services.qbittorrent-bittorrent.loadbalancer.server.port=6881
       #
-      - traefik.http.routers.sabnzbd.rule=Host(`{{{domainForApp "sabnzbd"}}}`)
-      - traefik.http.routers.sabnzbd.entrypoints=https
-      - traefik.http.routers.sabnzbd.tls=true
-      - traefik.http.routers.sabnzbd.tls.certresolver=porkbun
-      - traefik.http.routers.sabnzbd.service=sabnzbd
-      - traefik.http.services.sabnzbd.loadbalancer.server.port=8080
+      - traefik.http.routers.nzbget.rule=Host(`{{{domainForApp "nzbget"}}}`)
+      - traefik.http.routers.nzbget.entrypoints=https
+      - traefik.http.routers.nzbget.tls=true
+      - traefik.http.routers.nzbget.tls.certresolver=porkbun
+      - traefik.http.routers.nzbget.service=nzbget
+      - traefik.http.services.nzbget.loadbalancer.server.port=6789
     networks:
       - traefik
 
@@ -123,15 +123,15 @@ services:
       start_period: 20s
       timeout: 10s
 
-  sabnzbd:
-    image: ghcr.io/linuxserver/sabnzbd:4.5.5@sha256:6e6e7abf7a87436ffccd7df41e64a28df9c530e2be5467339a3f5f0518922b49
-    container_name: sabnzbd
+  nzbget:
+    image: ghcr.io/linuxserver/nzbget:25.4.20251114@sha256:92be8b940db9c185947e940b5abb93551ce4a8be15b8254167fe26e969a3fc99
+    container_name: nzbget
     environment:
       - PUID=0
       - PGID=0
       - TZ={{{global:TIMEZONE}}}
     volumes:
-      - /docker/sabnzbd:/config
+      - /docker/nzbget:/config
       - /mnt/media:/data
     restart: unless-stopped
     network_mode: service:gluetun
@@ -149,7 +149,7 @@ services:
         - --timeout=3
         - --tries=1
         - --spider
-        - http://localhost:8080/
+        - http://127.0.0.1:6789/
       interval: 10s
       timeout: 5s
       retries: 8
@@ -216,7 +216,7 @@ services:
       qbittorrent:
         condition: service_healthy
         restart: true
-      sabnzbd:
+      nzbget:
         condition: service_healthy
         restart: true
       prowlarr:
@@ -266,7 +266,7 @@ services:
       qbittorrent:
         condition: service_healthy
         restart: true
-      sabnzbd:
+      nzbget:
         condition: service_healthy
         restart: true
       prowlarr:
@@ -331,7 +331,7 @@ services:
       interval: 5s
       timeout: 4s
       retries: 4
-      start_period: 5s
+      start_period: 15s
     labels:
       - deunhealth.restart.on.unhealthy=true
       - traefik.enable=true
@@ -423,7 +423,7 @@ services:
       qbittorrent:
         condition: service_healthy
         restart: true
-      sabnzbd:
+      nzbget:
         condition: service_healthy
         restart: true
     # ports:
@@ -477,7 +477,7 @@ services:
       qbittorrent:
         condition: service_healthy
         restart: true
-      sabnzbd:
+      nzbget:
         condition: service_healthy
         restart: true
     volumes:

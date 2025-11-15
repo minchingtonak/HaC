@@ -8,7 +8,7 @@ dozzle = {}
 subdomains = [
     "apprise",
     "qbittorrent",
-    "sabnzbd",
+    "nzbget",
     "radarr",
     "sonarr",
     "prowlarr",
