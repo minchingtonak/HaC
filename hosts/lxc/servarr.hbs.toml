@@ -14,8 +14,8 @@ subdomains = [
     "prowlarr",
     "bazarr",
     "profilarr",
-    "cleanuparr",
     "huntarr",
+    "cleanuparr",
 ]
 
 [cpu]
