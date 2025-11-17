@@ -30,6 +30,10 @@
       allowedVersions: "<2021",
     },
     {
+      matchPackageNames: ["ghcr.io/linuxserver/nzbget"],
+      allowedVersions: "<2021",
+    },
+    {
       matchPackageNames: ["ghcr.io/linuxserver/qbittorrent"],
       allowedVersions: "<6",
     },
