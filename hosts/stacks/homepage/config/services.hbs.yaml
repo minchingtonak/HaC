@@ -68,6 +68,13 @@ widget:
   token: "{{{SECRET_NAVIDROME_TOKEN}}}" #md5(password + salt)
   salt: "{{{SECRET_NAVIDROME_SALT}}}"
 # {{/ifeq}}
+# {{#ifeq serviceName "nzbget"}}
+widget:
+  type: nzbget
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+  username: "{{{SECRET_NZBGET_USERNAME}}}"
+  password: "{{{SECRET_NZBGET_PASSWORD}}}"
+# {{/ifeq}}
 # {{#ifeq serviceName "paperless-ngx"}}
 widget:
   type: paperlessngx

@@ -105,6 +105,10 @@ config:
     secure: v1:d3PpejzMl7YEwbr5:oarJnPqS6HoAJNkHq/3SYP51ar28bQyu/93k+6KtcRgw3vW4ww+CToFR4LEswaBN
   lxc#admin#homepage:SECRET_NAVIDROME_SALT:
     secure: v1:NmJEAkCmoZGmfRHX:Mi2zws0UGFNS2uTC1XZjFRHmbIWzYqwKKxMd8mb0PTI=
+  lxc#admin#homepage:SECRET_NZBGET_USERNAME:
+    secure: v1:rva27jNG90PjqeaE:d0mq/t0zO4Fsy70NV0torKXt1VCc
+  lxc#admin#homepage:SECRET_NZBGET_PASSWORD:
+    secure: v1:75vNLpxZQKwl1NOu:CsgWV5Of9oibVRGNFGEQMdw=
   lxc#admin#homepage:SECRET_SLSKD_API_KEY:
     secure: v1:aoV+4I3byA9PZK+m:8rg8TmAjacreWhPvvNUniSx9ds41PS0wyZa+dD23szDVfsiq8+qOcwH/+e7/Yqa7/6WMX5mPbmXNV7MEWNnslhsQonhG5KoTwA+97y8l+ls=
   lxc#admin#homepage:SECRET_WALLOS_API_KEY:
