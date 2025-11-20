@@ -6,10 +6,12 @@ traefik = {}
 dozzle = {}
 cyberchef = {}
 docuseal = {}
-it-tools = {}
-mazanoke = {}
-omni-tools = {}
 stirling-pdf = {}
+bentopdf = {}
+it-tools = {}
+omni-tools = {}
+mazanoke = {}
+withoutbg = {}
 
 [cpu]
 cores = 4

@@ -1,0 +1,21 @@
+services:
+  bentopdf:
+    image: bentopdf/bentopdf:v1.7.5@sha256:4d7deb3e04b7bb39b8c0873b15817abf35b2dd7bb8ad7ed8266b704267758377
+    container_name: bentopdf
+    # ports:
+    #   - "3000:8080"
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.bentopdf.rule=Host(`{{{domainForApp "bentopdf"}}}`)
+      - traefik.http.routers.bentopdf.entrypoints=https
+      - traefik.http.routers.bentopdf.tls=true
+      - traefik.http.routers.bentopdf.tls.certresolver=porkbun
+      - traefik.http.routers.bentopdf.service=bentopdf
+      - traefik.http.services.bentopdf.loadbalancer.server.port=8080
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
