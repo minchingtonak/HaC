@@ -1,0 +1,23 @@
+services:
+  app:
+    image: ghcr.io/itskovacs/trip:1.31.0@sha256:5233ea5bf3414c7508ed4a1c0fa636fac5af973bd3b7c63e7cda38296e14ef5b
+    # ports:
+    #   - 127.0.0.1:8080:8000
+    volumes:
+      - /docker/trip:/app/storage
+    command: ["fastapi", "run", "/app/trip/main.py", "--host", "0.0.0.0"]
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.trip.rule=Host(`{{{domainForApp "trip"}}}`)
+      - traefik.http.routers.trip.entrypoints=https
+      - traefik.http.routers.trip.tls=true
+      - traefik.http.routers.trip.tls.certresolver=porkbun
+      - traefik.http.routers.trip.service=trip
+      - traefik.http.services.trip.loadbalancer.server.port=8000
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

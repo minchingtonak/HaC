@@ -4,11 +4,12 @@ description = "life tracking apps"
 [stacks]
 traefik = {}
 dozzle = {}
-dawarich = {}
-fittrackee = {}
 mealie = {}
-memos = {}
+fittrackee = {}
 wallos = {}
+dawarich = {}
+trip = {}
+memos = {}
 
 [cpu]
 cores = 4
