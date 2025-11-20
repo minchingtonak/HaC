@@ -33,10 +33,10 @@ jellyfin = { id = 203 }
 jellyseerr = { id = 204 }
 immich = { id = 207 }
 paperless = { id = 214 }
-servarr = { id = 201 }
-music = { id = 216 }
 life = { id = 215 }
 tools = { id = 208 }
+music = { id = 216 }
+servarr = { id = 201 }
 admin = { id = 213 }
 backup = { id = 202 }
 gitea = { id = 206 }
