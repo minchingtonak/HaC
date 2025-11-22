@@ -17,12 +17,13 @@
   minimumReleaseAge: "7 days",
 
   prHourlyLimit: 0,
+  prConcurrentLimit: 0,
 
   ignorePaths: ["sdks/**"],
 
   rangeStrategy: "bump",
 
-  pruneStaleBranches: false, 
+  pruneStaleBranches: false,
 
   // docker:enableMajor preset, this is disabled by default
   packageRules: [
