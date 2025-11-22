@@ -22,6 +22,8 @@
 
   rangeStrategy: "bump",
 
+  pruneStaleBranches: false, 
+
   // docker:enableMajor preset, this is disabled by default
   packageRules: [
     { matchPackagePatterns: ["^lavaforge\\.org/"], enabled: false },
