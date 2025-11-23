@@ -54,6 +54,10 @@ mount_point = "/mnt/podcasts"
 volume = "{{{@pve.storage.mass.path}}}/restic"
 mount_point = "/mnt/restic"
 
+[[mount_points]]
+volume = "{{{@pve.storage.fast.path}}}/appdata"
+mount_point = "/mnt/appdata"
+
 [[provisioners]]
 type = "ansible"
 playbook = "provisioners/ansible/lxc-init.yaml"
