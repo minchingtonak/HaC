@@ -9,7 +9,7 @@ services:
     volumes:
       - /docker/copyparty:/cfg
       - ./copyparty.conf:/cfg/copyparty.conf
-      - /mnt:/void
+      - /mnt:/mnt
     labels:
       - traefik.enable=true
       - traefik.http.routers.copyparty.rule=Host(`{{{domainForApp "copyparty"}}}`)
