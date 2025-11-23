@@ -5,8 +5,8 @@ description = "various backup-related services"
 traefik = {}
 dozzle = {}
 backrest = {}
-cronicle = {}
 dagu = {}
+forgejo = {}
 
 [cpu]
 cores = 4
@@ -17,6 +17,14 @@ swap = 4096
 
 [disk]
 size = 8
+
+[[firewall_rules]]
+enabled = true
+type = "in"
+action = "ACCEPT"
+dport = "222"
+proto = "tcp"
+comment = "forgejo ssh"
 
 [[mount_points]]
 volume = "{{{@pve.lxc.app_data_dir}}}/backup"
@@ -46,6 +54,11 @@ mount_point = "/mnt/repos"
 type = "ansible"
 playbook = "provisioners/ansible/lxc-init.yaml"
 replayable = false
+
+[[provisioners]]
+type = "ansible"
+playbook = "provisioners/ansible/git-server-setup.yaml"
+replayable = true
 
 [[provisioners]]
 type = "ansible"

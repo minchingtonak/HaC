@@ -171,6 +171,12 @@ config:
     secure: v1:WMY5vfivaMqgnHLn:ahm2lhdS4vWy+E62pLtlAiWVf4oA4WDqiXl3heqAXSAMK0TPK1mqecBm0HOAJcMqh8u1aN1CeyRkU+kSRVQ57CUeP2pkwMVf5v98RdP6ueMkdeXnzxMgP2IH/EiLdkbYcOsUDx2GCbL0SRgmjBOXMdtjucFU+fK6Sl+6ChdItCw4BrY34wj9VmFoVMlE2eOA8Me6egPaLXCqFE0y+4BPe1D0J1qypC4YL4zrPrreoExTFRslvmye8L5guAKFNt2Jfr23TaSynbAVYwd4vtjf/Qfwib6qlvHRndstm78GierLaUgt0J2i804bXojDFFEVzem6oYKkDZ/JcxVaoKJozCGAwDOVhjOnIMW9lOFG9NWcCMVQztLls0aPaly7K38SItm1/lJQdLgAsGEQqJGnj/ThKX7MQHg30XyliVBdtgljXYtFcU8joNxfys8XtxZBV5K536klu2Lme/SpHiIilkO3ODliUpw6w5PRyyzkUxBWF3MaKDpv+II1RSmV+UdnBKsFl4wohjEFeeGOTtQ3
   lxc#backup#dagu:SECRET_APPDATA_HEALTHCHECK_PING_URL:
     secure: v1:0NPdoIQvBedAG3ik:2v/uTocIEnMrvwXhmvYWZLdbReKSHIQVrBeBTwzvyZzMZv/epLa405NYDxEzGfZPgCZHvCxNqMfrl8M9XqBrEHH+5F+rvOcV
+  lxc#backup#forgejo:SECRET_LFS_JWT_SECRET:
+    secure: v1:wwrv4/7jP12dYID9:SXNe8F900y2BzjW+3OXw9+AHTw0pl+VZaZw/6Ulf6Jv7OfjX2kVbdljUjINypYz/EfLuQOd/MiQf28M=
+  lxc#backup#forgejo:SECRET_INTERNAL_TOKEN:
+    secure: v1:yO2mJgscLnc/c8JT:MvbOhHjEO6PVV+wjtGUNRZeQa+LUIXET+DZO7cCM8LbKuGoHje91eeVX6OjShJ7Iuqx1HbpbM2j2wwq4sNQ8h83Rh9kOsUXJS88R2WUhiErsfWynlYazOfEMhEa2d5lanJpcAAW4qzoaALpe3EzPShB2gTF+O5KItA==
+  lxc#backup#forgejo:SECRET_JWT_SECRET:
+    secure: v1:ayUsAZZn5opBcroE:966gcy7jKPtjymzlnMQpR2VYtY1WjdHXBmpo47e+5hj3Mwz/2jlMz738wRVJBQ/ZQtfWxGimGXH2R0k=
   # life
   lxc#life#dawarich:SECRET_DB_PASSWORD:
     secure: v1:xEWsp+rmkp0ekfX0:fDOUcy1psCZEQPCgfxHGBMzi0oTNJdmNENQTIYNNxjQoc3Mt

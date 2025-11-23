@@ -1,0 +1,45 @@
+---
+- name: Git Server Setup
+  hosts: all
+  become: true
+  vars:
+    git_user_uid: 1000
+    git_user_gid: 1000
+    void_access_gid: 10000
+
+  tasks:
+    - name: Create void-access group
+      ansible.builtin.group:
+        name: void-access
+        gid: "{{ void_access_gid }}"
+        state: present
+
+    - name: Create git group
+      ansible.builtin.group:
+        name: git
+        gid: "{{ git_user_gid }}"
+        state: present
+
+    - name: Create git user
+      ansible.builtin.user:
+        name: git
+        uid: "{{ git_user_uid }}"
+        group: git
+        groups: void-access
+        shell: /bin/bash
+        home: /home/git
+        create_home: true
+        state: present
+
+    - name: Reboot with systemctl
+      ansible.builtin.systemd:
+        name: reboot.target
+        state: started
+      async: 1
+      poll: 0
+      failed_when: false
+
+    - name: Wait for system to come back
+      ansible.builtin.wait_for_connection:
+        delay: 20
+        timeout: 600
