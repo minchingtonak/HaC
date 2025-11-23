@@ -19,6 +19,9 @@
   prHourlyLimit: 0,
   prConcurrentLimit: 0,
 
+  // https://docs.renovatebot.com/configuration-options/#prbodytemplate
+  prBodyTemplate: "{{{header}}}{{{table}}}{{{warnings}}}{{{notes}}}{{{configDescription}}}{{{controls}}}{{{footer}}}",
+
   ignorePaths: ["sdks/**"],
 
   rangeStrategy: "bump",
