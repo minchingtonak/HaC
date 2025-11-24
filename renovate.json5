@@ -105,6 +105,12 @@
       matchCurrentVersion: "8.20",
       enabled: false,
     },
+    // tandoor
+    {
+      matchPackageNames: "postgres",
+      matchCurrentVersion: "16-alpine3.22",
+      enabled: false,
+    },
     // windmill
     {
       matchPackageNames: "postgres",

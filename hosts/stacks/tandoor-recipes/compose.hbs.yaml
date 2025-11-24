@@ -1,0 +1,36 @@
+services:
+  db_recipes:
+    restart: always
+    # pinned
+    image: postgres:16-alpine3.22@sha256:79c06d285ed9186efbbc45c73413b3c3510c3c94ffede2f25d1e523f74d07f28
+    volumes:
+      - /docker/tandoor/postgres:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+    networks:
+      - traefik
+
+  web_recipes:
+    restart: always
+    image: vabene1111/recipes:2.3.5@sha256:0f8d061895e9ba57a6d048d295af9d2fac1aa442a8d053d3d7f68ad78c4d1c17
+    env_file:
+      - ./.env
+    volumes:
+      - /docker/tandoor/staticfiles:/opt/recipes/staticfiles
+      - /docker/tandoor/mediafiles:/opt/recipes/mediafiles
+    depends_on:
+      - db_recipes
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.tandoor.rule=Host(`{{{domainForApp "tandoor-recipes"}}}`)
+      - traefik.http.routers.tandoor.entrypoints=https
+      - traefik.http.routers.tandoor.tls=true
+      - traefik.http.routers.tandoor.tls.certresolver=porkbun
+      - traefik.http.routers.tandoor.service=tandoor
+      - traefik.http.services.tandoor.loadbalancer.server.port=80
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

@@ -5,6 +5,7 @@ description = "life tracking apps"
 traefik = {}
 dozzle = {}
 mealie = {}
+tandoor-recipes = {}
 fittrackee = {}
 wallos = {}
 dawarich = {}

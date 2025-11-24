@@ -184,6 +184,10 @@ config:
     secure: v1:ifCk9F9zZ+3sHV+R:05/13+YnJnaBGpU131t0FIplYRNxyXT/0StRQu+VGe1uIcp3ppDY0lJxTCV3Gg==
   lxc#life#fittrackee:SECRET_DB_PASSWORD:
     secure: v1:2SC5AIdLdytL3l7R:CJhjXr0pdvtwClww4/fnwDjZHKE8F4Cxs4SxPW5wNIItrxTfXwtMAdzmkiE=
+  lxc#life#tandoor-recipes:SECRET_KEY:
+    secure: v1:nuKklw9Lw7CB/wXi:RBXhq2GUMtjebUOaMIYCfqwVi/PMudiccrCDgRkS4xKSX1bJ0Q+kQG+zrIRFMcKDriIRxWa+IHcNlEI01taVuz1h
+  lxc#life#tandoor-recipes:SECRET_DB_PASSWORD:
+    secure: v1:WuyLZFlEVBAu8GqV:FBUtTYuDvxAso2+utSe2/A7MPEh2S0pg8jW3q1hdb1ANDqWvDwWrySdwwWRy8M0T89L3i5Bqe0EBQbn1h8oKnA==
   # paperless
   lxc#paperless#paperless-ngx:SECRET_ADMIN_USERNAME:
     secure: v1:ZN1VLNMSu60BAhxf:okOhImt9d3D9NVlmztIPHDRv9noH
