@@ -188,6 +188,12 @@ config:
     secure: v1:nuKklw9Lw7CB/wXi:RBXhq2GUMtjebUOaMIYCfqwVi/PMudiccrCDgRkS4xKSX1bJ0Q+kQG+zrIRFMcKDriIRxWa+IHcNlEI01taVuz1h
   lxc#life#tandoor-recipes:SECRET_DB_PASSWORD:
     secure: v1:WuyLZFlEVBAu8GqV:FBUtTYuDvxAso2+utSe2/A7MPEh2S0pg8jW3q1hdb1ANDqWvDwWrySdwwWRy8M0T89L3i5Bqe0EBQbn1h8oKnA==
+  lxc#life#discount-bandit:SECRET_EXCHANGE_RATE_API_KEY:
+    secure: v1:RQ6dK/n0hI/KviTJ:ilXLNdiJrb6fUpL0vySEjNVRiWNZXX7T6DXBCogXzC2L6IkU1fwzuw==
+  lxc#life#discount-bandit:SECRET_APP_KEY:
+    secure: v1:LHlQ2zKTgYm40nWj:DXKMSJmGhCzGKSEZNcqubZPDry9PtNDil66bLfG74eA8Z4o3iUbfJGUbDmaGni+Cb2X90O3A7Ru2s+GIZs/vTdX4Qg==
+  lxc#life#discount-bandit:SECRET_SLACK_WEBHOOK:
+    secure: v1:Dmt3tyTahKp/D+r2:r42FFwkQx0yIxHci28zKL0BCmkWU5bdQnV2WtY57/OgO4h+iF0jHrUipgCS/mvvu7cpNZzCe8p30kwDOgGhxP7AJt6Z+sEVAohloSrn9xlvdud2Yf6UGmDk5kLmeHfvhAw==
   # paperless
   lxc#paperless#paperless-ngx:SECRET_ADMIN_USERNAME:
     secure: v1:ZN1VLNMSu60BAhxf:okOhImt9d3D9NVlmztIPHDRv9noH

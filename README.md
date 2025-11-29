@@ -304,6 +304,7 @@ See [`provisioners/scripts/`](provisioners/scripts/) for examples.
 
 ### Usability
 
+- implement template system for app domains. can be `{{{stackName}}}{{{@lxc.name}}}.homelab.akmin.dev`
 - stacks for PVE hosts
   - need to consider implications of rendering templates in a different context
     - mainly the lxc config fields will not be available

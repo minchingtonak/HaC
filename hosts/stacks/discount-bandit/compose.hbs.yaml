@@ -1,0 +1,62 @@
+services:
+  discount-bandit:
+    image: cybrarist/discount-bandit:v4@sha256:6ba6ce19511ac2afaf0c630bbdf9607c29f23506fcd7f482963ba547d240a70f
+    # ports:
+    #   - 8080:80
+    volumes:
+      - /docker/discount-bandit/database/database.sqlite:/app/database/sqlite
+      - /docker/discount-bandit/logs:/logs
+    environment:
+      DB_CONNECTION: sqlite
+      APP_TIMEZONE: "{{{global:TIMEZONE}}}"
+      THEME_COLOR: Red
+      APP_URL: "https://{{{domainForApp 'discount-bandit'}}}"
+      ASSET_URL: "https://{{{domainForApp 'discount-bandit'}}}"
+      EXCHANGE_RATE_API_KEY: "{{{SECRET_EXCHANGE_RATE_API_KEY}}}"
+      CRON: "*/5 * * * *"
+      # base64:JeyDqSB4OYfvY6d2uJYQsEp/BE988nVvOas2Tl3f2do=
+      APP_KEY: "{{{SECRET_APP_KEY}}}"
+      APPRISE_URL: "apprises://{{{domainForApp 'discount-bandit-apprise'}}}/homelab?tags=discount-bandit"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.discount-bandit.rule=Host(`{{{domainForApp "discount-bandit"}}}`)
+      - traefik.http.routers.discount-bandit.entrypoints=https
+      - traefik.http.routers.discount-bandit.tls=true
+      - traefik.http.routers.discount-bandit.tls.certresolver=porkbun
+      - traefik.http.routers.discount-bandit.service=discount-bandit
+      - traefik.http.services.discount-bandit.loadbalancer.server.port=80
+    networks:
+      - traefik
+
+  # apprise:
+  #   image: caronc/apprise:1.2.2@sha256:0d74af8c1df9cf1de91f20f46d00ddee3a3efa15be179f9dbbe8a0f99d64268f
+  #   environment:
+  #     - APPRISE_WORKER_COUNT=1
+  #     - APPRISE_STATEFUL_MODE=simple
+  #     - APPRISE_DEFAULT_THEME=dark
+  #     - APPRISE_DEFAULT_CONFIG_ID=homelab
+  #     - APPRISE_CONFIG_LOCK=yes # should not be able to edit through UI
+  #     - PGID=0
+  #     - PUID=0
+  #   volumes:
+  #     - /docker/discount-bandit/apprise/attach:/attach
+  #     - /docker/discount-bandit/apprise/plugin:/plugin
+  #     - ./config:/config
+  #   restart: unless-stopped
+  #   # ports:
+  #   #   - 8000:8000
+  #   container_name: discount-bandit-apprise
+  #   labels:
+  #     - traefik.enable=true
+  #     - traefik.http.routers.discount-bandit-apprise.rule=Host(`{{{domainForApp "discount-bandit-apprise"}}}`)
+  #     - traefik.http.routers.discount-bandit-apprise.entrypoints=https
+  #     - traefik.http.routers.discount-bandit-apprise.tls=true
+  #     - traefik.http.routers.discount-bandit-apprise.tls.certresolver=porkbun
+  #     - traefik.http.routers.discount-bandit-apprise.service=discount-bandit-apprise
+  #     - traefik.http.services.discount-bandit-apprise.loadbalancer.server.port=8000
+  #   networks:
+  #     - traefik
+
+networks:
+  traefik:
+    external: true
