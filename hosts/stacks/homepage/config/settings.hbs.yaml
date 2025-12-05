@@ -8,3 +8,12 @@ theme: dark
 color: emerald
 layout:
   columns: 3
+quicklaunch:
+  searchDescriptions: true
+  hideInternetSearch: true
+  showSearchSuggestions: false
+  hideVisitURL: false
+  provider: custom
+  url: https://kagi.com/search?q=
+  target: _blank
+  suggestionUrl: https://kagi.com/api/autosuggest?q=
