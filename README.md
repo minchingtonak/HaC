@@ -282,7 +282,196 @@ See [`provisioners/scripts/`](provisioners/scripts/) for examples.
 
 ## Misc
 
-### Music Management Stack Target Architecture
+### Music Management Stack
+
+#### Glossary
+
+**User**
+
+- **User** - The person interacting with the music management system through various client applications
+
+**Listening Tools**
+
+- **Browser**
+  - **Navidrome Web UI** - Browser-based interface for streaming music from Navidrome
+- **iOS**
+  - **Play:Sub** - iOS client application for accessing Subsonic-compatible servers like Navidrome
+- **Android**
+  - **Symfonium** - Android client application for streaming music from Subsonic-compatible servers
+- **Desktop**
+  - **Feishin** - Desktop client application for accessing music from Navidrome
+
+**Music Server**
+
+- **Navidrome** - Self-hosted music streaming server that provides a web interface and API for accessing your music library
+
+**Music Acquisition**
+
+- **Lidarr** - Automated music library manager that searches for, downloads, and organizes music releases
+- **MusicBrainz Picard** - Music tagger that uses the MusicBrainz database to automatically identify and tag music files
+- **Tubifarry Plugin** - YouTube downloader plugin for Lidarr that downloads music from YouTube. Also enables slskd as indexer & download client, plus automatic lyric file downloads
+- **Music Files Storage Drive** - Physical or network storage location where music files are stored
+- **VPN Tunnel (gluetun)** - Encrypted network connection using Gluetun that routes download client traffic through a VPN for privacy
+  - **NZBGet** - Usenet client for downloading files from Usenet newsgroups
+  - **qBittorrent** - BitTorrent client for downloading files via the BitTorrent protocol
+  - **slskd** - Soulseek client for peer-to-peer music file sharing
+
+**Recommendations**
+
+- **Last.fm** - Music tracking service that records listening history (scrobbles) and provides recommendations
+- **ListenBrainz** - Open-source music listening tracker that provides analytics and insights on listening habits
+- **Sonobarr** - Recommendation engine that suggests new artists based on listening history from Last.fm and ListenBrainz
+
+**Import**
+
+- **Last.fm Import Target** - Last.fm service used as a destination for importing scrobbles from other platforms
+- **Spotify Playlist Source** - Spotify service used specifically for importing playlist albums into Lidarr
+
+#### Reasonable Starter Architecture
+
+Features
+
+- Stream & download tracks from any device
+- Like tracks/albums and create playlists like every other music provider
+- Manage & acquire your music with Lidarr, Tubifarry, and qBittorrent
+- Listening analytics and track recommendations from last.fm
+- Import listening history into Lidarr from last.fm to download your library
+
+```mermaid
+flowchart TB
+    %% Define User node
+    User(["User"])
+
+    %% Define subgraphs
+    subgraph subGraph3["Listening Tools"]
+        subgraph Browser["Browser"]
+            WebUI["Navidrome Web UI"]
+        end
+        subgraph iOS["iOS"]
+            PlaySub["Play:Sub"]
+        end
+        subgraph Android["Android"]
+            Symfonium["Symfonium"]
+        end
+        subgraph Desktop["Desktop"]
+            Feishin["Feishin"]
+        end
+    end
+
+    subgraph subGraph1["Music Server"]
+        Navidrome["Navidrome<br/>Music Server"]
+    end
+
+    subgraph subGraph4["Import"]
+        LastFMImport("Last.fm<br/>Import Target")
+        SpotifyImport("Spotify")
+        AppleMusic("Apple Music")
+        YouTubeMusic("YouTube Music")
+        Tidal("Tidal")
+        SpotifyPlaylist("Spotify<br/>Playlist Source")
+    end
+
+    subgraph subGraph0["Music Acquisition"]
+        subgraph VPN["VPN Tunnel (gluetun)"]
+            qbittorrent["qBittorrent<br/>Torrent Client"]
+        end
+        MusicFiles[("Music Files<br/>Storage Drive")]
+        tubifarry["Tubifarry Plugin<br/>YouTube Downloader"]
+        Lidarr["Lidarr<br/>Music Library Manager"]
+    end
+
+    subgraph Legend["Legend"]
+        direction TB
+        LocalExample["Local Service"]
+        CloudExample("Cloud Service")
+    end
+
+    subgraph ColorLegend["Color Legend"]
+        direction TB
+        LegendDocker["Locally Hosted (Docker)"]
+        LegendDevice["Running on Device"]
+    end
+
+    %% Connections - User to Access Methods
+    User --> WebUI
+    User --> PlaySub
+    User --> Symfonium
+    User --> Feishin
+    User -.->|Configure| Lidarr
+    User -.->|Request Releases| Lidarr
+
+    %% Connections - Access Methods
+    WebUI --> Navidrome
+    PlaySub --> Navidrome
+    Symfonium --> Navidrome
+    Feishin --> Navidrome
+
+    %% Connections - Music Server to Storage
+    Navidrome -->|Streams & Downloads| MusicFiles
+
+    %% Connections - Acquisition Flow
+    tubifarry -->|Downloads| MusicFiles
+    tubifarry -->|LRC files| MusicFiles
+    qbittorrent -->|Downloads| MusicFiles
+    Lidarr --> qbittorrent
+    Lidarr --> tubifarry
+
+    %% Connections - Import Services
+    SpotifyImport -.->|Scrobbles| LastFMImport
+    AppleMusic -.->|Scrobbles| LastFMImport
+    YouTubeMusic -.->|Scrobbles| LastFMImport
+    Tidal -.->|Scrobbles| LastFMImport
+    LastFMImport -.->|Import Playlist Albums| Lidarr
+    SpotifyPlaylist -.->|Import Playlist Albums| Lidarr
+
+    %% Styling - Local services (solid border, rectangle shape)
+    classDef acquisitionLocal fill:#6495ED,stroke:#333,stroke-width:2px,color:white
+    classDef serverLocal fill:#6495ED,stroke:#333,stroke-width:2px,color:white
+    classDef accessLocal fill:#9370DB,stroke:#333,stroke-width:2px,color:white
+
+    %% Styling - Cloud services (dashed border, rounded shape)
+    classDef externalCloud fill:#3CB371,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5,color:white
+    classDef lastfmCloud fill:#B8392E,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5,color:white
+    classDef spotifyCloud fill:#1DB954,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5,color:white
+    classDef appleMusicCloud fill:#FA243C,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5,color:white
+    classDef youtubeMusicCloud fill:#FF0000,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5,color:white
+    classDef tidalCloud fill:#000000,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5,color:white
+
+    %% Styling - User and Legend
+    classDef user fill:#FF6347,stroke:#333,stroke-width:2px,color:white
+    classDef legendLocal fill:#E8E8E8,stroke:#333,stroke-width:2px,color:black
+    classDef legendCloud fill:#E8E8E8,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5,color:black
+    classDef legendDockerStyle fill:#6495ED,stroke:#333,stroke-width:2px,color:white
+    classDef legendDeviceStyle fill:#9370DB,stroke:#333,stroke-width:2px,color:white
+    classDef legendBrandStyle fill:#3CB371,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5,color:white
+
+    class Lidarr,qbittorrent,tubifarry,MusicFiles acquisitionLocal
+    class Navidrome serverLocal
+    class LastFMImport lastfmCloud
+    class SpotifyImport spotifyCloud
+    class SpotifyPlaylist spotifyCloud
+    class AppleMusic appleMusicCloud
+    class YouTubeMusic youtubeMusicCloud
+    class Tidal tidalCloud
+    class WebUI,PlaySub,Symfonium,Feishin accessLocal
+    class User user
+    class LocalExample legendLocal
+    class CloudExample legendCloud
+    class LegendDocker legendDockerStyle
+    class LegendDevice legendDeviceStyle
+    class LegendBrand legendBrandStyle
+```
+
+#### Full-featured Architecture
+
+Features
+
+- All of the features of the starter architecture, plus...
+- Daily & weekly recommendation playlists generated by ListenBrainz
+- Generate more recommendations based on last.fm or ListenBrainz with Sonobarr
+- Continually import new tracks from Spotify to download your library as you find new tracks (assumes that you're still using Spotify)
+- Greatly improved music availaibility and quality due to added usage of Usenet (NZBGet) and Soulseek (slskd)
+- Ability to manually tag and rename music that isn't available in Lidarr by default
 
 ```mermaid
 flowchart TB
@@ -323,7 +512,7 @@ flowchart TB
 
     subgraph subGraph0["Music Acquisition"]
         Picard["MusicBrainz Picard<br/>Music Tagger"]
-        subgraph VPN["VPN Tunnel"]
+        subgraph VPN["VPN Tunnel (gluetun)"]
             nzbget["NZBGet<br/>Usenet Client"]
             qbittorrent["qBittorrent<br/>Torrent Client"]
             slskd["slskd<br/>Soulseek Client"]
@@ -422,133 +611,6 @@ flowchart TB
     class Navidrome serverLocal
     class LastFM lastfmCloud
     class ListenBrainz listenbrainzCloud
-    class LastFMImport lastfmCloud
-    class SpotifyImport spotifyCloud
-    class SpotifyPlaylist spotifyCloud
-    class AppleMusic appleMusicCloud
-    class YouTubeMusic youtubeMusicCloud
-    class Tidal tidalCloud
-    class WebUI,PlaySub,Symfonium,Feishin accessLocal
-    class User user
-    class LocalExample legendLocal
-    class CloudExample legendCloud
-    class LegendDocker legendDockerStyle
-    class LegendDevice legendDeviceStyle
-    class LegendBrand legendBrandStyle
-```
-
-#### Reasonable Starter Music Management Stack Architecture
-
-```mermaid
-flowchart TB
-    %% Define User node
-    User(["User"])
-
-    %% Define subgraphs
-    subgraph subGraph3["Listening Tools"]
-        subgraph Browser["Browser"]
-            WebUI["Navidrome Web UI"]
-        end
-        subgraph iOS["iOS"]
-            PlaySub["Play:Sub"]
-        end
-        subgraph Android["Android"]
-            Symfonium["Symfonium"]
-        end
-        subgraph Desktop["Desktop"]
-            Feishin["Feishin"]
-        end
-    end
-
-    subgraph subGraph1["Music Server"]
-        Navidrome["Navidrome<br/>Music Server"]
-    end
-
-    subgraph subGraph4["Import"]
-        LastFMImport("Last.fm<br/>Import Target")
-        SpotifyImport("Spotify")
-        AppleMusic("Apple Music")
-        YouTubeMusic("YouTube Music")
-        Tidal("Tidal")
-        SpotifyPlaylist("Spotify<br/>Playlist Source")
-    end
-
-    subgraph subGraph0["Music Acquisition"]
-        subgraph VPN["VPN Tunnel"]
-            qbittorrent["qBittorrent<br/>Torrent Client"]
-        end
-        MusicFiles[("Music Files<br/>Storage Drive")]
-        tubifarry["Tubifarry Plugin<br/>YouTube Downloader"]
-        Lidarr["Lidarr<br/>Music Library Manager"]
-    end
-
-    subgraph Legend["Legend"]
-        direction TB
-        LocalExample["Local Service"]
-        CloudExample("Cloud Service")
-    end
-
-    subgraph ColorLegend["Color Legend"]
-        direction TB
-        LegendDocker["Locally Hosted (Docker)"]
-        LegendDevice["Running on Device"]
-    end
-
-    %% Connections - User to Access Methods
-    User --> WebUI
-    User --> PlaySub
-    User --> Symfonium
-    User --> Feishin
-    User -.->|Configure| Lidarr
-    User -.->|Request Releases| Lidarr
-
-    %% Connections - Access Methods
-    WebUI --> Navidrome
-    PlaySub --> Navidrome
-    Symfonium --> Navidrome
-    Feishin --> Navidrome
-
-    %% Connections - Music Server to Storage
-    Navidrome -->|Streams & Downloads| MusicFiles
-
-    %% Connections - Acquisition Flow
-    tubifarry -->|Downloads| MusicFiles
-    tubifarry -->|LRC files| MusicFiles
-    qbittorrent -->|Downloads| MusicFiles
-    Lidarr --> qbittorrent
-    Lidarr --> tubifarry
-
-    %% Connections - Import Services
-    SpotifyImport -.->|Scrobbles| LastFMImport
-    AppleMusic -.->|Scrobbles| LastFMImport
-    YouTubeMusic -.->|Scrobbles| LastFMImport
-    Tidal -.->|Scrobbles| LastFMImport
-    LastFMImport -.->|Import Playlist Albums| Lidarr
-    SpotifyPlaylist -.->|Import Playlist Albums| Lidarr
-
-    %% Styling - Local services (solid border, rectangle shape)
-    classDef acquisitionLocal fill:#6495ED,stroke:#333,stroke-width:2px,color:white
-    classDef serverLocal fill:#6495ED,stroke:#333,stroke-width:2px,color:white
-    classDef accessLocal fill:#9370DB,stroke:#333,stroke-width:2px,color:white
-
-    %% Styling - Cloud services (dashed border, rounded shape)
-    classDef externalCloud fill:#3CB371,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5,color:white
-    classDef lastfmCloud fill:#B8392E,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5,color:white
-    classDef spotifyCloud fill:#1DB954,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5,color:white
-    classDef appleMusicCloud fill:#FA243C,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5,color:white
-    classDef youtubeMusicCloud fill:#FF0000,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5,color:white
-    classDef tidalCloud fill:#000000,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5,color:white
-
-    %% Styling - User and Legend
-    classDef user fill:#FF6347,stroke:#333,stroke-width:2px,color:white
-    classDef legendLocal fill:#E8E8E8,stroke:#333,stroke-width:2px,color:black
-    classDef legendCloud fill:#E8E8E8,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5,color:black
-    classDef legendDockerStyle fill:#6495ED,stroke:#333,stroke-width:2px,color:white
-    classDef legendDeviceStyle fill:#9370DB,stroke:#333,stroke-width:2px,color:white
-    classDef legendBrandStyle fill:#3CB371,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5,color:white
-
-    class Lidarr,qbittorrent,tubifarry,MusicFiles acquisitionLocal
-    class Navidrome serverLocal
     class LastFMImport lastfmCloud
     class SpotifyImport spotifyCloud
     class SpotifyPlaylist spotifyCloud
