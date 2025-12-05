@@ -218,6 +218,16 @@ config:
     secure: v1:w/o6ZsYbS5sUTcQC:DNy5wi+ud/rWyPqDiqpE8Kcbo6WrrVrz3JymjQqW+/Mie7RT5THNvbEAI4y439m2
   lxc#music#your-spotify:SECRET_SPOTIFY_CLIENT_SECRET:
     secure: v1:vOfwntO6rFuwv7HX:TfO4gitQRKUjvAuVgrObOpfQubcKbAGG36aKGPBKcGUaRoKe+1u0QUQV9WdskLg3
+  lxc#music#sonobarr:SECRET_SECRET_KEY:
+    secure: v1:+MZeMvGNqVFcoS4X:md3AK1GkENZu85q2I6RZdMD9nRENO9BxVXGr2KHZixYj0/+m0ULqE2W5Nth66xb6aEJzHfmL2FARN0+Rks2n8g==
+  lxc#music#sonobarr:SECRET_LIDARR_API_KEY:
+    secure: v1:R7fKpYjlJh4dnbQ+:iCDDZQTovQdzmnL9wHC+gL3lRuiDAE+JKKxnxZq1JakAHp23vRbDX8YdI6Zh8ahl
+  lxc#music#sonobarr:SECRET_LASTFM_API_KEY:
+    secure: v1:B+wEckCfN1XP0UQf:lAKLPw7M8roWVpohokhDHbmR+WSzCIMojS/pxz5V2dTeXGqECI967g9T1qerZZgi
+  lxc#music#sonobarr:SECRET_LASTFM_API_SECRET:
+    secure: v1:fnQkH8rr/mWuoz9L:Uk6V2SpbGUSk0RMnDwaiE4irMDB8lUz/+baak9tmUDZ+cATo8xsFtiYHEFt6lX5Z
+  lxc#music#sonobarr:SECRET_SUPERADMIN_PASSWORD:
+    secure: v1:Q8u3HtbannGUWOKt:6URtN03PVCyH6x0DpR/6ZlNmTTpgGjt58FpL6r62D9DTDRak
   # windmill
   lxc#windmill#windmill:SECRET_DB_PASSWORD:
     secure: v1:o/l5rWI9Pdv7C2lQ:fktUJhe1pR3EcFvC/GoAGmqSJ9xSsQCGJycZYSMudmPe4yJupQKrUlX0OPAT7g==

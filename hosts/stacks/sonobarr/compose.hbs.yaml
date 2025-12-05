@@ -1,0 +1,26 @@
+services:
+  sonobarr:
+    image: ghcr.io/dodelidoo-labs/sonobarr:0.10.0@sha256:ddb70f93004100c392a62b6a1e3e972d485affe3e7790f18a2527ffa1bed9334
+    container_name: sonobarr
+    env_file:
+      - .env
+    volumes:
+      - /docker/sonobarr:/sonobarr/config
+      - /etc/localtime:/etc/localtime:ro
+    # ports:
+    #   - "5000:5000"
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.sonobarr.rule=Host(`{{{domainForApp "sonobarr"}}}`)
+      - traefik.http.routers.sonobarr.entrypoints=https
+      - traefik.http.routers.sonobarr.tls=true
+      - traefik.http.routers.sonobarr.tls.certresolver=porkbun
+      - traefik.http.routers.sonobarr.service=sonobarr
+      - traefik.http.services.sonobarr.loadbalancer.server.port=5000
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
