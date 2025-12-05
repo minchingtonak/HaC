@@ -1,0 +1,29 @@
+services:
+  picard:
+    image: mikenye/picard:2.13.3@sha256:8579fd6ca63e50463208cae7cdc8a0ca3504f5e7bdeb85c57441d5aac96030e3
+    container_name: musicbrainz-picard
+    # ports:
+    #   - "5800:5800"
+    #   - "5900:5900"
+    environment:
+      USER_ID: 0
+      GROUP_ID: 0
+      TZ: "{{{global:TIMEZONE}}}"
+    volumes:
+      - "/docker/picard:/config:rw"
+      - "/mnt/media/music:/storage:rw"
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.picard.rule=Host(`{{{domainForApp "picard"}}}`)
+      - traefik.http.routers.picard.entrypoints=https
+      - traefik.http.routers.picard.tls=true
+      - traefik.http.routers.picard.tls.certresolver=porkbun
+      - traefik.http.routers.picard.service=picard
+      - traefik.http.services.picard.loadbalancer.server.port=5800
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
