@@ -332,7 +332,11 @@ See [`provisioners/scripts/`](provisioners/scripts/) for examples.
 Features
 
 - Stream & download tracks from any device
-- Like tracks/albums and create playlists like every other music provider
+- Music features you expect
+  - like/favorite tracks
+  - create playlists
+  - share playlists with other users
+- Connect and listen to internet radio stations from your music player
 - Manage & acquire your music with Lidarr, Tubifarry, and qBittorrent
 - Listening analytics and track recommendations from last.fm
 - Import listening history into Lidarr from last.fm to download your library
