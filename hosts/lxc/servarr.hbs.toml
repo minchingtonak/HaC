@@ -9,8 +9,10 @@ subdomains = [
     "apprise",
     "qbittorrent",
     "nzbget",
+    "slskd",
     "radarr",
     "sonarr",
+    "lidarr",
     "prowlarr",
     "bazarr",
     "profilarr",
@@ -19,7 +21,7 @@ subdomains = [
 ]
 
 [cpu]
-cores = 2
+cores = 4
 
 [memory]
 dedicated = 8192
@@ -35,6 +37,14 @@ action = "ACCEPT"
 proto = "tcp"
 comment = "qbittorrent bittorrent"
 dport = "6881"
+
+[[firewall_rules]]
+enabled = true
+type = "in"
+action = "ACCEPT"
+dport = "50300"
+proto = "tcp"
+comment = "slskd-listen"
 
 [[mount_points]]
 volume = "{{{@pve.lxc.app_data_dir}}}/servarr"

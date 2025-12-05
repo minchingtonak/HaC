@@ -53,6 +53,12 @@ widget:
   url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
   key: "{{{SECRET_JELLYSEERR_API_KEY}}}"
 # {{/ifeq}}
+# {{#ifeq serviceName "lidarr"}}
+widget:
+  type: lidarr
+  url: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+  key: "{{{SECRET_LIDARR_API_KEY}}}"
+# {{/ifeq}}
 # {{#ifeq serviceName "mealie"}}
 widget:
   type: mealie

@@ -10,6 +10,9 @@ services:
     #   - 8081:8081 # qbittorrent web interface
     #   - 6881:6881 # qbittorrent torrent port
     #   - 6789:6789 # nzbget
+    #   # - "5030:5030" # slskd http
+    #   - "5031:5031" # slskd https
+    #   - "50300:50300" # Soulseek
     volumes:
       - /docker/gluetun:/gluetun
     environment:
@@ -52,6 +55,18 @@ services:
       - traefik.http.routers.nzbget.tls.certresolver=porkbun
       - traefik.http.routers.nzbget.service=nzbget
       - traefik.http.services.nzbget.loadbalancer.server.port=6789
+      #
+      - traefik.http.routers.slskd.rule=Host(`{{{domainForApp "slskd"}}}`)
+      - traefik.http.routers.slskd.entrypoints=https
+      - traefik.http.routers.slskd.tls=true
+      - traefik.http.routers.slskd.tls.certresolver=porkbun
+      - traefik.http.routers.slskd.service=slskd
+      - traefik.http.services.slskd.loadbalancer.server.port=5030
+      # https://doc.traefik.io/traefik/reference/routing-configuration/tcp/router/rules-and-priority/#hostsni-and-hostsniregexp
+      - traefik.tcp.routers.slskd-listen.rule=HostSNI(`*`)
+      - traefik.tcp.routers.slskd-listen.entrypoints=slskd-listen-50300-tcp
+      - traefik.tcp.routers.slskd-listen.service=slskd-listen
+      - traefik.tcp.services.slskd-listen.loadbalancer.server.port=50300
     networks:
       - traefik
 
@@ -154,6 +169,26 @@ services:
       timeout: 5s
       retries: 8
       start_period: 15s
+
+  slskd:
+    image: slskd/slskd:0.24.0@sha256:239ccb871fa1a624aa8ad4f11a712b4ec6c7a2ff570bf5800abae2cf91030834
+    container_name: slskd
+    environment:
+      - SLSKD_REMOTE_CONFIGURATION=true
+    network_mode: service:gluetun
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+    depends_on:
+      gluetun:
+        condition: service_healthy
+        restart: true
+    volumes:
+      - /docker/slskd/data:/app/data
+      - /docker/slskd/incomplete:/app/incomplete
+      - /docker/slskd/scripts:/app/scripts
+      - /mnt/media:/data
+      - ./config/slskd.yml:/app/slskd.yml
+    restart: always
 
   prowlarr:
     image: ghcr.io/linuxserver/prowlarr:2.1.5@sha256:643220338204525524db787ff38a607261597f49d1f550694acdb3e908e2b43e
@@ -298,6 +333,56 @@ services:
     networks:
       - traefik
 
+  lidarr:
+    container_name: lidarr
+    image: ghcr.io/hotio/lidarr:pr-plugins-3.1.1.4884@sha256:64d2979d6bb54d3b7ff413faa3ebbe81d71643f6bbc920e364b102782b718cdc
+    restart: unless-stopped
+    depends_on:
+      qbittorrent:
+        condition: service_healthy
+        restart: true
+      nzbget:
+        condition: service_healthy
+        restart: true
+      prowlarr:
+        condition: service_healthy
+        restart: true
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ={{{global:TIMEZONE}}}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /docker/lidarr:/config
+      - /mnt/media:/data
+    # ports:
+    #   - 8686:8686
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - --quiet
+        - --timeout=3
+        - --tries=1
+        - --spider
+        - http://localhost:8686/ping
+      interval: 5s
+      timeout: 4s
+      retries: 4
+      start_period: 5s
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.lidarr.rule=Host(`{{{domainForApp "lidarr"}}}`)
+      - traefik.http.routers.lidarr.entrypoints=https
+      - traefik.http.routers.lidarr.tls=true
+      - traefik.http.routers.lidarr.tls.certresolver=porkbun
+      - traefik.http.routers.lidarr.service=lidarr
+      - traefik.http.services.lidarr.loadbalancer.server.port=8686
+    networks:
+      - traefik
+
   bazarr:
     image: ghcr.io/linuxserver/bazarr:1.5.3@sha256:2be164c02c0bb311b6c32e57d3d0ddc2813d524e89ab51a3408c1bf6fafecda5
     container_name: bazarr
@@ -417,9 +502,9 @@ services:
       radarr:
         condition: service_healthy
         restart: true
-      # lidarr:
-      #   condition: service_healthy
-      #   restart: true
+      lidarr:
+        condition: service_healthy
+        restart: true
       qbittorrent:
         condition: service_healthy
         restart: true
@@ -471,9 +556,9 @@ services:
       radarr:
         condition: service_healthy
         restart: true
-      # lidarr:
-      #   condition: service_healthy
-      #   restart: true
+      lidarr:
+        condition: service_healthy
+        restart: true
       qbittorrent:
         condition: service_healthy
         restart: true
