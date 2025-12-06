@@ -196,6 +196,14 @@ config:
     secure: v1:LHlQ2zKTgYm40nWj:DXKMSJmGhCzGKSEZNcqubZPDry9PtNDil66bLfG74eA8Z4o3iUbfJGUbDmaGni+Cb2X90O3A7Ru2s+GIZs/vTdX4Qg==
   lxc#life#discount-bandit:SECRET_SLACK_WEBHOOK:
     secure: v1:Dmt3tyTahKp/D+r2:r42FFwkQx0yIxHci28zKL0BCmkWU5bdQnV2WtY57/OgO4h+iF0jHrUipgCS/mvvu7cpNZzCe8p30kwDOgGhxP7AJt6Z+sEVAohloSrn9xlvdud2Yf6UGmDk5kLmeHfvhAw==
+  lxc#life#cleanslate:SECRET_POSTGRES_PASSWORD:
+    secure: v1:ehvxfKGSQdzXe56A:xfbXHrWGCQfoyKbhHp25+NlwiTTURN0PP4O2BVkuaxyLWMXZYiS5p8Rl9ZHQIUarRtzPBtYH/NwvJdRiM1sHgQ==
+  lxc#life#cleanslate:SECRET_HASURA_GRAPHQL_ADMIN_SECRET:
+    secure: v1:m3NCAkGOfyYtLdcI:11F6+ATl0NgFyIMKIfpbXlZIkyalYnZitPl9FAU6CZxAB/g2Ms1+ZjS/b52kQMoXMkFjIKB4WUNfsSuLFhmo0w==
+  lxc#life#cleanslate:SECRET_JWT_SIGNING_SECRET:
+    secure: v1:heiyg0tHr0E6COhN:Q/gQEPj67DJMdEt9hc0D4GLOo8xcd/AHD1AYnpn4JhypxD3ocG4Gi74TRBFAklrdYYag6EFeP+5Groj9dWpfsQ==
+  lxc#life#cleanslate:SECRET_HASURA_GRAPHQL_JWT_SECRET:
+    secure: v1:fX3N8AnuxLTOMAkG:kEB4FvHmTibjxsTGfu2UBY4fnVmCUM/LItY1VthQ2KMZWTcPSm6LUbH9KCQUvrk2Xw4MqZSv++7QYpTuzEMxaiqZdm7YJPA9GhPw6lWb5+S2wnKDGrQUvE23g24f4RYdQQ==
   # paperless
   lxc#paperless#paperless-ngx:SECRET_ADMIN_USERNAME:
     secure: v1:ZN1VLNMSu60BAhxf:okOhImt9d3D9NVlmztIPHDRv9noH
