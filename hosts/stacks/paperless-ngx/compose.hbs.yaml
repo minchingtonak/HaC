@@ -18,6 +18,8 @@ services:
     environment:
       USERMAP_UID: 0
       USERMAP_GID: 0
+      PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
+      PAPERLESS_SOCIALACCOUNT_PROVIDERS: '{"openid_connect":{"SCOPE":["openid","profile","email"],"OAUTH_PKCE_ENABLED":true,"APPS":[{"provider_id":"pocket-id","name":"Pocket ID","client_id":"{{{SECRET_OIDC_CLIENT_ID}}}","secret":"{{{SECRET_OIDC_CLIENT_SECRET}}}","settings":{"server_url":"https://{{{domainForApp "pocket-id" hostname="admin"}}}"}}]}}'
       PAPERLESS_APP_TITLE: paperless-ngx
       PAPERLESS_URL: https://{{{domainForApp "paperless-ngx"}}}
       PAPERLESS_REDIS: redis://broker:6379

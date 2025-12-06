@@ -196,6 +196,10 @@ config:
     secure: v1:nuKklw9Lw7CB/wXi:RBXhq2GUMtjebUOaMIYCfqwVi/PMudiccrCDgRkS4xKSX1bJ0Q+kQG+zrIRFMcKDriIRxWa+IHcNlEI01taVuz1h
   lxc#life#tandoor-recipes:SECRET_DB_PASSWORD:
     secure: v1:WuyLZFlEVBAu8GqV:FBUtTYuDvxAso2+utSe2/A7MPEh2S0pg8jW3q1hdb1ANDqWvDwWrySdwwWRy8M0T89L3i5Bqe0EBQbn1h8oKnA==
+  lxc#life#tandoor-recipes:SECRET_OIDC_CLIENT_ID:
+    secure: v1:k1KJeBq/deoDpMHD:4fxZDmVucggb/Ar3dUjL2u0X939nUty8gf8jVUm7r0sFFAnXu5Vu7pIfcGae8hu2anBUQA==
+  lxc#life#tandoor-recipes:SECRET_OIDC_CLIENT_SECRET:
+    secure: v1:afKSPBbHQ8vRJ92I:klgSmHlrw29LmFnsh3CRxnkME3rN20aJ4xu4LnwVBWNmCYTUtsFJg3GTiq22rycX
   lxc#life#discount-bandit:SECRET_EXCHANGE_RATE_API_KEY:
     secure: v1:RQ6dK/n0hI/KviTJ:ilXLNdiJrb6fUpL0vySEjNVRiWNZXX7T6DXBCogXzC2L6IkU1fwzuw==
   lxc#life#discount-bandit:SECRET_APP_KEY:
@@ -215,6 +219,10 @@ config:
     secure: v1:ZN1VLNMSu60BAhxf:okOhImt9d3D9NVlmztIPHDRv9noH
   lxc#paperless#paperless-ngx:SECRET_ADMIN_PASSWORD:
     secure: v1:0NpMQ0oelz/GSKbW:LNPX/H4nomIsrwR7uH0med0p02S2vEf7VPfOZaqiTe441JqS
+  lxc#paperless#paperless-ngx:SECRET_OIDC_CLIENT_ID:
+    secure: v1:JxqT6is3fVQm9rgB:gh9l1H81msgZQUe//4VaIhkJ8H7Zu2iPdMV3JuRT35B44g13sIBb1lloLxPNsdzwm74iuQ==
+  lxc#paperless#paperless-ngx:SECRET_OIDC_CLIENT_SECRET:
+    secure: v1:0PsdwSxXfu52+a7t:J1gT1zIUCWguAVcU3UEtv67lLvpsdCqHButJTLT/YvAaozbRMCYWmIwOI8uqmfL3
   # music
   lxc#music#navidrome:SECRET_LASTFM_APIKEY:
     secure: v1:gvt3vIfX9NTkf9tQ:8bIKcNzkJtSvd/R/h2A8wHq1xPqQHTurz8JrlxXHj1DStEyU0030sx1u0K1qlga7
