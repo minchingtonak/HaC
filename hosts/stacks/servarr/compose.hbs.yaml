@@ -83,7 +83,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   apprise:
-    image: caronc/apprise:1.2.2@sha256:0d74af8c1df9cf1de91f20f46d00ddee3a3efa15be179f9dbbe8a0f99d64268f
+    image: caronc/apprise:1.2.6@sha256:a92f836b0c2c53523465b670f290615a0ac5c863b0ff72e48fac91c1dac795de
     environment:
       - APPRISE_WORKER_COUNT=1
       - APPRISE_STATEFUL_MODE=simple
