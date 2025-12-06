@@ -1,6 +1,6 @@
 services:
   app:
-    image: withoutbg/app:1.0.1@sha256:5ab6061821c0599254e43b6a4d209a83e113d30f7cb468e982684ac0d7f34732
+    image: withoutbg/app:1.2.0@sha256:c66cee53fc62fff6d33a84ce0c5e7351d1e5c236b4f0c3f56387f5ea19976ff8
     # ports:
     #   - "80:80"
     restart: unless-stopped
