@@ -10,9 +10,13 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /docker/traefik/letsencrypt:/letsencrypt
       - /docker/traefik:/etc/traefik
+      - ./dynamic/oidc-middleware.yml:/etc/traefik/dynamic/oidc-middleware.yml:ro # Add this for dynamic config
     environment:
       - PORKBUN_API_KEY={{{traefik:SECRET_PORKBUN_API_KEY}}}
       - PORKBUN_SECRET_API_KEY={{{traefik:SECRET_PORKBUN_SECRET_API_KEY}}}
+      - OIDC_PROVIDER_URL=https://{{{domainForApp "pocket-id" hostname="admin"}}}
+      - OIDC_CLIENT_ID={{{traefik:SECRET_OIDC_CLIENT_ID}}}
+      - OIDC_CLIENT_SECRET={{{traefik:SECRET_OIDC_CLIENT_SECRET}}}
     command: # traefik.yml (static) configuration goes below
       - --api=true
       - --api.dashboard=true
@@ -33,6 +37,10 @@ services:
       - --entrypoints.slskd-listen-50300-tcp.address=:50300
       - --providers.docker.endpoint=unix:///var/run/docker.sock
       - --providers.docker.exposedByDefault=false
+      - --providers.file.directory=/etc/traefik/dynamic # Enable file provider for dynamic config
+      - --providers.file.watch=true
+      - --experimental.plugins.oidc-authentication.moduleName=github.com/sevensolutions/traefik-oidc-auth
+      - --experimental.plugins.oidc-authentication.version=v0.17.0
       - --certificatesresolvers.porkbun.acme.email={{{traefik:SECRET_ACME_EMAIL}}}
       - --certificatesresolvers.porkbun.acme.storage=/letsencrypt/acme.json
       - --certificatesresolvers.porkbun.acme.caserver=https://acme-v02.api.letsencrypt.org/directory # prod
@@ -54,7 +62,7 @@ services:
       - traefik.http.routers.traefik.rule=Host(`{{{domainForApp "traefik"}}}`)
       # https
       - traefik.http.routers.traefik-secure.entrypoints=https
-      # - traefik.http.routers.traefik-secure.middlewares=traefik-auth
+      # - traefik.http.routers.traefik-secure.middlewares=oidc-auth@file
       - traefik.http.routers.traefik-secure.rule=Host(`{{{domainForApp "traefik"}}}`)
       - traefik.http.routers.traefik-secure.tls=true
       - traefik.http.routers.traefik-secure.tls.certresolver=porkbun

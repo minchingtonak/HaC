@@ -4,6 +4,7 @@ description = "homelab administration-related apps"
 [stacks]
 traefik = {}
 dozzle = {}
+pocket-id = {}
 homepage = {}
 tailscale = {}
 copyparty = {}

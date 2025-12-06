@@ -1,0 +1,30 @@
+services:
+  pocket-id:
+    image: ghcr.io/pocket-id/pocket-id:v1.16.0@sha256:f8cde808e8e840acda25683fc2168e0206e3f3fb1a48cca89d211aafd87eaeef
+    restart: unless-stopped
+    env_file: .env
+    # ports:
+    #   - 1411:1411
+    volumes:
+      - "/docker/pocket-id:/app/data"
+    healthcheck:
+      test: ["CMD", "/app/pocket-id", "healthcheck"]
+      interval: 1m30s
+      timeout: 5s
+      retries: 2
+      start_period: 10s
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.pocket-id.rule=Host(`{{{domainForApp "pocket-id"}}}`)
+      - traefik.http.routers.pocket-id.entrypoints=https
+      - traefik.http.routers.pocket-id.tls=true
+      - traefik.http.routers.pocket-id.tls.certresolver=porkbun
+      - traefik.http.routers.pocket-id.service=pocket-id
+      - traefik.http.services.pocket-id.loadbalancer.server.port=1411
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

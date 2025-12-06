@@ -1,0 +1,13 @@
+http:
+  middlewares:
+    oidc-auth:
+      plugin:
+        oidc-authentication:
+          Provider:
+            ClientId: "{{{traefik:SECRET_OIDC_CLIENT_ID}}}"
+            ClientSecret: "{{{traefik:SECRET_OIDC_CLIENT_SECRET}}}"
+            Url: "https://{{{domainForApp 'pocket-id' hostname='admin'}}}"
+          Scopes:
+            - openid
+            - profile
+            - email

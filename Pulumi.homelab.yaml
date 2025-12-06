@@ -30,6 +30,10 @@ config:
     secure: v1:m7HfBcH/6BQpNaVt:YiUVsRksYvTgMvzLqQRUHulFKOHOZXpLpZvM/So=
   traefik:SECRET_DASHBOARD_CREDENTIALS:
     secure: v1:aa25tD89mZWe4xmC:2nwTF58I51T0oKH52cdWLcHfsrAW87XFdex9bCobX/hAoIKultlUwq6WB7odz82sr6j4zavf9zpztxzqx3ZNHJbX4iUnAeg7mrSyPOFSeIMSWg==
+  traefik:SECRET_OIDC_CLIENT_ID:
+    secure: v1:kae4HktMsjSen68I:8rPKPaZLnv3jLA2oM/FpmY4xDPFxFQYI46UEBHBrsz3gEbkhiFgBdafY+tgjQLrNgF+2Rw==
+  traefik:SECRET_OIDC_CLIENT_SECRET:
+    secure: v1:eucsGh3YtFvyK4Lg:mTdV7e+ybQd0yHVbP/VgyjH3NIq/q47ERRYP+McIbNOHNdOTZ4j9CGzPZMwkw5cx
   # komodo global
   komodo:SECRET_DB_PASSWORD:
     secure: v1:8mSv1bssR+dsJZed:gp9dM48zcgnbK6KOWO+ITbIsqw1Of6UpD9rFYwdarfTXqP+OpQ==
@@ -134,6 +138,8 @@ config:
   lxc#admin#tailscale:SECRET_TAILSCALE_AUTHKEY:
     secure: v1:WzqZRv9cGYpzab5r:QmAK2vrwxNtPNZwMv0k/uWlnHT/nqKb+yGXPiRdSl83AhTm2SusJhSf03MEDGUIxZFe+9oF7R5POga0vC8k2JiRSvcmlVjRSTHlWkYae
   lxc#admin#tailscale:TAILSCALE_SUBNET_ROUTES: 192.168.0.0/24
+  lxc#admin#pocket-id:SECRET_ENCRYPTION_KEY:
+    secure: v1:wzP6B4YNoNuX5q3D:ZFsDC+0PvR2rwcgc/uZGFhtJWb8gQI1Q1S1H3OIFVZ4ZFplBPHikIUSe6Fr4pfdT7QarYCxvwFee1oe2
   # immich
   lxc#immich#immich:SECRET_DB_PASSWORD:
     secure: v1:ECc5/vJz6VnDlxsj:xgdWvCAj0NxBmWNBrAg4cP+l8j7DAk9cij/mO/JSNm+S8zVq
