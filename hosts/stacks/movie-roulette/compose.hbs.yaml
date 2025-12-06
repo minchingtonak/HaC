@@ -15,6 +15,7 @@ services:
       - traefik.http.routers.movieroulette.tls.certresolver=porkbun
       - traefik.http.routers.movieroulette.service=movieroulette
       - traefik.http.services.movieroulette.loadbalancer.server.port=4000
+      - traefik.http.routers.movieroulette.middlewares=oidc-auth@file
     networks:
       - traefik
 

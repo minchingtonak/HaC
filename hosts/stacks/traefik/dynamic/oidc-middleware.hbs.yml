@@ -11,3 +11,6 @@ http:
             - openid
             - profile
             - email
+          # /api - so (most) apps can communicate with each other
+          # /jsonrpc - nzbget's API route
+          BypassAuthenticationRule: "PathRegexp(`/api`) || PathPrefix(`/jsonrpc`)"

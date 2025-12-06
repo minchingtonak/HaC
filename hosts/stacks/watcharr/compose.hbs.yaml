@@ -16,6 +16,7 @@ services:
       - traefik.http.routers.watcharr.tls.certresolver=porkbun
       - traefik.http.routers.watcharr.service=watcharr
       - traefik.http.services.watcharr.loadbalancer.server.port=3080
+      - traefik.http.routers.watcharr.middlewares=oidc-auth@file
     networks:
       - traefik
 

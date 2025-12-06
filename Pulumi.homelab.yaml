@@ -34,6 +34,8 @@ config:
     secure: v1:kae4HktMsjSen68I:8rPKPaZLnv3jLA2oM/FpmY4xDPFxFQYI46UEBHBrsz3gEbkhiFgBdafY+tgjQLrNgF+2Rw==
   traefik:SECRET_OIDC_CLIENT_SECRET:
     secure: v1:eucsGh3YtFvyK4Lg:mTdV7e+ybQd0yHVbP/VgyjH3NIq/q47ERRYP+McIbNOHNdOTZ4j9CGzPZMwkw5cx
+  # OIDC global
+  oidc:PROVIDER_URL: https://{{{domainForApp "pocket-id" hostname="admin"}}}
   # komodo global
   komodo:SECRET_DB_PASSWORD:
     secure: v1:8mSv1bssR+dsJZed:gp9dM48zcgnbK6KOWO+ITbIsqw1Of6UpD9rFYwdarfTXqP+OpQ==

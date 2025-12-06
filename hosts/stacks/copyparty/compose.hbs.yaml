@@ -18,6 +18,7 @@ services:
       - traefik.http.routers.copyparty.tls.certresolver=porkbun
       - traefik.http.routers.copyparty.service=copyparty
       - traefik.http.services.copyparty.loadbalancer.server.port=3939
+      - traefik.http.routers.copyparty.middlewares=oidc-auth@file
     networks:
       - traefik
 

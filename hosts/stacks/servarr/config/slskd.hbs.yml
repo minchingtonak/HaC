@@ -146,7 +146,7 @@ web:
   url_base: /
   logging: false
   authentication:
-    disabled: false
+    disabled: true
     username: "{{{SECRET_SLSKD_USERNAME}}}"
     password: "{{{SECRET_SLSKD_PASSWORD}}}"
     jwt:

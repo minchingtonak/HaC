@@ -21,6 +21,7 @@ services:
       - traefik.http.routers.dozzle.tls.certresolver=porkbun
       - traefik.http.routers.dozzle.service=dozzle
       - traefik.http.services.dozzle.loadbalancer.server.port=8080
+      - traefik.http.routers.dozzle.middlewares=oidc-auth@file
     networks:
       - traefik
 

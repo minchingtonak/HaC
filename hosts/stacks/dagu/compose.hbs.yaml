@@ -24,6 +24,7 @@ services:
       - traefik.http.routers.dagu.tls.certresolver=porkbun
       - traefik.http.routers.dagu.service=dagu
       - traefik.http.services.dagu.loadbalancer.server.port=8080
+      - traefik.http.routers.dagu.middlewares=oidc-auth@file
     networks:
       - traefik
 

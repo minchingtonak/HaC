@@ -24,6 +24,7 @@ services:
       - traefik.http.routers.syncthing.tls.certresolver=porkbun
       - traefik.http.services.syncthing.loadbalancer.server.port=8384
       - traefik.http.routers.syncthing.service=syncthing
+      - traefik.http.routers.syncthing.middlewares=oidc-auth@file
       #
       - traefik.tcp.routers.syncthing-sync.rule=HostSNI(`*`)
       - traefik.tcp.routers.syncthing-sync.entrypoints=syncthing-sync-22000-tcp

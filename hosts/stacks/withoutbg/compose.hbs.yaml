@@ -12,6 +12,7 @@ services:
       - traefik.http.routers.withoutbg.tls.certresolver=porkbun
       - traefik.http.routers.withoutbg.service=withoutbg
       - traefik.http.services.withoutbg.loadbalancer.server.port=80
+      - traefik.http.routers.withoutbg.middlewares=oidc-auth@file
     networks:
       - traefik
 

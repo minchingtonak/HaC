@@ -43,6 +43,7 @@ services:
       - traefik.http.routers.qbittorrent.tls.certresolver=porkbun
       - traefik.http.routers.qbittorrent.service=qbittorrent
       - traefik.http.services.qbittorrent.loadbalancer.server.port=8081
+      - traefik.http.routers.qbittorrent.middlewares=oidc-auth@file
       #
       - traefik.tcp.routers.qbittorrent-bittorrent.rule=HostSNI(`*`)
       - traefik.tcp.routers.qbittorrent-bittorrent.entrypoints=qbittorrent-6881-tcp
@@ -55,6 +56,7 @@ services:
       - traefik.http.routers.nzbget.tls.certresolver=porkbun
       - traefik.http.routers.nzbget.service=nzbget
       - traefik.http.services.nzbget.loadbalancer.server.port=6789
+      - traefik.http.routers.nzbget.middlewares=oidc-auth@file
       #
       - traefik.http.routers.slskd.rule=Host(`{{{domainForApp "slskd"}}}`)
       - traefik.http.routers.slskd.entrypoints=https
@@ -62,6 +64,7 @@ services:
       - traefik.http.routers.slskd.tls.certresolver=porkbun
       - traefik.http.routers.slskd.service=slskd
       - traefik.http.services.slskd.loadbalancer.server.port=5030
+      - traefik.http.routers.slskd.middlewares=oidc-auth@file
       # https://doc.traefik.io/traefik/reference/routing-configuration/tcp/router/rules-and-priority/#hostsni-and-hostsniregexp
       - traefik.tcp.routers.slskd-listen.rule=HostSNI(`*`)
       - traefik.tcp.routers.slskd-listen.entrypoints=slskd-listen-50300-tcp
@@ -108,6 +111,7 @@ services:
       - traefik.http.routers.apprise.tls.certresolver=porkbun
       - traefik.http.routers.apprise.service=apprise
       - traefik.http.services.apprise.loadbalancer.server.port=8000
+      - traefik.http.routers.apprise.middlewares=oidc-auth@file
     networks:
       - traefik
 
@@ -230,6 +234,7 @@ services:
       - traefik.http.routers.prowlarr.tls.certresolver=porkbun
       - traefik.http.routers.prowlarr.service=prowlarr
       - traefik.http.services.prowlarr.loadbalancer.server.port=9696
+      - traefik.http.routers.prowlarr.middlewares=oidc-auth@file
     networks:
       - traefik
 
@@ -280,6 +285,7 @@ services:
       - traefik.http.routers.sonarr.tls.certresolver=porkbun
       - traefik.http.routers.sonarr.service=sonarr
       - traefik.http.services.sonarr.loadbalancer.server.port=8989
+      - traefik.http.routers.sonarr.middlewares=oidc-auth@file
     networks:
       - traefik
 
@@ -330,6 +336,7 @@ services:
       - traefik.http.routers.radarr.tls.certresolver=porkbun
       - traefik.http.routers.radarr.service=radarr
       - traefik.http.services.radarr.loadbalancer.server.port=7878
+      - traefik.http.routers.radarr.middlewares=oidc-auth@file
     networks:
       - traefik
 
@@ -380,6 +387,7 @@ services:
       - traefik.http.routers.lidarr.tls.certresolver=porkbun
       - traefik.http.routers.lidarr.service=lidarr
       - traefik.http.services.lidarr.loadbalancer.server.port=8686
+      - traefik.http.routers.lidarr.middlewares=oidc-auth@file
     networks:
       - traefik
 
@@ -427,6 +435,7 @@ services:
       - traefik.http.routers.bazarr.tls.certresolver=porkbun
       - traefik.http.routers.bazarr.service=bazarr
       - traefik.http.services.bazarr.loadbalancer.server.port=6767
+      - traefik.http.routers.bazarr.middlewares=oidc-auth@file
     networks:
       - traefik
 
@@ -475,6 +484,7 @@ services:
       - traefik.http.routers.profilarr.tls.certresolver=porkbun
       - traefik.http.routers.profilarr.service=profilarr
       - traefik.http.services.profilarr.loadbalancer.server.port=6868
+      - traefik.http.routers.profilarr.middlewares=oidc-auth@file
     networks:
       - traefik
     # healthcheck:
@@ -540,6 +550,7 @@ services:
       - traefik.http.routers.cleanuparr.tls.certresolver=porkbun
       - traefik.http.routers.cleanuparr.service=cleanuparr
       - traefik.http.services.cleanuparr.loadbalancer.server.port=11011
+      - traefik.http.routers.cleanuparr.middlewares=oidc-auth@file
     networks:
       - traefik
 
@@ -579,6 +590,7 @@ services:
       - traefik.http.routers.huntarr.tls.certresolver=porkbun
       - traefik.http.routers.huntarr.service=huntarr
       - traefik.http.services.huntarr.loadbalancer.server.port=9705
+      - traefik.http.routers.huntarr.middlewares=oidc-auth@file
     networks:
       - traefik
 

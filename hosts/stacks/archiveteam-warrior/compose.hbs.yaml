@@ -22,6 +22,7 @@ services:
       - traefik.http.routers.archiveteamwarrior.tls.certresolver=porkbun
       - traefik.http.routers.archiveteamwarrior.service=archiveteamwarrior
       - traefik.http.services.archiveteamwarrior.loadbalancer.server.port=8001
+      - traefik.http.routers.archiveteamwarrior.middlewares=oidc-auth@file
     networks:
       - traefik
 
