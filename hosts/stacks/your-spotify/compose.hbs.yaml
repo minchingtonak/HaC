@@ -14,6 +14,7 @@ services:
       CLIENT_ENDPOINT: https://{{{domainForApp "your-spotify"}}}
       SPOTIFY_PUBLIC: "{{{SECRET_SPOTIFY_CLIENT_ID}}}"
       SPOTIFY_SECRET: "{{{SECRET_SPOTIFY_CLIENT_SECRET}}}"
+      CORS: i-want-a-security-vulnerability-and-want-to-allow-all-origins
     labels:
       - traefik.enable=true
       - traefik.http.routers.yourspotifyserver.rule=Host(`{{{domainForApp "your-spotify-api"}}}`)
