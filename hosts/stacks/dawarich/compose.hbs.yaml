@@ -72,6 +72,13 @@ services:
       PROMETHEUS_EXPORTER_PORT: 9394
       SELF_HOSTED: "true"
       STORE_GEODATA: "true"
+      OIDC_CLIENT_ID: "{{{SECRET_OIDC_CLIENT_ID}}}"
+      OIDC_CLIENT_SECRET: "{{{SECRET_OIDC_CLIENT_SECRET}}}"
+      OIDC_ISSUER: "{{{oidc:PROVIDER_URL}}}"
+      OIDC_REDIRECT_URI: "https://{{{domainForApp 'dawarich'}}}/users/auth/openid_connect/callback"
+      OIDC_AUTO_REGISTER: false
+      OIDC_PROVIDER_NAME: Pocket ID
+      ALLOW_EMAIL_PASSWORD_REGISTRATION: true
     logging:
       driver: "json-file"
       options:
