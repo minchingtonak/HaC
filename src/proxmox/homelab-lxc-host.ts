@@ -31,6 +31,12 @@ export class HomelabLxcHost extends pulumi.ComponentResource {
   public static RESOURCE_TYPE = "HaC:proxmoxve:HomelabContainer";
 
   /**
+   * Returns the IP address of the container
+   */
+  public static CONTAINER_IP = (subnet: string, lastOctet: string) =>
+    `${subnet}.${lastOctet}`;
+
+  /**
    * Returns the domain of the container, minus the root domain (i.e. test.com)
    */
   public static CONTAINER_SUBDOMAIN = (hostname: string, nodeName: string) =>
@@ -323,5 +329,42 @@ TemplateProcessor.registerTemplateHelper(
     const context = options.data as TemplateFileContext;
 
     return HomelabLxcHost.CONTAINER_BASE_DOMAIN(context);
+  },
+);
+
+TemplateProcessor.registerTemplateHelper(
+  "ipForContainer",
+  (hostnameOrLxcId: string, options: Handlebars.HelperOptions) => {
+    const context = structuredClone(options.data) as TemplateFileContext;
+
+    let lastOctet = hostnameOrLxcId;
+
+    // if hostname, look up lxc id and use that as the last octet
+    if (!Number.isInteger(hostnameOrLxcId)) {
+      const lxcHost = context.lxc_hosts.find(
+        (host) => host.hostname === hostnameOrLxcId,
+      );
+
+      if (!lxcHost) {
+        throw new Error(
+          `LXC host with hostname "${hostnameOrLxcId}" not found in lxc_hosts`,
+        );
+      }
+
+      const lxcPveConfig = context.pve.lxc.hosts[lxcHost.hostname];
+
+      if (!lxcPveConfig) {
+        throw new Error(
+          `LXC host "${hostnameOrLxcId}" not found in PVE host configuration`,
+        );
+      }
+
+      lastOctet = lxcPveConfig.id.toString();
+    }
+
+    return HomelabLxcHost.CONTAINER_IP(
+      context.pve.lxc.network.subnet,
+      lastOctet,
+    );
   },
 );

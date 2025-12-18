@@ -14,7 +14,9 @@ export type HandlebarsTemplateDirectoryArgs<
 
 export class HandlebarsTemplateDirectory<
   TContext extends Record<string, unknown> = Record<string, unknown>,
-> extends pulumi.ComponentResource {
+>
+  extends pulumi.ComponentResource
+{
   public static RESOURCE_TYPE = "HaC:templates:HandlebarsTemplateDirectory";
 
   templateFiles: { [templatePath: string]: HandlebarsTemplateFile } = {};

@@ -13,4 +13,6 @@ http:
             - email
           # /api - so (most) apps can communicate with each other
           # /jsonrpc - nzbget's API route
-          BypassAuthenticationRule: "PathRegexp(`/api`) || PathPrefix(`/jsonrpc`)"
+          BypassAuthenticationRule: "PathRegexp(`/api`) || PathPrefix(`/jsonrpc`) || PathRegexp(`^/\\d+/`)"
+          # BypassAuthenticationRule: "{{#each @lxc_hosts}}Header(`X-Real-Ip`, `{{{ipForContainer this.hostname}}}`){{#unless @last}} || {{/unless}}{{/each}}"
+          # BypassAuthenticationRule: "Header(`X-Homelab-Auth-Token`, `{{{traefik:SECRET_HOMELAB_AUTH_TOKEN}}}`)"

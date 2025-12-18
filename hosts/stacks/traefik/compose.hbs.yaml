@@ -10,7 +10,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /docker/traefik/letsencrypt:/letsencrypt
       - /docker/traefik:/etc/traefik
-      - ./dynamic/oidc-middleware.yml:/etc/traefik/dynamic/oidc-middleware.yml:ro # Add this for dynamic config
+      - ./dynamic/oidc-middleware.yml:/etc/traefik/dynamic/oidc-middleware.yml:ro
+      - ./dynamic/auth-token-middleware.yml:/etc/traefik/dynamic/auth-token-middleware.yml:ro
     environment:
       - PORKBUN_API_KEY={{{traefik:SECRET_PORKBUN_API_KEY}}}
       - PORKBUN_SECRET_API_KEY={{{traefik:SECRET_PORKBUN_SECRET_API_KEY}}}
@@ -27,6 +28,7 @@ services:
       - --entrypoints.https.address=:443
       - --entrypoints.http.http.redirections.entrypoint.to=https
       - --entrypoints.http.http.redirections.entrypoint.scheme=https
+      # - --entrypoints.https.http.middlewares=homelab-auth-token@file
       - --entrypoints.ssh-222-tcp.address=:222
       - --entrypoints.qbittorrent-6881-tcp.address=:6881
       - --entrypoints.jellyfin-service-discovery-1900-udp.address=:1900/udp
