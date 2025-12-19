@@ -18,7 +18,7 @@ importers:
     dependencies:
       '@hanseltime/pulumi-file-utils':
         specifier: 1.2.0
-        version: 1.2.0(patch_hash=e5d211be610d1ebcd0e4781e82cb1ec57ab59635056aa758f4366f001a469c10)(@pulumi/pulumi@3.210.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@5.9.3))
+        version: 1.2.0(patch_hash=e5d211be610d1ebcd0e4781e82cb1ec57ab59635056aa758f4366f001a469c10)(@pulumi/pulumi@3.213.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@5.9.3))
       '@muhlba91/pulumi-proxmoxve':
         specifier: ^7.9.0
         version: 7.9.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@5.9.3)
@@ -32,8 +32,8 @@ importers:
         specifier: file:sdks/porkbun
         version: file:sdks/porkbun(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))
       '@pulumi/pulumi':
-        specifier: ^3.209.0
-        version: 3.210.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@5.9.3)
+        specifier: ^3.212.0
+        version: 3.213.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@5.9.3)
       handlebars:
         specifier: ^4.7.8
         version: 4.7.8
@@ -437,8 +437,8 @@ packages:
   '@pulumi/porkbun@file:sdks/porkbun':
     resolution: {directory: sdks/porkbun, type: directory}
 
-  '@pulumi/pulumi@3.210.0':
-    resolution: {integrity: sha512-ZMe4oH8nFNi3Tig1U8mTEuqrjTyEz0aVkn+DvvjcBPvM7WzZSdB6xR9MiRK/ZUi0G5O+H7fx2gEEeq1vYcM5Jg==}
+  '@pulumi/pulumi@3.213.0':
+    resolution: {integrity: sha512-qTAOJXQYjMse2oAwht4iuYA4TiSgUgDfGmlySf2xa4n34+eF1/ytCbF3UJdfOx9+yDD5mYBAi37t0OY/VyVzyQ==}
     engines: {node: '>=20'}
     peerDependencies:
       ts-node: '>= 7.0.1 < 12'
@@ -2071,9 +2071,9 @@ snapshots:
       protobufjs: 7.5.3
       yargs: 17.7.2
 
-  '@hanseltime/pulumi-file-utils@1.2.0(patch_hash=e5d211be610d1ebcd0e4781e82cb1ec57ab59635056aa758f4366f001a469c10)(@pulumi/pulumi@3.210.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@5.9.3))':
+  '@hanseltime/pulumi-file-utils@1.2.0(patch_hash=e5d211be610d1ebcd0e4781e82cb1ec57ab59635056aa758f4366f001a469c10)(@pulumi/pulumi@3.213.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@5.9.3))':
     dependencies:
-      '@pulumi/pulumi': 3.210.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@5.9.3)
+      '@pulumi/pulumi': 3.213.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@5.9.3)
 
   '@humanfs/core@0.19.1': {}
 
@@ -2112,7 +2112,7 @@ snapshots:
 
   '@muhlba91/pulumi-proxmoxve@7.9.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
-      '@pulumi/pulumi': 3.210.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@5.9.3)
+      '@pulumi/pulumi': 3.213.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@5.9.3)
     transitivePeerDependencies:
       - bluebird
       - supports-color
@@ -2357,7 +2357,7 @@ snapshots:
 
   '@pulumi/ansible@file:sdks/ansible(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))':
     dependencies:
-      '@pulumi/pulumi': 3.210.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@4.9.5)
+      '@pulumi/pulumi': 3.213.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@4.9.5)
       '@types/node': 18.19.127
       async-mutex: 0.5.0
       typescript: 4.9.5
@@ -2368,7 +2368,7 @@ snapshots:
 
   '@pulumi/command@1.1.3(patch_hash=919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6)(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
-      '@pulumi/pulumi': 3.210.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@5.9.3)
+      '@pulumi/pulumi': 3.213.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@5.9.3)
     transitivePeerDependencies:
       - bluebird
       - supports-color
@@ -2377,7 +2377,7 @@ snapshots:
 
   '@pulumi/porkbun@file:sdks/porkbun(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))':
     dependencies:
-      '@pulumi/pulumi': 3.210.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@4.9.5)
+      '@pulumi/pulumi': 3.213.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@4.9.5)
       '@types/node': 18.19.127
       async-mutex: 0.5.0
       typescript: 4.9.5
@@ -2386,7 +2386,7 @@ snapshots:
       - supports-color
       - ts-node
 
-  '@pulumi/pulumi@3.210.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@4.9.5)':
+  '@pulumi/pulumi@3.213.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@4.9.5)':
     dependencies:
       '@grpc/grpc-js': 1.13.4
       '@logdna/tail-file': 2.2.0
@@ -2423,7 +2423,7 @@ snapshots:
       - bluebird
       - supports-color
 
-  '@pulumi/pulumi@3.210.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@5.9.3)':
+  '@pulumi/pulumi@3.213.0(ts-node@10.9.2(@types/node@22.19.3)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
       '@grpc/grpc-js': 1.13.4
       '@logdna/tail-file': 2.2.0
