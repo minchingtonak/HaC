@@ -40,7 +40,6 @@ music = { id = 216 }
 servarr = { id = 201 }
 admin = { id = 213 }
 backup = { id = 202 }
-gitea = { id = 206 }
 windmill = { id = 209 }
 syncthing = { id = 212 }
 archiver = { id = 217 }

@@ -4,7 +4,6 @@ description = "life tracking apps"
 [stacks]
 traefik = {}
 dozzle = {}
-mealie = {}
 tandoor-recipes = {}
 cleanslate = {}
 fittrackee = {}
