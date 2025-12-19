@@ -4,7 +4,7 @@ http:
       headers:
         # adds headers to requests going FROM Traefik TO the services sitting behind it
         # customRequestHeaders:
-        #   X-Homelab-Auth-Test: "{{{traefik:SECRET_HOMELAB_AUTH_TOKEN}}}"
+        #   X-Homelab-Auth-Test: ""
         # adds headers to responses going FROM services behind traefik back TO clients
         # customResponseHeaders:
-        #   X-Homelab-Auth-Token: "{{{traefik:SECRET_HOMELAB_AUTH_TOKEN}}}"
+        #   X-Homelab-Auth-Token: ""

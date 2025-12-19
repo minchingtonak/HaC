@@ -20,6 +20,7 @@ import {
   ProvisionerEngine,
   ProvisionerResource,
 } from "../hosts/provisioner-engine";
+import { TemplateFileContext } from "../docker/compose-stack";
 
 /**
  * a camelCase version of all properties is provided for ease of
@@ -43,7 +44,12 @@ export interface HomelabPveHostArgs {
 export class HomelabPveHost extends pulumi.ComponentResource {
   public static RESOURCE_TYPE = "HaC:proxmoxve:HomelabPveHost";
 
-  static LXC_HOST_CONFIG_PATH_FOR = (hostname: string) =>
+  public static PVE_HOST_BASE_DOMAIN = (
+    subDomain: string,
+    rootDomain: string,
+  ) => `${subDomain}.${rootDomain}`;
+
+  public static LXC_HOST_CONFIG_PATH_FOR = (hostname: string) =>
     `./hosts/lxc/${hostname}.hbs.toml`;
 
   public readonly provider: HomelabPveProvider;
@@ -189,3 +195,15 @@ export class HomelabPveHost extends pulumi.ComponentResource {
     this.registerOutputs({ files: this.files, containers: this.containers });
   }
 }
+
+TemplateProcessor.registerTemplateHelper(
+  "domainForPveHost",
+  (options: Handlebars.HelperOptions) => {
+    const context = options.data as TemplateFileContext;
+
+    return HomelabPveHost.PVE_HOST_BASE_DOMAIN(
+      context.pve.node,
+      context.pve.domain,
+    );
+  },
+);

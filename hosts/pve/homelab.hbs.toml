@@ -1,6 +1,7 @@
 node = "homelab"
 endpoint = "https://192.168.0.89:8006"
 ip = "192.168.0.89"
+domain = "akmin.dev"
 
 [auth]
 username = "{{{SECRET_USERNAME}}}"

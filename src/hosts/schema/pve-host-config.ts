@@ -87,6 +87,7 @@ export const PveHostConfigSchema = z
     // HaC custom fields
     enabled: z.boolean().default(PVE_DEFAULTS.HOST.ENABLED),
     ip: z.string().min(1),
+    domain: z.string().min(1),
     ssh: SshSchema,
     lxc: LxcConfigSchema,
     storage: StorageConfigSchema,
