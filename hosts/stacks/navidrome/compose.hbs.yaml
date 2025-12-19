@@ -23,6 +23,7 @@ services:
       - traefik.http.routers.navidrome.tls.certresolver=porkbun
       - traefik.http.routers.navidrome.service=navidrome
       - traefik.http.services.navidrome.loadbalancer.server.port=4533
+      - traefik.http.routers.navidrome.middlewares=oidc-auth@file
     networks:
       - traefik
 

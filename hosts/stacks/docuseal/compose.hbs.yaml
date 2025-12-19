@@ -21,6 +21,7 @@ services:
       - traefik.http.routers.docuseal.tls.certresolver=porkbun
       - traefik.http.routers.docuseal.service=docuseal
       - traefik.http.services.docuseal.loadbalancer.server.port=3000
+      - traefik.http.routers.docuseal.middlewares=oidc-auth@file
     networks:
       - docuseal
       - traefik

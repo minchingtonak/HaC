@@ -13,6 +13,7 @@ services:
       - traefik.http.routers.bentopdf.tls.certresolver=porkbun
       - traefik.http.routers.bentopdf.service=bentopdf
       - traefik.http.services.bentopdf.loadbalancer.server.port=8080
+      - traefik.http.routers.bentopdf.middlewares=oidc-auth@file
     networks:
       - traefik
 

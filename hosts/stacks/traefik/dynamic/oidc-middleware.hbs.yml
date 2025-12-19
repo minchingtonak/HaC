@@ -11,5 +11,7 @@ http:
             - openid
             - profile
             - email
-          # BypassAuthenticationRule: "{{#each @lxc_hosts}}Header(`X-Real-Ip`, `{{{ipForContainer this.hostname}}}`){{#unless @last}} || {{/unless}}{{/each}}"
-          BypassAuthenticationRule: "HostRegexp(`[a-z.]+\\.{{{domainForPveHost}}}`)"
+          # /api - so (most) apps can communicate with each other
+          # /rest - navidrome API
+          # /jsonrpc - nzbget's API route
+          BypassAuthenticationRule: "PathRegexp(`/api`) || PathRegexp(`/rest`) || PathPrefix(`/v1.Backrest`) || PathPrefix(`/jsonrpc`) || PathRegexp(`^/\\d+/`)"

@@ -22,6 +22,7 @@ services:
       - traefik.http.routers.picard.tls.certresolver=porkbun
       - traefik.http.routers.picard.service=picard
       - traefik.http.services.picard.loadbalancer.server.port=5800
+      - traefik.http.routers.picard.middlewares=oidc-auth@file
     networks:
       - traefik
 

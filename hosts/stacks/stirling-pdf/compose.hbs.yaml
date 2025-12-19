@@ -21,6 +21,7 @@ services:
       - traefik.http.routers.stirlingpdf.tls.certresolver=porkbun
       - traefik.http.routers.stirlingpdf.service=stirlingpdf
       - traefik.http.services.stirlingpdf.loadbalancer.server.port=8080
+      - traefik.http.routers.stirlingpdf.middlewares=oidc-auth@file
     networks:
       - traefik
 

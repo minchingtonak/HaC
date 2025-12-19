@@ -53,6 +53,7 @@ services:
       - traefik.http.routers.yourspotifyclient.tls.certresolver=porkbun
       - traefik.http.routers.yourspotifyclient.service=yourspotifyclient
       - traefik.http.services.yourspotifyclient.loadbalancer.server.port=3000
+      - traefik.http.routers.yourspotifyclient.middlewares=oidc-auth@file
     networks:
       - your_spotify
       - traefik

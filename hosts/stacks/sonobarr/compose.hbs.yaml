@@ -18,6 +18,7 @@ services:
       - traefik.http.routers.sonobarr.tls.certresolver=porkbun
       - traefik.http.routers.sonobarr.service=sonobarr
       - traefik.http.services.sonobarr.loadbalancer.server.port=5000
+      - traefik.http.routers.sonobarr.middlewares=oidc-auth@file
     networks:
       - traefik
 

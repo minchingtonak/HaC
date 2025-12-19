@@ -28,6 +28,7 @@ services:
       - traefik.http.routers.backrest.tls.certresolver=porkbun
       - traefik.http.routers.backrest.service=backrest
       - traefik.http.services.backrest.loadbalancer.server.port=9898
+      - traefik.http.routers.backrest.middlewares=oidc-auth@file
     networks:
       - traefik
 
