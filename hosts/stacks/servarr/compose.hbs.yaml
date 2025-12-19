@@ -392,7 +392,7 @@ services:
       - traefik
 
   bazarr:
-    image: ghcr.io/linuxserver/bazarr:1.5.3@sha256:2be164c02c0bb311b6c32e57d3d0ddc2813d524e89ab51a3408c1bf6fafecda5
+    image: ghcr.io/linuxserver/bazarr:1.5.3@sha256:648f694532a3a53d8cf78bc888919ef538659bad41af4c680b0427ad1047d171
     container_name: bazarr
     restart: unless-stopped
     environment:
