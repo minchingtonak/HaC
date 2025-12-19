@@ -41,7 +41,7 @@ services:
     # command: postgres -c config_file=/etc/postgresql/postgresql.conf # Use custom config, uncomment if you want to use a custom config
 
   dawarich_app:
-    image: freikin/dawarich:0.36.1@sha256:c3225f42870d322d7a2fa5f2c60833de8860ffcb30c2c084ab8eb797bf5a3010
+    image: freikin/dawarich:0.36.3@sha256:4f83ccbfcbc5166ba9f96ba7571ab0812c2596f99079ceffc7808a3f896bef0b
     container_name: dawarich_app
     volumes:
       - /docker/dawarich/public:/var/app/public
@@ -120,7 +120,7 @@ services:
       - traefik
 
   dawarich_sidekiq:
-    image: freikin/dawarich:0.36.1@sha256:c3225f42870d322d7a2fa5f2c60833de8860ffcb30c2c084ab8eb797bf5a3010
+    image: freikin/dawarich:0.36.3@sha256:4f83ccbfcbc5166ba9f96ba7571ab0812c2596f99079ceffc7808a3f896bef0b
     container_name: dawarich_sidekiq
     volumes:
       - /docker/dawarich/public:/var/app/public
