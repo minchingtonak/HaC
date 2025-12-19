@@ -1,6 +1,6 @@
 services:
   discount-bandit:
-    image: cybrarist/discount-bandit:v4@sha256:6ba6ce19511ac2afaf0c630bbdf9607c29f23506fcd7f482963ba547d240a70f
+    image: cybrarist/discount-bandit:v4@sha256:af804a13f7c6f0251ff7728f6dd84fbe034dd1da1865914ed7a58ac5063cbb21
     # ports:
     #   - 8080:80
     volumes:
