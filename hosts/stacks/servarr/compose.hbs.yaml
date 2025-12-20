@@ -74,7 +74,7 @@ services:
       - traefik
 
   deunhealth:
-    image: qmcgaw/deunhealth:latest@sha256:fca3832ace35e3c028d3ec2e6271ac1161ed302b75b34e9dd01db1c106a25802
+    image: qmcgaw/deunhealth:latest@sha256:686131eb18d01b42ecd83932d7fc38c0efbfbeefbd5c94162bd3b39c024cf677
     container_name: deunhealth
     network_mode: "none"
     environment:
