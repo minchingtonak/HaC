@@ -47,7 +47,7 @@ jobs:
           echo '{"status": "writing", "owner": "${{ github.run_id }}", "branch": "${{ github.ref_name }}", "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"}' > writer-lock.json
 
       - name: Upload writer lock
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: writer-lock
           path: writer-lock.json
@@ -110,7 +110,7 @@ jobs:
           echo '{"status": "reading", "owner": "${{ github.run_id }}", "branch": "${{ github.ref_name }}", "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"}' > reader-state.json
 
       - name: Upload reader state
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: reader-state-${{ github.run_id }}
           path: reader-state.json
