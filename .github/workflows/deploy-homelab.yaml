@@ -15,45 +15,10 @@ jobs:
   pulumi:
     runs-on: ubuntu-latest
     environment: ${{ github.ref == 'refs/heads/main' && 'homelab' || '' }}
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/main' && 'homelab' || '' }}
+      cancel-in-progress: false
     steps:
-      # begin lock
-      - name: Wait for workflow lock
-        run: |
-          MAX_WAIT_TIME=900
-          POLL_INTERVAL=10
-          elapsed=0
-
-          echo "Checking for active workflow lock..."
-          while [ $elapsed -lt $MAX_WAIT_TIME ]; do
-            if curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-               "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" | \
-               grep -q "workflow-lock"; then
-              echo "Workflow lock detected. Waiting... (${elapsed}s elapsed)"
-              sleep $POLL_INTERVAL
-              elapsed=$((elapsed + POLL_INTERVAL))
-            else
-              echo "No workflow lock found. Proceeding."
-              break
-            fi
-          done
-
-          if [ $elapsed -ge $MAX_WAIT_TIME ]; then
-            echo "Timeout reached after ${MAX_WAIT_TIME}s. Workflow lock still present."
-            exit 1
-          fi
-
-      - name: Create workflow lock
-        run: |
-          echo '{"status": "running", "owner": "${{ github.run_id }}", "branch": "${{ github.ref_name }}", "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"}' > workflow-lock.json
-
-      - name: Upload workflow lock
-        uses: actions/upload-artifact@v5
-        with:
-          name: workflow-lock
-          path: workflow-lock.json
-          retention-days: 1
-      # end lock
-      # begin setup
       - name: Checkout code
         uses: actions/checkout@v6
 
@@ -194,11 +159,3 @@ jobs:
           PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # end deployment
-      # begin lock
-      - name: Remove workflow lock
-        if: always()
-        uses: geekyeggo/delete-artifact@v5
-        with:
-          name: workflow-lock
-          failOnError: false
-      # end lock
