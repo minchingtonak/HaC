@@ -12,53 +12,48 @@ permissions:
   pull-requests: write
 
 jobs:
-  pulumi-preview:
+  pulumi:
     runs-on: ubuntu-latest
-    outputs:
-      changes-check-outcome: ${{ steps.check-for-changes.outcome }}
+    environment: ${{ github.ref == 'refs/heads/main' && 'homelab' || '' }}
     steps:
-      # reader lock
-      - name: Wait for writer lock to be released
+      # begin lock
+      - name: Wait for workflow lock
         run: |
           MAX_WAIT_TIME=900
           POLL_INTERVAL=10
           elapsed=0
 
-          # wait to allow any queued writers grab the lock first
-          echo "sleep 20"
-          sleep 20
-
-          echo "Checking for writer lock..."
+          echo "Checking for active workflow lock..."
           while [ $elapsed -lt $MAX_WAIT_TIME ]; do
             if curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" | \
-               grep -q "writer-lock"; then
-              echo "Writer lock detected. Waiting... (${elapsed}s elapsed)"
+               grep -q "workflow-lock"; then
+              echo "Workflow lock detected. Waiting... (${elapsed}s elapsed)"
               sleep $POLL_INTERVAL
               elapsed=$((elapsed + POLL_INTERVAL))
             else
-              echo "No writer lock found. Proceeding with reader operations."
+              echo "No workflow lock found. Proceeding."
               break
             fi
           done
 
           if [ $elapsed -ge $MAX_WAIT_TIME ]; then
-            echo "Timeout reached after ${MAX_WAIT_TIME}s. Writer lock still present."
+            echo "Timeout reached after ${MAX_WAIT_TIME}s. Workflow lock still present."
             exit 1
           fi
 
-      - name: Register reader state
+      - name: Create workflow lock
         run: |
-          echo '{"status": "reading", "owner": "${{ github.run_id }}", "branch": "${{ github.ref_name }}", "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"}' > reader-state.json
+          echo '{"status": "running", "owner": "${{ github.run_id }}", "branch": "${{ github.ref_name }}", "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"}' > workflow-lock.json
 
-      - name: Upload reader state
+      - name: Upload workflow lock
         uses: actions/upload-artifact@v5
         with:
-          name: reader-state-${{ github.run_id }}
-          path: reader-state.json
+          name: workflow-lock
+          path: workflow-lock.json
           retention-days: 1
-      # end reader lock
-
+      # end lock
+      # begin setup
       - name: Checkout code
         uses: actions/checkout@v6
 
@@ -77,7 +72,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
         working-directory: ./
-
+      # end setup
+      # begin preview
       # This step is needed to comment on PRs.
       # PR comments are not posted if the preview step fails due
       # to detecting changes (expect-no-changes: true)
@@ -168,90 +164,17 @@ jobs:
                 throw error;
               }
             }
-
-      # reader lock
-      - name: Unregister reader state
-        if: always()
-        uses: geekyeggo/delete-artifact@v5
-        with:
-          name: reader-state-${{ github.run_id }}
-          failOnError: false
-      # end reader lock
-
-  pulumi-deploy:
-    runs-on: ubuntu-latest
-    needs: pulumi-preview
-    # Only deploy from main branch and when changes are detected
-    if: github.ref == 'refs/heads/main' && needs.pulumi-preview.outputs.changes-check-outcome == 'failure'
-    environment: homelab
-    concurrency:
-      group: writer
-      cancel-in-progress: false
-    steps:
-      # writer lock
-      - name: Wait for active readers to complete
-        run: |
-          MAX_WAIT_TIME=900
-          POLL_INTERVAL=10
-          elapsed=0
-
-          echo "Checking for active readers..."
-          while [ $elapsed -lt $MAX_WAIT_TIME ]; do
-            reader_count=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-               "https://api.github.com/repos/${{ github.repository }}/actions/artifacts" | \
-               grep -c "reader-state-" || echo "0")
-
-            if [ "$reader_count" -gt 0 ]; then
-              echo "Found ${reader_count} active reader(s). Waiting... (${elapsed}s elapsed)"
-              sleep $POLL_INTERVAL
-              elapsed=$((elapsed + POLL_INTERVAL))
-            else
-              echo "No active readers found. Proceeding with writer lock."
-              break
-            fi
-          done
-
-          if [ $elapsed -ge $MAX_WAIT_TIME ]; then
-            echo "Timeout reached after ${MAX_WAIT_TIME}s. ${reader_count} reader(s) still active."
-            exit 1
-          fi
-
-      - name: Create writer lock
-        run: |
-          echo '{"status": "writing", "owner": "${{ github.run_id }}", "branch": "${{ github.ref_name }}", "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%SZ)'"}' > writer-lock.json
-      # end writer lock
-      - name: Upload writer lock
-        uses: actions/upload-artifact@v5
-        with:
-          name: writer-lock
-          path: writer-lock.json
-          retention-days: 1
-
-      - name: Checkout code
-        uses: actions/checkout@v6
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.25.0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: "22.21.1"
-          cache: "pnpm"
-          cache-dependency-path: ./pnpm-lock.yaml
-
-      - name: Install dependencies
-        run: pnpm install
-        working-directory: ./
-
+      # end preview
+      # begin deployment
+      # deploy only if changes were found when running preview
       - name: Write SSH key
+        if: github.ref == 'refs/heads/main' && steps.check-for-changes.outcome == 'failure'
         run: |
           install -m 600 -D /dev/null ~/.ssh/lxc_ed25519
           echo "${{ secrets.LXC_SSH_PRIVATE_KEY }}" > ~/.ssh/lxc_ed25519
 
       - name: Join Tailscale network
+        if: github.ref == 'refs/heads/main' && steps.check-for-changes.outcome == 'failure'
         uses: tailscale/github-action@v4
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
@@ -259,6 +182,7 @@ jobs:
           tags: tag:github-actions
 
       - name: Pulumi up
+        if: github.ref == 'refs/heads/main' && steps.check-for-changes.outcome == 'failure'
         uses: pulumi/actions@v6
         with:
           command: up
@@ -269,12 +193,12 @@ jobs:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
           PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # writer lock
-      - name: Remove writer lock
+      # end deployment
+      # begin lock
+      - name: Remove workflow lock
         if: always()
         uses: geekyeggo/delete-artifact@v5
         with:
-          name: writer-lock
+          name: workflow-lock
           failOnError: false
-      # end writer lock
+      # end lock
