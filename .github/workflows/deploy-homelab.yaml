@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ github.ref == 'refs/heads/main' && 'homelab' || '' }}
     concurrency:
-      group: ${{ github.ref == 'refs/heads/main' && 'homelab' || '' }}
+      group: ${{ github.ref == 'refs/heads/main' && 'homelab' || github.run_id }}
       cancel-in-progress: false
     steps:
       - name: Checkout code
