@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@hanseltime/pulumi-file-utils": "1.2.0",
-    "@muhlba91/pulumi-proxmoxve": "^7.9.0",
+    "@muhlba91/pulumi-proxmoxve": "^7.11.0",
     "@pulumi/ansible": "file:sdks/ansible",
     "@pulumi/command": "^1.1.3",
     "@pulumi/porkbun": "file:sdks/porkbun",
