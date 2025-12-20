@@ -25,10 +25,16 @@ services:
       - --log.level=debug
       # - --log.filePath=/etc/traefik/traefik.log
       - --entrypoints.http.address=:80
+      - --entrypoints.http.http.encodedCharacters.allowEncodedSlash=true
+      - --entrypoints.http.http.encodedCharacters.allowEncodedBackSlash=true
+      - --entrypoints.http.http.encodedCharacters.allowEncodedNullCharacter=true
+      - --entrypoints.http.http.encodedCharacters.allowEncodedSemicolon=true
+      - --entrypoints.http.http.encodedCharacters.allowEncodedPercent=true
+      - --entrypoints.http.http.encodedCharacters.allowEncodedQuestionMark=true
+      - --entrypoints.http.http.encodedCharacters.allowEncodedHash=true
       - --entrypoints.https.address=:443
       - --entrypoints.http.http.redirections.entrypoint.to=https
       - --entrypoints.http.http.redirections.entrypoint.scheme=https
-      # - --entrypoints.https.http.middlewares=homelab-auth-token@file
       - --entrypoints.ssh-222-tcp.address=:222
       - --entrypoints.qbittorrent-6881-tcp.address=:6881
       - --entrypoints.jellyfin-service-discovery-1900-udp.address=:1900/udp
