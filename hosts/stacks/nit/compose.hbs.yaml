@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  navidrome-import-tools:
+    image: ethanbarclay/navidrome-import-tools:latest@sha256:1ea58feccef64653c3cc6457a0aa8b15b515cefae78ec18d99cee525c26758e7
+    container_name: nit
+    # ports:
+    #   - "8888:8888"
+    volumes:
+      # Mount external data directory for Navidrome database
+      - /docker/navidrome:/app/data:ro
+      # Optional: Mount output directory for persistent storage
+      - /mnt/media/music/_playists:/app/output
+    environment:
+      - DATABASE_PATH=/app/data/navidrome.db
+      - OUTPUT_DIR=/app/output
+      - DATA_DIR=/app/data
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8888/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nit.rule=Host(`{{{domainForApp "nit"}}}`)
+      - traefik.http.routers.nit.entrypoints=https
+      - traefik.http.routers.nit.tls=true
+      - traefik.http.routers.nit.tls.certresolver=porkbun
+      - traefik.http.routers.nit.service=nit
+      - traefik.http.services.nit.loadbalancer.server.port=8888
+      - traefik.http.routers.nit.middlewares=oidc-auth@file
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

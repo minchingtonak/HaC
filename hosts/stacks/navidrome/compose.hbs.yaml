@@ -12,6 +12,7 @@ services:
       # https://www.navidrome.org/docs/usage/configuration-options/#environment-variables
       ND_DEFAULTTHEME: "Spotify-ish"
       ND_DEFAULTUIVOLUME: 50
+      ND_AUTOIMPORTPLAYLISTS: true
     volumes:
       - /docker/navidrome:/data
       - /mnt/media/music:/music:ro

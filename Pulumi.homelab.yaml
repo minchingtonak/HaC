@@ -248,6 +248,10 @@ config:
     secure: v1:fnQkH8rr/mWuoz9L:Uk6V2SpbGUSk0RMnDwaiE4irMDB8lUz/+baak9tmUDZ+cATo8xsFtiYHEFt6lX5Z
   lxc#music#sonobarr:SECRET_SUPERADMIN_PASSWORD:
     secure: v1:Q8u3HtbannGUWOKt:6URtN03PVCyH6x0DpR/6ZlNmTTpgGjt58FpL6r62D9DTDRak
+  lxc#music#nit:SECRET_SPOTIFY_CLIENT_ID:
+    secure: v1:vWxPnLrp5JAm4cbZ:bsfe8/XfcDHxrgJTQPatmEM10GxLyJazL7ycRYBnJUvsgEyzPveTuYvLkiXvwr5h
+  lxc#music#nit:SECRET_SPOTIFY_CLIENT_SECRET:
+    secure: v1:KQOUP532ohSWFhab:sXZ9UUq7T7GppVMOcYT0eY3zYsXKmM6mgWfRZmw51AhbLIB0SMu/DaJdHHn9y9v0
   # windmill
   lxc#windmill#windmill:SECRET_DB_PASSWORD:
     secure: v1:o/l5rWI9Pdv7C2lQ:fktUJhe1pR3EcFvC/GoAGmqSJ9xSsQCGJycZYSMudmPe4yJupQKrUlX0OPAT7g==

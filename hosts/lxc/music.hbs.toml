@@ -9,7 +9,6 @@ audiobookshelf = {}
 navidrome = {}
 picard = {}
 sonobarr = {}
-nit = {}
 your-spotify = {}
 
 [cpu]
