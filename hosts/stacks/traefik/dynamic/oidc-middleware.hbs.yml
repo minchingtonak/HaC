@@ -12,6 +12,6 @@ http:
             - profile
             - email
           # /api - so (most) apps can communicate with each other
-          # /rest - navidrome API
+          # /rest,/auth,/share - navidrome API
           # /jsonrpc - nzbget's API route
-          BypassAuthenticationRule: "PathRegexp(`/api`) || PathRegexp(`/rest`) || PathPrefix(`/v1.Backrest`) || PathPrefix(`/jsonrpc`) || PathRegexp(`^/\\d+/`)"
+          BypassAuthenticationRule: "PathRegexp(`/api`) || PathRegexp(`^/\\d+/`) || PathPrefix(`/rest`) || PathPrefix(`/auth`) || PathPrefix(`/share`) || PathPrefix(`/jsonrpc`) || PathPrefix(`/v1.Backrest`)"
