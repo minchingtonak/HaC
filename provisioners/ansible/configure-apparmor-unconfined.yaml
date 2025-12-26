@@ -1,0 +1,34 @@
+---
+- name: Configure LXC container for AppArmor unconfined mode
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Check if LXC container exists
+      ansible.builtin.stat:
+        path: "/etc/pve/lxc/{{ lxc_id }}.conf"
+      register: lxc_config_file
+
+    - name: Fail if LXC container doesn't exist
+      ansible.builtin.fail:
+        msg: "LXC container {{ lxc_id }} configuration file not found"
+      when: not lxc_config_file.stat.exists
+
+    - name: Add AppArmor unconfined configuration to LXC container
+      ansible.builtin.blockinfile:
+        path: "/etc/pve/lxc/{{ lxc_id }}.conf"
+        block: |
+          lxc.apparmor.profile: unconfined
+          lxc.mount.entry: /dev/null sys/module/apparmor/parameters/enabled none bind 0 0
+        marker: "# {mark} ANSIBLE MANAGED - APPARMOR UNCONFINED CONFIGURATION"
+        backup: true
+      notify: Restart container
+
+    - name: Wait for container to reboot
+      ansible.builtin.pause:
+        seconds: 20
+
+  handlers:
+    - name: Restart container
+      ansible.builtin.command: "pct reboot {{ lxc_id }}"
+      changed_when: true

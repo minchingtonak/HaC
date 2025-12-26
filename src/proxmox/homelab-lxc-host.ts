@@ -323,6 +323,44 @@ export class HomelabLxcHost extends pulumi.ComponentResource {
   }
 }
 
+export type IdForContainerOptions = { hostname?: string; node?: string };
+
+TemplateProcessor.registerTemplateHelper(
+  "idForContainer",
+  (options: Handlebars.HelperOptions) => {
+    const context = options.data as TemplateFileContext;
+
+    const { hostname: hostnameArgument, node } =
+      options.hash as IdForContainerOptions;
+    const hostname = hostnameArgument ?? context?.lxc?.hostname;
+
+    if (!hostname) {
+      throw new Error(
+        "You must provide hostname when calling in a non-lxc context (hostname='example')",
+      );
+    }
+
+    if (node) {
+      // @ts-expect-error deliberately setting context property
+      context.pve.node = node;
+    }
+
+    // look up the hostname in the pve host's list of lxcs
+    const pve = context.pve_hosts.find(
+      (host) => host.node === context.pve.node,
+    );
+    const lxc = pve?.lxc.hosts[hostname];
+
+    if (!lxc) {
+      throw new Error(
+        `Cannot find lxc '${hostname}' on node '${context.pve.node}'`,
+      );
+    }
+
+    return String(lxc?.id);
+  },
+);
+
 TemplateProcessor.registerTemplateHelper(
   "domainForContainer",
   (options: Handlebars.HelperOptions) => {

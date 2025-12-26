@@ -33,7 +33,7 @@ proto = "udp"
 comment = "jellyfin auto discovery"
 
 [[device_passthroughs]]
-path = "/dev/dri/card1"
+path = "/dev/dri/card0"
 uid = 0
 gid = 44
 mode = "0660"
@@ -51,6 +51,17 @@ mount_point = "/docker"
 [[mount_points]]
 volume = "{{{@pve.storage.mass.path}}}/media"
 mount_point = "/mnt/media"
+
+[[provisioners]]
+type = "ansible"
+playbook = "provisioners/ansible/configure-apparmor-unconfined.yaml"
+replayable = false
+
+[provisioners.variables]
+lxc_id = "{{{idForContainer hostname='jellyfin'}}}"
+
+[provisioners.connection]
+host = "{{{@pve.ip}}}"
 
 [[provisioners]]
 type = "ansible"

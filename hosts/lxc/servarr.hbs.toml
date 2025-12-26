@@ -56,6 +56,17 @@ mount_point = "/mnt/media"
 
 [[provisioners]]
 type = "ansible"
+playbook = "provisioners/ansible/configure-apparmor-unconfined.yaml"
+replayable = false
+
+[provisioners.variables]
+lxc_id = "{{{idForContainer hostname='servarr'}}}"
+
+[provisioners.connection]
+host = "{{{@pve.ip}}}"
+
+[[provisioners]]
+type = "ansible"
 playbook = "provisioners/ansible/lxc-init.yaml"
 replayable = false
 

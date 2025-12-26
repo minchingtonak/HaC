@@ -1,6 +1,6 @@
 node = "homelab"
-endpoint = "https://192.168.0.89:8006"
-ip = "192.168.0.89"
+endpoint = "https://192.168.8.89:8006"
+ip = "192.168.8.89"
 domain = "akmin.dev"
 
 [auth]
@@ -20,8 +20,9 @@ fast = { name = "fast", path = "/fast" }
 [[files]]
 datastore_id = "local"
 content_type = "vztmpl"
-url = "http://download.proxmox.com/images/system/debian-12-standard_12.7-1_amd64.tar.zst"
-checksum = "39f6d06e082d6a418438483da4f76092ebd0370a91bad30b82ab6d0f442234d63fe27a15569895e34d6d1e5ca50319f62637f7fb96b98dbde4f6103cf05bff6d"
+# http://download.proxmox.com/images/system/
+url = "http://download.proxmox.com/images/system/debian-13-standard_13.1-2_amd64.tar.zst"
+checksum = "5aec4ab2ac5c16c7c8ecb87bfeeb10213abe96db6b85e2463585cea492fc861d7c390b3f9c95629bf690b95e9dfe1037207fc69c0912429605f208d5cb2621f8"
 checksum_algorithm = "sha512"
 overwrite_unmanaged = true
 retain_on_delete = true
@@ -42,12 +43,11 @@ admin = { id = 213 }
 backup = { id = 202 }
 windmill = { id = 209 }
 syncthing = { id = 212 }
-archiver = { id = 217 }
 
 [lxc.network]
 domain = "akmin.dev"
-subnet = "192.168.0"
-gateway = "192.168.0.1"
+subnet = "192.168.8"
+gateway = "192.168.8.1"
 
 [lxc.auth]
 password = "{{{SECRET_CONTAINER_ROOT_PASSWORD}}}"
