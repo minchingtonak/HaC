@@ -1,27 +1,22 @@
-name: spotizerr
-
+# HEY, YOU! READ THE DOCS BEFORE YOU DO ANYTHING!
+# https://spotizerr-phoenix.readthedocs.io
+name: spotizerr-phoenix
 services:
   spotizerr:
+    image: spotizerrphoenix/spotizerr:4.0.15@sha256:545aa36e7c515a6a6a3d716bb33e950b6c991e01ef08db80c40e5b33580a1315
+    user: "0:0"
     volumes:
-      - /docker/spotizerr/data:/app/data
-      - /docker/spotizerr/logs:/app/logs # persistent logs
-      - /mnt/media/music:/app/downloads # your music library dir
+      # Ensure these directories and the .cache file exist and are writable by the container user
+      - /docker/spotizerr/.cache:/app/.cache # cache file
+      - /docker/spotizerr/data:/app/data # data directory, contains config, creds, watch, history
+      - /docker/spotizerr/logs:/app/logs # logs directory, contains logs
+      - /mnt/media/downloads/spotizerr:/app/downloads # downloads directory, contains downloaded files
     # ports:
-    #   - 7171:7171
-    image: lavaforge.org/spotizerr/spotizerr:4.0.0@sha256:80e7f932f7e67770dc715f434822459170a4682254bbc8e7bcf3fa4b35a9980c
+    # - 7171:7171
     container_name: spotizerr-app
     restart: unless-stopped
-    environment:
-      - PUID={{{PUID}}} # Replace with your desired user ID  | Remove both if you want to run as root (not recommended, might result in unreadable files)
-      - PGID={{{PGID}}} # Replace with your desired group ID | The user must have write permissions in the volume mapped to /app/downloads
-      - UMASK={{{UMASK}}} # Optional: Sets the default file permissions for newly created files within the container.
-      - REDIS_HOST={{{REDIS_HOST}}}
-      - REDIS_PORT={{{REDIS_PORT}}}
-      - REDIS_DB={{{REDIS_DB}}}
-      - REDIS_PASSWORD={{{REDIS_PASSWORD}}} # Optional, Redis AUTH password. Leave empty if not using authentication
-      - REDIS_URL=redis://:{{{REDIS_PASSWORD}}}@{{{REDIS_HOST}}}:{{{REDIS_PORT}}}/{{{REDIS_DB}}}
-      - REDIS_BACKEND=redis://:{{{REDIS_PASSWORD}}}@{{{REDIS_HOST}}}:{{{REDIS_PORT}}}/{{{REDIS_DB}}}
-      - EXPLICIT_FILTER={{{EXPLICIT_FILTER}}} # Set to true to filter out explicit content
+    env_file:
+      - .env
     depends_on:
       - redis
     labels:
@@ -32,6 +27,7 @@ services:
       - traefik.http.routers.spotizerr.tls.certresolver=porkbun
       - traefik.http.routers.spotizerr.service=spotizerr
       - traefik.http.services.spotizerr.loadbalancer.server.port=7171
+      - traefik.http.routers.spotizerr.middlewares=oidc-auth@file
     networks:
       - traefik
 
@@ -39,12 +35,11 @@ services:
     image: redis:alpine@sha256:6cbef353e480a8a6e7f10ec545f13d7d3fa85a212cdcc5ffaf5a1c818b9d3798
     container_name: spotizerr-redis
     restart: unless-stopped
-    environment:
-      - REDIS_PASSWORD={{{REDIS_PASSWORD}}}
+    env_file:
+      - .env
     volumes:
       - /docker/spotizerr/redis:/data
-    # command: redis-server --requirepass {{{REDIS_PASSWORD}}} --appendonly yes
-    command: redis-server --appendonly yes
+    command: sh -c 'redis-server --requirepass "$REDIS_PASSWORD" --appendonly yes'
 
 networks:
   traefik:

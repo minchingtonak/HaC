@@ -252,6 +252,16 @@ config:
     secure: v1:vWxPnLrp5JAm4cbZ:bsfe8/XfcDHxrgJTQPatmEM10GxLyJazL7ycRYBnJUvsgEyzPveTuYvLkiXvwr5h
   lxc#music#nit:SECRET_SPOTIFY_CLIENT_SECRET:
     secure: v1:KQOUP532ohSWFhab:sXZ9UUq7T7GppVMOcYT0eY3zYsXKmM6mgWfRZmw51AhbLIB0SMu/DaJdHHn9y9v0
+  lxc#music#spotizerr:SECRET_REDIS_PASSWORD:
+    secure: v1:AkluPIxFkBkw7IKi:+d3oPLIeLFhHWx/ng/EWk05HQrDA8GAY
+  lxc#music#spotizerr:EXPLICIT_FILTER: "false"
+  lxc#music#spotizerr:UMASK: "0022"
+  lxc#music#spotizerr:SECRET_JWT_SECRET:
+    secure: v1:eaUNejx9H+m9IsbG:28BhUBRYU/0k6aXrmnFIUApzHTN26/3maM+RbRFpa2N5bN68EjY3xDorPdqVfX9KRf9QSPGpwHW452orj1Ldp8sakR5VlczHYbEqsfeGLMQ=
+  lxc#music#spotizerr:SECRET_ADMIN_USERNAME:
+    secure: v1:JhFA3jup9KDcKGik:stzKvoWo1b7ojuXjxaJBtLwAdG+b
+  lxc#music#spotizerr:SECRET_ADMIN_PASSWORD:
+    secure: v1:TYd62f7VrwyStoht:YvNjeuAXUF7vmaLzb1zuqD2RMoCdS+PZlk5912C/cXIKiMeB
   # windmill
   lxc#windmill#windmill:SECRET_DB_PASSWORD:
     secure: v1:o/l5rWI9Pdv7C2lQ:fktUJhe1pR3EcFvC/GoAGmqSJ9xSsQCGJycZYSMudmPe4yJupQKrUlX0OPAT7g==

@@ -10,6 +10,7 @@ navidrome = {}
 picard = {}
 sonobarr = {}
 your-spotify = {}
+spotizerr = {}
 
 [cpu]
 cores = 2
