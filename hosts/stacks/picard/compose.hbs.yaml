@@ -12,7 +12,8 @@ services:
       TZ: "{{{global:TIMEZONE}}}"
     volumes:
       - "/docker/picard:/config:rw"
-      - "/mnt/media/music:/storage:rw"
+      - "/mnt/media/music:/music:rw"
+      - "/mnt/media/downloads:/downloads:rw"
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik
