@@ -23,11 +23,16 @@ TAG="pbs-local$(date '+%y%m%d%H%M%S')"
 # shellcheck source=/dev/null
 source "$(dirname "$0")/pbs-backup-common.sh"
 
+LOCAL_PBS_IP='192.168.8.189'
+
 function backup() {
     setup_error_handling "$TAG"
 
+    # note: this will need to be updated when the IP/cert of PBS is changed
+    export PBS_FINGERPRINT='{{{SECRET_LOCAL_PBS_FINGERPRINT}}}'
+
     backup_app_data \
-        'root@pam@192.168.0.189:appdata' \
+        "root@pam@$LOCAL_PBS_IP:appdata" \
         '{{{SECRET_APPDATA_ENCRYPTION_PASSWORD}}}' \
         '{{{SECRET_EDSAC_PBS_PASSWORD}}}' \
         './keys/appdata.key' \
@@ -35,7 +40,7 @@ function backup() {
         'local PBS'
 
     backup_personal_files \
-        'root@pam@192.168.0.189:personal-files' \
+        "root@pam@$LOCAL_PBS_IP:personal-files" \
         '{{{SECRET_PERSONAL_FILES_AND_CLOUD_PBS_ENCRYPTION_PASSWORD}}}' \
         '{{{SECRET_EDSAC_PBS_PASSWORD}}}' \
         './keys/personal-files.key' \

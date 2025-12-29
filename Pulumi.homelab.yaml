@@ -84,7 +84,7 @@ config:
   lxc#admin#homepage:SECRET_TAILSCALE_DEVICE_ID:
     secure: v1:dqN6stIt3ZVU3fem:HFvnzhAnwJvN/7CJWsJ6prvC2TptY6NCsoO+ebhQSu1T
   lxc#admin#homepage:SECRET_EDSAC_PBS_URL:
-    secure: v1:MLE5HIZp4zT6rbW6:Kh/aCg3qjT44XNbXSXdjOd2+9LetPa3StK4PETWYuUQ8ZS3fTyOVH+TJ
+    secure: v1:OmCyirQiLhMDNDqq:5dthHnq1PwW9J+5yakMXaZPWdjYIq0UBsKFgklnvB1ZdMc6xLqMsQNjG
   lxc#admin#homepage:SECRET_CLOUD_PBS_URL:
     secure: v1:VVq9lruV1qEC+o/Y:kOEYDJVxy+3KD6xAgaXPZlHYZLPP3mcRo9lxQzg6mscCPhk+wUz785HPqtO3we7L/QU4eylQtY0=
   lxc#admin#homepage:SECRET_SLACK_WEBUI_URL:
@@ -181,6 +181,8 @@ config:
     secure: v1:WMY5vfivaMqgnHLn:ahm2lhdS4vWy+E62pLtlAiWVf4oA4WDqiXl3heqAXSAMK0TPK1mqecBm0HOAJcMqh8u1aN1CeyRkU+kSRVQ57CUeP2pkwMVf5v98RdP6ueMkdeXnzxMgP2IH/EiLdkbYcOsUDx2GCbL0SRgmjBOXMdtjucFU+fK6Sl+6ChdItCw4BrY34wj9VmFoVMlE2eOA8Me6egPaLXCqFE0y+4BPe1D0J1qypC4YL4zrPrreoExTFRslvmye8L5guAKFNt2Jfr23TaSynbAVYwd4vtjf/Qfwib6qlvHRndstm78GierLaUgt0J2i804bXojDFFEVzem6oYKkDZ/JcxVaoKJozCGAwDOVhjOnIMW9lOFG9NWcCMVQztLls0aPaly7K38SItm1/lJQdLgAsGEQqJGnj/ThKX7MQHg30XyliVBdtgljXYtFcU8joNxfys8XtxZBV5K536klu2Lme/SpHiIilkO3ODliUpw6w5PRyyzkUxBWF3MaKDpv+II1RSmV+UdnBKsFl4wohjEFeeGOTtQ3
   lxc#backup#dagu:SECRET_APPDATA_HEALTHCHECK_PING_URL:
     secure: v1:0NPdoIQvBedAG3ik:2v/uTocIEnMrvwXhmvYWZLdbReKSHIQVrBeBTwzvyZzMZv/epLa405NYDxEzGfZPgCZHvCxNqMfrl8M9XqBrEHH+5F+rvOcV
+  lxc#backup#dagu:SECRET_LOCAL_PBS_FINGERPRINT:
+    secure: v1:97fDK5iL7CSE0sZy:Hl01fWRnLuigeVuvGB9DgQDAYUMkP0o8FkmhvvyIPiG3EtOdeEk9oUpvZWHR0zqPn8KqztlZduzpisd4AQqnomLdGnJeYVkQAsgpQ1MAHIxUAnmxd6CwEjh0AmXoGFeqzfKP6xEIUrj/6MgOigZK
   lxc#backup#forgejo:SECRET_LFS_JWT_SECRET:
     secure: v1:wwrv4/7jP12dYID9:SXNe8F900y2BzjW+3OXw9+AHTw0pl+VZaZw/6Ulf6Jv7OfjX2kVbdljUjINypYz/EfLuQOd/MiQf28M=
   lxc#backup#forgejo:SECRET_INTERNAL_TOKEN:
