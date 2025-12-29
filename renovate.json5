@@ -43,6 +43,12 @@
       matchPackageNames: ["ghcr.io/linuxserver/qbittorrent"],
       allowedVersions: "<6",
     },
+    //authentik
+    {
+      matchPackageNames: "docker.io/library/postgres",
+      matchCurrentVersion: "16-alpine",
+      enabled: false,
+    },
     // dawarich
     {
       matchPackageNames: "redis",
