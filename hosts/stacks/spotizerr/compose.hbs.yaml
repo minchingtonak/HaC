@@ -7,7 +7,7 @@ services:
     user: "0:0"
     volumes:
       # Ensure these directories and the .cache file exist and are writable by the container user
-      - /docker/spotizerr/.cache:/app/.cache # cache file
+      - /docker/spotizerr/cache:/app/.cache # cache file
       - /docker/spotizerr/data:/app/data # data directory, contains config, creds, watch, history
       - /docker/spotizerr/logs:/app/logs # logs directory, contains logs
       - /mnt/media/downloads/spotizerr:/app/downloads # downloads directory, contains downloaded files
@@ -40,6 +40,8 @@ services:
     volumes:
       - /docker/spotizerr/redis:/data
     command: sh -c 'redis-server --requirepass "$REDIS_PASSWORD" --appendonly yes'
+    networks:
+      - traefik
 
 networks:
   traefik:
