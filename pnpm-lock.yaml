@@ -32,7 +32,7 @@ importers:
         specifier: file:sdks/porkbun
         version: file:sdks/porkbun(ts-node@10.9.2(@types/node@24.10.4)(typescript@5.9.3))
       '@pulumi/pulumi':
-        specifier: ^3.212.0
+        specifier: ^3.213.0
         version: 3.213.0(ts-node@10.9.2(@types/node@24.10.4)(typescript@5.9.3))(typescript@5.9.3)
       handlebars:
         specifier: ^4.7.8
