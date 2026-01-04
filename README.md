@@ -309,6 +309,7 @@ See [`provisioners/scripts/`](provisioners/scripts/) for examples.
 
 - **Lidarr** - Automated music library manager that searches for, downloads, and organizes music releases
 - **MusicBrainz Picard** - Music tagger that uses the MusicBrainz database to automatically identify and tag music files
+- **MusicBrainz Mirror** - Self-hosted mirror of the MusicBrainz database that provides metadata to Lidarr, removing the need for API calls to the public MusicBrainz service and improving performance
 - **Tubifarry Plugin** - YouTube downloader plugin for Lidarr that downloads music from YouTube. Also enables slskd as indexer & download client, plus automatic lyric file downloads
 - **Music Files Storage Drive** - Physical or network storage location where music files are stored
 - **VPN Tunnel (gluetun)** - Encrypted network connection using Gluetun that routes download client traffic through a VPN for privacy
@@ -475,7 +476,8 @@ Features
 - Generate more recommendations based on last.fm or ListenBrainz with Sonobarr
 - Continually import new tracks from Spotify to download your library as you find new tracks (assumes that you're still using Spotify)
 - Greatly improved music availaibility and quality due to added usage of Usenet (NZBGet) and Soulseek (slskd)
-- Ability to manually tag and rename music that isn't available in Lidarr by default
+- Ability to manually tag and rename music that isn't available in Lidarr by default (really useful for 3p download clients without Lidarr integration)
+- Self-hosted MusicBrainz mirror allows for speedier responses and less errors compared to using the community-hosted metadata server
 
 ```mermaid
 flowchart TB
@@ -524,6 +526,7 @@ flowchart TB
         MusicFiles[("Music Files<br/>Storage Drive")]
         tubifarry["Tubifarry Plugin<br/>YouTube Downloader"]
         Lidarr["Lidarr<br/>Music Library Manager"]
+        MusicBrainzMirror["MusicBrainz Mirror<br/>Metadata Server"]
     end
 
     subgraph subGraph2["Recommendations"]
@@ -573,6 +576,7 @@ flowchart TB
     Lidarr --> qbittorrent
     Lidarr --> slskd
     Lidarr --> tubifarry
+    Lidarr -.->|Metadata Provider| MusicBrainzMirror
 
     %% Connections - External Services
     Navidrome -.->|Scrobbles| LastFM
@@ -611,7 +615,7 @@ flowchart TB
     classDef legendDeviceStyle fill:#9370DB,stroke:#333,stroke-width:2px,color:white
     classDef legendBrandStyle fill:#3CB371,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5,color:white
 
-    class Lidarr,nzbget,qbittorrent,slskd,tubifarry,Picard,MusicFiles,Sonobarr acquisitionLocal
+    class Lidarr,nzbget,qbittorrent,slskd,tubifarry,Picard,MusicFiles,Sonobarr,MusicBrainzMirror acquisitionLocal
     class Navidrome serverLocal
     class LastFM lastfmCloud
     class ListenBrainz listenbrainzCloud
