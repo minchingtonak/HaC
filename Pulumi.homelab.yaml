@@ -139,7 +139,7 @@ config:
     secure: v1:KwttXGbRHvKgLL4w:VPVxFmym/TbBWSxRcho3kQlg/VCF7M93XTPAeDfg6+ZZTYZYL3jOX+frT51BRBHm+dBu8g==
   lxc#admin#tailscale:SECRET_TAILSCALE_AUTHKEY:
     secure: v1:WzqZRv9cGYpzab5r:QmAK2vrwxNtPNZwMv0k/uWlnHT/nqKb+yGXPiRdSl83AhTm2SusJhSf03MEDGUIxZFe+9oF7R5POga0vC8k2JiRSvcmlVjRSTHlWkYae
-  lxc#admin#tailscale:TAILSCALE_SUBNET_ROUTES: 192.168.0.0/24
+  lxc#admin#tailscale:TAILSCALE_SUBNET_ROUTES: 192.168.8.0/24
   lxc#admin#pocket-id:SECRET_ENCRYPTION_KEY:
     secure: v1:wzP6B4YNoNuX5q3D:ZFsDC+0PvR2rwcgc/uZGFhtJWb8gQI1Q1S1H3OIFVZ4ZFplBPHikIUSe6Fr4pfdT7QarYCxvwFee1oe2
   # immich
@@ -264,6 +264,14 @@ config:
     secure: v1:JhFA3jup9KDcKGik:stzKvoWo1b7ojuXjxaJBtLwAdG+b
   lxc#music#spotizerr:SECRET_ADMIN_PASSWORD:
     secure: v1:TYd62f7VrwyStoht:YvNjeuAXUF7vmaLzb1zuqD2RMoCdS+PZlk5912C/cXIKiMeB
+  lxc#music#spotisub:SECRET_SPOTIFY_CLIENT_ID:
+    secure: v1:DqTBpnD/17jThq0q:ppLBdfUVcuQyBKIdzXxTJibS3FE9Ulcxv5D7VOOWlVbK9F5unm77V8WjTcMShjT3
+  lxc#music#spotisub:SECRET_SPOTIFY_CLIENT_SECRET:
+    secure: v1:1WVi2pgTznLH+m1z:K6tPNxDJ5B49I6hKCQnsAju2gFpA0ZIqhcj1AMAPFgsP42Ozl4Bdbd7RCC6cOob3
+  lxc#music#spotisub:SECRET_SUBSONIC_USERNAME:
+    secure: v1:tuBCtEYXk4CaFweF:gGB1Ewsnj/Gnig3agb0p6kMAfc+Q
+  lxc#music#spotisub:SECRET_SUBSONIC_PASSWORD:
+    secure: v1:ZfcXEySfjZNJ4w2b:0JaZeR5Bz3tEW5C3njaqcfGKduBzFDzcb5WvAv1AvLxEogib
   # windmill
   lxc#windmill#windmill:SECRET_DB_PASSWORD:
     secure: v1:o/l5rWI9Pdv7C2lQ:fktUJhe1pR3EcFvC/GoAGmqSJ9xSsQCGJycZYSMudmPe4yJupQKrUlX0OPAT7g==

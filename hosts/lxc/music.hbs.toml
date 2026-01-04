@@ -5,12 +5,13 @@ start_on_boot = true
 [stacks]
 traefik = {}
 dozzle = {}
-audiobookshelf = {}
 navidrome = {}
-picard = {}
+audiobookshelf = {}
+spotisub = {}
 sonobarr = {}
-your-spotify = {}
 spotizerr = {}
+your-spotify = {}
+picard = {}
 
 [cpu]
 cores = 2

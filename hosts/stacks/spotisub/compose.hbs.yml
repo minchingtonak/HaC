@@ -1,0 +1,31 @@
+name: spotisub
+services:
+  spotisub:
+    image: blastbeng/spotisub:v0.3.6@sha256:a560b7a42eb2411903cc7da6ff7c3e946b1b4fd5043a53dfdc8787bea9ddb765
+    container_name: spotisub
+    env_file: .env
+    restart: unless-stopped
+    volumes:
+      - "/docker/spotisub/cache:/home/user/spotisub/cache"
+    # ports:
+    #   - 5183:5183
+    healthcheck:
+      test: curl -s http://127.0.0.1:5183/api/v1/utils/healthcheck | grep -q 'Ok!' || exit 1
+      interval: 30s
+      retries: 20
+      start_period: 30s
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.spotisub.rule=Host(`{{{domainForApp "spotisub"}}}`)
+      - traefik.http.routers.spotisub.entrypoints=https
+      - traefik.http.routers.spotisub.tls=true
+      - traefik.http.routers.spotisub.tls.certresolver=porkbun
+      - traefik.http.routers.spotisub.service=spotisub
+      - traefik.http.services.spotisub.loadbalancer.server.port=5183
+      - traefik.http.routers.spotisub.middlewares=oidc-auth@file
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
