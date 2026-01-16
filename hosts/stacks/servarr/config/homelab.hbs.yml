@@ -4,3 +4,16 @@ tag:
 urls:
   - "{{{SECRET_SERVARR_SLACK_WEBHOOK}}}":
       - tag: servarr
+  # https://github.com/caronc/apprise/wiki/Notify_pushover
+  - "pover://{{{pushover:SECRET_USER_TOKEN}}}@{{{SECRET_PUSHOVER_RADARR_TOKEN}}}?priority=normal":
+      - tag: radarr
+  - "pover://{{{pushover:SECRET_USER_TOKEN}}}@{{{SECRET_PUSHOVER_SONARR_TOKEN}}}?priority=normal":
+      - tag: sonarr
+  - "pover://{{{pushover:SECRET_USER_TOKEN}}}@{{{SECRET_PUSHOVER_LIDARR_TOKEN}}}?priority=normal":
+      - tag: lidarr
+  - "pover://{{{pushover:SECRET_USER_TOKEN}}}@{{{SECRET_PUSHOVER_BAZARR_TOKEN}}}?priority=normal":
+      - tag: bazarr
+  - "pover://{{{pushover:SECRET_USER_TOKEN}}}@{{{SECRET_PUSHOVER_HUNTARR_TOKEN}}}?priority=normal":
+      - tag: huntarr
+  - "pover://{{{pushover:SECRET_USER_TOKEN}}}@{{{SECRET_PUSHOVER_CLEANUPARR_TOKEN}}}?priority=normal":
+      - tag: cleanuparr

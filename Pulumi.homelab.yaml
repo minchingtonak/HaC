@@ -64,6 +64,11 @@ config:
   # loggifly global
   loggifly:SECRET_SLACK_WEBHOOK:
     secure: v1:np+7j9i6PPh2CQsD:4ULi1u2NrP9UTiL6cFk8m5aptFzs3GZbAQjg+r+hQ5edgw6YAdM3xlXHlqhqL0WR6io79S8DSwV44yI1CNffgSQlmz6Z8aQb0eUxHNyuhx01jwXIDn/HCDggN4mKZAdISA==
+  loggifly:SECRET_PUSHOVER_TOKEN:
+    secure: v1:EYiXHSWiTzeyUybO:tiG7hT7DT3wmfICOyiYw3UVdAK9pp32A5uPf9Tt7t7JCPHI2KD/SJScOeOn5vQ==
+  # pushover global
+  pushover:SECRET_USER_TOKEN:
+    secure: v1:gmPZz6jkhxu/feyP:49BPolhAhkOUODGZlFWXlDz3vqGAF8zSY/ILhjVyD3lVd9F6caoyen6H2YOfhw==
   # admin
   lxc#admin#semaphore:SECRET_ADMIN_USERNAME:
     secure: v1:hfzh9QFJQ1EIzwfo:YvPybPDxT0B3iA1b8GstY1jk7Xnv
@@ -294,3 +299,17 @@ config:
     secure: v1:mLcvvhwkReE+AYUQ:lq1bSqqZumiouMHoZB9gIA8YkW7z
   lxc#servarr#servarr:SECRET_SLSKD_API_KEY:
     secure: v1:tievgzN+s8hRWDeq:WaQHm/1SxBNxW8JNiI69WBo1cEN/WJB7mJBEsfG+Hv6onaWrFytXE8wz+Mkt5brEUAX0Gq03fI9DkTlQTsp3cu8sfgldIHWlawNWl9KaYNY=
+  lxc#servarr#servarr:SECRET_PUSHOVER_LIDARR_TOKEN:
+    secure: v1:5kB7Yj5ULEIjHJES:Iig8mX1vKMT6+YEZ/fnAqZ1MnHvXfeW5RuN6cLfW5mXUQkv0EryI2Nd0XBG8/g==
+  lxc#servarr#servarr:SECRET_PUSHOVER_RADARR_TOKEN:
+    secure: v1:2LRmJgvm6G0ayfQM:QKl24MKyoJT3yQFHRUzzfM4qIWJvO3miW1VjormD7lDoqr47QhMREHwCN4lV/w==
+  lxc#servarr#servarr:SECRET_PUSHOVER_SONARR_TOKEN:
+    secure: v1:Qn7K7EMnZeIU53cL:wl+oafz83KJmIsGXbXkurG06x1GSTD1pfofer8TQrUCYfN4Osqh12KPL0LOUMw==
+  lxc#servarr#servarr:SECRET_PUSHOVER_BAZARR_TOKEN:
+    secure: v1:0aMLsa8DCro7uF9u:B6QhhiaGX4BD5pOLZin4lBrD0lAfv1I/MbwrW6xAPd6qA7zk0qC3usGjrGsRBQ==
+  lxc#servarr#servarr:SECRET_PUSHOVER_HUNTARR_TOKEN:
+    secure: v1:aKX31KeMyEle0jLI:W0JtJ6X0JOG3zywo7yQhsZk9uASUr18wUioQDEcsH94+oCD+fA6jTG/GmeawmQ==
+  lxc#servarr#servarr:SECRET_PUSHOVER_CLEANUPARR_TOKEN:
+    secure: v1:geaaX2PKt+tYIoIY:Fa/4jE1tcX6wSj9NeDlNCK+ax9JpXsImqbWMluRz1r36Fx720o7Rdpfko+/PNg==
+  lxc#backup#dagu:SECRET_MUSIC_HEALTHCHECK_PING_URL:
+    secure: v1:+t/uHPT/skxe06ri:EhlKQpiZIKQyJwCoL4fD1KUjnBmI7Ja+NHl33SQ+lxF/RQtyGWanzTm7Zt9NeIB6EyEZVIijl2Pl+jOf6txqbD3mBlJkt6wX

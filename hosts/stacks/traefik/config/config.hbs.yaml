@@ -1,9 +1,10 @@
+global_keywords:
+  keywords:
+    - foo
+# loggifly requires at least one container to be defined here
 containers:
-  # loggifly requires at least one container to be defined here
-  foo-container:
-    keywords:
-      - foo
+  "{{{@lxc.hostname}}}-dummy-container":
 notifications:
   apprise:
     # Any Apprise-compatible URL (https://github.com/caronc/apprise/wiki)
-    url: "{{{loggifly:SECRET_SLACK_WEBHOOK}}}"
+    url: "pover://{{{pushover:SECRET_USER_TOKEN}}}@{{{loggifly:SECRET_PUSHOVER_TOKEN}}}?priority=normal"
