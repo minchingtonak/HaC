@@ -1,0 +1,41 @@
+services:
+  ntfy:
+    image: binwiederhier/ntfy:v2.15.0@sha256:aa10e84da624f65be107f9317dbf6e212fa812e0ebf62e74d032d0762eccc930
+    container_name: ntfy
+    command:
+      - serve
+    environment:
+      - TZ={{{global:TIMEZONE}}}
+    user: 0:0
+    volumes:
+      - /docker/ntfy/cache:/var/cache/ntfy
+      - ./config:/etc/ntfy
+    # ports:
+    #   - 2586:2586
+    healthcheck: # optional: remember to adapt the host:port to your environment
+      test:
+        [
+          "CMD-SHELL",
+          "wget -q --tries=1 http://localhost:2586/v1/health -O - | grep -Eo '\"healthy\"\\s*:\\s*true' || exit 1",
+        ]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    init: true # needed if healthcheck is used. Prevents zombie processes
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.ntfy.rule=Host(`{{{domainForApp "ntfy"}}}`)
+      - traefik.http.routers.ntfy.entrypoints=https
+      - traefik.http.routers.ntfy.tls=true
+      - traefik.http.routers.ntfy.tls.certresolver=porkbun
+      - traefik.http.routers.ntfy.service=ntfy
+      - traefik.http.services.ntfy.loadbalancer.server.port=2586
+      # - traefik.http.routers.ntfy.middlewares=oidc-auth@file
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
