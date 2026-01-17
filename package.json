@@ -20,7 +20,7 @@
     "smol-toml": "^1.6.0",
     "ts-node": "^10.9.2",
     "type-fest": "^5.4.0",
-    "zod": "^4.2.1"
+    "zod": "^4.3.5"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.3.1",
