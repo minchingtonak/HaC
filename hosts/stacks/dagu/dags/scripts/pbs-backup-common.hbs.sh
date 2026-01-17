@@ -43,6 +43,54 @@ function log_to_slack() {
     done
 }
 
+# Function to send logs to Pushover in chunks
+# Parameters:
+#   $1 - TAG to filter logs
+function log_to_pushover() {
+    local TAG="$1"
+    echo "gathering and sending logs with tag: $TAG"
+
+    # remove useless metadata prefixes from logs
+    LOGS="$(journalctl --since today | grep "$TAG" | sed "s/ homelab $TAG\[[0-9]*\]//")"
+
+    length=1024
+    CHUNKS=()
+
+    for ((i=0; i<${#LOGS}; i+=length)); do
+        CHUNKS+=("${LOGS:i:length}")
+    done
+
+    CHUNK_NUM=1
+    TOTAL_CHUNKS=${#CHUNKS[@]}
+
+    for CHUNK in "${CHUNKS[@]}"; do
+        CHUNK_TITLE="[$TAG] backup job logs"
+
+        # Add chunk header for multi-part messages
+        if [ "$TOTAL_CHUNKS" -gt 1 ]; then
+            CHUNK_TITLE="[$CHUNK_NUM/$TOTAL_CHUNKS]$CHUNK_TITLE (${#CHUNK}B)"
+        fi
+
+        PAYLOAD="{
+            \"token\": \"{{{SECRET_PUSHOVER_BACKUP_JOB_TOKEN}}}\",
+            \"user\": \"{{{pushover:SECRET_USER_TOKEN}}}\",
+            \"title\": $(printf "%s" "$CHUNK_TITLE" | jq -Rsa .),
+            \"message\": $(printf "%s" "$CHUNK" | jq -Rsa .)
+        }"
+
+        echo "Sending chunk $CHUNK_NUM/$TOTAL_CHUNKS"
+        curl -s -X POST -H 'Content-type: application/json' \
+            --data "$PAYLOAD" \
+            "https://api.pushover.net/1/messages.json"
+
+        if [ "$CHUNK_NUM" -lt "$TOTAL_CHUNKS" ]; then
+            sleep 1
+        fi
+
+        CHUNK_NUM=$((CHUNK_NUM + 1))
+    done
+}
+
 # Error handler that logs to Slack and exits
 # Parameters:
 #   $1 - Line number where error occurred
@@ -55,6 +103,8 @@ function handle_error() {
 
     MESSAGE="⛔ error in $0 at line $line_num (command '$BASH_COMMAND')"
     echo "$MESSAGE"
+
+    log_to_pushover "$tag"
 
     log_to_slack "$tag"
 

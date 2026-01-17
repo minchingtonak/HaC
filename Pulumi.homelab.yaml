@@ -188,6 +188,8 @@ config:
     secure: v1:0NPdoIQvBedAG3ik:2v/uTocIEnMrvwXhmvYWZLdbReKSHIQVrBeBTwzvyZzMZv/epLa405NYDxEzGfZPgCZHvCxNqMfrl8M9XqBrEHH+5F+rvOcV
   lxc#backup#dagu:SECRET_LOCAL_PBS_FINGERPRINT:
     secure: v1:97fDK5iL7CSE0sZy:Hl01fWRnLuigeVuvGB9DgQDAYUMkP0o8FkmhvvyIPiG3EtOdeEk9oUpvZWHR0zqPn8KqztlZduzpisd4AQqnomLdGnJeYVkQAsgpQ1MAHIxUAnmxd6CwEjh0AmXoGFeqzfKP6xEIUrj/6MgOigZK
+  lxc#backup#dagu:SECRET_PUSHOVER_BACKUP_JOB_TOKEN:
+    secure: v1:Pfv3SsMKMSBFFI+a:Flzy0Bcpy/xR8Gy3pHDgR77roWTe4XST9lD03rD/49f/fq30wlb4UjexFAJ16Q==
   lxc#backup#forgejo:SECRET_LFS_JWT_SECRET:
     secure: v1:wwrv4/7jP12dYID9:SXNe8F900y2BzjW+3OXw9+AHTw0pl+VZaZw/6Ulf6Jv7OfjX2kVbdljUjINypYz/EfLuQOd/MiQf28M=
   lxc#backup#forgejo:SECRET_INTERNAL_TOKEN:
