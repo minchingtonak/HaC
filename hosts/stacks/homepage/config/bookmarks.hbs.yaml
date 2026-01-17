@@ -1,5 +1,8 @@
 ---
 - homelab:
+    - router web ui:
+        - abbr: GLiNet
+          href: http://192.168.8.1
     - pve web ui:
         - icon: proxmox.png
           href: "{{{@pve.endpoint}}}"
@@ -12,7 +15,9 @@
     - home labs slack:
         - icon: slack.png
           href: "{{{SECRET_SLACK_WEBUI_URL}}}"
-
+    - home labs pushover:
+        - icon: pushover.png
+          href: https://client.pushover.net
 - etc:
     - HaC Github:
         - abbr: HaC
@@ -26,3 +31,6 @@
     - healthchecksio:
         - icon: healthchecks.png
           href: https://healthchecks.io
+    - pushover:
+        - icon: pushover.png
+          href: https://pushover.net
