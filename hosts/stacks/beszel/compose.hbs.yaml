@@ -21,7 +21,7 @@ services:
       - traefik
 
   beszel-agent:
-    image: henrygd/beszel-agent:0.17.0@sha256:730ac49d1a89d315b5a9424ad8cca2f586e981da7caf151c5ec2d599f474efad
+    image: henrygd/beszel-agent:0.18.2@sha256:137f2aefa4f8b06df8a94cc85449da6da2e1977230bfa5fdce9d0119ada19b0a
     container_name: beszel-agent
     restart: unless-stopped
     network_mode: host
