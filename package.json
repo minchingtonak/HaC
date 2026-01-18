@@ -19,7 +19,7 @@
     "handlebars": "^4.7.8",
     "smol-toml": "^1.6.0",
     "ts-node": "^10.9.2",
-    "type-fest": "^5.4.0",
+    "type-fest": "^5.4.1",
     "zod": "^4.3.5"
   },
   "devDependencies": {
