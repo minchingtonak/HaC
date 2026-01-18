@@ -168,14 +168,14 @@ export class ComposeStack extends pulumi.ComponentResource {
           {
             create: [
               `cd ${remoteStackDirectory}`,
-              "docker compose pull",
               ...waitForAndAcquireLock,
+              "docker compose pull",
               "docker compose up -d --force-recreate",
             ].join(" && "),
             update: [
               `cd ${remoteStackDirectory}`,
-              "docker compose pull",
               ...waitForAndAcquireLock,
+              "docker compose pull",
               "docker compose down --remove-orphans",
               "docker compose up -d --force-recreate",
               "docker image prune -a -f",
