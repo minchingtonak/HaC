@@ -1,6 +1,6 @@
 global_keywords:
   keywords:
-    - foo
+    - reallylongkeywordthatwillnevermatchanything
 # loggifly requires at least one container to be defined here
 containers:
   "{{{@lxc.hostname}}}-dummy-container":
