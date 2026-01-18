@@ -14,7 +14,7 @@
   vulnerabilityAlerts: { labels: ["security"], schedule: "at any time" },
 
   ignoreUnstable: true,
-  minimumReleaseAge: "0 days",
+  minimumReleaseAge: "4 days",
   minimumReleaseAgeBehaviour: "timestamp-optional",
 
   prHourlyLimit: 0,
