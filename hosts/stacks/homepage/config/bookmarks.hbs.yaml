@@ -22,6 +22,9 @@
     - HaC Github:
         - abbr: HaC
           href: https://github.com/minchingtonak/HaC
+    - pulumi cloud homelab:
+        - abbr: Pu
+          href: https://app.pulumi.com/minchingtonak/HaC/homelab/updates
     - slack api:
         - icon: slack.png
           href: https://api.slack.com/apps/
