@@ -1,6 +1,6 @@
 services:
   sonobarr:
-    image: ghcr.io/dodelidoo-labs/sonobarr:0.10.0@sha256:ddb70f93004100c392a62b6a1e3e972d485affe3e7790f18a2527ffa1bed9334
+    image: ghcr.io/dodelidoo-labs/sonobarr:0.10.1@sha256:d9d269c44a423e33f81081b377cac89bddac59bae8fa477a4e7e27862ec6cdf1
     container_name: sonobarr
     env_file:
       - .env
