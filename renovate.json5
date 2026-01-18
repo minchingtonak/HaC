@@ -7,14 +7,15 @@
   dependencyDashboard: true,
   dependencyDashboardTitle: "Renovate Dashboard",
 
-  // Run on a monthly schedule to keep interruptions to a minimum,
+  // Run on a weekly schedule to keep interruptions to a minimum,
   //  but always open vulnerability-fixing pull requests immediately
   schedule: "on saturday",
   timezone: "America/New_York",
   vulnerabilityAlerts: { labels: ["security"], schedule: "at any time" },
 
   ignoreUnstable: true,
-  minimumReleaseAge: "4 days",
+  minimumReleaseAge: "0 days",
+  minimumReleaseAgeBehaviour: "timestamp-optional",
 
   prHourlyLimit: 0,
   prConcurrentLimit: 0,
