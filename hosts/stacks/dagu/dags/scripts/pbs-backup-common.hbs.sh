@@ -210,6 +210,41 @@ function backup_personal_files() {
     curl -fsS -m 10 --retry 5 -o /dev/null "$healthcheck_url"
 }
 
+# Backup music files to PBS
+# Parameters:
+#   $1 - PBS repository URL
+#   $2 - Encryption password
+#   $3 - PBS password
+#   $4 - Keyfile path
+#   $5 - Healthcheck ping URL
+#   $6 - Backup location name (for logging)
+function backup_music() {
+    local repository="$1"
+    local encryption_password="$2"
+    local pbs_password="$3"
+    local keyfile="$4"
+    local healthcheck_url="$5"
+    local location_name="$6"
+
+    echo "📸 beginning music backup to $location_name"
+
+    # shellcheck disable=SC2016
+    export PBS_ENCRYPTION_PASSWORD="$encryption_password"
+    export PBS_PASSWORD="$pbs_password"
+
+    set -x
+    proxmox-backup-client backup \
+        music.pxar:/void/media/music \
+        --repository "$repository" \
+        --change-detection-mode=metadata \
+        --keyfile "$keyfile"
+    { set +x; } 2>/dev/null
+
+    echo "✅ personal files backup to $location_name completed successfully!"
+
+    curl -fsS -m 10 --retry 5 -o /dev/null "$healthcheck_url"
+}
+
 # Backup both app data and personal files to PBS in a single command
 # This is required for PBS datastores that need all data in one backup snapshot
 # Parameters:
