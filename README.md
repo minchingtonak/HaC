@@ -728,3 +728,46 @@ flowchart TB
 
 - set up pbs backup of app data folder
   - discontinue lxc backups after since they should be able to be recreated trivially, data is the only thing worth backing up
+
+## Appendix
+
+### Pulumi backends
+
+migration: https://www.pulumi.com/docs/iac/concepts/state-and-backends/#migrating-between-state-backends
+
+- pulumi cloud: `pulumi login`
+- backblaze s3: `pulumi login 's3://<bucket-name>?endpoint=<bucket-endpoint>&s3ForcePathStyle=true'`
+  - auth: https://www.pulumi.com/registry/packages/aws/installation-configuration/#set-credentials-as-environment-variables
+- local .pulumi folder: `pulumi login 'file://.'`
+- local ~/.pulumi folder: `pulumi login --local`
+
+speed up deployments by disabling checkpointing https://www.pulumi.com/blog/pulumi-release-notes-80/#skip-checkpoints-experimental-flag
+
+#### Which backend to use?
+
+for now, going with pulumi cloud options since in theory disconnects should almost never happen deploying to the LAN
+
+##### idea 1
+
+locally, use pulumi cloud with checkpointing disabled
+in ci, use pulumi cloud
+
+pros
+
+- nice ui in cloud
+- no ci changes
+  cons
+- can break stuff locally, would need to manually fix infra/rollback to initial state if deployment crashes/disconnects
+
+##### idea 2
+
+locally, use rclone wrapper script with s3
+in ci, use s3
+
+pros
+
+- speedy local deployments with checkpointing
+  cons
+- need to use script locally
+- no web ui to view deployments
+- need to update ci job
