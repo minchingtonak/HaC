@@ -1,6 +1,6 @@
 services:
   handbrake-server:
-    image: ghcr.io/thenickoftime/handbrake-web-server:0.7.3@sha256:1bb42d405c5936ae66885002e6424fd858f6cd9472b35837828e6d40e673006c
+    image: ghcr.io/thenickoftime/handbrake-web-server:0.8.1@sha256:6aa18122e08299cf05edf0aa6135d9c97d92839933f5377f8fde59978430e543
     container_name: handbrake-web-server
     user: 0:0
     # ports:
