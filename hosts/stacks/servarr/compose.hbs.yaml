@@ -343,7 +343,7 @@ services:
 
   lidarr:
     container_name: lidarr
-    image: ghcr.io/hotio/lidarr:pr-plugins-3.1.1.4884@sha256:5347b56f2f7d740248790c3ef6be87c2b0f836d3180495abbf56ff1874a24a6b
+    image: ghcr.io/hotio/lidarr:pr-plugins-3.1.1.4901@sha256:b274cfbabfced9836351f09c4d443b526f452fe39b374a6274cc5d37bcad9ccb
     restart: unless-stopped
     depends_on:
       qbittorrent:
