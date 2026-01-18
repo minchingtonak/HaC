@@ -107,7 +107,7 @@ services:
       - cleanslate
 
   client:
-    image: ghcr.io/successible/cleanslate/client:v4.0.3@sha256:d6a8b5bf017fe97a8fe8455ad1bcbbc714f6be763fec81262eb5dd428d981ae2
+    image: ghcr.io/successible/cleanslate/client:v4.6.0@sha256:05ded1f4b034ddecd52dd8cb075e8bf058ba4d4f397833a20ad70107582001d2
     pull_policy: always
     restart: always
     container_name: client
