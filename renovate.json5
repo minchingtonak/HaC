@@ -44,6 +44,12 @@
       matchPackageNames: ["ghcr.io/linuxserver/qbittorrent"],
       allowedVersions: "<6",
     },
+    // hotio lidarr uses non-standard versioning (pr-plugins branch)
+    {
+      matchPackageNames: ["ghcr.io/hotio/lidarr"],
+      versioning: "regex:^(?<compatibility>pr-plugins)-(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)$",
+      ignoreUnstable: false,
+    },
     //authentik
     {
       matchPackageNames: "docker.io/library/postgres",
