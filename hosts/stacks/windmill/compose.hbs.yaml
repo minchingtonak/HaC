@@ -153,7 +153,7 @@ services:
       - windmill
 
   lsp:
-    image: ghcr.io/windmill-labs/windmill-lsp:1.574.1@sha256:e9653ba37501dc0598c3cd2012b743febb9895b2ef8644a647922df87e8f41a3
+    image: ghcr.io/windmill-labs/windmill-lsp:1.603.4@sha256:4e76621383915a938b8d45a9fab4bf4b8769068a73c079fccbbbc23be8da092e
     container_name: windmill-lsp
     pull_policy: always
     restart: unless-stopped
