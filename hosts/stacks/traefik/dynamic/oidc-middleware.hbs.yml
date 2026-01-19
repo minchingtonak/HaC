@@ -3,6 +3,7 @@ http:
     oidc-auth:
       plugin:
         oidc-authentication:
+          Secret: "{{{traefik:SECRET_OIDC_MIDDLEWARE_SECRET}}}"
           Provider:
             ClientId: "{{{traefik:SECRET_OIDC_CLIENT_ID}}}"
             ClientSecret: "{{{traefik:SECRET_OIDC_CLIENT_SECRET}}}"
