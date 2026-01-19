@@ -71,7 +71,7 @@ export const LXC_DEFAULTS = {
   PROTECTION: false,
   OS: {
     TYPE: "debian",
-    TEMPLATE_FILE_ID: "local:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst",
+    TEMPLATE_FILE_ID: "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst",
   },
   CPU: { ARCHITECTURE: "amd64", CORES: CpuCores.DUAL, UNITS: 1024 },
   MEMORY: { DEDICATED: MemorySize.GB_4, SWAP: MemorySize.GB_2 },
