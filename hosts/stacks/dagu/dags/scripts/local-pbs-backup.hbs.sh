@@ -31,16 +31,16 @@ function backup() {
     # note: this will need to be updated when the IP/cert of PBS is changed
     export PBS_FINGERPRINT='{{{SECRET_LOCAL_PBS_FINGERPRINT}}}'
 
-    # backup_music \
-    #     "root@pam@$LOCAL_PBS_IP:music" \
-    #     '{{{SECRET_PERSONAL_FILES_AND_CLOUD_PBS_ENCRYPTION_PASSWORD}}}' \
-    #     '{{{SECRET_EDSAC_PBS_PASSWORD}}}' \
-    #     './keys/personal-files.key' \
-    #     '{{{SECRET_MUSIC_HEALTHCHECK_PING_URL}}}' \
-    #     'local PBS'
+    backup_music \
+        "root@pam@$LOCAL_PBS_IP:music-blackpool" \
+        '{{{SECRET_PERSONAL_FILES_AND_CLOUD_PBS_ENCRYPTION_PASSWORD}}}' \
+        '{{{SECRET_EDSAC_PBS_PASSWORD}}}' \
+        './keys/personal-files.key' \
+        '{{{SECRET_MUSIC_HEALTHCHECK_PING_URL}}}' \
+        'local PBS'
 
     backup_app_data \
-        "root@pam@$LOCAL_PBS_IP:appdata" \
+        "root@pam@$LOCAL_PBS_IP:appdata-blackpool" \
         '{{{SECRET_APPDATA_ENCRYPTION_PASSWORD}}}' \
         '{{{SECRET_EDSAC_PBS_PASSWORD}}}' \
         './keys/appdata.key' \
@@ -48,7 +48,7 @@ function backup() {
         'local PBS'
 
     backup_personal_files \
-        "root@pam@$LOCAL_PBS_IP:personal-files" \
+        "root@pam@$LOCAL_PBS_IP:personal-files-blackpool" \
         '{{{SECRET_PERSONAL_FILES_AND_CLOUD_PBS_ENCRYPTION_PASSWORD}}}' \
         '{{{SECRET_EDSAC_PBS_PASSWORD}}}' \
         './keys/personal-files.key' \
