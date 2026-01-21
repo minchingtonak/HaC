@@ -1,0 +1,15 @@
+services:
+  newt:
+    image: fosrl/newt:1.8.1@sha256:c05a8383fc8370e6211f0ab84e37993848aae224322d0c5aede7d3368414bdd0
+    container_name: newt
+    restart: unless-stopped
+    environment:
+      - PANGOLIN_ENDPOINT={{{SECRET_PANGOLIN_ENDPOINT}}}
+      - NEWT_ID={{{SECRET_NEWT_ID}}}
+      - NEWT_SECRET={{{SECRET_NEWT_SECRET}}}
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

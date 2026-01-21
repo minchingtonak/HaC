@@ -1,0 +1,42 @@
+services:
+  crafty:
+    container_name: crafty_container
+    image: registry.gitlab.com/crafty-controller/crafty-4:4.7.0@sha256:ea02e5def93e9d2d40ac3014639dd9b640834b320d1e676b5d94076d23938726
+    restart: unless-stopped
+    environment:
+      - TZ={{{global:TIMEZONE}}}
+    # ports:
+    #   - "8000:8000" # HTTP
+    #   - "8443:8443" # HTTPS
+    #   - "8123:8123" # DYNMAP
+    #   - "19132:19132/udp" # BEDROCK
+    #   - "25500-25600:25500-25600" # MC SERV PORT RANGE
+    volumes:
+      - /docker/crafty-controller/backups:/crafty/backups
+      - /docker/crafty-controller/logs:/crafty/logs
+      - /docker/crafty-controller/servers:/crafty/servers
+      - /docker/crafty-controller/config:/crafty/app/config
+      - /docker/crafty-controller/import:/crafty/import
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.crafty-controller.rule=Host(`{{{domainForApp "crafty-controller"}}}`)
+      - traefik.http.routers.crafty-controller.entrypoints=https
+      - traefik.http.routers.crafty-controller.tls=true
+      - traefik.http.routers.crafty-controller.tls.certresolver=porkbun
+      - traefik.http.routers.crafty-controller.service=crafty-controller
+      - traefik.http.services.crafty-controller.loadbalancer.server.port=8443
+      - traefik.http.services.crafty-controller.loadbalancer.server.scheme=https
+      - traefik.http.services.crafty-controller.loadbalancer.serverstransport=skip@file
+      - traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto = https
+      - traefik.http.routers.crafty-controller.middlewares=oidc-auth@file
+      #
+      - traefik.tcp.routers.minecraft-server.rule=HostSNI(`*`)
+      - traefik.tcp.routers.minecraft-server.entrypoints=minecraft-25565-tcp
+      - traefik.tcp.routers.minecraft-server.service=minecraft-server
+      - traefik.tcp.services.minecraft-server.loadbalancer.server.port=25565
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

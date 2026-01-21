@@ -1,0 +1,43 @@
+hostname = "gameserver"
+description = "multigame server hosting container"
+start_on_boot = true
+
+[stacks]
+traefik = {}
+dozzle = {}
+crafty-controller = {}
+newt = {}
+
+[cpu]
+cores = 12
+
+[memory]
+dedicated = 16384
+swap = 8192
+
+[disk]
+size = 64
+
+[[mount_points]]
+volume = "{{{@pve.lxc.app_data_dir}}}/gameserver"
+mount_point = "/docker"
+
+[[provisioners]]
+type = "ansible"
+playbook = "provisioners/ansible/configure-apparmor-unconfined.yaml"
+replayable = false
+
+[provisioners.variables]
+lxc_id = "{{{idForContainer hostname='gameserver'}}}"
+
+[provisioners.connection]
+host = "{{{@pve.ip}}}"
+
+[[provisioners]]
+type = "ansible"
+playbook = "provisioners/ansible/lxc-init.yaml"
+replayable = false
+
+[[provisioners]]
+type = "script"
+script = "provisioners/scripts/install-docker.sh"

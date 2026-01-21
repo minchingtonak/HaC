@@ -39,6 +39,7 @@ life = { id = 215 }
 tools = { id = 208 }
 music = { id = 216 }
 servarr = { id = 201 }
+gameserver = { id = 210 }
 admin = { id = 213 }
 backup = { id = 202 }
 windmill = { id = 209 }

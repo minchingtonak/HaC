@@ -18,6 +18,9 @@
     - home labs pushover:
         - icon: pushover.png
           href: https://client.pushover.net
+    - pangolin:
+        - icon: pangolin.png
+          href: https://pangolin.minch.zone
 - etc:
     - HaC Github:
         - abbr: HaC

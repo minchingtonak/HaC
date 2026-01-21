@@ -317,3 +317,10 @@ config:
     secure: v1:geaaX2PKt+tYIoIY:Fa/4jE1tcX6wSj9NeDlNCK+ax9JpXsImqbWMluRz1r36Fx720o7Rdpfko+/PNg==
   lxc#backup#dagu:SECRET_MUSIC_HEALTHCHECK_PING_URL:
     secure: v1:+t/uHPT/skxe06ri:EhlKQpiZIKQyJwCoL4fD1KUjnBmI7Ja+NHl33SQ+lxF/RQtyGWanzTm7Zt9NeIB6EyEZVIijl2Pl+jOf6txqbD3mBlJkt6wX
+  # gameserver
+  lxc#gameserver#newt:SECRET_PANGOLIN_ENDPOINT:
+    secure: v1:ivr9DGrC1lA18oUz:J3/6ceDOCzs7itABrbNDHPASoCbyWGaz8XviKbiBvMw/oL5ufY01BGB/Bg==
+  lxc#gameserver#newt:SECRET_NEWT_ID:
+    secure: v1:rRF0Meadlh7iJ1uH:p89tMZo8j8bbCAkZ+tZeX9ERrcTmTCtm+Q2Nqx2xUw==
+  lxc#gameserver#newt:SECRET_NEWT_SECRET:
+    secure: v1:v1Si2cvyhErNnG2C:BsHcWbFMrKcw67OXzOEued33FVqrID3UVomuEKKTXADc9s077NBdRkL7O2aNkk2itFl+eo9gKoViQjVOPG/MYw==
