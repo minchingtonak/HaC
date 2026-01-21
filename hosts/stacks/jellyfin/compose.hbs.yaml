@@ -13,11 +13,11 @@ services:
       - /docker/jellyfin/data:/var/lib/jellyfin
       - /docker/jellyfin:/etc/jellyfin
       - /mnt/media:/mnt/media
-    # ports:
-    #   - 8096:8096 # http
-    #   - 8920:8920 # https
-    #   - 7359:7359/udp # optional - auto-discovery
-    #   - 1900:1900/udp # optional - service discovery
+    ports:
+      #   - 8096:8096 # http
+      #   - 8920:8920 # https
+      - 7359:7359/udp # optional - auto-discovery
+      - 1900:1900/udp # optional - service discovery
     devices:
       # select VAAPI acceleration in Dashboard > Playback > Transcoding
       # device: /dev/dri/renderD128
@@ -32,14 +32,6 @@ services:
       - traefik.http.routers.jellyfin.tls.certresolver=porkbun
       - traefik.http.routers.jellyfin.service=jellyfin
       - traefik.http.services.jellyfin.loadbalancer.server.port=8096
-      #
-      - traefik.udp.routers.jellyfin-service-discovery.entrypoints=jellyfin-service-discovery-1900-udp
-      - traefik.udp.routers.jellyfin-service-discovery.service=jellyfin-service-discovery
-      - traefik.udp.services.jellyfin-service-discovery.loadbalancer.server.port=1900
-      #
-      - traefik.udp.routers.jellyfin-auto-discovery.entrypoints=jellyfin-auto-discovery-7359-udp
-      - traefik.udp.routers.jellyfin-auto-discovery.service=jellyfin-auto-discovery
-      - traefik.udp.services.jellyfin-auto-discovery.loadbalancer.server.port=7359
     networks:
       - traefik
 

@@ -10,11 +10,11 @@ services:
     volumes:
       - /docker/syncthing:/config # ensure syncthing folder is owned by lxc-root
       - /mnt:/mnt
-    # ports:
-    #   - 8384:8384
-    #   - 22000:22000/tcp
-    #   - 22000:22000/udp
-    #   - 21027:21027/udp
+    ports:
+      #   - 8384:8384
+      #   - 22000:22000/tcp
+      #   - 22000:22000/udp
+      - 21027:21027/udp
     restart: unless-stopped
     labels:
       - traefik.enable=true
@@ -34,10 +34,6 @@ services:
       - traefik.udp.routers.syncthing-sync-quic.entrypoints=syncthing-sync-quic-22000-udp
       - traefik.udp.routers.syncthing-sync-quic.service=syncthing-sync-quic
       - traefik.udp.services.syncthing-sync-quic.loadbalancer.server.port=22000
-      #
-      - traefik.udp.routers.syncthing-local-discovery.entrypoints=syncthing-local-discovery-21027-udp
-      - traefik.udp.routers.syncthing-local-discovery.service=syncthing-local-discovery
-      - traefik.udp.services.syncthing-local-discovery.loadbalancer.server.port=21027
     networks:
       - traefik
 

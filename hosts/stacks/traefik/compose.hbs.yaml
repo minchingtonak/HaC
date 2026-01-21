@@ -7,6 +7,10 @@ services:
       - "80:80"
       - "443:443"
       - "25565:25565" # minecraft-25565-tcp
+      - "6881:6881" # qbittorrent-6881-tcp
+      - "22000:22000" # syncthing-sync-22000-tcp
+      - "22000:22000/udp" # syncthing-sync-quic-22000-udp
+      - "50300:50300" # slskd-listen-50300-tcp
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /docker/traefik/letsencrypt:/letsencrypt
@@ -39,9 +43,6 @@ services:
       - --entrypoints.http.http.redirections.entrypoint.scheme=https
       - --entrypoints.ssh-222-tcp.address=:222
       - --entrypoints.qbittorrent-6881-tcp.address=:6881
-      - --entrypoints.jellyfin-service-discovery-1900-udp.address=:1900/udp
-      - --entrypoints.jellyfin-auto-discovery-7359-udp.address=:7359/udp
-      - --entrypoints.syncthing-local-discovery-21027-udp.address=:21027/udp
       - --entrypoints.syncthing-sync-22000-tcp.address=:22000
       - --entrypoints.syncthing-sync-quic-22000-udp.address=:22000/udp
       - --entrypoints.minecraft-25565-tcp.address=:25565/tcp
@@ -83,7 +84,13 @@ services:
       #
       - "loggifly.monitor=true"
       - "loggifly.attach_logfile=true"
-      - "loggifly.keywords.0.regex= ERR "
+      # Match " ERR " but exclude lines containing ":22000" (syncthing port logs)
+      # Pattern: ^(?!.*:22000).* ERR
+      #   ^             - Start of line
+      #   (?!.*:22000)  - Negative lookahead: fail if ":22000" appears anywhere in the line
+      #   .*            - Match any characters
+      #    ERR          - Match the literal string " ERR " (with spaces)
+      - "loggifly.keywords.0.regex=^(?!.*:22000).* ERR "
       - "loggifly.keywords.0.notification_title={{{@lxc.hostname}}}#{container} - error"
       - "loggifly.keywords.0.action=restart"
       - "loggifly.keywords.0.action_cooldown=60"
