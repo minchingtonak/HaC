@@ -20,7 +20,9 @@ services:
       # Do not edit the next line. If you want to change the media storage location on your system, edit the value of UPLOAD_LOCATION in the .env file
       - ${UPLOAD_LOCATION}:/usr/src/app/upload
       - /etc/localtime:/etc/localtime:ro
+      # no readonly so immich can write metadata to .xmp files alongside media
       - /mnt/photos:/mnt/photos
+      - /mnt/drive:/mnt/drive
     env_file:
       - .env
     # ports:
