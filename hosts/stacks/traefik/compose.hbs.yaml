@@ -98,7 +98,7 @@ services:
       - traefik
 
   loggifly:
-    image: ghcr.io/clemcer/loggifly:v1.7.2@sha256:6faa4d4964994a9213494f879b58085acc04cafa2927cadfde98657676dfd199
+    image: ghcr.io/clemcer/loggifly:v1.8.1@sha256:9f6a673cd11fb90ffd0cfdb9675d5d3b9b3dfac060800fab52ec8dfbd4cc0293
     container_name: traefik-loggifly
     # It is recommended to run the container as the same UID/GID as the owner of your docker socket to avoid running as root.
     # But you can also just comment out the user line and run as root.
