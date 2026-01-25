@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   navidrome-import-tools:
-    image: ethanbarclay/navidrome-import-tools:latest@sha256:1ea58feccef64653c3cc6457a0aa8b15b515cefae78ec18d99cee525c26758e7
+    image: ethanbarclay/navidrome-import-tools:latest@sha256:8fa8020d9d9357fd5eaa6783805cb41cfd0bf9257d05696b0392abb868a88c0b
     container_name: nit
     # ports:
     #   - "8888:8888"
