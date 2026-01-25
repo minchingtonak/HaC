@@ -144,7 +144,7 @@ services:
       timeout: 10s
 
   nzbget:
-    image: ghcr.io/linuxserver/nzbget:25.4.20260109@sha256:500b4e697584d80f0ed09176ec9b8dd92e45d9a41952bde6dbe349b0487988fb
+    image: ghcr.io/linuxserver/nzbget:25.4.20260123@sha256:af26942450afe1fdd0e04026a8257064cdfb1785cad66b1175d123b55404120b
     container_name: nzbget
     environment:
       - PUID=0
