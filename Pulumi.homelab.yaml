@@ -259,6 +259,11 @@ config:
     secure: v1:fnQkH8rr/mWuoz9L:Uk6V2SpbGUSk0RMnDwaiE4irMDB8lUz/+baak9tmUDZ+cATo8xsFtiYHEFt6lX5Z
   lxc#music#sonobarr:SECRET_SUPERADMIN_PASSWORD:
     secure: v1:Q8u3HtbannGUWOKt:6URtN03PVCyH6x0DpR/6ZlNmTTpgGjt58FpL6r62D9DTDRak
+  lxc#music#sonobarr:SECRET_OIDC_CLIENT_ID:
+    secure: v1:6yYCrbX2fd8RlXc3:tWQtbv/Fuirw83h8zwpr8Jbj8Ac0K9JUTQnbes5bYpnm+GK3nYzKjG92Ed+6sIexIsDXWA==
+  lxc#music#sonobarr:SECRET_CLIENT_SECRET:
+    secure: v1:e+IILLwkBJKuUtjw:Kis0IPmsnhpWnQsL4YofVwbKpjxMrD7dv8EgSWbwPiy43blylU7eHxFnhCBe8Bmu
+  lxc#music#sonobarr:ADMIN_GROUP: sonobarr_admin
   lxc#music#nit:SECRET_SPOTIFY_CLIENT_ID:
     secure: v1:vWxPnLrp5JAm4cbZ:bsfe8/XfcDHxrgJTQPatmEM10GxLyJazL7ycRYBnJUvsgEyzPveTuYvLkiXvwr5h
   lxc#music#nit:SECRET_SPOTIFY_CLIENT_SECRET:
