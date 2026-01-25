@@ -118,6 +118,12 @@
       matchCurrentVersion: "8.20",
       enabled: false,
     },
+    // ryot
+    {
+      matchPackageNames: "postgres",
+      matchCurrentVersion: "18-alpine",
+      enabled: false,
+    },
     // tandoor
     {
       matchPackageNames: "postgres",

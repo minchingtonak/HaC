@@ -1,0 +1,60 @@
+services:
+  ryot-db:
+    # pinned
+    image: postgres:18-alpine@sha256:b40d931bd0e7ce6eecc59a5a6ac3b3c04a01e559750e73e7086b6dbd7f8bf545
+    restart: unless-stopped
+    container_name: ryot-db
+    volumes:
+      - /docker/ryot/db:/var/lib/postgresql
+    environment:
+      - TZ={{{global:TIMEZONE}}}
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - ryot
+
+  ryot:
+    image: ignisda/ryot:v10.1.1@sha256:45a88856d6f80282fec17b06fa45f9a148e48748f64cce4039f6e87b44945d7b
+    pull_policy: always
+    container_name: ryot
+    restart: unless-stopped
+    # ports:
+    #   - "8000:8000"
+    environment:
+      - TZ={{{global:TIMEZONE}}}
+      - DISABLE_TELEMETRY=true
+      - FRONTEND_URL=https://{{{domainForApp "ryot"}}}
+      - DATABASE_URL=postgres://postgres:postgres@ryot-db:5432/postgres
+      - SERVER_ADMIN_ACCESS_TOKEN={{{SECRET_SERVER_ADMIN_ACCESS_TOKEN}}} # REQUIRED: set to a long random string
+      # - USERS_DISABLE_LOCAL_AUTH=true # redirect to OIDC provider automatically
+      - SERVER_OIDC_CLIENT_ID={{{SECRET_OIDC_CLIENT_ID}}}
+      - SERVER_OIDC_CLIENT_SECRET={{{SECRET_OIDC_CLIENT_SECRET}}}
+      - SERVER_OIDC_ISSUER_URL={{{oidc:PROVIDER_URL}}}
+      - FRONTEND_OIDC_BUTTON_LABEL=Login with Pocket ID
+      - MOVIES_AND_SHOWS_TMDB_ACCESS_TOKEN={{{SECRET_TMDB_API_KEY}}}
+      - MOVIES_AND_SHOWS_TVDB_API_KEY={{{SECRET_TVDB_API_KEY}}}
+      - VIDEO_GAMES_TWITCH_CLIENT_ID={{{SECRET_TWITCH_CLIENT_ID}}}
+      - VIDEO_GAMES_TWITCH_CLIENT_SECRET={{{SECRET_TWITCH_CLIENT_SECRET}}}
+      - ANIME_AND_MANGA_MAL_CLIENT_ID={{{SECRET_MAL_CLIENT_ID}}}
+      - RUST_LOG=ryot=debug
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.ryot.rule=Host(`{{{domainForApp "ryot"}}}`)
+      - traefik.http.routers.ryot.entrypoints=https
+      - traefik.http.routers.ryot.tls=true
+      - traefik.http.routers.ryot.tls.certresolver=porkbun
+      - traefik.http.routers.ryot.service=ryot
+      - traefik.http.services.ryot.loadbalancer.server.port=8000
+      # - traefik.http.routers.ryot.middlewares=oidc-auth@file
+    # https://github.com/IgnisDa/ryot/issues/543
+    healthcheck:
+      interval: 30s
+    networks:
+      - ryot
+      - traefik
+
+networks:
+  ryot:
+  traefik:
+    external: true
