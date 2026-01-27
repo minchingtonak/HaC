@@ -5,6 +5,8 @@ description = "jellyfin media player server"
 traefik = {}
 dozzle = {}
 jellyfin = {}
+jellyseerr = {}
+watcharr = {}
 
 [cpu]
 cores = 4
