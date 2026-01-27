@@ -42,7 +42,6 @@ gameserver = { id = 210 }
 admin = { id = 213 }
 backup = { id = 202 }
 windmill = { id = 209 }
-syncthing = { id = 212 }
 
 [lxc.network]
 domain = "akmin.dev"

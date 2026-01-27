@@ -7,6 +7,7 @@ dozzle = {}
 backrest = {}
 dagu = {}
 forgejo = {}
+syncthing = {}
 
 [cpu]
 cores = 4
@@ -25,6 +26,30 @@ action = "ACCEPT"
 dport = "222"
 proto = "tcp"
 comment = "forgejo ssh"
+
+[[firewall_rules]]
+enabled = true
+type = "in"
+action = "ACCEPT"
+dport = "22000"
+proto = "tcp"
+comment = "syncthing-sync"
+
+[[firewall_rules]]
+enabled = true
+type = "in"
+action = "ACCEPT"
+dport = "22000"
+proto = "udp"
+comment = "syncthing-sync-quic"
+
+[[firewall_rules]]
+enabled = true
+type = "in"
+action = "ACCEPT"
+dport = "21027"
+proto = "udp"
+comment = "syncthing-local-discovery"
 
 [[mount_points]]
 volume = "{{{@pve.lxc.app_data_dir}}}/backup"
@@ -49,6 +74,22 @@ mount_point = "/mnt/backup-data/photos"
 [[mount_points]]
 volume = "/void/restic/repos"
 mount_point = "/mnt/repos"
+
+[[mount_points]]
+volume = "/void/documents"
+mount_point = "/mnt/documents"
+
+[[mount_points]]
+volume = "/void/drive"
+mount_point = "/mnt/drive"
+
+[[mount_points]]
+volume = "/void/media"
+mount_point = "/mnt/media"
+
+[[mount_points]]
+volume = "/void/photos"
+mount_point = "/mnt/photos"
 
 [[provisioners]]
 type = "ansible"
