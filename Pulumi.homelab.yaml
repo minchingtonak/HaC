@@ -86,8 +86,6 @@ config:
     secure: v1:lp4auliCGNf6VjUE:CL2JM6S7jzmILxnO3211UvB191Em5Dm7s+MpkQLHoQyUcHc/IdBe3BEy5WnY8ihnnghRc75i9iVY5KM=
   lxc#admin#homepage:SECRET_JELLYSEERR_API_KEY:
     secure: v1:Vaa55qDCwBiM0EkM:5ED/Xznd7JKBBtsNc7sSayfI2LckX/unfHPeg5DxCjUu9UgchgWZrRGxTaw/GNhd2iozU+wSw98Cq/pYoHLOvCpboYmHvhPvRhtd5eTRuYrp15ko
-  lxc#admin#homepage:SECRET_TAILSCALE_API_KEY:
-    secure: v1:qhpND82hNZ/BJZMk:VuNJ9lGokAE8LdALXawjXaeoVH5Uj/YhEcBf1Z0ETg/aH0yrXx9D4AcPKlp40mf9QW+p6py+ZA0zgdqhyXRJxuo0leASVpITs/Qe8w==
   lxc#admin#homepage:SECRET_TAILSCALE_DEVICE_ID:
     secure: v1:dqN6stIt3ZVU3fem:HFvnzhAnwJvN/7CJWsJ6prvC2TptY6NCsoO+ebhQSu1T
   lxc#admin#homepage:SECRET_EDSAC_PBS_URL:
