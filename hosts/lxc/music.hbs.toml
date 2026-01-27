@@ -7,10 +7,10 @@ traefik = {}
 dozzle = {}
 navidrome = {}
 audiobookshelf = {}
-sonobarr = {}
 spotizerr = {}
-your-spotify = {}
 picard = {}
+sonobarr = {}
+your-spotify = {}
 
 [cpu]
 cores = 2
