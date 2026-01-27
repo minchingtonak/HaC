@@ -156,6 +156,14 @@ widget:
 # {{/ifeq}}
 # {{/partial}}
 
+# {{#partial "ping"}}
+# {{#ifnoteq serviceName "newt"}}
+# {{#ifnoteq ../serviceName "tailscale"}}
+siteMonitor: https://{{{domainForApp ../serviceName hostname=../hostname}}}
+# {{/ifnoteq}}
+# {{/ifnoteq}}
+# {{/partial}}
+
 # {{#each @lxc_hosts}}
 - "{{{this.hostname}}}":
     # {{#if this.stacks}}
@@ -164,15 +172,15 @@ widget:
     # {{#each this.subdomains}}
     - "{{{this}}}":
         href: https://{{{domainForApp this hostname=../../this.hostname}}}
-        siteMonitor: https://{{{domainForApp this hostname=../../this.hostname}}}
         icon: "{{{this}}}.png"
+        {{> ping serviceName=this hostname=../../this.hostname}}
         {{> widgets serviceName=this hostname=../../this.hostname}}
     # {{/each}}
     # {{else}}
     - "{{{@key}}}":
         href: https://{{{domainForApp @key hostname=../this.hostname}}}
-        siteMonitor: https://{{{domainForApp @key hostname=../this.hostname}}}
         icon: "{{{@key}}}.png"
+        {{> ping serviceName=@key hostname=../this.hostname}}
         {{> widgets serviceName=@key hostname=../this.hostname}}
     # {{/if}}
     # {{/each}}
