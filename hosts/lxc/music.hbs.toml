@@ -7,7 +7,6 @@ traefik = {}
 dozzle = {}
 navidrome = {}
 audiobookshelf = {}
-spotisub = {}
 sonobarr = {}
 spotizerr = {}
 your-spotify = {}
