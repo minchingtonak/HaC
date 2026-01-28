@@ -149,6 +149,13 @@ config:
   lxc#admin#tailscale:TAILSCALE_SUBNET_ROUTES: 192.168.8.0/24
   lxc#admin#pocket-id:SECRET_ENCRYPTION_KEY:
     secure: v1:wzP6B4YNoNuX5q3D:ZFsDC+0PvR2rwcgc/uZGFhtJWb8gQI1Q1S1H3OIFVZ4ZFplBPHikIUSe6Fr4pfdT7QarYCxvwFee1oe2
+  # jellyfin
+  lxc#jellyfin#newt:SECRET_PANGOLIN_ENDPOINT:
+    secure: v1:v/fRcosLb5F80QSQ:v8tsYNhKvXX3E4rdG/KgU6oobTk2OKkVxqKcC3PfKAGuecqaaSkWwu/ljw==
+  lxc#jellyfin#newt:SECRET_NEWT_ID:
+    secure: v1:IR9ey5UembobicQN:JT9ITfSEwh0i8G1PukfMWLA7xGl4azZhxMrwhFaClQ==
+  lxc#jellyfin#newt:SECRET_NEWT_SECRET:
+    secure: v1:oC6GH15ofs8jCf/P:PSE9wHDLRpegwM5jUyjoIN7giQ/0ZcUMZXls5cMY0F01ww68n/Fji3kITjMMXDgfKAOztY2CSTNyhvI4OIjNnQ==
   # immich
   lxc#immich#immich:SECRET_DB_PASSWORD:
     secure: v1:ECc5/vJz6VnDlxsj:xgdWvCAj0NxBmWNBrAg4cP+l8j7DAk9cij/mO/JSNm+S8zVq

@@ -7,6 +7,7 @@ dozzle = {}
 jellyfin = {}
 jellyseerr = {}
 watcharr = {}
+newt = {}
 
 [cpu]
 cores = 4
