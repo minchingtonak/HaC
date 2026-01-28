@@ -1,0 +1,23 @@
+services:
+  metube:
+    image: ghcr.io/alexta69/metube:2026.01.11@sha256:dbbf9a25660b6255cc0726a00c06cf2968941803e29813e1d23863919794713c
+    container_name: metube
+    restart: unless-stopped
+    # ports:
+    #   - "8081:8081"
+    volumes:
+      - /mnt/media/downloads/metube:/downloads
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.metube.rule=Host(`{{{domainForApp "metube"}}}`)
+      - traefik.http.routers.metube.entrypoints=https
+      - traefik.http.routers.metube.tls=true
+      - traefik.http.routers.metube.tls.certresolver=porkbun
+      - traefik.http.routers.metube.service=metube
+      - traefik.http.services.metube.loadbalancer.server.port=8081
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

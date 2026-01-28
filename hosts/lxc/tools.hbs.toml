@@ -12,6 +12,8 @@ it-tools = {}
 omni-tools = {}
 mazanoke = {}
 withoutbg = {}
+metube = {}
+ytptube = {}
 
 [cpu]
 cores = 4
@@ -26,6 +28,10 @@ size = 16
 [[mount_points]]
 volume = "{{{@pve.lxc.app_data_dir}}}/tools"
 mount_point = "/docker"
+
+[[mount_points]]
+volume = "{{{@pve.storage.mass.path}}}/media"
+mount_point = "/mnt/media"
 
 [[provisioners]]
 type = "ansible"
