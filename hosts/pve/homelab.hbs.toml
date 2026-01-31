@@ -33,10 +33,10 @@ app_data_dir = "/fast/appdata"
 [lxc.hosts]
 jellyfin = { id = 203 }
 life = { id = 215 }
-tools = { id = 208 }
-music = { id = 216 }
 admin = { id = 213 }
 backup = { id = 202 }
+tools = { id = 208 }
+music = { id = 216 }
 servarr = { id = 201 }
 immich = { id = 207 }
 paperless = { id = 214 }
