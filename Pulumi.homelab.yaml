@@ -293,6 +293,12 @@ config:
     secure: v1:tuBCtEYXk4CaFweF:gGB1Ewsnj/Gnig3agb0p6kMAfc+Q
   lxc#music#spotisub:SECRET_SUBSONIC_PASSWORD:
     secure: v1:ZfcXEySfjZNJ4w2b:0JaZeR5Bz3tEW5C3njaqcfGKduBzFDzcb5WvAv1AvLxEogib
+  lxc#music#newt:SECRET_PANGOLIN_ENDPOINT:
+    secure: v1:1tVgWK4iHnwBPhlF:3WrDzNOEXAwnDjaQ4L2yH2W4BCxg2HpfhNiNB0Hzwz0QPb9l3W0OpUouAw==
+  lxc#music#newt:SECRET_NEWT_ID:
+    secure: v1:+zUnT6OwWpyAjTPm:gjdFXhJBV2NNjRuqSJZEPrNmK1RzG2WuHB9SzxPSlA==
+  lxc#music#newt:SECRET_NEWT_SECRET:
+    secure: v1:7Udy1J4LARwwXgEW:8HpV8tm9t6fLato7cj10Mr3CjVWF0929E09w0iLnZfPxyWXpm23/ZkP9+vmK1/mFl9fd/V1SBHLSbr9B6oR3Eg==
   # windmill
   lxc#windmill#windmill:SECRET_DB_PASSWORD:
     secure: v1:o/l5rWI9Pdv7C2lQ:fktUJhe1pR3EcFvC/GoAGmqSJ9xSsQCGJycZYSMudmPe4yJupQKrUlX0OPAT7g==

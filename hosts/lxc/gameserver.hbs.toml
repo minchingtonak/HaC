@@ -5,8 +5,8 @@ start_on_boot = true
 [stacks]
 traefik = {}
 dozzle = {}
-crafty-controller = {}
 newt = {}
+crafty-controller = {}
 
 [cpu]
 cores = 12

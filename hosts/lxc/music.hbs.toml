@@ -5,6 +5,7 @@ start_on_boot = true
 [stacks]
 traefik = {}
 dozzle = {}
+newt = {}
 navidrome = {}
 audiobookshelf = {}
 spotizerr = {}

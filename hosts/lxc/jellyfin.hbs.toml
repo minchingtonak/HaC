@@ -4,10 +4,10 @@ description = "jellyfin media player server"
 [stacks]
 traefik = {}
 dozzle = {}
+newt = {}
 jellyfin = {}
 jellyseerr = {}
 watcharr = {}
-newt = {}
 
 [cpu]
 cores = 4
