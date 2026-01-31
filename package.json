@@ -56,6 +56,26 @@
         2,
         "always",
         256
+      ],
+      "type-enum": [
+        2,
+        "always",
+        [
+          "build",
+          "chore",
+          "ci",
+          "deploy",
+          "destroy",
+          "docs",
+          "feat",
+          "fix",
+          "perf",
+          "refactor",
+          "revert",
+          "style",
+          "task",
+          "test"
+        ]
       ]
     }
   }
