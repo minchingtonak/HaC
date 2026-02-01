@@ -3,7 +3,7 @@
 name: spotizerr-phoenix
 services:
   spotizerr:
-    image: spotizerrphoenix/spotizerr:4.0.15@sha256:545aa36e7c515a6a6a3d716bb33e950b6c991e01ef08db80c40e5b33580a1315
+    image: spotizerrphoenix/spotizerr:4.0.17@sha256:2a4aac5ef750f1497a3b942796ddaa9e02d6cec7a196d1292051a90d68b8f2ce
     user: "0:0"
     volumes:
       # Ensure these directories and the .cache file exist and are writable by the container user
