@@ -161,13 +161,6 @@ jobs:
           install -m 600 -D /dev/null ~/.ssh/lxc_ed25519
           echo "${{ secrets.LXC_SSH_PRIVATE_KEY }}" > ~/.ssh/lxc_ed25519
 
-      - name: Simulate failure (REMOVE AFTER TESTING)
-        if: github.ref == 'refs/heads/main' && steps.check-for-changes.outcome == 'failure'
-        run: |
-          echo "Simulating failure for testing..."
-          sleep 5
-          exit 1
-
       - name: Join Tailscale network
         if: github.ref == 'refs/heads/main' && steps.check-for-changes.outcome == 'failure'
         uses: tailscale/github-action@v4
