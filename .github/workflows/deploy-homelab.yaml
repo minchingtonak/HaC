@@ -129,6 +129,30 @@ jobs:
                 throw error;
               }
             }
+
+      - name: Send infra diff status to Pushover
+        if: github.event_name == 'pull_request'
+        run: |
+          if [ "${{ steps.check-for-changes.outcome }}" == "failure" ]; then
+            MESSAGE="🔄 Infra diff in PR: ${{ github.event.pull_request.title }} (#${{ github.event.pull_request.number }})"
+            PRIORITY=0
+          else
+            MESSAGE="✅ No diff in PR: ${{ github.event.pull_request.title }} (#${{ github.event.pull_request.number }})"
+            # do not generate sound/vibration, only push notification
+            PRIORITY=-1
+          fi
+
+          curl -s -X POST https://api.pushover.net/1/messages.json \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"token\": \"${{ secrets.PUSHOVER_API_TOKEN }}\",
+              \"user\": \"${{ secrets.PUSHOVER_USER_KEY }}\",
+              \"message\": \"${MESSAGE}\",
+              \"title\": \"Homelab Infra Diff\",
+              \"priority\": ${PRIORITY},
+              \"url\": \"${{ github.event.pull_request.html_url }}\",
+              \"url_title\": \"View PR #${{ github.event.pull_request.number }}\"
+            }"
       # end preview
       # begin deployment
       # deploy only if changes were found when running preview
