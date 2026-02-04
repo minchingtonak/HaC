@@ -169,19 +169,27 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:github-actions
 
-      - name: Pulumi up
+      - name: Simulate deployment failure (REMOVE AFTER TESTING)
         if: github.ref == 'refs/heads/main' && steps.check-for-changes.outcome == 'failure'
-        uses: pulumi/actions@v6
         id: pulumi-up
-        with:
-          command: up
-          stack-name: homelab
-          comment-on-pr: false
-          work-dir: ./
-        env:
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-          PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Simulating deployment failure for testing..."
+          sleep 5
+          exit 1
+
+      # - name: Pulumi up
+      #   if: github.ref == 'refs/heads/main' && steps.check-for-changes.outcome == 'failure'
+      #   uses: pulumi/actions@v6
+      #   id: pulumi-up
+      #   with:
+      #     command: up
+      #     stack-name: homelab
+      #     comment-on-pr: false
+      #     work-dir: ./
+      #   env:
+      #     PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+      #     PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Send deployment status to Pushover
         if: always() && github.ref == 'refs/heads/main' && steps.check-for-changes.outcome == 'failure'
