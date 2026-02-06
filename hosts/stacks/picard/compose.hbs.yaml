@@ -1,6 +1,6 @@
 services:
   picard:
-    image: mikenye/picard:2.13.3@sha256:8579fd6ca63e50463208cae7cdc8a0ca3504f5e7bdeb85c57441d5aac96030e3
+    image: ghcr.io/minchingtonak/picard:2.13.3@sha256:c98fd975f631a3d89230e6b381a54995a98d75e03f78988d8ab2726e2265ceaf
     container_name: musicbrainz-picard
     restart: always
     # ports:
