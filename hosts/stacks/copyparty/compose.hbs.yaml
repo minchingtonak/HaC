@@ -1,6 +1,6 @@
 services:
   ac:
-    image: copyparty/ac:1.20.5@sha256:4b38c63a106960bcdc73becbe7545b152ba9cbc22a7d30fb2564498309ca83d3
+    image: copyparty/ac:1.20.6@sha256:1d8684f0801137355d928c369cec93c28d6127dcc7851a84ade7e6782ea9a1cd
     container_name: copyparty
     restart: unless-stopped
     user: "0:0"
