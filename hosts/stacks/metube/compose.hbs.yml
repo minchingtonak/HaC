@@ -1,6 +1,6 @@
 services:
   metube:
-    image: ghcr.io/alexta69/metube:2026.02.03@sha256:54397e60511244e2251a06d9ee89e3492d945142eb1b938a402b8a1217da8bd2
+    image: ghcr.io/alexta69/metube:2026.02.07@sha256:a2d698f9457ffe81c7101fa722a699dabd547420498f66f8c437a3cd5eed2abc
     container_name: metube
     restart: unless-stopped
     # ports:
