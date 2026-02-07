@@ -31,9 +31,9 @@ function backup() {
         '{{{SECRET_PERSONAL_FILES_AND_CLOUD_PBS_ENCRYPTION_PASSWORD}}}' \
         '{{{SECRET_CLOUD_PBS_API_TOKEN_SECRET}}}' \
         './keys/cloud-pbs.key' \
-        '{{{SECRET_APPDATA_HEALTHCHECK_PING_URL}}}' \
-        '{{{SECRET_PERSONAL_FILES_HEALTHCHECK_PING_URL}}}' \
         'cloud PBS'
+
+    curl -fsS -m 10 --retry 5 -o /dev/null '{{{SECRET_CLOUD_PBS_BACKUP_HEALTHCHECK_URL}}}'
 
     echo '🎉 all cloud PBS backups completed successfully!'
 }

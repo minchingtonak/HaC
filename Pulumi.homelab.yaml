@@ -187,18 +187,22 @@ config:
     secure: v1:XrRLiAyaxgf0HSLj:MeRv7+r25n2sAlJ+prp6ObdpJ3L3YKw1GyhEljksM73fl5EGN1VXKVXGKyi3cQ==
   lxc#backup#dagu:SECRET_CLOUD_PBS_API_TOKEN_SECRET:
     secure: v1:NfjPns+iyuoRPL1q:RRJ5e0pSn9aNEyTqhh7s/my4y9PgT8IogKD1jWrt0/nsYNgjaIneocwkMh2oLA4xWVRGGA==
-  lxc#backup#dagu:SECRET_PERSONAL_FILES_HEALTHCHECK_PING_URL:
-    secure: v1:X4COd5MubXqevVOB:21AG4gBVZe85pL/YTi6jTewT5elprofs1/0OQbRri8INXUObWIjYDIUzPwaO6LvTiR0tu4GvwBX76yLjKooKbzEyNQlEkqvw
   lxc#backup#dagu:SECRET_CLOUD_PBS_PBS_CLIENT_KEY:
     secure: v1:2/3cAknfNpJY4Zs2:15v10hsra9Ee0+q4OsTgVI8qofdx+IK6YjZHbj/7YQgvAvSdwsC1YtaRoEJkvfnj5MmdHpPHEIqHJ7UWuSXuGStLW/hCjmuXhar7yfAHLzFO4uPWee0DCejvmexezJYvE/DwPIstbp92McZAdqVO9XRkY7Y8eMOaNLIYvPdKtdHqoI80oBUMauwuS46En7IVrySen5Tt3LQpo7Bn+eCY30HCiEdtBlJqElSI1GIRcN0L0XYvmiGVyLUmxQ+2ttmfqKp32mPErUhNQYbhfjSEDsNa/Byt3rePR/q4SB/h1TNMNke75WMOHV2FhPtJEC36Pf4N0WPU+ykt+6QW63SGfYQ5BZnh7QtcsQDIhbgaKn49sTJuEdlcNK/a7lGO9hbyMD3AzHxljHoTA7ipUsdLbtdr/SJ3IZA+GewlSzogDEnfunhR09WUkPXvFZfonxqYibzJwPy8TXNOcMIFdFynSQeKRZCnIsDEmb0leFjV+iWAQNy8vIXv2V9IwychJAB/MqXw48ND/5a3m3/aFErF
   lxc#backup#dagu:SECRET_PERSONAL_FILES_PBS_CLIENT_KEY:
     secure: v1:WMY5vfivaMqgnHLn:ahm2lhdS4vWy+E62pLtlAiWVf4oA4WDqiXl3heqAXSAMK0TPK1mqecBm0HOAJcMqh8u1aN1CeyRkU+kSRVQ57CUeP2pkwMVf5v98RdP6ueMkdeXnzxMgP2IH/EiLdkbYcOsUDx2GCbL0SRgmjBOXMdtjucFU+fK6Sl+6ChdItCw4BrY34wj9VmFoVMlE2eOA8Me6egPaLXCqFE0y+4BPe1D0J1qypC4YL4zrPrreoExTFRslvmye8L5guAKFNt2Jfr23TaSynbAVYwd4vtjf/Qfwib6qlvHRndstm78GierLaUgt0J2i804bXojDFFEVzem6oYKkDZ/JcxVaoKJozCGAwDOVhjOnIMW9lOFG9NWcCMVQztLls0aPaly7K38SItm1/lJQdLgAsGEQqJGnj/ThKX7MQHg30XyliVBdtgljXYtFcU8joNxfys8XtxZBV5K536klu2Lme/SpHiIilkO3ODliUpw6w5PRyyzkUxBWF3MaKDpv+II1RSmV+UdnBKsFl4wohjEFeeGOTtQ3
-  lxc#backup#dagu:SECRET_APPDATA_HEALTHCHECK_PING_URL:
-    secure: v1:0NPdoIQvBedAG3ik:2v/uTocIEnMrvwXhmvYWZLdbReKSHIQVrBeBTwzvyZzMZv/epLa405NYDxEzGfZPgCZHvCxNqMfrl8M9XqBrEHH+5F+rvOcV
   lxc#backup#dagu:SECRET_LOCAL_PBS_FINGERPRINT:
     secure: v1:97fDK5iL7CSE0sZy:Hl01fWRnLuigeVuvGB9DgQDAYUMkP0o8FkmhvvyIPiG3EtOdeEk9oUpvZWHR0zqPn8KqztlZduzpisd4AQqnomLdGnJeYVkQAsgpQ1MAHIxUAnmxd6CwEjh0AmXoGFeqzfKP6xEIUrj/6MgOigZK
   lxc#backup#dagu:SECRET_PUSHOVER_BACKUP_JOB_TOKEN:
     secure: v1:Pfv3SsMKMSBFFI+a:Flzy0Bcpy/xR8Gy3pHDgR77roWTe4XST9lD03rD/49f/fq30wlb4UjexFAJ16Q==
+  lxc#backup#dagu:SECRET_CLOUD_PBS_BACKUP_HEALTHCHECK_URL:
+    secure: v1:jmddUCiioUwylPJr:d0zbQd0LT62Nkm1VJ90cA6deokPP+k/8uqiCyli3uX3Dz49jmWA0XdOosCj9MzHEy5Ky9M7+DXwCQa+NDtUKVs/LtpnlVUon
+  lxc#backup#dagu:SECRET_MUSIC_HEALTHCHECK_URL:
+    secure: v1:LnmQS6t8rMdeFoAd:ijvI5BbU6e+hAkV1rOuLijJddGGFn0WYbXFoQF05ZW/3dfLHmhz5xgzaZ2jQKfyNeTlwz89FRLPTQagvj5W+KY2ekpm+RBKb
+  lxc#backup#dagu:SECRET_APPDATA_HEALTHCHECK_URL:
+    secure: v1:f8EenU2Pi0qJ4cHB:MS8DHEz4RF1qjiriJ2j+o9/v/E8Edwo/JJkX0QD0z2TfRedbNAaIJ3x+hM0LmkwofAG6iCSQbmbPNb1ap+1BKmh7raMKOqYF
+  lxc#backup#dagu:SECRET_PERSONAL_FILES_HEALTHCHECK_URL:
+    secure: v1:iJMTADhRdFN9A6eK:YTFUeSU0+Mg6fXpVuGYeJLqCYw9csl9n5aMlPaQumKfqrdb3XHTJgBGF5A5CUl7eJY5wYeFPVao2NdeIrxUOG8U+jFm1cL11
   lxc#backup#forgejo:SECRET_LFS_JWT_SECRET:
     secure: v1:wwrv4/7jP12dYID9:SXNe8F900y2BzjW+3OXw9+AHTw0pl+VZaZw/6Ulf6Jv7OfjX2kVbdljUjINypYz/EfLuQOd/MiQf28M=
   lxc#backup#forgejo:SECRET_INTERNAL_TOKEN:
@@ -333,8 +337,6 @@ config:
     secure: v1:aKX31KeMyEle0jLI:W0JtJ6X0JOG3zywo7yQhsZk9uASUr18wUioQDEcsH94+oCD+fA6jTG/GmeawmQ==
   lxc#servarr#servarr:SECRET_PUSHOVER_CLEANUPARR_TOKEN:
     secure: v1:geaaX2PKt+tYIoIY:Fa/4jE1tcX6wSj9NeDlNCK+ax9JpXsImqbWMluRz1r36Fx720o7Rdpfko+/PNg==
-  lxc#backup#dagu:SECRET_MUSIC_HEALTHCHECK_PING_URL:
-    secure: v1:+t/uHPT/skxe06ri:EhlKQpiZIKQyJwCoL4fD1KUjnBmI7Ja+NHl33SQ+lxF/RQtyGWanzTm7Zt9NeIB6EyEZVIijl2Pl+jOf6txqbD3mBlJkt6wX
   # gameserver
   lxc#gameserver#newt:SECRET_PANGOLIN_ENDPOINT:
     secure: v1:ivr9DGrC1lA18oUz:J3/6ceDOCzs7itABrbNDHPASoCbyWGaz8XviKbiBvMw/oL5ufY01BGB/Bg==

@@ -125,15 +125,13 @@ function setup_error_handling() {
 #   $2 - Encryption password
 #   $3 - PBS password
 #   $4 - Keyfile path
-#   $5 - Healthcheck ping URL
-#   $6 - Backup location name (for logging)
+#   $5 - Backup location name (for logging)
 function backup_app_data() {
     local repository="$1"
     local encryption_password="$2"
     local pbs_password="$3"
     local keyfile="$4"
-    local healthcheck_url="$5"
-    local location_name="$6"
+    local location_name="$5"
 
     echo "📸 beginning app data backup to $location_name"
 
@@ -169,8 +167,6 @@ function backup_app_data() {
     else
         echo "⚠️  No app data folders found to backup"
     fi
-
-    curl -fsS -m 10 --retry 5 -o /dev/null "$healthcheck_url"
 }
 
 # Backup personal files to PBS
@@ -179,15 +175,13 @@ function backup_app_data() {
 #   $2 - Encryption password
 #   $3 - PBS password
 #   $4 - Keyfile path
-#   $5 - Healthcheck ping URL
-#   $6 - Backup location name (for logging)
+#   $5 - Backup location name (for logging)
 function backup_personal_files() {
     local repository="$1"
     local encryption_password="$2"
     local pbs_password="$3"
     local keyfile="$4"
-    local healthcheck_url="$5"
-    local location_name="$6"
+    local location_name="$5"
 
     echo "📸 beginning personal files backup to $location_name"
 
@@ -206,8 +200,6 @@ function backup_personal_files() {
     { set +x; } 2>/dev/null
 
     echo "✅ personal files backup to $location_name completed successfully!"
-
-    curl -fsS -m 10 --retry 5 -o /dev/null "$healthcheck_url"
 }
 
 # Backup music files to PBS
@@ -216,15 +208,13 @@ function backup_personal_files() {
 #   $2 - Encryption password
 #   $3 - PBS password
 #   $4 - Keyfile path
-#   $5 - Healthcheck ping URL
-#   $6 - Backup location name (for logging)
+#   $5 - Backup location name (for logging)
 function backup_music() {
     local repository="$1"
     local encryption_password="$2"
     local pbs_password="$3"
     local keyfile="$4"
-    local healthcheck_url="$5"
-    local location_name="$6"
+    local location_name="$5"
 
     echo "📸 beginning music backup to $location_name"
 
@@ -241,8 +231,6 @@ function backup_music() {
     { set +x; } 2>/dev/null
 
     echo "✅ personal files backup to $location_name completed successfully!"
-
-    curl -fsS -m 10 --retry 5 -o /dev/null "$healthcheck_url"
 }
 
 # Backup both app data and personal files to PBS in a single command
@@ -252,17 +240,13 @@ function backup_music() {
 #   $2 - Encryption password
 #   $3 - PBS password
 #   $4 - Keyfile path
-#   $5 - App data healthcheck ping URL
-#   $6 - Personal files healthcheck ping URL
-#   $7 - Backup location name (for logging)
+#   $5 - Backup location name (for logging)
 function backup_combined() {
     local repository="$1"
     local encryption_password="$2"
     local pbs_password="$3"
     local keyfile="$4"
-    local appdata_healthcheck_url="$5"
-    local personal_healthcheck_url="$6"
-    local location_name="$7"
+    local location_name="$5"
 
     echo "📸 beginning combined backup to $location_name"
 
@@ -304,8 +288,4 @@ function backup_combined() {
     else
         echo "⚠️  No data found to backup"
     fi
-
-    # Ping both healthcheck URLs
-    curl -fsS -m 10 --retry 5 -o /dev/null "$appdata_healthcheck_url"
-    curl -fsS -m 10 --retry 5 -o /dev/null "$personal_healthcheck_url"
 }

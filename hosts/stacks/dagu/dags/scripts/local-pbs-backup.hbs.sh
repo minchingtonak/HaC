@@ -36,24 +36,27 @@ function backup() {
         '{{{SECRET_PERSONAL_FILES_AND_CLOUD_PBS_ENCRYPTION_PASSWORD}}}' \
         '{{{SECRET_EDSAC_PBS_PASSWORD}}}' \
         './keys/personal-files.key' \
-        '{{{SECRET_MUSIC_HEALTHCHECK_PING_URL}}}' \
         'local PBS'
+
+    curl -fsS -m 10 --retry 5 -o /dev/null '{{{SECRET_MUSIC_HEALTHCHECK_URL}}}'
 
     backup_app_data \
         "root@pam@$LOCAL_PBS_IP:appdata-blackpool" \
         '{{{SECRET_APPDATA_ENCRYPTION_PASSWORD}}}' \
         '{{{SECRET_EDSAC_PBS_PASSWORD}}}' \
         './keys/appdata.key' \
-        '{{{SECRET_APPDATA_HEALTHCHECK_PING_URL}}}' \
         'local PBS'
+
+    curl -fsS -m 10 --retry 5 -o /dev/null '{{{SECRET_APPDATA_HEALTHCHECK_URL}}}'
 
     backup_personal_files \
         "root@pam@$LOCAL_PBS_IP:personal-files-blackpool" \
         '{{{SECRET_PERSONAL_FILES_AND_CLOUD_PBS_ENCRYPTION_PASSWORD}}}' \
         '{{{SECRET_EDSAC_PBS_PASSWORD}}}' \
         './keys/personal-files.key' \
-        '{{{SECRET_PERSONAL_FILES_HEALTHCHECK_PING_URL}}}' \
         'local PBS'
+
+    curl -fsS -m 10 --retry 5 -o /dev/null '{{{SECRET_PERSONAL_FILES_HEALTHCHECK_URL}}}'
 
     echo '🎉 all local PBS backups completed successfully!'
 }
