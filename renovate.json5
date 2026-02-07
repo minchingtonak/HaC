@@ -7,7 +7,7 @@
   dependencyDashboard: true,
   dependencyDashboardTitle: "Renovate Dashboard",
 
-  schedule: ["after 10pm and before 5am every weekday", "every weekend"],
+  schedule: "every saturday",
 
   timezone: "America/New_York",
   // always open vulnerability-fixing pull requests immediately
