@@ -15,7 +15,7 @@ services:
       - ryot
 
   ryot:
-    image: ignisda/ryot:v10.1.1@sha256:45a88856d6f80282fec17b06fa45f9a148e48748f64cce4039f6e87b44945d7b
+    image: ignisda/ryot:v10.2.0@sha256:6b2867a53fcdf2b574d26749a243ebade6e9ccaa6cb9d520d97146ebc059624d
     pull_policy: always
     container_name: ryot
     restart: unless-stopped
