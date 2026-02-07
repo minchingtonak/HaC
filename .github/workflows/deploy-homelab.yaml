@@ -134,10 +134,10 @@ jobs:
         if: github.event_name == 'pull_request'
         run: |
           if [ "${{ steps.check-for-changes.outcome }}" == "failure" ]; then
-            MESSAGE="🔄 Infra diff in PR: ${{ github.event.pull_request.title }} (#${{ github.event.pull_request.number }})"
+            MESSAGE='🔄 Infra diff in PR: ${{ github.event.pull_request.title }} (#${{ github.event.pull_request.number }})'
             PRIORITY=0
           else
-            MESSAGE="✅ No diff in PR: ${{ github.event.pull_request.title }} (#${{ github.event.pull_request.number }})"
+            MESSAGE='✅ No diff in PR: ${{ github.event.pull_request.title }} (#${{ github.event.pull_request.number }})'
             # do not generate sound/vibration, only push notification
             PRIORITY=-1
           fi
@@ -188,7 +188,7 @@ jobs:
         run: |
           SHORT_SHA="${{ github.sha }}"
           SHORT_SHA="${SHORT_SHA:0:7}"
-          COMMIT_MSG=$(echo "${{ github.event.head_commit.message }}" | head -n 1)
+          COMMIT_MSG=$(echo '${{ github.event.head_commit.message }}' | head -n 1)
 
           if [ "${{ steps.pulumi-up.outcome }}" == "success" ]; then
             MESSAGE="✅ Deployment succeeded
