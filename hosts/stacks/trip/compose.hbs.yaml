@@ -1,6 +1,6 @@
 services:
   app:
-    image: ghcr.io/itskovacs/trip:1.38.0@sha256:c2aa28465226ff66f4a9a9fcaf994d9e5e4ed861f8f7bcbefedf97abdedf7fcc
+    image: ghcr.io/itskovacs/trip:1.39.0@sha256:c86c5e7e565b824c22cff03d8ff0a6c86e8e84c2045387d26814c3e0477061a9
     # ports:
     #   - 127.0.0.1:8080:8000
     volumes:
