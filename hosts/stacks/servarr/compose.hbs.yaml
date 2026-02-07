@@ -24,6 +24,7 @@ services:
       - FIREWALL_VPN_INPUT_PORTS=29730
       - SERVER_COUNTRIES=United States
       - HEALTH_VPN_DURATION_INITIAL=120s
+      - UPDATER_PERIOD=24h
     depends_on:
       deunhealth:
         condition: service_started
