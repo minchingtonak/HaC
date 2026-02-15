@@ -1,6 +1,6 @@
 services:
   navidrome:
-    image: deluan/navidrome:0.60.0@sha256:5d0f6ab343397c043c7063db14ae10e4e3980e54ae7388031cbce47e84af6657
+    image: deluan/navidrome:0.60.3@sha256:a5dce8f33304714dd138e870cca0dcab3d937ca236be1a9f2b97da009d1a0048
     container_name: navidrome
     user: 0:0
     # ports:
