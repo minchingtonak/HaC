@@ -1,0 +1,91 @@
+directory: /mnt/media/beets-test/clean/
+# https://beets.readthedocs.io/en/stable/guides/advanced.html#automatically-add-new-music-to-your-library
+import:
+  copy: no
+  move: yes
+  link: no
+  hardlink: yes
+  write: yes
+  resume: ask
+  incremental: yes
+  log: beetslog.txt
+plugins: lastgenre
+ui:
+  color: yes
+
+per_disc_numbering: yes
+# https://beets.readthedocs.io/en/stable/reference/pathformat.html#album-disambiguation
+paths:
+  default: $albumartist/$album %aunique{albumartist album,albumtype year label catalognum albumdisambig releasegroupdisambig,()}/$artist_$album_${disc:02}-${track:02}_$title
+  # singleton: Singletons/$artist - $title
+  # comp: $genre/$album/$track $title
+
+gui:
+  num_preview_workers: 4 # how many previews to generate in parallel
+
+  library:
+    # Use to split artists in the library view if using multiple artists in a field.
+    # Set to an empty list to disable this feature.
+    artist_separators: [",", ";", "&"]
+
+  terminal:
+    start_path: "/music/inbox" # the directory where to start new terminal sessions
+
+  inbox:
+    folders:
+      # --------------------------------- README -------------------------------- #
+      # Before using the inbox feature, you need to create the folders
+      # and decide on an inbox type. Have a look at the examples below.
+
+      Inbox1:
+        name: "Dummy inbox"
+        path: "/music/dummy"
+        autotag: no
+        # do not automatically trigger tagging and do not automatically import
+      Inbox2:
+        name: "Auto Inbox"
+        path: "/music/inbox_auto"
+        autotag: "auto"
+        # trigger tag and import if a good match is found based on `auto_threshold`
+        auto_threshold: null
+        # if set to null, uses the value in beets config (match.strong_rec_thresh)
+        # define the distance from a perfect match, i.e. set to 0.1 to import
+        # matches with 90% similarity or better.
+      Inbox3:
+        name: "An Inbox that only generates the previews"
+        path: "/music/inbox_preview"
+        autotag: "preview"
+        # trigger tag but do not import, recommended for most control
+
+# lidarr
+
+# artist folder
+# {Artist Name}
+
+# standard
+# {Album Title} {(Album Disambiguation)}/{Artist Name}_{Album Title}_{track:00}_{Track Title}
+# multidisc
+# {Album Title} {(Album Disambiguation)}/{Artist Name}_{Album Title}_{medium:00}-{track:00}_{Track Title}
+
+# picard
+
+# $noop({Artist name}/)
+# $if2(%albumartist%,%artist%)/
+
+# $noop({Album Title} {\(Album Disambiguation\)}/)
+# $if(%albumartist%,%album% ,)/
+
+# $noop({Artist Name}_)
+# $if2(%albumartist%,%artist%)_
+
+# $noop({Album Title}_)
+# $if(%albumartist%,%album%,)_
+
+# $noop({medium:00}-)
+# $if($gt(%totaldiscs%,1),%discnumber%-,)
+
+# $noop({track:00}_)
+# $if($and(%albumartist%,%tracknumber%),$num(%tracknumber%,2) ,)_
+
+# $noop({Track Title})
+# %title%

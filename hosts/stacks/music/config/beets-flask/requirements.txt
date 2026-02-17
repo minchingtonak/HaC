@@ -1,0 +1,5 @@
+# beets[lastgenre]
+# beets[lyrics]
+# beets[discogs]
+# beets[fetchart]
+# beets[beatport]

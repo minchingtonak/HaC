@@ -12,6 +12,12 @@ spotizerr = {}
 picard = {}
 sonobarr = {}
 your-spotify = {}
+# [stacks.music]
+# subdomains = [
+#     # "lidarr",
+#     # "slskd",
+#     "beets-flask"
+# ]
 
 [cpu]
 cores = 2

@@ -1,0 +1,121 @@
+# FIRST TIME DEPLOY
+# need to copy over slskd and lidarr data folders
+# need to unmount /data as music root in lidarr
+
+services:
+  # lidarr:
+  #   container_name: lidarr
+  #   image: ghcr.io/linuxserver/lidarr:nightly-version-3.1.2.4914@sha256:bcad2fdb95a60cf3e634a37ec833a54f8dc5346fe9e8d8963b44ba35bb78c9cd
+  #   restart: unless-stopped
+  #   environment:
+  #     PUID: ${PUID}
+  #     PGID: ${PGID}
+  #     TZ: "{{{global:TIMEZONE}}}"
+  #   volumes:
+  #     - /etc/localtime:/etc/localtime:ro
+  #     - /mnt/media:/data
+  #     - ${LIDARR_CONFIG_PATH}:/config
+  #     # Download directory — CDH reads completed downloads from here
+  #     - ${DOWNLOADS_PATH}:/downloads/music
+  #     # beets-flask inbox — post-import.sh moves validated albums here
+  #     - ${MUSIC_VALIDATED_PATH}:/downloads/music-validated
+  #     # Final music library — CDH imports here (first pass)
+  #     - ${MUSIC_LIBRARY_PATH}:/music/library
+  #     # Post-import script — triggered On Import via Lidarr Connection
+  #     - ${CUSTOM_SCRIPTS_PATH}:/custom-scripts:ro
+  #   # ports:
+  #   #   - 8686:8686
+  #   healthcheck:
+  #     test:
+  #       - CMD
+  #       - wget
+  #       - --quiet
+  #       - --timeout=3
+  #       - --tries=1
+  #       - --spider
+  #       - http://localhost:8686/ping
+  #     interval: 5s
+  #     timeout: 4s
+  #     retries: 4
+  #     start_period: 5s
+  #   labels:
+  #     - traefik.enable=true
+  #     - traefik.docker.network=traefik
+  #     - traefik.http.routers.lidarr.rule=Host(`{{{domainForApp "lidarr"}}}`)
+  #     - traefik.http.routers.lidarr.entrypoints=https
+  #     - traefik.http.routers.lidarr.tls=true
+  #     - traefik.http.routers.lidarr.tls.certresolver=porkbun
+  #     - traefik.http.routers.lidarr.service=lidarr
+  #     - traefik.http.services.lidarr.loadbalancer.server.port=8686
+  #     - traefik.http.routers.lidarr.middlewares=oidc-auth@file
+  #   networks:
+  #     - traefik
+
+  # slskd:
+  #   image: slskd/slskd:0.24.3@sha256:bcf9820dab68e21d2bba8ebb1ffd583d71fcba542a50a1e998119f69b7b498fe
+  #   container_name: slskd
+  #   environment:
+  #     TZ: "{{{global:TIMEZONE}}}"
+  #     SLSKD_REMOTE_CONFIGURATION: true
+  #   volumes:
+  #     - ${SLSKD_DATA_PATH}/data:/app/data
+  #     - ${SLSKD_DATA_PATH}/incomplete:/app/incomplete
+  #     - ${SLSKD_DATA_PATH}/scripts:/app/scripts
+  #     - ./config/slskd.yml:/app/slskd.yml
+  #     # Downloads — same path as Lidarr sees
+  #     - ${DOWNLOADS_PATH}:/downloads/music
+  #   # ports:
+  #   #   - 5030:5030
+  #   restart: always
+  #   labels:
+  #     - traefik.enable=true
+  #     - traefik.docker.network=traefik
+  #     - traefik.http.routers.slskd.rule=Host(`{{{domainForApp "slskd"}}}`)
+  #     - traefik.http.routers.slskd.entrypoints=https
+  #     - traefik.http.routers.slskd.tls=true
+  #     - traefik.http.routers.slskd.tls.certresolver=porkbun
+  #     - traefik.http.routers.slskd.service=slskd
+  #     - traefik.http.services.slskd.loadbalancer.server.port=5030
+  #     - traefik.http.routers.slskd.middlewares=oidc-auth@file
+  #     # https://doc.traefik.io/traefik/reference/routing-configuration/tcp/router/rules-and-priority/#hostsni-and-hostsniregexp
+  #     - traefik.tcp.routers.slskd-listen.rule=HostSNI(`*`)
+  #     - traefik.tcp.routers.slskd-listen.entrypoints=slskd-listen-50300-tcp
+  #     - traefik.tcp.routers.slskd-listen.service=slskd-listen
+  #     - traefik.tcp.services.slskd-listen.loadbalancer.server.port=50300
+
+  beets-flask:
+    image: pspitzner/beets-flask:v1.2.1@sha256:98b8b87281e0526f3b9ee517ed1a75da76ae77bfc16564999c5e72d413d1ec50
+    restart: unless-stopped
+    user: "${PUID}:${PGID}"
+    # ports:
+    #   - "5001:5001"
+    entrypoint:
+      [
+        "/bin/sh",
+        "-c",
+        "/repo/entrypoint_user_scripts.sh && exec /repo/entrypoint.sh",
+      ]
+    environment:
+      TZ: "{{{global:TIMEZONE}}}"
+    volumes:
+      - ${BEETS_CONFIG_DIR}:/config
+      # - ${BEETS_CONFIG_PATH}:/config/beets/config.yaml
+      # - ${BEETS_REQ_PATH}:/config/beets/requirements.txt
+      # for music folders, match paths inside and out of container!
+      - /mnt/media/beets-test/inbox/:/mnt/media/beets-test/inbox/
+      - /mnt/media/beets-test/clean/:/mnt/media/beets-test/clean/
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.beets-flask.rule=Host(`{{{domainForApp "beets-flask"}}}`)
+      - traefik.http.routers.beets-flask.entrypoints=https
+      - traefik.http.routers.beets-flask.tls=true
+      - traefik.http.routers.beets-flask.tls.certresolver=porkbun
+      - traefik.http.routers.beets-flask.service=beets-flask
+      - traefik.http.services.beets-flask.loadbalancer.server.port=5001
+      - traefik.http.routers.beets-flask.middlewares=oidc-auth@file
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
