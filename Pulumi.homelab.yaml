@@ -145,7 +145,7 @@ config:
   lxc#admin#homepage:SECRET_YOUR_SPOTIFY_TOKEN:
     secure: v1:KwttXGbRHvKgLL4w:VPVxFmym/TbBWSxRcho3kQlg/VCF7M93XTPAeDfg6+ZZTYZYL3jOX+frT51BRBHm+dBu8g==
   lxc#admin#tailscale:SECRET_TAILSCALE_AUTHKEY:
-    secure: v1:WzqZRv9cGYpzab5r:QmAK2vrwxNtPNZwMv0k/uWlnHT/nqKb+yGXPiRdSl83AhTm2SusJhSf03MEDGUIxZFe+9oF7R5POga0vC8k2JiRSvcmlVjRSTHlWkYae
+    secure: v1:lhLTBnyShQRUpsn3:Pf5qi5sExyLDqKoF7bV5LKGrFbcQBwDi0Ir5DvyoBLB4fzj4B0QL/nZG/Ygj0sQbYmk4pRj0RpRLa+90nIjoTJS8g6B3hcJsmWBvAas=
   lxc#admin#tailscale:TAILSCALE_SUBNET_ROUTES: 192.168.8.0/24
   lxc#admin#pocket-id:SECRET_ENCRYPTION_KEY:
     secure: v1:wzP6B4YNoNuX5q3D:ZFsDC+0PvR2rwcgc/uZGFhtJWb8gQI1Q1S1H3OIFVZ4ZFplBPHikIUSe6Fr4pfdT7QarYCxvwFee1oe2
