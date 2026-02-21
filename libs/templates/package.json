@@ -1,0 +1,35 @@
+{
+  "name": "@hac/templates",
+  "version": "0.1.0",
+  "description": "Handlebars templating library with pluggable variable resolution and Pulumi integration",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./pulumi": "./src/pulumi/index.ts"
+  },
+  "scripts": {
+    "check": "prettier --check src/",
+    "format": "prettier --write src/",
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "handlebars": "^4.7.8"
+  },
+  "peerDependencies": {
+    "@hanseltime/pulumi-file-utils": "^1.2.0",
+    "@pulumi/pulumi": "^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@hanseltime/pulumi-file-utils": {
+      "optional": true
+    },
+    "@pulumi/pulumi": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.10",
+    "typescript": "^5.9.3"
+  }
+}
