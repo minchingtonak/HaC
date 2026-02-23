@@ -1,5 +1,14 @@
 // https://www.totaltypescript.com/books/total-typescript-essentials/deriving-types#using-as-const-for-javascript-style-enums
 
+export const TemplatePaths = {
+  REMOTE_OUTPUT_FOLDER_ROOT: "/etc/pulumi",
+  LOCAL_STACKS_FOLDER_ROOT_NAME: "stacks",
+  REMOTE_STACK_DIRECTORY_ROOT: "/etc/pulumi/stacks",
+} as const;
+export type TemplatePathsKey = keyof typeof TemplatePaths;
+export type TemplatePathsValue =
+  (typeof TemplatePaths)[keyof typeof TemplatePaths];
+
 export const MemorySize = {
   MB_512: 512,
   GB_1: 1024,

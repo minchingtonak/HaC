@@ -24,42 +24,10 @@ export const BUILTIN_HELPERS = {
 } as const;
 
 /**
- * Register all built-in Handlebars helpers.
- *
- * This registers:
- * - `raw` - Render content without variable substitution
- * - `ifeq` - Conditional block if values are equal
- * - `ifnoteq` - Conditional block if values are not equal
- * - `partial` - Register inline partials
- * - `helperMissing` - Debug output for missing helpers
- *
- * @param onHelperRegistered - Optional callback for each registered helper name
- * @returns A function to unregister all helpers
- *
- * @example
- * ```typescript
- * import { registerBuiltinHelpers } from "@hac/templates";
- *
- * const unregister = registerBuiltinHelpers();
- *
- * // Later, to clean up:
- * unregister();
- * ```
+ * Register all built-in helpers.
  */
-export function registerBuiltinHelpers(
-  onHelperRegistered?: (name: string) => void,
-): () => void {
-  const registeredNames: string[] = [];
-
+export function registerBuiltinHelpers(): void {
   for (const [name, helper] of Object.entries(BUILTIN_HELPERS)) {
     Handlebars.registerHelper(name, helper);
-    registeredNames.push(name);
-    onHelperRegistered?.(name);
   }
-
-  return () => {
-    for (const name of registeredNames) {
-      Handlebars.unregisterHelper(name);
-    }
-  };
 }

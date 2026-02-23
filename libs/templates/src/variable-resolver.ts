@@ -44,7 +44,6 @@ export interface VariableResolver<T = string> {
    * Called before resolve() - if true, the variable is skipped entirely.
    *
    * Use this for:
-   * - Registered Handlebars helpers
    * - Built-in Handlebars keywords (@root, @first, etc.)
    * - Context paths (this.foo, ../bar)
    *
@@ -52,21 +51,6 @@ export interface VariableResolver<T = string> {
    * @returns true if the variable should be ignored
    */
   shouldIgnore?(variableName: string): boolean;
-
-  /**
-   * Called when a Handlebars helper is registered.
-   * Implementations should track this to avoid resolving helper names as variables.
-   *
-   * @param helperName - The name of the registered helper
-   */
-  onHelperRegistered?(helperName: string): void;
-
-  /**
-   * Called when a Handlebars helper is unregistered.
-   *
-   * @param helperName - The name of the unregistered helper
-   */
-  onHelperUnregistered?(helperName: string): void;
 }
 
 /**
@@ -88,8 +72,6 @@ export interface VariableResolver<T = string> {
  * ```
  */
 export class ObjectVariableResolver implements VariableResolver<string> {
-  private ignoredVariables = new Set<string>();
-
   constructor(private variables: Record<string, string>) {}
 
   resolve(variableName: string): ResolvedVariable<string> | undefined {
@@ -103,18 +85,9 @@ export class ObjectVariableResolver implements VariableResolver<string> {
 
   shouldIgnore(variableName: string): boolean {
     return (
-      this.ignoredVariables.has(variableName) ||
       variableName.startsWith("@") ||
       variableName.startsWith("this.") ||
       variableName.startsWith("../")
     );
-  }
-
-  onHelperRegistered(helperName: string): void {
-    this.ignoredVariables.add(helperName);
-  }
-
-  onHelperUnregistered(helperName: string): void {
-    this.ignoredVariables.delete(helperName);
   }
 }

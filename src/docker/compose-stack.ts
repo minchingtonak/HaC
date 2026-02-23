@@ -2,10 +2,9 @@ import * as pulumi from "@pulumi/pulumi";
 import * as command from "@pulumi/command";
 import * as path from "node:path";
 import * as crypto from "node:crypto";
-import { HandlebarsTemplateDirectory } from "../templates/handlebars-template-directory";
-import { ComposeStackUtils } from "./compose-file-processor";
-import { TemplateProcessor } from "../templates/template-processor";
-import { TemplateContext } from "../templates/template-context";
+import { Handlebars, TemplateContext, TemplateProcessor } from "@hac/templates";
+import { HandlebarsTemplateDirectory } from "@hac/templates/pulumi";
+import { TemplatePaths } from "../constants";
 import {
   HomelabLxcHost,
   type HomelabLxcHostContext,
@@ -70,14 +69,14 @@ export class ComposeStack extends pulumi.ComponentResource {
       "enabled_pve_hosts",
     );
 
-    const stackDirectory = ComposeStackUtils.STACK_DIRECTORY_FOR(
+    const stackDirectory = ComposeStack.STACK_DIRECTORY_FOR(
       contextData.stackName,
     );
 
     this.stackDirectoryAsset = new pulumi.asset.FileArchive(stackDirectory);
 
     const remoteStackDirectory = path.join(
-      TemplateProcessor.REMOTE_STACK_DIRECTORY_ROOT,
+      TemplatePaths.REMOTE_STACK_DIRECTORY_ROOT,
       contextData.stackName,
     );
 
@@ -86,7 +85,7 @@ export class ComposeStack extends pulumi.ComponentResource {
       `${name}-copy-stack-dir`,
       {
         source: this.stackDirectoryAsset,
-        remotePath: TemplateProcessor.REMOTE_STACK_DIRECTORY_ROOT,
+        remotePath: TemplatePaths.REMOTE_STACK_DIRECTORY_ROOT,
         connection: args.connection,
       },
       { parent: this },
@@ -115,12 +114,12 @@ export class ComposeStack extends pulumi.ComponentResource {
       this.handlebarsTemplateDirectory.templateFiles,
     )) {
       const stacksRelativePath = templatePath.substring(
-        templatePath.indexOf(TemplateProcessor.LOCAL_STACKS_FOLDER_ROOT_NAME),
+        templatePath.indexOf(TemplatePaths.LOCAL_STACKS_FOLDER_ROOT_NAME),
       );
 
       this.processedTemplateCopies[templatePath] =
         new command.remote.CopyToRemote(
-          `${name}-copy-rendered-${templateFile.processedTemplate.idSafeName}`,
+          `${name}-copy-rendered-${templateFile.idSafeName}`,
           {
             source: templateFile.asset.copyableSource,
             remotePath: ComposeStack.getRemoteOutputPath(stacksRelativePath),
@@ -147,7 +146,7 @@ export class ComposeStack extends pulumi.ComponentResource {
             tf.processedTemplate.content.apply(
               (content) =>
                 // use idSafeName:contentMd5 as the trigger value for better readability in cli diffs
-                `${tf.processedTemplate.idSafeName}:${crypto.createHash("md5").update(content).digest("hex")}`,
+                `${tf.idSafeName}:${crypto.createHash("md5").update(content).digest("hex")}`,
             ),
         ),
       )
@@ -194,8 +193,8 @@ export class ComposeStack extends pulumi.ComponentResource {
             parent: this,
             dependsOn: this.deleteStackFolder,
             hooks: {
-              afterCreate: [ComposeStackUtils.checkForMissingVariables],
-              afterUpdate: [ComposeStackUtils.checkForMissingVariables],
+              afterCreate: [ComposeStack.checkForMissingVariables],
+              afterUpdate: [ComposeStack.checkForMissingVariables],
             },
             deleteBeforeReplace: true,
             additionalSecretOutputs: ["stdout", "stderr"],
@@ -214,7 +213,7 @@ export class ComposeStack extends pulumi.ComponentResource {
 
   private static getRemoteOutputPath(templatePath: string): string {
     return path.join(
-      TemplateProcessor.REMOTE_OUTPUT_FOLDER_ROOT,
+      TemplatePaths.REMOTE_OUTPUT_FOLDER_ROOT,
       TemplateProcessor.removeTemplateExtensions(templatePath),
     );
   }
@@ -235,12 +234,29 @@ export class ComposeStack extends pulumi.ComponentResource {
       {} as pulumi.Inputs,
     );
   }
+
+  static STACK_DIRECTORY_FOR = (stackName: string) =>
+    `./hosts/stacks/${stackName}`;
+
+  private static UNSET_VARIABLE_MARKER = "variable is not set";
+
+  static checkForMissingVariables(args: pulumi.ResourceHookArgs) {
+    const outputs = args.newOutputs as { stderr: string };
+
+    const missingVars = outputs.stderr
+      .split("\n")
+      .filter((line) => line.includes(ComposeStack.UNSET_VARIABLE_MARKER));
+
+    if (missingVars.length) {
+      throw new Error("\n" + missingVars.join("\n"));
+    }
+  }
 }
 
 // use with: {{{domainForApp "appName" hostname=other-lxc-hostname,node=other-pve-node}}}
 export type DomainForAppOptions = { hostname?: string; node?: string };
 
-TemplateProcessor.registerTemplateHelper(
+Handlebars.registerHelper(
   "domainForApp",
   (appName: string, options: Handlebars.HelperOptions) => {
     const context = structuredClone(options.data) as TemplateFileContext;

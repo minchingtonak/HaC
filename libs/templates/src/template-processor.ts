@@ -2,21 +2,14 @@ import * as fs from "node:fs";
 import * as path from "node:path";
 import * as Handlebars from "handlebars";
 
+import {
+  type TemplateProcessorBase,
+  type RenderedTemplateFile,
+} from "./template-processor-interface";
 import { type VariableResolver } from "./variable-resolver";
 
-/**
- * Result of processing a template file.
- *
- * @typeParam T - The type of the content (string for sync, Output<string> for Pulumi)
- */
-export interface RenderedTemplateFile<T = string> {
-  /** A sanitized name safe for use in resource IDs */
-  idSafeName: string;
-  /** The original template file path */
-  templatePath: string;
-  /** The rendered content with all variables resolved */
-  content: T;
-}
+// Re-export for backwards compatibility
+export type { RenderedTemplateFile, TemplateProcessorBase };
 
 /**
  * Options for template processing.
@@ -56,7 +49,7 @@ export interface TemplateProcessorOptions {
  * // Result: "Endpoint: https://example.com/api"
  * ```
  */
-export class TemplateProcessor<T = string> {
+export class TemplateProcessor<T = string> implements TemplateProcessorBase<T> {
   private static readonly TEMPLATE_PATTERN = () =>
     /^.*\.(hbs|handlebars)\..+(\.(hbs|handlebars))?$/;
 
@@ -165,12 +158,11 @@ export class TemplateProcessor<T = string> {
     dataVariables?: object,
   ): RenderedTemplateFile<T> {
     const templateContent = fs.readFileSync(templatePath, "utf-8");
-    const idSafeName = TemplateProcessor.buildSanitizedNameForId(templatePath);
 
     const variables = TemplateProcessor.discoverVariables(templateContent);
 
     if (variables.length === 0) {
-      return { content: templateContent as T, idSafeName, templatePath };
+      return { content: templateContent as T, templatePath };
     }
 
     const resolvedVariables = this.resolveAllVariables(variables);
@@ -180,7 +172,7 @@ export class TemplateProcessor<T = string> {
       dataVariables,
     );
 
-    return { content, idSafeName, templatePath };
+    return { content, templatePath };
   }
 
   /**
@@ -453,56 +445,5 @@ export class TemplateProcessor<T = string> {
       TemplateProcessor.FILENAME_REPLACE_PATTERN(),
       "",
     );
-  }
-
-  /**
-   * Build a sanitized name from a file path that is safe for use in resource IDs.
-   *
-   * - Replaces dots and path separators with dashes
-   * - Handles dotfiles by prefixing with "dot-"
-   * - Removes any characters that aren't alphanumeric, underscore, or dash
-   *
-   * @param templatePath - The template file path
-   * @returns A sanitized name safe for resource IDs
-   */
-  static buildSanitizedNameForId(templatePath: string): string {
-    let filename = path.basename(templatePath);
-
-    if (filename.startsWith(".")) {
-      filename = `dot-${filename.substring(1)}`;
-      templatePath = path.join(path.dirname(templatePath), filename);
-    }
-
-    return templatePath
-      .replaceAll(".", "-")
-      .replaceAll(path.sep, "-")
-      .replaceAll(/[^a-zA-Z0-9_-]/g, "");
-  }
-
-  /**
-   * Register a custom Handlebars helper.
-   *
-   * This also notifies the resolver that this helper name should be ignored
-   * during variable resolution.
-   *
-   * @param name - The helper name
-   * @param fn - The helper function
-   * @returns A function to unregister the helper
-   */
-  registerHelper(name: string, fn: Handlebars.HelperDelegate): () => void {
-    Handlebars.registerHelper(name, fn);
-    this.resolver.onHelperRegistered?.(name);
-
-    return () => {
-      this.resolver.onHelperUnregistered?.(name);
-      Handlebars.unregisterHelper(name);
-    };
-  }
-
-  /**
-   * Get the underlying Handlebars instance for advanced customization.
-   */
-  static getHandlebars(): typeof Handlebars {
-    return Handlebars;
   }
 }

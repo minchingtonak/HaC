@@ -2,6 +2,7 @@ import * as pulumi from "@pulumi/pulumi";
 import * as command from "@pulumi/command";
 import * as proxmox from "@muhlba91/pulumi-proxmoxve";
 import * as porkbun from "@pulumi/porkbun";
+import { Handlebars, TemplateContext } from "@hac/templates";
 import { HomelabPveProvider } from "./homelab-pve-provider";
 import {
   ComposeStack,
@@ -12,11 +13,14 @@ import {
   ProvisionerEngine,
   ProvisionerResource,
 } from "../hosts/provisioner-engine";
-import { TemplateProcessor } from "../templates/template-processor";
-import { TemplateContext } from "../templates/template-context";
 import { type HomelabPveHostContext } from "./homelab-pve-host";
 import { LXC_DEFAULTS } from "../hosts/schema/pve";
-import { FirewallDirection, FirewallMacro, FirewallPolicy } from "../constants";
+import {
+  FirewallDirection,
+  FirewallMacro,
+  FirewallPolicy,
+  TemplatePaths,
+} from "../constants";
 
 export type HomelabLxcHostContext = HomelabPveHostContext & {
   stackName: string;
@@ -286,8 +290,8 @@ export class HomelabLxcHost extends pulumi.ComponentResource {
       this.createRemoteOutputRootDir = new command.remote.Command(
         `${name}-create-pulumi-root-output-dir`,
         {
-          create: `mkdir -p ${TemplateProcessor.REMOTE_OUTPUT_FOLDER_ROOT}`,
-          delete: `rm -rf ${TemplateProcessor.REMOTE_OUTPUT_FOLDER_ROOT}`,
+          create: `mkdir -p ${TemplatePaths.REMOTE_OUTPUT_FOLDER_ROOT}`,
+          delete: `rm -rf ${TemplatePaths.REMOTE_OUTPUT_FOLDER_ROOT}`,
           addPreviousOutputInEnv: false,
           connection,
         },
@@ -325,7 +329,7 @@ export class HomelabLxcHost extends pulumi.ComponentResource {
 
 export type IdForContainerOptions = { hostname?: string; node?: string };
 
-TemplateProcessor.registerTemplateHelper(
+Handlebars.registerHelper(
   "idForContainer",
   (options: Handlebars.HelperOptions) => {
     const context = options.data as TemplateFileContext;
@@ -361,7 +365,7 @@ TemplateProcessor.registerTemplateHelper(
   },
 );
 
-TemplateProcessor.registerTemplateHelper(
+Handlebars.registerHelper(
   "domainForContainer",
   (options: Handlebars.HelperOptions) => {
     const context = options.data as TemplateFileContext;
@@ -370,7 +374,7 @@ TemplateProcessor.registerTemplateHelper(
   },
 );
 
-TemplateProcessor.registerTemplateHelper(
+Handlebars.registerHelper(
   "ipForContainer",
   (hostnameOrLxcId: string, options: Handlebars.HelperOptions) => {
     const context = structuredClone(options.data) as TemplateFileContext;

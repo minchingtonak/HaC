@@ -9,6 +9,7 @@
 // Core template processing
 export {
   TemplateProcessor,
+  type TemplateProcessorBase,
   type RenderedTemplateFile,
   type TemplateProcessorOptions,
 } from "./template-processor";
@@ -33,3 +34,7 @@ export {
   partialHelper,
   helperMissingHelper,
 } from "./helpers";
+
+// Re-export Handlebars for custom helper registration
+import * as Handlebars from "handlebars";
+export { Handlebars };

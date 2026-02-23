@@ -10,6 +10,7 @@
     "commitlint": "commitlint --edit"
   },
   "dependencies": {
+    "@hac/templates": "workspace:*",
     "@hanseltime/pulumi-file-utils": "1.2.0",
     "@muhlba91/pulumi-proxmoxve": "^7.11.0",
     "@pulumi/ansible": "file:sdks/ansible",

@@ -10,7 +10,7 @@ import {
   AnsibleProvisioner,
 } from "./schema/provisioner";
 import { EnvUtils } from "../utils/env-utils";
-import { TemplateProcessor } from "../templates/template-processor";
+import { PulumiTemplateProcessor } from "@hac/templates/pulumi";
 import { LXC_DEFAULTS } from "./schema/pve";
 
 export type ProvisionerResource = command.remote.Command | ansible.Playbook;
@@ -132,7 +132,7 @@ export class ProvisionerEngine {
     );
 
     return new command.remote.Command(
-      `${commandName}-${TemplateProcessor.buildSanitizedNameForId(
+      `${commandName}-${PulumiTemplateProcessor.buildSanitizedNameForId(
         provisioner.script,
       )}`,
       {
@@ -156,7 +156,7 @@ export class ProvisionerEngine {
   ): string {
     const scriptName = path.basename(provisioner.script);
 
-    const safeName = TemplateProcessor.buildSanitizedNameForId(
+    const safeName = PulumiTemplateProcessor.buildSanitizedNameForId(
       provisioner.script,
     );
 
@@ -239,7 +239,7 @@ export class ProvisionerEngine {
       dependsOn,
     );
 
-    const safeName = TemplateProcessor.buildSanitizedNameForId(
+    const safeName = PulumiTemplateProcessor.buildSanitizedNameForId(
       provisioner.playbook,
     );
 

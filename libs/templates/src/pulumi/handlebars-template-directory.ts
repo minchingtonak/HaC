@@ -3,6 +3,7 @@ import * as pulumi from "@pulumi/pulumi";
 import { TemplateProcessor } from "../template-processor";
 import { type TemplateContext } from "../template-context";
 import { HandlebarsTemplateFile } from "./handlebars-template-file";
+import { PulumiTemplateProcessor } from "./pulumi-template-processor";
 
 /**
  * Arguments for creating a HandlebarsTemplateDirectory resource.
@@ -66,7 +67,7 @@ export class HandlebarsTemplateDirectory<
 
     for (const templatePath of templateFilePaths) {
       this.templateFiles[templatePath] = new HandlebarsTemplateFile(
-        `${name}-${TemplateProcessor.buildSanitizedNameForId(templatePath)}`,
+        `${name}-${PulumiTemplateProcessor.buildSanitizedNameForId(templatePath)}`,
         {
           templatePath,
           configNamespace: args.configNamespace,

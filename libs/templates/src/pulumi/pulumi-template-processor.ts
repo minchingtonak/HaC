@@ -1,10 +1,15 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as fs from "node:fs";
+import * as path from "node:path";
 import * as Handlebars from "handlebars";
 
 import {
-  TemplateProcessor,
+  type TemplateProcessorBase,
   type RenderedTemplateFile,
+} from "../template-processor-interface";
+import {
+  TemplateProcessor,
+  type TemplateProcessorOptions,
 } from "../template-processor";
 import { type VariableResolver } from "../variable-resolver";
 import { PulumiVariableResolver } from "./pulumi-variable-resolver";
@@ -12,14 +17,7 @@ import { PulumiVariableResolver } from "./pulumi-variable-resolver";
 /**
  * Options for Pulumi template processing.
  */
-export interface PulumiTemplateProcessorOptions {
-  /**
-   * Maximum depth for recursive variable resolution.
-   * Prevents infinite loops from circular references.
-   * @default 10
-   */
-  maxDepth?: number;
-}
+export type PulumiTemplateProcessorOptions = TemplateProcessorOptions;
 
 /**
  * Pulumi-aware template processor that handles `Output<string>` values.
@@ -38,11 +36,13 @@ export interface PulumiTemplateProcessorOptions {
  * const resolver = new PulumiVariableResolver(new pulumi.Config("myapp"));
  * const processor = new PulumiTemplateProcessor(resolver);
  *
- * const result = processor.processTemplate("config.hbs.toml");
+ * const result = processor.processTemplateFile("config.hbs.toml");
  * // result.content is pulumi.Output<string>
  * ```
  */
-export class PulumiTemplateProcessor {
+export class PulumiTemplateProcessor implements TemplateProcessorBase<
+  pulumi.Output<string>
+> {
   private resolver: VariableResolver<string | pulumi.Output<string>>;
   private maxDepth: number;
 
@@ -77,21 +77,16 @@ export class PulumiTemplateProcessor {
    * @param dataVariables - Additional data to pass to the template context
    * @returns Processed template with Output<string> content
    */
-  processTemplate(
+  processTemplateFile(
     templatePath: string,
     dataVariables?: object,
   ): RenderedTemplateFile<pulumi.Output<string>> {
     const templateContent = fs.readFileSync(templatePath, "utf-8");
-    const idSafeName = TemplateProcessor.buildSanitizedNameForId(templatePath);
 
     const variables = TemplateProcessor.discoverVariables(templateContent);
 
     if (variables.length === 0) {
-      return {
-        content: pulumi.output(templateContent),
-        idSafeName,
-        templatePath,
-      };
+      return { content: pulumi.output(templateContent), templatePath };
     }
 
     const resolvedVariables = this.resolveAllVariables(
@@ -105,7 +100,31 @@ export class PulumiTemplateProcessor {
       dataVariables,
     );
 
-    return { content, idSafeName, templatePath };
+    return { content, templatePath };
+  }
+
+  /**
+   * Build a sanitized name from a file path that is safe for use in Pulumi resource IDs.
+   *
+   * - Replaces dots and path separators with dashes
+   * - Handles dotfiles by prefixing with "dot-"
+   * - Removes any characters that aren't alphanumeric, underscore, or dash
+   *
+   * @param templatePath - The template file path
+   * @returns A sanitized name safe for Pulumi resource IDs
+   */
+  static buildSanitizedNameForId(templatePath: string): string {
+    let filename = path.basename(templatePath);
+
+    if (filename.startsWith(".")) {
+      filename = `dot-${filename.substring(1)}`;
+      templatePath = path.join(path.dirname(templatePath), filename);
+    }
+
+    return templatePath
+      .replaceAll(".", "-")
+      .replaceAll(path.sep, "-")
+      .replaceAll(/[^a-zA-Z0-9_-]/g, "");
   }
 
   /**
@@ -262,22 +281,5 @@ export class PulumiTemplateProcessor {
     }
 
     return result;
-  }
-
-  /**
-   * Register a custom Handlebars helper.
-   *
-   * @param name - The helper name
-   * @param fn - The helper function
-   * @returns A function to unregister the helper
-   */
-  registerHelper(name: string, fn: Handlebars.HelperDelegate): () => void {
-    Handlebars.registerHelper(name, fn);
-    this.resolver.onHelperRegistered?.(name);
-
-    return () => {
-      this.resolver.onHelperUnregistered?.(name);
-      Handlebars.unregisterHelper(name);
-    };
   }
 }

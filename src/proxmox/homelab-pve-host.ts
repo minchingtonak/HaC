@@ -1,11 +1,12 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as proxmox from "@muhlba91/pulumi-proxmoxve";
 import * as command from "@pulumi/command";
+import * as path from "node:path";
+import { Handlebars, TemplateContext } from "@hac/templates";
+import { PulumiTemplateProcessor } from "@hac/templates/pulumi";
 import { HomelabLxcHost, HomelabLxcHostContext } from "./homelab-lxc-host";
 import { HomelabPveProvider } from "./homelab-pve-provider";
 import { LxcHostConfigParser } from "../hosts/lxc-host-config-parser";
-import path from "node:path";
-import { TemplateContext } from "../templates/template-context";
 import {
   PveHostConfig,
   PveHostConfigToml,
@@ -15,7 +16,6 @@ import {
   LxcHostConfigToml,
 } from "../hosts/schema/lxc-host-config";
 import { snakeToCamelKeys } from "../utils/schema-utils";
-import { TemplateProcessor } from "../templates/template-processor";
 import {
   ProvisionerEngine,
   ProvisionerResource,
@@ -97,7 +97,7 @@ export class HomelabPveHost extends pulumi.ComponentResource {
 
     this.files = pveConfig.files?.map((file) => {
       const url = new URL(file.url);
-      const sanitizedName = TemplateProcessor.buildSanitizedNameForId(
+      const sanitizedName = PulumiTemplateProcessor.buildSanitizedNameForId(
         `${url.host}${url.pathname}`,
       );
 
@@ -196,7 +196,7 @@ export class HomelabPveHost extends pulumi.ComponentResource {
   }
 }
 
-TemplateProcessor.registerTemplateHelper(
+Handlebars.registerHelper(
   "domainForPveHost",
   (options: Handlebars.HelperOptions) => {
     const context = options.data as TemplateFileContext;

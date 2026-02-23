@@ -1,7 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import { CopyableAsset } from "@hanseltime/pulumi-file-utils";
 
-import { type RenderedTemplateFile } from "../template-processor";
+import { type RenderedTemplateFile } from "../template-processor-interface";
 import { type TemplateContext } from "../template-context";
 import { PulumiTemplateProcessor } from "./pulumi-template-processor";
 import { PulumiVariableResolver } from "./pulumi-variable-resolver";
@@ -47,6 +47,9 @@ export class HandlebarsTemplateFile<
 {
   public static RESOURCE_TYPE = "HaC:templates:HandlebarsTemplateFile";
 
+  /** A sanitized name safe for use in Pulumi resource IDs */
+  idSafeName: string;
+
   /** The processed template result */
   processedTemplate: RenderedTemplateFile<pulumi.Output<string>>;
 
@@ -60,18 +63,22 @@ export class HandlebarsTemplateFile<
   ) {
     super(HandlebarsTemplateFile.RESOURCE_TYPE, name, {}, opts);
 
+    this.idSafeName = PulumiTemplateProcessor.buildSanitizedNameForId(
+      args.templatePath,
+    );
+
     const resolver = new PulumiVariableResolver(
       new pulumi.Config(args.configNamespace),
     );
     const processor = new PulumiTemplateProcessor(resolver);
 
-    this.processedTemplate = processor.processTemplate(
+    this.processedTemplate = processor.processTemplateFile(
       args.templatePath,
       args.templateContext.get(),
     );
 
     this.asset = new CopyableAsset(
-      `${name}-rendered-template-${this.processedTemplate.idSafeName}`,
+      `${name}-rendered-template-${this.idSafeName}`,
       {
         asset:
           pulumi.Output.isInstance(this.processedTemplate.content) ?
@@ -79,7 +86,7 @@ export class HandlebarsTemplateFile<
               (val) => new pulumi.asset.StringAsset(val),
             )
           : new pulumi.asset.StringAsset(this.processedTemplate.content),
-        synthName: this.processedTemplate.idSafeName,
+        synthName: this.idSafeName,
         tmpCopyDir: "tmp",
         noClean: false,
       },

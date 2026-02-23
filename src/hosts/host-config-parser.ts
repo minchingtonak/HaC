@@ -1,8 +1,12 @@
 import * as pulumi from "@pulumi/pulumi";
 import TOML from "smol-toml";
 import { z } from "zod";
-import { TemplateProcessor } from "../templates/template-processor";
-import path from "node:path";
+import * as path from "node:path";
+import { TemplateProcessor } from "@hac/templates";
+import {
+  PulumiTemplateProcessor,
+  PulumiVariableResolver,
+} from "@hac/templates/pulumi";
 
 export interface ParserConfig<TConfig> {
   type: "pve" | "lxc";
@@ -49,11 +53,9 @@ export abstract class HostConfigParser<TConfig> {
   ): TConfig | pulumi.Output<TConfig> {
     const fileName = path.basename(filePath);
     const identifier = `${this.getConfig().type}#${fileName.substring(0, fileName.indexOf("."))}`;
-    const renderedTemplate = TemplateProcessor.processTemplate(
-      filePath,
-      new pulumi.Config(identifier),
-      extraData,
-    );
+    const resolver = new PulumiVariableResolver(new pulumi.Config(identifier));
+    const processor = new PulumiTemplateProcessor(resolver);
+    const renderedTemplate = processor.processTemplateFile(filePath, extraData);
 
     return this.parseConfigString(renderedTemplate.content);
   }

@@ -34,8 +34,6 @@ export class PulumiVariableResolver implements VariableResolver<
   private static readonly SECRET_VARIABLE_PREFIX = "SECRET_";
   private static readonly PARENT_NAMESPACE_PREFIX = "parent:";
 
-  private ignoredVariables = new Set<string>();
-
   constructor(private config: pulumi.Config) {}
 
   resolve(
@@ -96,36 +94,10 @@ export class PulumiVariableResolver implements VariableResolver<
 
   shouldIgnore(variableName: string): boolean {
     return (
-      this.ignoredVariables.has(variableName) ||
       variableName.startsWith("@") ||
       variableName.startsWith("this.") ||
       variableName.startsWith("../")
     );
-  }
-
-  onHelperRegistered(helperName: string): void {
-    this.ignoredVariables.add(helperName);
-  }
-
-  onHelperUnregistered(helperName: string): void {
-    this.ignoredVariables.delete(helperName);
-  }
-
-  /**
-   * Add a variable name to the ignore list.
-   *
-   * Ignored variables are skipped during resolution, which is useful
-   * for template helpers or context variables.
-   */
-  addIgnoredVariable(name: string): void {
-    this.ignoredVariables.add(name);
-  }
-
-  /**
-   * Remove a variable name from the ignore list.
-   */
-  removeIgnoredVariable(name: string): boolean {
-    return this.ignoredVariables.delete(name);
   }
 
   /**
