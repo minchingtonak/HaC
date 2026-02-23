@@ -2,10 +2,7 @@ import { snakeToCamelKeys } from "@hac/schema/case-conversion";
 
 import { TemplateContext } from "@hac/templates/template-context";
 
-import {
-  pveConfigParser,
-  logFileParseErrors,
-} from "../hosts/host-config-parser";
+import { pveConfigParser, logFileParseErrors } from "../hosts/config-parser";
 import { HomelabPveHost, HomelabPveHostContext } from "./homelab-pve-host";
 
 export function deployHomelab() {

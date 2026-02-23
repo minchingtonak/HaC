@@ -21,10 +21,10 @@ import {
   PveHostConfigToml,
 } from "./schema/pve-host-config";
 
-type HostConfigType = "pve" | "lxc";
+type ConfigType = "pve" | "lxc";
 
 /**
- * Parse error with file context for host config parsing.
+ * Parse error with file context for config file parsing.
  */
 export type FileParseError = {
   filePath: string;
@@ -81,7 +81,7 @@ export function logFileParseErrors(errors: FileParseError[]): void {
  * Context variables available when rendering the config namespace template.
  */
 export interface ConfigNamespaceTemplateContext {
-  parser_type: HostConfigType;
+  parser_type: ConfigType;
   /** The filename including extensions (e.g., "my-host.hbs.toml") */
   file_name: string;
   /** The full absolute path to the file */
@@ -90,12 +90,12 @@ export interface ConfigNamespaceTemplateContext {
   dir_name: string;
 }
 
-export class HostConfigParser<TConfig> {
+export class ConfigParser<TConfig> {
   private readonly parser: PulumiSchemaParser<z.ZodSchema<TConfig>>;
   private readonly compiledNamespaceTemplate: TemplateDelegate<ConfigNamespaceTemplateContext>;
 
   private constructor(
-    private readonly type: HostConfigType,
+    private readonly type: ConfigType,
     configSchema: z.ZodSchema<TConfig>,
     configNamespaceTemplate: string,
   ) {
@@ -107,15 +107,15 @@ export class HostConfigParser<TConfig> {
   }
 
   static create<T>(
-    type: HostConfigType,
+    type: ConfigType,
     schema: z.ZodSchema<T>,
     configNamespaceTemplate: string,
-  ): HostConfigParser<T> {
-    return new HostConfigParser(type, schema, configNamespaceTemplate);
+  ): ConfigParser<T> {
+    return new ConfigParser(type, schema, configNamespaceTemplate);
   }
 
   /**
-   * Load all host configurations from a directory.
+   * Load all configurations from a directory.
    * Returns a tuple of [successfullyParsed, failedParsing] arrays wrapped in a Pulumi Output.
    */
   public loadAllConfigs(
@@ -138,7 +138,7 @@ export class HostConfigParser<TConfig> {
   }
 
   /**
-   * Parse a host configuration file.
+   * Parse a configuration file.
    */
   public parseConfigFile(
     filePath: string,
@@ -176,7 +176,7 @@ export class HostConfigParser<TConfig> {
   }
 
   /**
-   * Parse host configuration from TOML string.
+   * Parse configuration from TOML string.
    */
   public parseConfigString(
     tomlContent: pulumi.Output<string>,
@@ -188,16 +188,8 @@ export class HostConfigParser<TConfig> {
 const CONFIG_NAMESPACE_TEMPLATE =
   "{{{parser_type}}}#{{{trimExtension file_name}}}";
 
-export const lxcConfigParser: HostConfigParser<LxcHostConfigToml> =
-  HostConfigParser.create(
-    "lxc",
-    LxcHostConfigSchema,
-    CONFIG_NAMESPACE_TEMPLATE,
-  );
+export const lxcConfigParser: ConfigParser<LxcHostConfigToml> =
+  ConfigParser.create("lxc", LxcHostConfigSchema, CONFIG_NAMESPACE_TEMPLATE);
 
-export const pveConfigParser: HostConfigParser<PveHostConfigToml> =
-  HostConfigParser.create(
-    "pve",
-    PveHostConfigSchema,
-    CONFIG_NAMESPACE_TEMPLATE,
-  );
+export const pveConfigParser: ConfigParser<PveHostConfigToml> =
+  ConfigParser.create("pve", PveHostConfigSchema, CONFIG_NAMESPACE_TEMPLATE);

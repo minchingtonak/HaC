@@ -12,7 +12,7 @@ import {
   lxcConfigParser,
   logFileParseErrors,
   partitionFileParseResults,
-} from "../hosts/host-config-parser";
+} from "../hosts/config-parser";
 import {
   PveHostConfig,
   PveHostConfigToml,
