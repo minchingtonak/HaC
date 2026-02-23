@@ -1,27 +1,20 @@
-import * as pulumi from "@pulumi/pulumi";
-
 import { snakeToCamelKeys } from "@hac/schema/case-conversion";
 
 import { TemplateContext } from "@hac/templates/template-context";
 
-import { pveConfigParser } from "../hosts/host-config-parser";
-import { PveHostConfigToml } from "../hosts/schema/pve-host-config";
+import {
+  pveConfigParser,
+  logFileParseErrors,
+} from "../hosts/host-config-parser";
 import { HomelabPveHost, HomelabPveHostContext } from "./homelab-pve-host";
 
 export function deployHomelab() {
-  const pveResults = pveConfigParser.loadAllConfigs("./hosts/pve");
+  const pveConfigResults = pveConfigParser.loadAllConfigs("./hosts/pve");
 
-  pulumi.all(pveResults).apply((results) => {
-    const configs: PveHostConfigToml[] = [];
-    for (const result of results) {
-      if (result.success) {
-        configs.push(result.data);
-      } else {
-        pulumi.log.warn(`Failed to parse PVE config: ${result.error.message}`);
-      }
-    }
+  pveConfigResults.apply(([pveConfigs, parseErrors]) => {
+    logFileParseErrors(parseErrors);
 
-    const enabledConfigs = configs.filter((c) => c.enabled);
+    const enabledConfigs = pveConfigs.filter((c) => c.enabled);
     const camelCasedEnabledConfigs = enabledConfigs.map((config) =>
       snakeToCamelKeys(config, { ignoreFields: ["variables", "environment"] }),
     );

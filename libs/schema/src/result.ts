@@ -5,7 +5,11 @@ import { z } from "zod";
  */
 export type ParseError =
   | { kind: "format"; message: string; formatName: string; cause?: unknown }
-  | { kind: "validation"; message: string; issues: z.core.$ZodIssue[] };
+  | {
+      kind: "validation";
+      message: string;
+      tree: z.core.$ZodErrorTree<unknown>;
+    };
 
 /**
  * Result type for all parsing operations.
@@ -28,17 +32,10 @@ export function formatError(error: ParseError): string {
  * Create a validation ParseError from a Zod error.
  */
 export function createValidationError(zodError: z.ZodError): ParseError {
-  const messages = zodError.issues
-    .map((issue) => {
-      const path = issue.path.length > 0 ? `${issue.path.join(".")}: ` : "";
-      return `${path}${issue.message}`;
-    })
-    .join("; ");
-
   return {
     kind: "validation",
-    message: `Schema validation failed: ${messages}`,
-    issues: zodError.issues,
+    message: z.prettifyError(zodError),
+    tree: z.treeifyError(zodError),
   };
 }
 

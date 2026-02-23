@@ -6,7 +6,7 @@ import { z } from "zod";
 
 import { PulumiSchemaParser } from "@hac/schema/pulumi/parser";
 import { TomlFormat } from "@hac/schema/formats/toml";
-import { ParseResult } from "@hac/schema/result";
+import { ParseError, ParseResult } from "@hac/schema/result";
 import { TemplateProcessor } from "@hac/templates/template-processor";
 import { PulumiTemplateProcessor } from "@hac/templates/pulumi/template-processor";
 import { PulumiVariableResolver } from "@hac/templates/pulumi/variable-resolver";
@@ -22,6 +22,60 @@ import {
 } from "./schema/pve-host-config";
 
 type HostConfigType = "pve" | "lxc";
+
+/**
+ * Parse error with file context for host config parsing.
+ */
+export type FileParseError = {
+  filePath: string;
+  fileName: string;
+  error: ParseError;
+};
+
+/**
+ * Result type for file-based parsing operations.
+ */
+export type FileParseResult<T> =
+  | { success: true; data: T }
+  | { success: false; error: FileParseError };
+
+/**
+ * Partition an array of FileParseResults into successes and failures.
+ */
+export function partitionFileParseResults<T>(
+  results: FileParseResult<T>[],
+): readonly [T[], FileParseError[]] {
+  const successes: T[] = [];
+  const failures: FileParseError[] = [];
+
+  for (const result of results) {
+    if (result.success) {
+      successes.push(result.data);
+    } else {
+      failures.push(result.error);
+    }
+  }
+
+  return [successes, failures] as const;
+}
+
+/**
+ * Log file parse errors using Pulumi's logging system.
+ */
+export function logFileParseErrors(errors: FileParseError[]): void {
+  errors.forEach(({ filePath, error }) => {
+    switch (error.kind) {
+      case "format":
+        pulumi.log.warn(
+          `[${filePath}] ${error.formatName} ${error.kind} error:\n${error.message}${error.cause ? ` (${error.cause})` : ""}`,
+        );
+        break;
+      case "validation":
+        pulumi.log.warn(`[${filePath}] ${error.kind} error:\n${error.message}`);
+        break;
+    }
+  });
+}
 
 /**
  * Context variables available when rendering the config namespace template.
@@ -62,21 +116,25 @@ export class HostConfigParser<TConfig> {
 
   /**
    * Load all host configurations from a directory.
-   * Returns an array of ParseResult wrapped in Pulumi Outputs.
+   * Returns a tuple of [successfullyParsed, failedParsing] arrays wrapped in a Pulumi Output.
    */
   public loadAllConfigs(
     hostsDir: string,
     extraData?: object,
-  ): pulumi.Output<ParseResult<TConfig>>[] {
-    const results: pulumi.Output<ParseResult<TConfig>>[] = [];
+  ): pulumi.Output<readonly [TConfig[], FileParseError[]]> {
     const configFiles = TemplateProcessor.discoverTemplateFiles(hostsDir);
+    const results: pulumi.Output<FileParseResult<TConfig>>[] = [];
 
     for (const configPath of configFiles) {
       const result = this.parseConfigFile(configPath, extraData);
       results.push(result);
     }
 
-    return results;
+    return pulumi.all(results).apply((resolvedResults) => {
+      return partitionFileParseResults(
+        resolvedResults as FileParseResult<TConfig>[],
+      );
+    });
   }
 
   /**
@@ -85,10 +143,11 @@ export class HostConfigParser<TConfig> {
   public parseConfigFile(
     filePath: string,
     extraData?: object,
-  ): pulumi.Output<ParseResult<TConfig>> {
+  ): pulumi.Output<FileParseResult<TConfig>> {
+    const fileName = path.basename(filePath);
     const templateContext: ConfigNamespaceTemplateContext = {
       parser_type: this.type,
-      file_name: path.basename(filePath),
+      file_name: fileName,
       file_path: filePath,
       dir_name: path.basename(path.dirname(filePath)),
     };
@@ -103,7 +162,17 @@ export class HostConfigParser<TConfig> {
     });
     const renderedTemplate = processor.processTemplateFile(filePath, extraData);
 
-    return this.parseConfigString(renderedTemplate.content);
+    return this.parseConfigString(renderedTemplate.content).apply(
+      (result): FileParseResult<TConfig> => {
+        if (result.success) {
+          return result;
+        }
+        return {
+          success: false,
+          error: { filePath, fileName, error: result.error },
+        };
+      },
+    );
   }
 
   /**

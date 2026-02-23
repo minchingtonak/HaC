@@ -8,7 +8,11 @@ import { pathToResourceId } from "@hac/templates/pulumi/path-utils";
 import { sharedHandlebars } from "../templates/shared-handlebars";
 import { HomelabLxcHost, HomelabLxcHostContext } from "./homelab-lxc-host";
 import { HomelabPveProvider } from "./homelab-pve-provider";
-import { lxcConfigParser } from "../hosts/host-config-parser";
+import {
+  lxcConfigParser,
+  logFileParseErrors,
+  partitionFileParseResults,
+} from "../hosts/host-config-parser";
 import {
   PveHostConfig,
   PveHostConfigToml,
@@ -148,16 +152,9 @@ export class HomelabPveHost extends pulumi.ComponentResource {
     });
 
     pulumi.all(enabledLxcResults).apply((results) => {
-      const hostConfigs: LxcHostConfigToml[] = [];
-      for (const result of results) {
-        if (result.success) {
-          hostConfigs.push(result.data);
-        } else {
-          pulumi.log.warn(
-            `Failed to parse LXC config: ${result.error.message}`,
-          );
-        }
-      }
+      const [hostConfigs, parseErrors] = partitionFileParseResults(results);
+
+      logFileParseErrors(parseErrors);
 
       const camelCasedConfigs = hostConfigs.map((config) =>
         snakeToCamelKeys(config, {
