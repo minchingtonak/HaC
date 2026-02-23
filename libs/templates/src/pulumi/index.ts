@@ -5,12 +5,9 @@ export {
   type PulumiTemplateProcessorOptions,
 } from "./pulumi-template-processor";
 
-export {
-  HandlebarsTemplateFile,
-  type HandlebarsTemplateFileArgs,
-} from "./resources/handlebars-template-file";
+export { TemplateFile, type TemplateFileArgs } from "./resources/template-file";
 
 export {
-  HandlebarsTemplateDirectory,
-  type HandlebarsTemplateDirectoryArgs,
-} from "./resources/handlebars-template-directory";
+  TemplateDirectory,
+  type TemplateDirectoryArgs,
+} from "./resources/template-directory";

@@ -7,11 +7,9 @@ import { PulumiTemplateProcessor } from "../pulumi-template-processor";
 import { PulumiVariableResolver } from "../pulumi-variable-resolver";
 
 /**
- * Arguments for creating a HandlebarsTemplateFile resource.
+ * Arguments for creating a TemplateFile resource.
  */
-export type HandlebarsTemplateFileArgs<
-  TContext extends Record<string, unknown>,
-> = {
+export type TemplateFileArgs<TContext extends Record<string, unknown>> = {
   /** Path to the template file */
   templatePath: string;
   /** Pulumi config namespace for variable resolution */
@@ -31,7 +29,7 @@ export type HandlebarsTemplateFileArgs<
  *
  * @example
  * ```typescript
- * const templateFile = new HandlebarsTemplateFile("my-config", {
+ * const templateFile = new TemplateFile("my-config", {
  *   templatePath: "configs/app.hbs.toml",
  *   configNamespace: "myapp",
  *   templateContext: new TemplateContext().withData({ env: "production" }),
@@ -40,12 +38,12 @@ export type HandlebarsTemplateFileArgs<
  * // Use templateFile.asset to copy to remote
  * ```
  */
-export class HandlebarsTemplateFile<
+export class TemplateFile<
   TContext extends Record<string, unknown> = Record<string, unknown>,
 >
   extends pulumi.ComponentResource
 {
-  public static RESOURCE_TYPE = "HaC:templates:HandlebarsTemplateFile";
+  public static RESOURCE_TYPE = "HaC:templates:TemplateFile";
 
   idSafeName: string;
 
@@ -55,10 +53,10 @@ export class HandlebarsTemplateFile<
 
   constructor(
     name: string,
-    args: HandlebarsTemplateFileArgs<TContext>,
+    args: TemplateFileArgs<TContext>,
     opts?: pulumi.ComponentResourceOptions,
   ) {
-    super(HandlebarsTemplateFile.RESOURCE_TYPE, name, {}, opts);
+    super(TemplateFile.RESOURCE_TYPE, name, {}, opts);
 
     this.idSafeName = PulumiTemplateProcessor.buildSanitizedNameForId(
       args.templatePath,

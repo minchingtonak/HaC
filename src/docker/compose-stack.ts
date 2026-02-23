@@ -3,7 +3,7 @@ import * as command from "@pulumi/command";
 import * as path from "node:path";
 import * as crypto from "node:crypto";
 import { Handlebars, TemplateContext, TemplateProcessor } from "@hac/templates";
-import { HandlebarsTemplateDirectory } from "@hac/templates/pulumi";
+import { TemplateDirectory } from "@hac/templates/pulumi";
 import { TemplatePaths } from "../constants";
 import {
   HomelabLxcHost,
@@ -42,7 +42,7 @@ export class ComposeStack extends pulumi.ComponentResource {
 
   deleteStackFolder: command.remote.Command;
 
-  handlebarsTemplateDirectory: HandlebarsTemplateDirectory;
+  templateDirectory: TemplateDirectory;
 
   processedTemplateCopies: {
     [templatePath: string]: command.remote.CopyToRemote;
@@ -91,27 +91,26 @@ export class ComposeStack extends pulumi.ComponentResource {
       { parent: this },
     );
 
-    this.handlebarsTemplateDirectory =
-      new HandlebarsTemplateDirectory<TemplateFileContext>(
-        `${name}-template-dir`,
-        {
-          templateDirectory: stackDirectory,
-          configNamespace: `lxc#${contextData.lxcConfig.hostname}#${contextData.stackName}`,
-          templateContext: new TemplateContext<TemplateFileContext>({
-            pve: contextData.pve_config,
-            pve_hosts: contextData.enabled_pve_hosts,
-            lxc: contextData.lxc_config,
-            lxc_hosts: contextData.enabled_lxc_hosts,
-            stack_name: contextData.stackName,
-            template_path: stackDirectory,
-          }),
-        },
-        { parent: this },
-      );
+    this.templateDirectory = new TemplateDirectory<TemplateFileContext>(
+      `${name}-template-dir`,
+      {
+        templateDirectory: stackDirectory,
+        configNamespace: `lxc#${contextData.lxcConfig.hostname}#${contextData.stackName}`,
+        templateContext: new TemplateContext<TemplateFileContext>({
+          pve: contextData.pve_config,
+          pve_hosts: contextData.enabled_pve_hosts,
+          lxc: contextData.lxc_config,
+          lxc_hosts: contextData.enabled_lxc_hosts,
+          stack_name: contextData.stackName,
+          template_path: stackDirectory,
+        }),
+      },
+      { parent: this },
+    );
 
     // copy rendered template files
     for (const [templatePath, templateFile] of Object.entries(
-      this.handlebarsTemplateDirectory.templateFiles,
+      this.templateDirectory.templateFiles,
     )) {
       const stacksRelativePath = templatePath.substring(
         templatePath.indexOf(TemplatePaths.LOCAL_STACKS_FOLDER_ROOT_NAME),
@@ -125,10 +124,7 @@ export class ComposeStack extends pulumi.ComponentResource {
             remotePath: ComposeStack.getRemoteOutputPath(stacksRelativePath),
             connection: args.connection,
           },
-          {
-            parent: this.handlebarsTemplateDirectory,
-            dependsOn: this.copyStackToRemote,
-          },
+          { parent: this.templateDirectory, dependsOn: this.copyStackToRemote },
         );
     }
 
@@ -141,13 +137,12 @@ export class ComposeStack extends pulumi.ComponentResource {
 
     this.deployStack = pulumi
       .all(
-        Object.values(this.handlebarsTemplateDirectory.templateFiles).map(
-          (tf) =>
-            tf.processedTemplate.content.apply(
-              (content) =>
-                // use idSafeName:contentMd5 as the trigger value for better readability in cli diffs
-                `${tf.idSafeName}:${crypto.createHash("md5").update(content).digest("hex")}`,
-            ),
+        Object.values(this.templateDirectory.templateFiles).map((tf) =>
+          tf.processedTemplate.content.apply(
+            (content) =>
+              // use idSafeName:contentMd5 as the trigger value for better readability in cli diffs
+              `${tf.idSafeName}:${crypto.createHash("md5").update(content).digest("hex")}`,
+          ),
         ),
       )
       .apply((templateFileContents) => {

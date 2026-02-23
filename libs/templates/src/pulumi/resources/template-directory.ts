@@ -2,15 +2,13 @@ import * as pulumi from "@pulumi/pulumi";
 
 import { TemplateProcessor } from "../../template-processor";
 import { type TemplateContext } from "../../template-context";
-import { HandlebarsTemplateFile } from "./handlebars-template-file";
+import { TemplateFile } from "./template-file";
 import { PulumiTemplateProcessor } from "../pulumi-template-processor";
 
 /**
- * Arguments for creating a HandlebarsTemplateDirectory resource.
+ * Arguments for creating a TemplateDirectory resource.
  */
-export type HandlebarsTemplateDirectoryArgs<
-  TContext extends Record<string, unknown>,
-> = {
+export type TemplateDirectoryArgs<TContext extends Record<string, unknown>> = {
   /** Path to the directory containing template files */
   templateDirectory: string;
   /** Pulumi config namespace for variable resolution */
@@ -26,12 +24,12 @@ export type HandlebarsTemplateDirectoryArgs<
  *
  * This resource:
  * 1. Discovers all template files (*.hbs.*, *.handlebars.*) in the directory
- * 2. Creates a HandlebarsTemplateFile for each discovered template
+ * 2. Creates a TemplateFile for each discovered template
  * 3. Exposes the processed templates as a map keyed by original path
  *
  * @example
  * ```typescript
- * const templates = new HandlebarsTemplateDirectory("app-configs", {
+ * const templates = new TemplateDirectory("app-configs", {
  *   templateDirectory: "configs/",
  *   configNamespace: "myapp",
  *   templateContext: new TemplateContext().withData({ env: "production" }),
@@ -42,23 +40,22 @@ export type HandlebarsTemplateDirectoryArgs<
  * const appConfig = templates.templateFiles["configs/app.hbs.toml"];
  * ```
  */
-export class HandlebarsTemplateDirectory<
+export class TemplateDirectory<
   TContext extends Record<string, unknown> = Record<string, unknown>,
 >
   extends pulumi.ComponentResource
 {
-  public static RESOURCE_TYPE = "HaC:templates:HandlebarsTemplateDirectory";
+  public static RESOURCE_TYPE = "HaC:templates:TemplateDirectory";
 
-  /** Map of template path to processed HandlebarsTemplateFile */
-  templateFiles: { [templatePath: string]: HandlebarsTemplateFile<TContext> } =
-    {};
+  /** Map of template path to processed TemplateFile */
+  templateFiles: { [templatePath: string]: TemplateFile<TContext> } = {};
 
   constructor(
     name: string,
-    args: HandlebarsTemplateDirectoryArgs<TContext>,
+    args: TemplateDirectoryArgs<TContext>,
     opts?: pulumi.ComponentResourceOptions,
   ) {
-    super(HandlebarsTemplateDirectory.RESOURCE_TYPE, name, {}, opts);
+    super(TemplateDirectory.RESOURCE_TYPE, name, {}, opts);
 
     const templateFilePaths = TemplateProcessor.discoverTemplateFiles(
       args.templateDirectory,
@@ -66,7 +63,7 @@ export class HandlebarsTemplateDirectory<
     );
 
     for (const templatePath of templateFilePaths) {
-      this.templateFiles[templatePath] = new HandlebarsTemplateFile(
+      this.templateFiles[templatePath] = new TemplateFile(
         `${name}-${PulumiTemplateProcessor.buildSanitizedNameForId(templatePath)}`,
         {
           templatePath,
