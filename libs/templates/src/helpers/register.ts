@@ -6,12 +6,14 @@ import { ifeqHelper } from "./ifeq";
 import { ifnoteqHelper } from "./ifnoteq";
 import { createPartialHelper } from "./partial";
 import { createHelperMissingHelper } from "./helper-missing";
+import { trimExtensionHelper } from "./trim-extension";
 
 export { rawHelper } from "./raw";
 export { ifeqHelper } from "./ifeq";
 export { ifnoteqHelper } from "./ifnoteq";
 export { createPartialHelper } from "./partial";
 export { createHelperMissingHelper } from "./helper-missing";
+export { trimExtensionHelper } from "./trim-extension";
 
 /**
  * Helper entry that defines either a simple helper function
@@ -37,4 +39,5 @@ export const BUILTIN_HELPERS: Record<string, HelperEntry> = {
   ifnoteq: { requiresInstance: false, fn: ifnoteqHelper },
   partial: { requiresInstance: true, factory: createPartialHelper },
   helperMissing: { requiresInstance: true, factory: createHelperMissingHelper },
+  trimExtension: { requiresInstance: false, fn: trimExtensionHelper },
 };

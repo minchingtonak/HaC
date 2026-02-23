@@ -4,15 +4,14 @@ import { snakeToCamelKeys } from "@hac/schema/case-conversion";
 
 import { TemplateContext } from "@hac/templates/template-context";
 
-import { PveHostConfigParser } from "../hosts/pve-host-config-parser";
+import { pveConfigParser } from "../hosts/host-config-parser";
 import { PveHostConfigToml } from "../hosts/schema/pve-host-config";
 import { HomelabPveHost, HomelabPveHostContext } from "./homelab-pve-host";
 
 export function deployHomelab() {
-  const pveResults = PveHostConfigParser.loadAllPveHostConfigs("./hosts/pve");
+  const pveResults = pveConfigParser.loadAllConfigs("./hosts/pve");
 
   pulumi.all(pveResults).apply((results) => {
-    // Filter to successful parses, log failures
     const configs: PveHostConfigToml[] = [];
     for (const result of results) {
       if (result.success) {

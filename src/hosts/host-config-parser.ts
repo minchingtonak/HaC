@@ -1,6 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as path from "node:path";
 
+import type { TemplateDelegate } from "handlebars";
 import { z } from "zod";
 
 import { PulumiSchemaParser } from "@hac/schema/pulumi/parser";
@@ -11,22 +12,52 @@ import { PulumiTemplateProcessor } from "@hac/templates/pulumi/template-processo
 import { PulumiVariableResolver } from "@hac/templates/pulumi/variable-resolver";
 
 import { sharedHandlebars } from "../templates/shared-handlebars";
+import {
+  LxcHostConfigSchema,
+  LxcHostConfigToml,
+} from "./schema/lxc-host-config";
+import {
+  PveHostConfigSchema,
+  PveHostConfigToml,
+} from "./schema/pve-host-config";
 
-export interface ParserConfig<TConfig> {
-  type: "pve" | "lxc";
-  configSchema: z.ZodSchema<TConfig>;
+type HostConfigType = "pve" | "lxc";
+
+/**
+ * Context variables available when rendering the config namespace template.
+ */
+export interface ConfigNamespaceTemplateContext {
+  parser_type: HostConfigType;
+  /** The filename including extensions (e.g., "my-host.hbs.toml") */
+  file_name: string;
+  /** The full absolute path to the file */
+  file_path: string;
+  /** The name of the parent directory (e.g., "lxc") */
+  dir_name: string;
 }
 
-export abstract class HostConfigParser<TConfig> {
-  protected abstract getConfig(): ParserConfig<TConfig>;
+export class HostConfigParser<TConfig> {
+  private readonly parser: PulumiSchemaParser<z.ZodSchema<TConfig>>;
+  private readonly compiledNamespaceTemplate: TemplateDelegate<ConfigNamespaceTemplateContext>;
 
-  /**
-   * Get or create a PulumiSchemaParser for this config type.
-   * Subclasses can override to provide a cached instance.
-   */
-  protected getParser(): PulumiSchemaParser<z.ZodSchema<TConfig>> {
-    const config = this.getConfig();
-    return new PulumiSchemaParser(config.configSchema);
+  private constructor(
+    private readonly type: HostConfigType,
+    configSchema: z.ZodSchema<TConfig>,
+    configNamespaceTemplate: string,
+  ) {
+    this.parser = new PulumiSchemaParser(configSchema);
+    this.compiledNamespaceTemplate =
+      sharedHandlebars.compile<ConfigNamespaceTemplateContext>(
+        configNamespaceTemplate,
+      );
+  }
+
+  static create<T>(
+    type: HostConfigType,
+    schema: z.ZodSchema<T>,
+    configNamespaceTemplate: string,
+  ): HostConfigParser<T> {
+    return new HostConfigParser(type, schema, configNamespaceTemplate);
   }
 
   /**
@@ -55,9 +86,18 @@ export abstract class HostConfigParser<TConfig> {
     filePath: string,
     extraData?: object,
   ): pulumi.Output<ParseResult<TConfig>> {
-    const fileName = path.basename(filePath);
-    const identifier = `${this.getConfig().type}#${fileName.substring(0, fileName.indexOf("."))}`;
-    const resolver = new PulumiVariableResolver(new pulumi.Config(identifier));
+    const templateContext: ConfigNamespaceTemplateContext = {
+      parser_type: this.type,
+      file_name: path.basename(filePath),
+      file_path: filePath,
+      dir_name: path.basename(path.dirname(filePath)),
+    };
+    const configNamespace = this.compiledNamespaceTemplate(templateContext);
+
+    const resolver = new PulumiVariableResolver(
+      new pulumi.Config(configNamespace),
+    );
+
     const processor = new PulumiTemplateProcessor(resolver, {
       handlebars: sharedHandlebars,
     });
@@ -72,6 +112,23 @@ export abstract class HostConfigParser<TConfig> {
   public parseConfigString(
     tomlContent: pulumi.Output<string>,
   ): pulumi.Output<ParseResult<TConfig>> {
-    return this.getParser().parse(tomlContent, TomlFormat);
+    return this.parser.parse(tomlContent, TomlFormat);
   }
 }
+
+const CONFIG_NAMESPACE_TEMPLATE =
+  "{{{parser_type}}}#{{{trimExtension file_name}}}";
+
+export const lxcConfigParser: HostConfigParser<LxcHostConfigToml> =
+  HostConfigParser.create(
+    "lxc",
+    LxcHostConfigSchema,
+    CONFIG_NAMESPACE_TEMPLATE,
+  );
+
+export const pveConfigParser: HostConfigParser<PveHostConfigToml> =
+  HostConfigParser.create(
+    "pve",
+    PveHostConfigSchema,
+    CONFIG_NAMESPACE_TEMPLATE,
+  );

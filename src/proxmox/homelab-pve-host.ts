@@ -8,7 +8,7 @@ import { pathToResourceId } from "@hac/templates/pulumi/path-utils";
 import { sharedHandlebars } from "../templates/shared-handlebars";
 import { HomelabLxcHost, HomelabLxcHostContext } from "./homelab-lxc-host";
 import { HomelabPveProvider } from "./homelab-pve-provider";
-import { LxcHostConfigParser } from "../hosts/lxc-host-config-parser";
+import { lxcConfigParser } from "../hosts/host-config-parser";
 import {
   PveHostConfig,
   PveHostConfigToml,
@@ -141,7 +141,7 @@ export class HomelabPveHost extends pulumi.ComponentResource {
 
     const enabledLxcResults = enabledHostnames.map((hostname) => {
       const hostConfigPath = HomelabPveHost.LXC_HOST_CONFIG_PATH_FOR(hostname);
-      return LxcHostConfigParser.parseHostConfigFile(hostConfigPath, {
+      return lxcConfigParser.parseConfigFile(hostConfigPath, {
         pve: pve_config,
         pve_hosts: enabled_pve_hosts,
       });
