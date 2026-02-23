@@ -17,14 +17,6 @@ import { PulumiTemplateProcessor } from "@hac/templates/pulumi/template-processo
 import { PulumiVariableResolver } from "@hac/templates/pulumi/variable-resolver";
 
 import { sharedHandlebars } from "../templates/shared-handlebars";
-import {
-  LxcHostConfigSchema,
-  LxcHostConfigToml,
-} from "./schema/lxc-host-config";
-import {
-  PveHostConfigSchema,
-  PveHostConfigToml,
-} from "./schema/pve-host-config";
 
 type ConfigType = "pve" | "lxc";
 
@@ -153,12 +145,3 @@ export class ConfigParser<TConfig> {
     return this.parser.parse(tomlContent, TomlFormat);
   }
 }
-
-const CONFIG_NAMESPACE_TEMPLATE =
-  "{{{parser_type}}}#{{{trimExtension file_name}}}";
-
-export const lxcConfigParser: ConfigParser<LxcHostConfigToml> =
-  ConfigParser.create("lxc", LxcHostConfigSchema, CONFIG_NAMESPACE_TEMPLATE);
-
-export const pveConfigParser: ConfigParser<PveHostConfigToml> =
-  ConfigParser.create("pve", PveHostConfigSchema, CONFIG_NAMESPACE_TEMPLATE);

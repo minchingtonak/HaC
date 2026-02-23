@@ -12,7 +12,14 @@ import { type HandlebarsInstance } from "../../handlebars-instance";
 export type TemplateDirectoryArgs<TContext extends Record<string, unknown>> = {
   /** Path to the directory containing template files */
   templateDirectory: string;
-  /** Pulumi config namespace for variable resolution */
+  /**
+   * Pulumi config namespace for variable resolution.
+   * Can be a static string or a Handlebars template.
+   *
+   * Available variables:
+   * - file_name, file_path, dir_name (from template file path)
+   * - All fields from templateContext (e.g., lxc.hostname, stack_name)
+   */
   configNamespace: string;
   /** Template context data */
   templateContext: TemplateContext<TContext>;

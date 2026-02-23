@@ -7,17 +7,17 @@ import { TemplateContext } from "@hac/templates/template-context";
 import { TemplateProcessor } from "@hac/templates/template-processor";
 import { TemplateDirectory } from "@hac/templates/pulumi/template-directory";
 import { sharedHandlebars } from "../templates/shared-handlebars";
-import { TemplatePaths } from "../constants";
+import { STACK_CONFIG_NAMESPACE_TEMPLATE, TemplatePaths } from "../constants";
 import {
   HomelabLxcHost,
   type HomelabLxcHostContext,
 } from "../proxmox/homelab-lxc-host";
 import { PveHostConfigToml } from "../hosts/schema/pve-host-config";
 import { LxcHostConfigToml } from "../hosts/schema/lxc-host-config";
+import { DualCaseContext } from "@hac/templates/dual-case-types";
 
-export type ComposeStackContext = HomelabLxcHostContext & {
-  templateDirectory: string;
-};
+export type ComposeStackContext = HomelabLxcHostContext &
+  DualCaseContext<{ stack_name: string; template_directory: string }>;
 
 export type TemplateFileContext = {
   pve: PveHostConfigToml;
@@ -62,6 +62,7 @@ export class ComposeStack extends pulumi.ComponentResource {
 
     const contextData = args.context.get(
       "stackName",
+      "stack_name",
       "lxcConfig",
       "lxc_config",
       "pveConfig",
@@ -98,13 +99,13 @@ export class ComposeStack extends pulumi.ComponentResource {
       `${name}-template-dir`,
       {
         templateDirectory: stackDirectory,
-        configNamespace: `lxc#${contextData.lxcConfig.hostname}#${contextData.stackName}`,
+        configNamespace: STACK_CONFIG_NAMESPACE_TEMPLATE,
         templateContext: new TemplateContext<TemplateFileContext>({
           pve: contextData.pve_config,
           pve_hosts: contextData.enabled_pve_hosts,
           lxc: contextData.lxc_config,
           lxc_hosts: contextData.enabled_lxc_hosts,
-          stack_name: contextData.stackName,
+          stack_name: contextData.stack_name,
           template_path: stackDirectory,
         }),
         handlebars: sharedHandlebars,

@@ -7,6 +7,7 @@
     "./template-context": "./src/template-context.ts",
     "./variable-resolver": "./src/variable-resolver.ts",
     "./helpers": "./src/helpers/register.ts",
+    "./dual-case-types": "./src/dual-case-types.ts",
     "./handlebars": "./src/handlebars.ts",
     "./pulumi/template-processor": "./src/pulumi/pulumi-template-processor.ts",
     "./pulumi/variable-resolver": "./src/pulumi/pulumi-variable-resolver.ts",
@@ -20,7 +21,8 @@
     "lint": "eslint src/"
   },
   "dependencies": {
-    "handlebars": "^4.7.8"
+    "handlebars": "^4.7.8",
+    "type-fest": "^5.4.3"
   },
   "peerDependencies": {
     "@hanseltime/pulumi-file-utils": "^1.2.0",

@@ -1,4 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
+import * as path from "node:path";
 import { CopyableAsset } from "@hanseltime/pulumi-file-utils";
 
 import { type RenderedTemplateFile } from "../../template-processor-interface";
@@ -6,7 +7,23 @@ import { type TemplateContext } from "../../template-context";
 import { pathToResourceId } from "../path-utils";
 import { PulumiTemplateProcessor } from "../pulumi-template-processor";
 import { PulumiVariableResolver } from "../pulumi-variable-resolver";
-import { type HandlebarsInstance } from "../../handlebars-instance";
+import {
+  HandlebarsInstance,
+  type HandlebarsInstance as HandlebarsInstanceType,
+} from "../../handlebars-instance";
+
+/**
+ * Base context available when rendering the configNamespace template.
+ * These are automatically derived from the template file path.
+ */
+export interface ConfigNamespaceTemplateContext {
+  /** The filename including extensions (e.g., "app.hbs.toml") */
+  file_name: string;
+  /** The full absolute path to the file */
+  file_path: string;
+  /** The name of the parent directory */
+  dir_name: string;
+}
 
 /**
  * Arguments for creating a TemplateFile resource.
@@ -14,7 +31,14 @@ import { type HandlebarsInstance } from "../../handlebars-instance";
 export type TemplateFileArgs<TContext extends Record<string, unknown>> = {
   /** Path to the template file */
   templatePath: string;
-  /** Pulumi config namespace for variable resolution */
+  /**
+   * Pulumi config namespace for variable resolution.
+   * Can be a static string or a Handlebars template.
+   *
+   * Available variables:
+   * - file_name, file_path, dir_name (from template file path)
+   * - All fields from templateContext (e.g., lxc.hostname, stack_name)
+   */
   configNamespace: string;
   /** Template context data */
   templateContext: TemplateContext<TContext>;
@@ -23,7 +47,7 @@ export type TemplateFileArgs<TContext extends Record<string, unknown>> = {
    * Use this to share an instance between template files or to register
    * custom helpers.
    */
-  handlebars?: HandlebarsInstance;
+  handlebars?: HandlebarsInstanceType;
 };
 
 /**
@@ -70,8 +94,15 @@ export class TemplateFile<
 
     this.idSafeName = pathToResourceId(args.templatePath);
 
+    const renderedConfigNamespace = this.renderConfigNamespace(
+      args.configNamespace,
+      args.templatePath,
+      args.templateContext.get(),
+      args.handlebars,
+    );
+
     const resolver = new PulumiVariableResolver(
-      new pulumi.Config(args.configNamespace),
+      new pulumi.Config(renderedConfigNamespace),
     );
 
     this.processor = new PulumiTemplateProcessor(resolver, {
@@ -99,5 +130,33 @@ export class TemplateFile<
     );
 
     this.registerOutputs();
+  }
+
+  /**
+   * Render the configNamespace template with file context and template context merged.
+   *
+   * The template has access to:
+   * - file_name, file_path, dir_name (from the template file path)
+   * - All fields from templateContext
+   */
+  private renderConfigNamespace(
+    configNamespaceTemplate: string,
+    templatePath: string,
+    templateContextData: Record<string, unknown>,
+    handlebars?: HandlebarsInstanceType,
+  ): string {
+    const fileName = path.basename(templatePath);
+    const fileContext: ConfigNamespaceTemplateContext = {
+      file_name: fileName,
+      file_path: templatePath,
+      dir_name: path.basename(path.dirname(templatePath)),
+    };
+
+    const mergedContext = { ...fileContext, ...templateContextData };
+
+    const hbs = handlebars ?? new HandlebarsInstance();
+    const compiled = hbs.compile(configNamespaceTemplate);
+
+    return compiled(mergedContext);
   }
 }

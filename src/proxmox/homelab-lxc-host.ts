@@ -24,9 +24,7 @@ import {
   TemplatePaths,
 } from "../constants";
 
-export type HomelabLxcHostContext = HomelabPveHostContext & {
-  stackName: string;
-};
+export type HomelabLxcHostContext = HomelabPveHostContext;
 
 export type HomelabLxcHostArgs = {
   context: TemplateContext<HomelabLxcHostContext>;
@@ -310,7 +308,7 @@ export class HomelabLxcHost extends pulumi.ComponentResource {
             {
               connection,
               context: args.context.withData<ComposeStackContext>({
-                stackName,
+                stack_name: stackName,
               }),
             },
             {

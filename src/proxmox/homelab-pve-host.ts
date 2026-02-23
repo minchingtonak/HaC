@@ -6,39 +6,33 @@ import type { HelperOptions } from "@hac/templates/handlebars";
 import { TemplateContext } from "@hac/templates/template-context";
 import { pathToResourceId } from "@hac/templates/pulumi/path-utils";
 import { sharedHandlebars } from "../templates/shared-handlebars";
-import { HomelabLxcHost, HomelabLxcHostContext } from "./homelab-lxc-host";
+import { HomelabLxcHost } from "./homelab-lxc-host";
 import { HomelabPveProvider } from "./homelab-pve-provider";
 import { partitionFileParseResults } from "@hac/schema/file-result";
-import { lxcConfigParser, logFileParseErrors } from "../hosts/config-parser";
-import {
-  PveHostConfig,
-  PveHostConfigToml,
-} from "../hosts/schema/pve-host-config";
-import {
-  LxcHostConfig,
-  LxcHostConfigToml,
-} from "../hosts/schema/lxc-host-config";
-import { snakeToCamelKeys } from "@hac/schema/case-conversion";
+import { logFileParseErrors } from "../hosts/config-parser";
+import { lxcConfigParser } from "../hosts/lxc-config-parser";
+import { PveHostConfigToml } from "../hosts/schema/pve-host-config";
+import { LxcHostConfigToml } from "../hosts/schema/lxc-host-config";
 import {
   ProvisionerEngine,
   ProvisionerResource,
 } from "../hosts/provisioner-engine";
 import { TemplateFileContext } from "../docker/compose-stack";
+import { DualCaseContext } from "@hac/templates/dual-case-types";
 
 /**
- * a camelCase version of all properties is provided for ease of
- * interoperability with the Pulumi pve resource APIs
+ * Context for HomelabPveHost. Define only snake_case keys here.
+ * camelCase accessors are automatically generated via DualCaseContext
+ * for interoperability with the Pulumi PVE resource APIs.
  */
-export type HomelabPveHostContext = {
+type HomelabPveHostContextBase = {
   pve_config: PveHostConfigToml;
-  pveConfig: PveHostConfig;
   enabled_pve_hosts: PveHostConfigToml[];
-  enabledPveHosts: PveHostConfig[];
   lxc_config: LxcHostConfigToml;
-  lxcConfig: LxcHostConfig;
   enabled_lxc_hosts: LxcHostConfigToml[];
-  enabledLxcHosts: LxcHostConfig[];
 };
+
+export type HomelabPveHostContext = DualCaseContext<HomelabPveHostContextBase>;
 
 export interface HomelabPveHostArgs {
   context: TemplateContext<HomelabPveHostContext>;
@@ -153,15 +147,7 @@ export class HomelabPveHost extends pulumi.ComponentResource {
 
       logFileParseErrors(parseErrors);
 
-      const camelCasedConfigs = hostConfigs.map((config) =>
-        snakeToCamelKeys(config, {
-          ignoreFields: ["variables", "environment"],
-        }),
-      );
-      for (let i = 0; i < hostConfigs.length; ++i) {
-        const config = hostConfigs[i];
-        const camelCasedConfig = camelCasedConfigs[i];
-
+      for (const config of hostConfigs) {
         const appDataDirPath = path.join(
           pveConfig.lxc.appDataDir,
           config.hostname,
@@ -184,11 +170,9 @@ export class HomelabPveHost extends pulumi.ComponentResource {
         const container = new HomelabLxcHost(
           `${name}-${config.hostname}`,
           {
-            context: args.context.withData<HomelabLxcHostContext>({
+            context: args.context.withData({
               lxc_config: config,
               enabled_lxc_hosts: hostConfigs,
-              lxcConfig: camelCasedConfig,
-              enabledLxcHosts: camelCasedConfigs,
             }),
             provider: this.provider,
           },

@@ -1,5 +1,11 @@
 // https://www.totaltypescript.com/books/total-typescript-essentials/deriving-types#using-as-const-for-javascript-style-enums
 
+export const CONFIG_NAMESPACE_TEMPLATE =
+  "{{{parser_type}}}#{{{trimExtension file_name}}}";
+
+export const STACK_CONFIG_NAMESPACE_TEMPLATE =
+  "lxc#{{{lxc.hostname}}}#{{{stack_name}}}";
+
 export const TemplatePaths = {
   REMOTE_OUTPUT_FOLDER_ROOT: "/etc/pulumi",
   LOCAL_STACKS_FOLDER_ROOT_NAME: "stacks",
