@@ -6,7 +6,12 @@ import { z } from "zod";
 
 import { PulumiSchemaParser } from "@hac/schema/pulumi/parser";
 import { TomlFormat } from "@hac/schema/formats/toml";
-import { ParseError, ParseResult } from "@hac/schema/result";
+import {
+  FileParseError,
+  FileParseResult,
+  partitionFileParseResults,
+} from "@hac/schema/file-result";
+import { ParseResult } from "@hac/schema/result";
 import { TemplateProcessor } from "@hac/templates/template-processor";
 import { PulumiTemplateProcessor } from "@hac/templates/pulumi/template-processor";
 import { PulumiVariableResolver } from "@hac/templates/pulumi/variable-resolver";
@@ -22,42 +27,6 @@ import {
 } from "./schema/pve-host-config";
 
 type ConfigType = "pve" | "lxc";
-
-/**
- * Parse error with file context for config file parsing.
- */
-export type FileParseError = {
-  filePath: string;
-  fileName: string;
-  error: ParseError;
-};
-
-/**
- * Result type for file-based parsing operations.
- */
-export type FileParseResult<T> =
-  | { success: true; data: T }
-  | { success: false; error: FileParseError };
-
-/**
- * Partition an array of FileParseResults into successes and failures.
- */
-export function partitionFileParseResults<T>(
-  results: FileParseResult<T>[],
-): readonly [T[], FileParseError[]] {
-  const successes: T[] = [];
-  const failures: FileParseError[] = [];
-
-  for (const result of results) {
-    if (result.success) {
-      successes.push(result.data);
-    } else {
-      failures.push(result.error);
-    }
-  }
-
-  return [successes, failures] as const;
-}
 
 /**
  * Log file parse errors using Pulumi's logging system.

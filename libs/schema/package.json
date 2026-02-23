@@ -9,7 +9,8 @@
     "./case-conversion": "./src/case-conversion.ts",
     "./formats/format": "./src/formats/format.ts",
     "./formats/toml": "./src/formats/toml.ts",
-    "./pulumi/parser": "./src/pulumi/schema-parser.ts"
+    "./pulumi/parser": "./src/pulumi/schema-parser.ts",
+    "./file-result": "./src/file-result.ts"
   },
   "scripts": {
     "check": "prettier --check src/",

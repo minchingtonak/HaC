@@ -8,11 +8,8 @@ import { pathToResourceId } from "@hac/templates/pulumi/path-utils";
 import { sharedHandlebars } from "../templates/shared-handlebars";
 import { HomelabLxcHost, HomelabLxcHostContext } from "./homelab-lxc-host";
 import { HomelabPveProvider } from "./homelab-pve-provider";
-import {
-  lxcConfigParser,
-  logFileParseErrors,
-  partitionFileParseResults,
-} from "../hosts/config-parser";
+import { partitionFileParseResults } from "@hac/schema/file-result";
+import { lxcConfigParser, logFileParseErrors } from "../hosts/config-parser";
 import {
   PveHostConfig,
   PveHostConfigToml,
