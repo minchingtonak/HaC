@@ -1,6 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as fs from "node:fs";
-import * as path from "node:path";
 import * as Handlebars from "handlebars";
 
 import {
@@ -101,30 +100,6 @@ export class PulumiTemplateProcessor implements TemplateProcessorBase<
     );
 
     return { content, templatePath };
-  }
-
-  /**
-   * Build a sanitized name from a file path that is safe for use in Pulumi resource IDs.
-   *
-   * - Replaces dots and path separators with dashes
-   * - Handles dotfiles by prefixing with "dot-"
-   * - Removes any characters that aren't alphanumeric, underscore, or dash
-   *
-   * @param templatePath - The template file path
-   * @returns A sanitized name safe for Pulumi resource IDs
-   */
-  static buildSanitizedNameForId(templatePath: string): string {
-    let filename = path.basename(templatePath);
-
-    if (filename.startsWith(".")) {
-      filename = `dot-${filename.substring(1)}`;
-      templatePath = path.join(path.dirname(templatePath), filename);
-    }
-
-    return templatePath
-      .replaceAll(".", "-")
-      .replaceAll(path.sep, "-")
-      .replaceAll(/[^a-zA-Z0-9_-]/g, "");
   }
 
   /**

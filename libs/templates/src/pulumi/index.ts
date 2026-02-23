@@ -11,3 +11,5 @@ export {
   TemplateDirectory,
   type TemplateDirectoryArgs,
 } from "./resources/template-directory";
+
+export { pathToResourceId } from "./path-utils";

@@ -2,8 +2,8 @@ import * as pulumi from "@pulumi/pulumi";
 
 import { TemplateProcessor } from "../../template-processor";
 import { type TemplateContext } from "../../template-context";
+import { pathToResourceId } from "../path-utils";
 import { TemplateFile } from "./template-file";
-import { PulumiTemplateProcessor } from "../pulumi-template-processor";
 
 /**
  * Arguments for creating a TemplateDirectory resource.
@@ -64,7 +64,7 @@ export class TemplateDirectory<
 
     for (const templatePath of templateFilePaths) {
       this.templateFiles[templatePath] = new TemplateFile(
-        `${name}-${PulumiTemplateProcessor.buildSanitizedNameForId(templatePath)}`,
+        `${name}-${pathToResourceId(templatePath)}`,
         {
           templatePath,
           configNamespace: args.configNamespace,

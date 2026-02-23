@@ -3,6 +3,7 @@ import { CopyableAsset } from "@hanseltime/pulumi-file-utils";
 
 import { type RenderedTemplateFile } from "../../template-processor-interface";
 import { type TemplateContext } from "../../template-context";
+import { pathToResourceId } from "../path-utils";
 import { PulumiTemplateProcessor } from "../pulumi-template-processor";
 import { PulumiVariableResolver } from "../pulumi-variable-resolver";
 
@@ -58,9 +59,7 @@ export class TemplateFile<
   ) {
     super(TemplateFile.RESOURCE_TYPE, name, {}, opts);
 
-    this.idSafeName = PulumiTemplateProcessor.buildSanitizedNameForId(
-      args.templatePath,
-    );
+    this.idSafeName = pathToResourceId(args.templatePath);
 
     const resolver = new PulumiVariableResolver(
       new pulumi.Config(args.configNamespace),

@@ -3,7 +3,7 @@ import * as proxmox from "@muhlba91/pulumi-proxmoxve";
 import * as command from "@pulumi/command";
 import * as path from "node:path";
 import { Handlebars, TemplateContext } from "@hac/templates";
-import { PulumiTemplateProcessor } from "@hac/templates/pulumi";
+import { pathToResourceId } from "@hac/templates/pulumi";
 import { HomelabLxcHost, HomelabLxcHostContext } from "./homelab-lxc-host";
 import { HomelabPveProvider } from "./homelab-pve-provider";
 import { LxcHostConfigParser } from "../hosts/lxc-host-config-parser";
@@ -97,9 +97,7 @@ export class HomelabPveHost extends pulumi.ComponentResource {
 
     this.files = pveConfig.files?.map((file) => {
       const url = new URL(file.url);
-      const sanitizedName = PulumiTemplateProcessor.buildSanitizedNameForId(
-        `${url.host}${url.pathname}`,
-      );
+      const sanitizedName = pathToResourceId(`${url.host}${url.pathname}`);
 
       return new proxmox.download.File(
         `${name}-file-${sanitizedName}`,
