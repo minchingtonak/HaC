@@ -16,6 +16,9 @@ importers:
 
   .:
     dependencies:
+      '@hac/schema':
+        specifier: workspace:*
+        version: link:libs/schema
       '@hac/templates':
         specifier: workspace:*
         version: link:libs/templates
@@ -80,6 +83,28 @@ importers:
       typescript-eslint:
         specifier: ^8.54.0
         version: 8.54.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
+
+  libs/schema:
+    dependencies:
+      '@pulumi/pulumi':
+        specifier: ^3.0.0
+        version: 3.218.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
+      smol-toml:
+        specifier: ^1.6.0
+        version: 1.6.0
+      type-fest:
+        specifier: ^5.4.3
+        version: 5.4.3
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
+    devDependencies:
+      '@types/node':
+        specifier: ^24.10.10
+        version: 24.10.11
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
 
   libs/templates:
     dependencies:

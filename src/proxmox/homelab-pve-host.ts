@@ -17,7 +17,7 @@ import {
   LxcHostConfig,
   LxcHostConfigToml,
 } from "../hosts/schema/lxc-host-config";
-import { snakeToCamelKeys } from "../utils/schema-utils";
+import { snakeToCamelKeys } from "@hac/schema/case-conversion";
 import {
   ProvisionerEngine,
   ProvisionerResource,
@@ -139,7 +139,7 @@ export class HomelabPveHost extends pulumi.ComponentResource {
       (hostname) => pveConfig.lxc.hosts[hostname].enabled,
     );
 
-    const enabledLxcConfigs = enabledHostnames.map((hostname) => {
+    const enabledLxcResults = enabledHostnames.map((hostname) => {
       const hostConfigPath = HomelabPveHost.LXC_HOST_CONFIG_PATH_FOR(hostname);
       return LxcHostConfigParser.parseHostConfigFile(hostConfigPath, {
         pve: pve_config,
@@ -147,9 +147,22 @@ export class HomelabPveHost extends pulumi.ComponentResource {
       });
     });
 
-    pulumi.all(enabledLxcConfigs).apply((hostConfigs) => {
+    pulumi.all(enabledLxcResults).apply((results) => {
+      const hostConfigs: LxcHostConfigToml[] = [];
+      for (const result of results) {
+        if (result.success) {
+          hostConfigs.push(result.data);
+        } else {
+          pulumi.log.warn(
+            `Failed to parse LXC config: ${result.error.message}`,
+          );
+        }
+      }
+
       const camelCasedConfigs = hostConfigs.map((config) =>
-        snakeToCamelKeys(config, ["variables", "environment"]),
+        snakeToCamelKeys(config, {
+          ignoreFields: ["variables", "environment"],
+        }),
       );
       for (let i = 0; i < hostConfigs.length; ++i) {
         const config = hostConfigs[i];

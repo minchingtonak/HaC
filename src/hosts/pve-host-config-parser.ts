@@ -1,4 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
+
+import { ParseResult } from "@hac/schema/result";
+
 import {
   PveHostConfigSchema,
   PveHostConfigToml,
@@ -7,16 +10,12 @@ import { HostConfigParser, ParserConfig } from "./host-config-parser";
 
 export class PveHostConfigParser extends HostConfigParser<PveHostConfigToml> {
   protected getConfig(): ParserConfig<PveHostConfigToml> {
-    return {
-      type: "pve",
-      configSchema: PveHostConfigSchema,
-      errorPrefix: "PVE host",
-    };
+    return { type: "pve", configSchema: PveHostConfigSchema };
   }
 
   static loadAllPveHostConfigs(
     pveHostsDir: string,
-  ): (PveHostConfigToml | pulumi.Output<PveHostConfigToml>)[] {
+  ): pulumi.Output<ParseResult<PveHostConfigToml>>[] {
     const parser = new PveHostConfigParser();
     return parser.loadAllConfigs(pveHostsDir);
   }
@@ -24,14 +23,14 @@ export class PveHostConfigParser extends HostConfigParser<PveHostConfigToml> {
   static parsePveHostConfigFile(
     filePath: string,
     extraData?: object,
-  ): PveHostConfigToml | pulumi.Output<PveHostConfigToml> {
+  ): pulumi.Output<ParseResult<PveHostConfigToml>> {
     const parser = new PveHostConfigParser();
     return parser.parseConfigFile(filePath, extraData);
   }
 
   static parsePveHostConfigString(
     tomlContent: pulumi.Output<string>,
-  ): pulumi.Output<PveHostConfigToml> {
+  ): pulumi.Output<ParseResult<PveHostConfigToml>> {
     const parser = new PveHostConfigParser();
     return parser.parseConfigString(tomlContent);
   }

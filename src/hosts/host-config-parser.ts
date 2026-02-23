@@ -1,55 +1,60 @@
 import * as pulumi from "@pulumi/pulumi";
-import TOML from "smol-toml";
-import { z } from "zod";
 import * as path from "node:path";
+
+import { z } from "zod";
+
+import { PulumiSchemaParser } from "@hac/schema/pulumi/parser";
+import { TomlFormat } from "@hac/schema/formats/toml";
+import { ParseResult } from "@hac/schema/result";
 import { TemplateProcessor } from "@hac/templates/template-processor";
 import { PulumiTemplateProcessor } from "@hac/templates/pulumi/template-processor";
 import { PulumiVariableResolver } from "@hac/templates/pulumi/variable-resolver";
+
 import { sharedHandlebars } from "../templates/shared-handlebars";
 
 export interface ParserConfig<TConfig> {
   type: "pve" | "lxc";
   configSchema: z.ZodSchema<TConfig>;
-  errorPrefix: string;
 }
 
 export abstract class HostConfigParser<TConfig> {
   protected abstract getConfig(): ParserConfig<TConfig>;
 
   /**
-   * Load all host configurations from a directory
+   * Get or create a PulumiSchemaParser for this config type.
+   * Subclasses can override to provide a cached instance.
+   */
+  protected getParser(): PulumiSchemaParser<z.ZodSchema<TConfig>> {
+    const config = this.getConfig();
+    return new PulumiSchemaParser(config.configSchema);
+  }
+
+  /**
+   * Load all host configurations from a directory.
+   * Returns an array of ParseResult wrapped in Pulumi Outputs.
    */
   public loadAllConfigs(
     hostsDir: string,
     extraData?: object,
-  ): (TConfig | pulumi.Output<TConfig>)[] {
-    const configs: (TConfig | pulumi.Output<TConfig>)[] = [];
+  ): pulumi.Output<ParseResult<TConfig>>[] {
+    const results: pulumi.Output<ParseResult<TConfig>>[] = [];
     const configFiles = TemplateProcessor.discoverTemplateFiles(hostsDir);
 
     for (const configPath of configFiles) {
-      try {
-        const config = this.parseConfigFile(configPath, extraData);
-        configs.push(config);
-      } catch (error) {
-        console.warn(
-          `Warning: Failed to load ${
-            this.getConfig().errorPrefix
-          } config from ${configPath}:`,
-          error,
-        );
-      }
+      const result = this.parseConfigFile(configPath, extraData);
+      results.push(result);
     }
 
-    return configs;
+    return results;
   }
 
   /**
-   * Parse a host configuration file
+   * Parse a host configuration file.
    */
   public parseConfigFile(
     filePath: string,
     extraData?: object,
-  ): TConfig | pulumi.Output<TConfig> {
+  ): pulumi.Output<ParseResult<TConfig>> {
     const fileName = path.basename(filePath);
     const identifier = `${this.getConfig().type}#${fileName.substring(0, fileName.indexOf("."))}`;
     const resolver = new PulumiVariableResolver(new pulumi.Config(identifier));
@@ -62,42 +67,11 @@ export abstract class HostConfigParser<TConfig> {
   }
 
   /**
-   * Parse host configuration from TOML string
+   * Parse host configuration from TOML string.
    */
   public parseConfigString(
     tomlContent: pulumi.Output<string>,
-  ): pulumi.Output<TConfig> {
-    const config = this.getConfig();
-
-    function parseAndValidate(tomlContent: string): TConfig {
-      const parsed = TOML.parse(tomlContent);
-      return HostConfigParser.validateConfig(parsed, config);
-    }
-
-    return tomlContent.apply(parseAndValidate);
-  }
-
-  /**
-   * Validate parsed configuration against schema
-   */
-  private static validateConfig<TConfig>(
-    config: unknown,
-    parserConfig: ParserConfig<TConfig>,
-  ): TConfig {
-    try {
-      return parserConfig.configSchema.parse(config);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const errorMessages = error.issues
-          .map((err: z.core.$ZodIssue) => {
-            return JSON.stringify(err); // FIXME this may crash when err.path contains symbol values
-          })
-          .join("\n;\n");
-        throw new Error(
-          `Invalid ${parserConfig.errorPrefix} TOML structure: ${errorMessages}`,
-        );
-      }
-      throw error;
-    }
+  ): pulumi.Output<ParseResult<TConfig>> {
+    return this.getParser().parse(tomlContent, TomlFormat);
   }
 }

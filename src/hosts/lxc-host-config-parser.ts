@@ -1,4 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
+
+import { ParseResult } from "@hac/schema/result";
+
 import {
   LxcHostConfigSchema,
   LxcHostConfigToml,
@@ -7,16 +10,12 @@ import { HostConfigParser, ParserConfig } from "./host-config-parser";
 
 export class LxcHostConfigParser extends HostConfigParser<LxcHostConfigToml> {
   protected getConfig(): ParserConfig<LxcHostConfigToml> {
-    return {
-      type: "lxc",
-      configSchema: LxcHostConfigSchema,
-      errorPrefix: "LXC host",
-    };
+    return { type: "lxc", configSchema: LxcHostConfigSchema };
   }
 
   static loadAllHostConfigs(
     hostsDir: string,
-  ): (LxcHostConfigToml | pulumi.Output<LxcHostConfigToml>)[] {
+  ): pulumi.Output<ParseResult<LxcHostConfigToml>>[] {
     const parser = new LxcHostConfigParser();
     return parser.loadAllConfigs(hostsDir);
   }
@@ -24,14 +23,14 @@ export class LxcHostConfigParser extends HostConfigParser<LxcHostConfigToml> {
   static parseHostConfigFile(
     filePath: string,
     extraData?: object,
-  ): LxcHostConfigToml | pulumi.Output<LxcHostConfigToml> {
+  ): pulumi.Output<ParseResult<LxcHostConfigToml>> {
     const parser = new LxcHostConfigParser();
     return parser.parseConfigFile(filePath, extraData);
   }
 
   static parseHostConfigString(
     tomlContent: pulumi.Output<string>,
-  ): pulumi.Output<LxcHostConfigToml> {
+  ): pulumi.Output<ParseResult<LxcHostConfigToml>> {
     const parser = new LxcHostConfigParser();
     return parser.parseConfigString(tomlContent);
   }
