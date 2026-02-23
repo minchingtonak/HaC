@@ -1,10 +1,10 @@
 import * as pulumi from "@pulumi/pulumi";
 import { CopyableAsset } from "@hanseltime/pulumi-file-utils";
 
-import { type RenderedTemplateFile } from "../template-processor-interface";
-import { type TemplateContext } from "../template-context";
-import { PulumiTemplateProcessor } from "./pulumi-template-processor";
-import { PulumiVariableResolver } from "./pulumi-variable-resolver";
+import { type RenderedTemplateFile } from "../../template-processor-interface";
+import { type TemplateContext } from "../../template-context";
+import { PulumiTemplateProcessor } from "../pulumi-template-processor";
+import { PulumiVariableResolver } from "../pulumi-variable-resolver";
 
 /**
  * Arguments for creating a HandlebarsTemplateFile resource.
@@ -47,13 +47,10 @@ export class HandlebarsTemplateFile<
 {
   public static RESOURCE_TYPE = "HaC:templates:HandlebarsTemplateFile";
 
-  /** A sanitized name safe for use in Pulumi resource IDs */
   idSafeName: string;
 
-  /** The processed template result */
   processedTemplate: RenderedTemplateFile<pulumi.Output<string>>;
 
-  /** A CopyableAsset for deploying the rendered template */
   asset: CopyableAsset;
 
   constructor(
