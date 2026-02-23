@@ -1,12 +1,12 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
-import * as Handlebars from "handlebars";
 
 import {
   type TemplateProcessorBase,
   type RenderedTemplateFile,
 } from "./template-processor-interface";
 import { type VariableResolver } from "./variable-resolver";
+import { HandlebarsInstance } from "./handlebars-instance";
 
 // Re-export for backwards compatibility
 export type { RenderedTemplateFile, TemplateProcessorBase };
@@ -21,6 +21,13 @@ export interface TemplateProcessorOptions {
    * @default 10
    */
   maxDepth?: number;
+
+  /**
+   * Custom Handlebars instance. If not provided, a new one is created.
+   * Use this to share an instance between processors or to pre-register
+   * custom helpers before processing.
+   */
+  handlebars?: HandlebarsInstance;
 }
 
 /**
@@ -34,6 +41,9 @@ export interface TemplateProcessorOptions {
  *
  * The variable resolution is pluggable via the `VariableResolver` interface,
  * allowing different backends (plain objects, Pulumi Config, environment variables, etc.)
+ *
+ * Each processor uses an isolated Handlebars instance with builtin helpers
+ * pre-registered. Custom helpers can be registered via the `instance` property.
  *
  * @example
  * ```typescript
@@ -58,7 +68,8 @@ export class TemplateProcessor<T = string> implements TemplateProcessorBase<T> {
     /\.(hbs|handlebars)/g;
 
   private resolver: VariableResolver<T>;
-  private options: Required<TemplateProcessorOptions>;
+  private options: Required<Pick<TemplateProcessorOptions, "maxDepth">>;
+  public readonly handlebars: HandlebarsInstance;
 
   constructor(
     resolver: VariableResolver<T>,
@@ -66,6 +77,7 @@ export class TemplateProcessor<T = string> implements TemplateProcessorBase<T> {
   ) {
     this.resolver = resolver;
     this.options = { maxDepth: options?.maxDepth ?? 10 };
+    this.handlebars = options?.handlebars ?? new HandlebarsInstance();
   }
 
   /**
@@ -133,7 +145,7 @@ export class TemplateProcessor<T = string> implements TemplateProcessorBase<T> {
    * @returns The rendered template string
    */
   renderTemplateString(templateContent: string, dataVariables?: object): T {
-    const variables = TemplateProcessor.discoverVariables(templateContent);
+    const variables = this.handlebars.discoverVariables(templateContent);
 
     if (variables.length === 0) {
       return templateContent as T;
@@ -160,7 +172,7 @@ export class TemplateProcessor<T = string> implements TemplateProcessorBase<T> {
   ): RenderedTemplateFile<T> {
     const templateContent = fs.readFileSync(templatePath, "utf-8");
 
-    const variables = TemplateProcessor.discoverVariables(templateContent);
+    const variables = this.handlebars.discoverVariables(templateContent);
 
     if (variables.length === 0) {
       return { content: templateContent as T, templatePath };
@@ -189,7 +201,7 @@ export class TemplateProcessor<T = string> implements TemplateProcessorBase<T> {
     templateContent: string,
     dataVariables?: object,
   ): T {
-    const template = Handlebars.compile<Record<string, string>>(
+    const template = this.handlebars.compile<Record<string, string>>(
       templateContent,
       {},
     );
@@ -232,9 +244,7 @@ export class TemplateProcessor<T = string> implements TemplateProcessorBase<T> {
           allResolved.set(varName, resolved.value);
 
           // Parse the resolved value to find nested variables
-          const nestedVars = TemplateProcessor.discoverVariables(
-            resolved.value,
-          );
+          const nestedVars = this.handlebars.discoverVariables(resolved.value);
           for (const nested of nestedVars) {
             if (!allResolved.has(nested)) {
               newlyDiscovered.push(nested);
@@ -277,7 +287,8 @@ export class TemplateProcessor<T = string> implements TemplateProcessorBase<T> {
       let changed = false;
 
       for (const [varName, varValue] of Object.entries(variables)) {
-        const template = Handlebars.compile<Record<string, string>>(varValue);
+        const template =
+          this.handlebars.compile<Record<string, string>>(varValue);
         const newValue = template(result, {
           data: { resolvedVariables: result },
         });
@@ -292,147 +303,6 @@ export class TemplateProcessor<T = string> implements TemplateProcessorBase<T> {
     }
 
     return result;
-  }
-
-  /**
-   * Discover all variable names referenced in a template string.
-   *
-   * Uses Handlebars AST parsing to find all variable references,
-   * including those inside block statements and helpers.
-   *
-   * @param templateContent - The template string to parse
-   * @returns Array of unique variable names found
-   */
-  static discoverVariables(templateContent: string): string[] {
-    const ast = Handlebars.parse(templateContent);
-    const variables = new Set<string>();
-
-    type ASTNode =
-      | hbs.AST.MustacheStatement
-      | hbs.AST.BlockStatement
-      | hbs.AST.PartialStatement
-      | hbs.AST.PartialBlockStatement
-      | hbs.AST.ContentStatement
-      | hbs.AST.CommentStatement
-      | hbs.AST.SubExpression
-      | hbs.AST.PathExpression
-      | hbs.AST.StringLiteral
-      | hbs.AST.BooleanLiteral
-      | hbs.AST.NumberLiteral
-      | hbs.AST.UndefinedLiteral
-      | hbs.AST.NullLiteral
-      | hbs.AST.Hash
-      | hbs.AST.HashPair;
-
-    function walkAST(node: ASTNode): void;
-    function walkAST(node: hbs.AST.Expression | hbs.AST.Expression[]): void;
-    function walkAST(node: hbs.AST.Statement | hbs.AST.Statement[]): void {
-      if (Array.isArray(node)) {
-        for (const element of node) {
-          walkAST(element);
-        }
-        return;
-      }
-
-      if (!node) return;
-
-      const astNode = node as ASTNode;
-
-      switch (astNode.type) {
-        case "PathExpression": {
-          variables.add(astNode.original);
-          break;
-        }
-
-        case "MustacheStatement": {
-          walkAST(astNode.path);
-          if (astNode.params.length > 0) {
-            walkAST(astNode.params);
-          }
-          if (astNode.hash) {
-            walkAST(astNode.hash);
-          }
-          break;
-        }
-
-        case "BlockStatement": {
-          walkAST(astNode.path);
-          if (astNode.params.length > 0) {
-            walkAST(astNode.params);
-          }
-          if (astNode.hash) {
-            walkAST(astNode.hash);
-          }
-          if (astNode.program) {
-            walkAST(astNode.program.body);
-          }
-          if (astNode.inverse) {
-            walkAST(astNode.inverse.body);
-          }
-          break;
-        }
-
-        case "SubExpression": {
-          walkAST(astNode.path);
-          if (astNode.params.length > 0) {
-            walkAST(astNode.params);
-          }
-          if (astNode.hash) {
-            walkAST(astNode.hash);
-          }
-          break;
-        }
-
-        case "PartialStatement": {
-          walkAST(astNode.name);
-          if (astNode.params.length > 0) {
-            walkAST(astNode.params);
-          }
-          if (astNode.hash) {
-            walkAST(astNode.hash);
-          }
-          break;
-        }
-
-        case "PartialBlockStatement": {
-          walkAST(astNode.name);
-          if (astNode.params.length > 0) {
-            walkAST(astNode.params);
-          }
-          if (astNode.hash) {
-            walkAST(astNode.hash);
-          }
-          if (astNode.program) {
-            walkAST(astNode.program.body);
-          }
-          break;
-        }
-
-        case "Hash": {
-          walkAST(astNode.pairs);
-          break;
-        }
-
-        case "HashPair": {
-          walkAST(astNode.value);
-          break;
-        }
-
-        // Terminal nodes - no action needed
-        case "ContentStatement":
-        case "CommentStatement":
-        case "StringLiteral":
-        case "BooleanLiteral":
-        case "NumberLiteral":
-        case "UndefinedLiteral":
-        case "NullLiteral":
-          break;
-      }
-    }
-
-    walkAST(ast.body);
-
-    return Array.from(variables);
   }
 
   /**

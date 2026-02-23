@@ -1,9 +1,12 @@
-import * as Handlebars from "handlebars";
+import type * as Handlebars from "handlebars";
+
+import type { HandlebarsInstance } from "../handlebars-instance";
 
 /**
- * Helper that registers a Handlebars partial from block content.
+ * Factory that creates the partial helper bound to a specific Handlebars instance.
  *
- * This allows defining reusable template fragments inline.
+ * The partial helper registers a Handlebars partial from block content,
+ * allowing reusable template fragments to be defined inline.
  *
  * @example
  * ```handlebars
@@ -15,20 +18,24 @@ import * as Handlebars from "handlebars";
  * {{> header}}
  * ```
  */
-export function partialHelper(
-  name: string,
-  options: Handlebars.HelperOptions,
-): string {
-  if (typeof name !== "string") {
-    throw new Error(
-      "partial helper requires a string name as the first argument",
-    );
-  }
+export function createPartialHelper(
+  instance: HandlebarsInstance,
+): Handlebars.HelperDelegate {
+  return function partialHelper(
+    name: string,
+    options: Handlebars.HelperOptions,
+  ): string {
+    if (typeof name !== "string") {
+      throw new Error(
+        "partial helper requires a string name as the first argument",
+      );
+    }
 
-  if (options.fn) {
-    Handlebars.registerPartial(name, options.fn);
-  }
+    if (options.fn) {
+      instance.registerPartial(name, options.fn);
+    }
 
-  // Return empty string since this helper is used for registration, not output
-  return "";
+    // Return empty string since this helper is used for registration, not output
+    return "";
+  };
 }

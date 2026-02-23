@@ -5,6 +5,7 @@ import * as path from "node:path";
 import { TemplateProcessor } from "@hac/templates/template-processor";
 import { PulumiTemplateProcessor } from "@hac/templates/pulumi/template-processor";
 import { PulumiVariableResolver } from "@hac/templates/pulumi/variable-resolver";
+import { sharedHandlebars } from "../templates/shared-handlebars";
 
 export interface ParserConfig<TConfig> {
   type: "pve" | "lxc";
@@ -52,7 +53,9 @@ export abstract class HostConfigParser<TConfig> {
     const fileName = path.basename(filePath);
     const identifier = `${this.getConfig().type}#${fileName.substring(0, fileName.indexOf("."))}`;
     const resolver = new PulumiVariableResolver(new pulumi.Config(identifier));
-    const processor = new PulumiTemplateProcessor(resolver);
+    const processor = new PulumiTemplateProcessor(resolver, {
+      handlebars: sharedHandlebars,
+    });
     const renderedTemplate = processor.processTemplateFile(filePath, extraData);
 
     return this.parseConfigString(renderedTemplate.content);

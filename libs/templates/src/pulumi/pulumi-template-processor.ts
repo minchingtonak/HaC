@@ -1,17 +1,14 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as fs from "node:fs";
-import * as Handlebars from "handlebars";
 
 import {
   type TemplateProcessorBase,
   type RenderedTemplateFile,
 } from "../template-processor-interface";
-import {
-  TemplateProcessor,
-  type TemplateProcessorOptions,
-} from "../template-processor";
+import { type TemplateProcessorOptions } from "../template-processor";
 import { type VariableResolver } from "../variable-resolver";
 import { PulumiVariableResolver } from "./pulumi-variable-resolver";
+import { HandlebarsInstance } from "../handlebars-instance";
 
 /**
  * Options for Pulumi template processing.
@@ -27,6 +24,9 @@ export type PulumiTemplateProcessorOptions = TemplateProcessorOptions;
  *
  * The recursive variable resolution is handled through `Output.apply()`
  * chains to properly track dependencies.
+ *
+ * Each processor uses an isolated Handlebars instance with builtin helpers
+ * pre-registered. Custom helpers can be registered via the `instance` property.
  *
  * @example
  * ```typescript
@@ -45,6 +45,7 @@ export class PulumiTemplateProcessor implements TemplateProcessorBase<
 > {
   private resolver: VariableResolver<string | pulumi.Output<string>>;
   private maxDepth: number;
+  public readonly handlebars: HandlebarsInstance;
 
   constructor(
     resolver: VariableResolver<string | pulumi.Output<string>>,
@@ -52,6 +53,7 @@ export class PulumiTemplateProcessor implements TemplateProcessorBase<
   ) {
     this.resolver = resolver;
     this.maxDepth = options?.maxDepth ?? 10;
+    this.handlebars = options?.handlebars ?? new HandlebarsInstance();
   }
 
   /**
@@ -83,7 +85,7 @@ export class PulumiTemplateProcessor implements TemplateProcessorBase<
   ): RenderedTemplateFile<pulumi.Output<string>> {
     const templateContent = fs.readFileSync(templatePath, "utf-8");
 
-    const variables = TemplateProcessor.discoverVariables(templateContent);
+    const variables = this.handlebars.discoverVariables(templateContent);
 
     if (variables.length === 0) {
       return { content: pulumi.output(templateContent), templatePath };
@@ -114,7 +116,7 @@ export class PulumiTemplateProcessor implements TemplateProcessorBase<
     templateContent: string,
     dataVariables?: object,
   ): pulumi.Output<string> {
-    const variables = TemplateProcessor.discoverVariables(templateContent);
+    const variables = this.handlebars.discoverVariables(templateContent);
 
     if (variables.length === 0) {
       return pulumi.output(templateContent);
@@ -140,7 +142,7 @@ export class PulumiTemplateProcessor implements TemplateProcessorBase<
     templateContent: string,
     dataVariables?: object,
   ): pulumi.Output<string> {
-    const template = Handlebars.compile<Record<string, string>>(
+    const template = this.handlebars.compile<Record<string, string>>(
       templateContent,
       {},
     );
@@ -172,7 +174,7 @@ export class PulumiTemplateProcessor implements TemplateProcessorBase<
     const processRecursiveVariables = (
       varValues: string[],
     ): pulumi.Output<Record<string, string | pulumi.Output<string>>> => {
-      const discoveredVars = TemplateProcessor.discoverVariables(
+      const discoveredVars = this.handlebars.discoverVariables(
         varValues.join("\n"),
       );
 
@@ -221,7 +223,8 @@ export class PulumiTemplateProcessor implements TemplateProcessorBase<
       // in the final template render
       for (let i = 0; i < maxVariableDepth - 1; ++i) {
         for (const [varName, varValue] of Object.entries(merged)) {
-          const template = Handlebars.compile<Record<string, string>>(varValue);
+          const template =
+            this.handlebars.compile<Record<string, string>>(varValue);
 
           const newVariableValue = template(result, {
             data: { ...dataVariables, resolvedVariables: result },

@@ -2,8 +2,9 @@ import * as pulumi from "@pulumi/pulumi";
 import * as command from "@pulumi/command";
 import * as proxmox from "@muhlba91/pulumi-proxmoxve";
 import * as porkbun from "@pulumi/porkbun";
-import { Handlebars } from "@hac/templates/handlebars";
+import type { HelperOptions } from "@hac/templates/handlebars";
 import { TemplateContext } from "@hac/templates/template-context";
+import { sharedHandlebars } from "../templates/shared-handlebars";
 import { HomelabPveProvider } from "./homelab-pve-provider";
 import {
   ComposeStack,
@@ -330,54 +331,49 @@ export class HomelabLxcHost extends pulumi.ComponentResource {
 
 export type IdForContainerOptions = { hostname?: string; node?: string };
 
-Handlebars.registerHelper(
-  "idForContainer",
-  (options: Handlebars.HelperOptions) => {
-    const context = options.data as TemplateFileContext;
+sharedHandlebars.registerHelper("idForContainer", (options: HelperOptions) => {
+  const context = options.data as TemplateFileContext;
 
-    const { hostname: hostnameArgument, node } =
-      options.hash as IdForContainerOptions;
-    const hostname = hostnameArgument ?? context?.lxc?.hostname;
+  const { hostname: hostnameArgument, node } =
+    options.hash as IdForContainerOptions;
+  const hostname = hostnameArgument ?? context?.lxc?.hostname;
 
-    if (!hostname) {
-      throw new Error(
-        "You must provide hostname when calling in a non-lxc context (hostname='example')",
-      );
-    }
-
-    if (node) {
-      // @ts-expect-error deliberately setting context property
-      context.pve.node = node;
-    }
-
-    // look up the hostname in the pve host's list of lxcs
-    const pve = context.pve_hosts.find(
-      (host) => host.node === context.pve.node,
+  if (!hostname) {
+    throw new Error(
+      "You must provide hostname when calling in a non-lxc context (hostname='example')",
     );
-    const lxc = pve?.lxc.hosts[hostname];
+  }
 
-    if (!lxc) {
-      throw new Error(
-        `Cannot find lxc '${hostname}' on node '${context.pve.node}'`,
-      );
-    }
+  if (node) {
+    // @ts-expect-error deliberately setting context property
+    context.pve.node = node;
+  }
 
-    return String(lxc?.id);
-  },
-);
+  // look up the hostname in the pve host's list of lxcs
+  const pve = context.pve_hosts.find((host) => host.node === context.pve.node);
+  const lxc = pve?.lxc.hosts[hostname];
 
-Handlebars.registerHelper(
+  if (!lxc) {
+    throw new Error(
+      `Cannot find lxc '${hostname}' on node '${context.pve.node}'`,
+    );
+  }
+
+  return String(lxc?.id);
+});
+
+sharedHandlebars.registerHelper(
   "domainForContainer",
-  (options: Handlebars.HelperOptions) => {
+  (options: HelperOptions) => {
     const context = options.data as TemplateFileContext;
 
     return HomelabLxcHost.CONTAINER_BASE_DOMAIN(context);
   },
 );
 
-Handlebars.registerHelper(
+sharedHandlebars.registerHelper(
   "ipForContainer",
-  (hostnameOrLxcId: string, options: Handlebars.HelperOptions) => {
+  (hostnameOrLxcId: string, options: HelperOptions) => {
     const context = structuredClone(options.data) as TemplateFileContext;
 
     let lastOctet = hostnameOrLxcId;

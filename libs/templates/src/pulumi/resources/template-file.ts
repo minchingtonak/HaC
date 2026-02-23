@@ -6,6 +6,7 @@ import { type TemplateContext } from "../../template-context";
 import { pathToResourceId } from "../path-utils";
 import { PulumiTemplateProcessor } from "../pulumi-template-processor";
 import { PulumiVariableResolver } from "../pulumi-variable-resolver";
+import { type HandlebarsInstance } from "../../handlebars-instance";
 
 /**
  * Arguments for creating a TemplateFile resource.
@@ -17,6 +18,12 @@ export type TemplateFileArgs<TContext extends Record<string, unknown>> = {
   configNamespace: string;
   /** Template context data */
   templateContext: TemplateContext<TContext>;
+  /**
+   * Custom Handlebars instance. If not provided, a new one is created.
+   * Use this to share an instance between template files or to register
+   * custom helpers.
+   */
+  handlebars?: HandlebarsInstance;
 };
 
 /**
@@ -52,6 +59,8 @@ export class TemplateFile<
 
   asset: CopyableAsset;
 
+  processor: PulumiTemplateProcessor;
+
   constructor(
     name: string,
     args: TemplateFileArgs<TContext>,
@@ -64,9 +73,12 @@ export class TemplateFile<
     const resolver = new PulumiVariableResolver(
       new pulumi.Config(args.configNamespace),
     );
-    const processor = new PulumiTemplateProcessor(resolver);
 
-    this.processedTemplate = processor.processTemplateFile(
+    this.processor = new PulumiTemplateProcessor(resolver, {
+      handlebars: args.handlebars,
+    });
+
+    this.processedTemplate = this.processor.processTemplateFile(
       args.templatePath,
       args.templateContext.get(),
     );

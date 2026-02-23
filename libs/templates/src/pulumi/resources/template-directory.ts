@@ -4,6 +4,7 @@ import { TemplateProcessor } from "../../template-processor";
 import { type TemplateContext } from "../../template-context";
 import { pathToResourceId } from "../path-utils";
 import { TemplateFile } from "./template-file";
+import { type HandlebarsInstance } from "../../handlebars-instance";
 
 /**
  * Arguments for creating a TemplateDirectory resource.
@@ -17,6 +18,13 @@ export type TemplateDirectoryArgs<TContext extends Record<string, unknown>> = {
   templateContext: TemplateContext<TContext>;
   /** Whether to recursively search subdirectories (default: true) */
   recurse?: boolean;
+  /**
+   * Custom Handlebars instance. If not provided, a new one is created.
+   * This instance is shared across all template files in the directory,
+   * allowing custom helpers registered on the instance to be used in
+   * all templates.
+   */
+  handlebars?: HandlebarsInstance;
 };
 
 /**
@@ -47,7 +55,6 @@ export class TemplateDirectory<
 {
   public static RESOURCE_TYPE = "HaC:templates:HandlebarsTemplateDirectory";
 
-  /** Map of template path to processed TemplateFile */
   templateFiles: { [templatePath: string]: TemplateFile<TContext> } = {};
 
   constructor(
@@ -69,6 +76,7 @@ export class TemplateDirectory<
           templatePath,
           configNamespace: args.configNamespace,
           templateContext: args.templateContext,
+          handlebars: args.handlebars,
         },
         { parent: this },
       );

@@ -2,9 +2,10 @@ import * as pulumi from "@pulumi/pulumi";
 import * as proxmox from "@muhlba91/pulumi-proxmoxve";
 import * as command from "@pulumi/command";
 import * as path from "node:path";
-import { Handlebars } from "@hac/templates/handlebars";
+import type { HelperOptions } from "@hac/templates/handlebars";
 import { TemplateContext } from "@hac/templates/template-context";
 import { pathToResourceId } from "@hac/templates/pulumi/path-utils";
+import { sharedHandlebars } from "../templates/shared-handlebars";
 import { HomelabLxcHost, HomelabLxcHostContext } from "./homelab-lxc-host";
 import { HomelabPveProvider } from "./homelab-pve-provider";
 import { LxcHostConfigParser } from "../hosts/lxc-host-config-parser";
@@ -195,9 +196,9 @@ export class HomelabPveHost extends pulumi.ComponentResource {
   }
 }
 
-Handlebars.registerHelper(
+sharedHandlebars.registerHelper(
   "domainForPveHost",
-  (options: Handlebars.HelperOptions) => {
+  (options: HelperOptions) => {
     const context = options.data as TemplateFileContext;
 
     return HomelabPveHost.PVE_HOST_BASE_DOMAIN(

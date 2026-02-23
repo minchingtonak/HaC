@@ -2,10 +2,11 @@ import * as pulumi from "@pulumi/pulumi";
 import * as command from "@pulumi/command";
 import * as path from "node:path";
 import * as crypto from "node:crypto";
-import { Handlebars } from "@hac/templates/handlebars";
+import type { HelperOptions } from "@hac/templates/handlebars";
 import { TemplateContext } from "@hac/templates/template-context";
 import { TemplateProcessor } from "@hac/templates/template-processor";
 import { TemplateDirectory } from "@hac/templates/pulumi/template-directory";
+import { sharedHandlebars } from "../templates/shared-handlebars";
 import { TemplatePaths } from "../constants";
 import {
   HomelabLxcHost,
@@ -106,6 +107,7 @@ export class ComposeStack extends pulumi.ComponentResource {
           stack_name: contextData.stackName,
           template_path: stackDirectory,
         }),
+        handlebars: sharedHandlebars,
       },
       { parent: this },
     );
@@ -253,9 +255,9 @@ export class ComposeStack extends pulumi.ComponentResource {
 // use with: {{{domainForApp "appName" hostname=other-lxc-hostname,node=other-pve-node}}}
 export type DomainForAppOptions = { hostname?: string; node?: string };
 
-Handlebars.registerHelper(
+sharedHandlebars.registerHelper(
   "domainForApp",
-  (appName: string, options: Handlebars.HelperOptions) => {
+  (appName: string, options: HelperOptions) => {
     const context = structuredClone(options.data) as TemplateFileContext;
 
     const { hostname, node } = options.hash as DomainForAppOptions;
