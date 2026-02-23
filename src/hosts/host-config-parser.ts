@@ -2,11 +2,9 @@ import * as pulumi from "@pulumi/pulumi";
 import TOML from "smol-toml";
 import { z } from "zod";
 import * as path from "node:path";
-import { TemplateProcessor } from "@hac/templates";
-import {
-  PulumiTemplateProcessor,
-  PulumiVariableResolver,
-} from "@hac/templates/pulumi";
+import { TemplateProcessor } from "@hac/templates/template-processor";
+import { PulumiTemplateProcessor } from "@hac/templates/pulumi/template-processor";
+import { PulumiVariableResolver } from "@hac/templates/pulumi/variable-resolver";
 
 export interface ParserConfig<TConfig> {
   type: "pve" | "lxc";

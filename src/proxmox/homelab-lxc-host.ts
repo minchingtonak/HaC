@@ -2,7 +2,8 @@ import * as pulumi from "@pulumi/pulumi";
 import * as command from "@pulumi/command";
 import * as proxmox from "@muhlba91/pulumi-proxmoxve";
 import * as porkbun from "@pulumi/porkbun";
-import { Handlebars, TemplateContext } from "@hac/templates";
+import { Handlebars } from "@hac/templates/handlebars";
+import { TemplateContext } from "@hac/templates/template-context";
 import { HomelabPveProvider } from "./homelab-pve-provider";
 import {
   ComposeStack,

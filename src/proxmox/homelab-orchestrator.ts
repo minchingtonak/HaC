@@ -1,7 +1,7 @@
 import * as pulumi from "@pulumi/pulumi";
 import { HomelabPveHost, HomelabPveHostContext } from "./homelab-pve-host";
 import { PveHostConfigParser } from "../hosts/pve-host-config-parser";
-import { TemplateContext } from "@hac/templates";
+import { TemplateContext } from "@hac/templates/template-context";
 import { snakeToCamelKeys } from "../utils/schema-utils";
 
 export function deployHomelab() {

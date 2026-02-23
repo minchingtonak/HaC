@@ -2,8 +2,10 @@ import * as pulumi from "@pulumi/pulumi";
 import * as command from "@pulumi/command";
 import * as path from "node:path";
 import * as crypto from "node:crypto";
-import { Handlebars, TemplateContext, TemplateProcessor } from "@hac/templates";
-import { TemplateDirectory } from "@hac/templates/pulumi";
+import { Handlebars } from "@hac/templates/handlebars";
+import { TemplateContext } from "@hac/templates/template-context";
+import { TemplateProcessor } from "@hac/templates/template-processor";
+import { TemplateDirectory } from "@hac/templates/pulumi/template-directory";
 import { TemplatePaths } from "../constants";
 import {
   HomelabLxcHost,

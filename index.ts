@@ -1,4 +1,4 @@
-import { registerBuiltinHelpers } from "@hac/templates";
+import { registerBuiltinHelpers } from "@hac/templates/helpers";
 import { deployHomelab } from "./src/proxmox/homelab-orchestrator";
 
 registerBuiltinHelpers();

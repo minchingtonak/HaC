@@ -37,7 +37,8 @@ export interface TemplateProcessorOptions {
  *
  * @example
  * ```typescript
- * import { TemplateProcessor, ObjectVariableResolver } from "@hac/templates";
+ * import { TemplateProcessor } from "@hac/templates/template-processor";
+ * import { ObjectVariableResolver } from "@hac/templates/variable-resolver";
  *
  * const resolver = new ObjectVariableResolver({
  *   DOMAIN: "example.com",

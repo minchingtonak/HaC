@@ -30,7 +30,8 @@ export type PulumiTemplateProcessorOptions = TemplateProcessorOptions;
  *
  * @example
  * ```typescript
- * import { PulumiTemplateProcessor, PulumiVariableResolver } from "@hac/templates/pulumi";
+ * import { PulumiTemplateProcessor } from "@hac/templates/pulumi/template-processor";
+ * import { PulumiVariableResolver } from "@hac/templates/pulumi/variable-resolver";
  *
  * const resolver = new PulumiVariableResolver(new pulumi.Config("myapp"));
  * const processor = new PulumiTemplateProcessor(resolver);

@@ -44,7 +44,7 @@ export class TemplateFile<
 >
   extends pulumi.ComponentResource
 {
-  public static RESOURCE_TYPE = "HaC:templates:TemplateFile";
+  public static RESOURCE_TYPE = "HaC:templates:HandlebarsTemplateFile";
 
   idSafeName: string;
 

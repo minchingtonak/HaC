@@ -45,7 +45,7 @@ export class TemplateDirectory<
 >
   extends pulumi.ComponentResource
 {
-  public static RESOURCE_TYPE = "HaC:templates:TemplateDirectory";
+  public static RESOURCE_TYPE = "HaC:templates:HandlebarsTemplateDirectory";
 
   /** Map of template path to processed TemplateFile */
   templateFiles: { [templatePath: string]: TemplateFile<TContext> } = {};

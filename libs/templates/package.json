@@ -2,11 +2,17 @@
   "name": "@hac/templates",
   "version": "0.1.0",
   "description": "Handlebars templating library with pluggable variable resolution and Pulumi integration",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./pulumi": "./src/pulumi/index.ts"
+    "./template-processor": "./src/template-processor.ts",
+    "./template-context": "./src/template-context.ts",
+    "./variable-resolver": "./src/variable-resolver.ts",
+    "./helpers": "./src/helpers/register.ts",
+    "./handlebars": "./src/handlebars.ts",
+    "./pulumi/template-processor": "./src/pulumi/pulumi-template-processor.ts",
+    "./pulumi/variable-resolver": "./src/pulumi/pulumi-variable-resolver.ts",
+    "./pulumi/template-file": "./src/pulumi/resources/template-file.ts",
+    "./pulumi/template-directory": "./src/pulumi/resources/template-directory.ts",
+    "./pulumi/path-utils": "./src/pulumi/path-utils.ts"
   },
   "scripts": {
     "check": "prettier --check src/",
