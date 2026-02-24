@@ -237,8 +237,6 @@ export class TemplateProcessor<T = string> implements TemplateProcessorBase<T> {
       for (const varName of currentVariables) {
         if (allResolved.has(varName)) continue;
 
-        if (this.resolver.shouldIgnore?.(varName)) continue;
-
         const resolved = this.resolver.resolve(varName);
         if (resolved && typeof resolved.value === "string") {
           allResolved.set(varName, resolved.value);

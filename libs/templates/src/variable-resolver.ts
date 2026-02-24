@@ -38,19 +38,6 @@ export interface VariableResolver<T = string> {
    *          skipped (e.g., it's a helper name, not a variable)
    */
   resolve(variableName: string): ResolvedVariable<T> | undefined;
-
-  /**
-   * Check if a variable name should be ignored during resolution.
-   * Called before resolve() - if true, the variable is skipped entirely.
-   *
-   * Use this for:
-   * - Built-in Handlebars keywords (@root, @first, etc.)
-   * - Context paths (this.foo, ../bar)
-   *
-   * @param variableName - The variable name to check
-   * @returns true if the variable should be ignored
-   */
-  shouldIgnore?(variableName: string): boolean;
 }
 
 /**
@@ -75,19 +62,7 @@ export class ObjectVariableResolver implements VariableResolver<string> {
   constructor(private variables: Record<string, string>) {}
 
   resolve(variableName: string): ResolvedVariable<string> | undefined {
-    if (this.shouldIgnore(variableName)) {
-      return undefined;
-    }
-
     const value = this.variables[variableName];
     return value !== undefined ? { value } : undefined;
-  }
-
-  shouldIgnore(variableName: string): boolean {
-    return (
-      variableName.startsWith("@") ||
-      variableName.startsWith("this.") ||
-      variableName.startsWith("../")
-    );
   }
 }

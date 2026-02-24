@@ -39,10 +39,6 @@ export class PulumiVariableResolver implements VariableResolver<
   resolve(
     variableName: string,
   ): ResolvedVariable<string | pulumi.Output<string>> | undefined {
-    if (this.shouldIgnore(variableName)) {
-      return undefined;
-    }
-
     let resolvedConfig = this.config;
     let resolvedConfigKey = variableName;
 
@@ -79,31 +75,11 @@ export class PulumiVariableResolver implements VariableResolver<
       .toLocaleUpperCase()
       .startsWith(PulumiVariableResolver.SECRET_VARIABLE_PREFIX);
 
-    try {
-      const value =
-        isSecret ?
-          resolvedConfig.requireSecret(resolvedConfigKey)
-        : resolvedConfig.require(resolvedConfigKey);
+    const value =
+      isSecret ?
+        resolvedConfig.requireSecret(resolvedConfigKey)
+      : resolvedConfig.require(resolvedConfigKey);
 
-      return { value, isSecret };
-    } catch {
-      // Variable not found in config - return undefined to skip
-      return undefined;
-    }
-  }
-
-  shouldIgnore(variableName: string): boolean {
-    return (
-      variableName.startsWith("@") ||
-      variableName.startsWith("this.") ||
-      variableName.startsWith("../")
-    );
-  }
-
-  /**
-   * Get the underlying Pulumi config namespace.
-   */
-  get namespace(): string {
-    return this.config.name;
+    return { value, isSecret };
   }
 }

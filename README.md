@@ -681,12 +681,9 @@ flowchart TB
   - augment context to return object proxy where gets are validated
   - empty strings should generate a warning but probably not throw an error in case there's a valid use case for empty string
     - throw error for null, undefined
-- better error handling for parser
 - error handling within template helpers
 - use zod schema for template context impl
-- better solution for having camel and snake case context vars
-  - is it necessary? would be nice to remove altogether
-- replace doc examples with unit tests
+- unit tests
 
 #### schema
 
@@ -696,7 +693,7 @@ flowchart TB
 - is .min(1) really necessary?
 - would be nice to be able to have pve config field that allows setting fields for all lxcs (potentially stacks as well)
   - can extend this type of this for stacks within lxc config
-- replace doc examples with unit tests
+- unit tests
 
 #### everything else
 

@@ -249,10 +249,6 @@ export class PulumiTemplateProcessor implements TemplateProcessorBase<
     const result: Record<string, string | pulumi.Output<string>> = {};
 
     for (const varName of variables) {
-      if (this.resolver.shouldIgnore?.(varName)) {
-        continue;
-      }
-
       const resolved = this.resolver.resolve(varName);
       if (resolved) {
         result[varName] = resolved.value;
