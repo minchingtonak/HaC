@@ -11,28 +11,23 @@ import { HomelabPveProvider } from "./homelab-pve-provider";
 import { partitionFileParseResults } from "@hac/schema/file-result";
 import { logFileParseErrors } from "../hosts/config-parser";
 import { lxcConfigParser } from "../hosts/lxc-config-parser";
-import { PveHostConfigToml } from "../hosts/schema/pve-host-config";
-import { LxcHostConfigToml } from "../hosts/schema/lxc-host-config";
+import { PveHostConfig } from "../hosts/schema/pve-host-config";
+import { LxcHostConfig } from "../hosts/schema/lxc-host-config";
 import {
   ProvisionerEngine,
   ProvisionerResource,
 } from "../hosts/provisioner-engine";
 import { TemplateFileContext } from "../docker/compose-stack";
-import { DualCaseContext } from "@hac/templates/dual-case-types";
 
 /**
- * Context for HomelabPveHost. Define only snake_case keys here.
- * camelCase accessors are automatically generated via DualCaseContext
- * for interoperability with the Pulumi PVE resource APIs.
+ * Context for HomelabPveHost with camelCase keys.
  */
-type HomelabPveHostContextBase = {
-  pve_config: PveHostConfigToml;
-  enabled_pve_hosts: PveHostConfigToml[];
-  lxc_config: LxcHostConfigToml;
-  enabled_lxc_hosts: LxcHostConfigToml[];
+export type HomelabPveHostContext = {
+  pveConfig: PveHostConfig;
+  enabledPveHosts: PveHostConfig[];
+  lxcConfig: LxcHostConfig;
+  enabledLxcHosts: LxcHostConfig[];
 };
-
-export type HomelabPveHostContext = DualCaseContext<HomelabPveHostContextBase>;
 
 export interface HomelabPveHostArgs {
   context: TemplateContext<HomelabPveHostContext>;
@@ -64,10 +59,9 @@ export class HomelabPveHost extends pulumi.ComponentResource {
   ) {
     super(HomelabPveHost.RESOURCE_TYPE, name, {}, opts);
 
-    const { pveConfig, pve_config, enabled_pve_hosts } = args.context.get(
+    const { pveConfig, enabledPveHosts } = args.context.get(
       "pveConfig",
-      "pve_config",
-      "enabled_pve_hosts",
+      "enabledPveHosts",
     );
 
     this.provider = new HomelabPveProvider(
@@ -137,8 +131,8 @@ export class HomelabPveHost extends pulumi.ComponentResource {
     const enabledLxcResults = enabledHostnames.map((hostname) => {
       const hostConfigPath = HomelabPveHost.LXC_HOST_CONFIG_PATH_FOR(hostname);
       return lxcConfigParser.parseConfigFile(hostConfigPath, {
-        pve: pve_config,
-        pve_hosts: enabled_pve_hosts,
+        pve: pveConfig,
+        pveHosts: enabledPveHosts,
       });
     });
 
@@ -171,8 +165,8 @@ export class HomelabPveHost extends pulumi.ComponentResource {
           `${name}-${config.hostname}`,
           {
             context: args.context.withData({
-              lxc_config: config,
-              enabled_lxc_hosts: hostConfigs,
+              lxcConfig: config,
+              enabledLxcHosts: hostConfigs,
             }),
             provider: this.provider,
           },

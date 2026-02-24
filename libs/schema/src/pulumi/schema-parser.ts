@@ -10,6 +10,11 @@ import { ParseResult, createValidationError } from "../result";
  * Pulumi-aware schema parser that handles Output<string> content.
  * Returns ParseResult types for exception-free error handling.
  *
+ * The parsing flow is:
+ * 1. Format.parse() - Parse raw content to native format (e.g., TOML with snake_case)
+ * 2. Format.normalizeKeys() - Convert keys to camelCase for TypeScript
+ * 3. Schema.validate() - Validate against Zod schema
+ *
  * @example
  * ```typescript
  * import { PulumiSchemaParser } from "@hac/schema/pulumi/parser";
@@ -71,11 +76,16 @@ export class PulumiSchemaParser<TSchema extends z.ZodSchema> {
    * @returns ParseResult with validated data or error
    */
   parseSync(content: string, format?: Format): ParseResult<z.infer<TSchema>> {
-    const formatResult = (format ?? this.defaultFormat).parse(content);
+    const resolvedFormat = format ?? this.defaultFormat;
+
+    const formatResult = resolvedFormat.parse(content);
     if (!formatResult.success) {
       return formatResult;
     }
-    return this.validateSync(formatResult.data);
+
+    const normalizedData = resolvedFormat.normalizeKeys(formatResult.data);
+
+    return this.validateSync(normalizedData);
   }
 
   /**

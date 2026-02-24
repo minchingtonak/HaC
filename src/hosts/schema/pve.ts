@@ -106,9 +106,9 @@ export const LXC_DEFAULTS = {
  */
 export const StartupConfigSchema = z
   .object({
-    down_delay: z.number().optional(),
+    downDelay: z.number().optional(),
     order: z.number().optional(),
-    up_delay: z.number().optional(),
+    upDelay: z.number().optional(),
   })
   .strict()
   .readonly();
@@ -118,9 +118,9 @@ export const StartupConfigSchema = z
  */
 export const CloneConfigSchema = z
   .object({
-    datastore_id: z.string().optional(),
-    node_name: z.string().optional(),
-    vm_id: z.number(),
+    datastoreId: z.string().optional(),
+    nodeName: z.string().optional(),
+    vmId: z.number(),
   })
   .strict()
   .readonly();
@@ -129,7 +129,7 @@ export const CloneConfigSchema = z
  * @see {@link types.input.CT.ContainerOperatingSystem}
  */
 export const OsConfigSchema = z
-  .object({ template_file_id: z.string(), type: z.string().optional() })
+  .object({ templateFileId: z.string(), type: z.string().optional() })
   .strict()
   .readonly();
 
@@ -161,7 +161,7 @@ export const MemoryConfigSchema = z
  */
 export const DiskConfigSchema = z
   .object({
-    datastore_id: z.string().default(LXC_DEFAULTS.DATASTORE_ID),
+    datastoreId: z.string().default(LXC_DEFAULTS.DATASTORE_ID),
     size: z.number().positive().optional(),
   })
   .strict()
@@ -176,10 +176,10 @@ export const NetworkInterfacesSchema = z
     bridge: z.string().default(LXC_DEFAULTS.NETWORK_BRIDGE),
     enabled: z.boolean().default(LXC_DEFAULTS.NETWORK_INTERFACE.ENABLED),
     firewall: z.boolean().default(LXC_DEFAULTS.NETWORK_INTERFACE.FIREWALL),
-    mac_address: z.string().optional(),
+    macAddress: z.string().optional(),
     mtu: z.number().min(1).optional(),
-    rate_limit: z.number().optional(),
-    vlan_id: z.number().optional(),
+    rateLimit: z.number().optional(),
+    vlanId: z.number().optional(),
   })
   .strict()
   .readonly();
@@ -203,7 +203,7 @@ export const FeaturesSchema = z
 export const ConsoleSchema = z
   .object({
     enabled: z.boolean().default(LXC_DEFAULTS.CONSOLE.ENABLED),
-    tty_count: z.number().int().default(LXC_DEFAULTS.CONSOLE.TTY_COUNT),
+    ttyCount: z.number().int().default(LXC_DEFAULTS.CONSOLE.TTY_COUNT),
     type: z.enum(Object.values(ConsoleType)).default(LXC_DEFAULTS.CONSOLE.TYPE),
   })
   .strict()
@@ -215,7 +215,7 @@ export const ConsoleSchema = z
 export const MountPointSchema = z
   .object({
     volume: z.string().min(1),
-    mount_point: z.string().min(1),
+    mountPoint: z.string().min(1),
     size: z.number().positive().optional(),
     acl: z.boolean().optional(),
     backup: z.boolean().optional(),
@@ -232,7 +232,7 @@ export const MountPointSchema = z
 export const DevicePassthroughSchema = z
   .object({
     path: z.string().min(1),
-    deny_write: z.boolean().optional(),
+    denyWrite: z.boolean().optional(),
     uid: z.number().optional(),
     gid: z.number().optional(),
     mode: z.string().length(4).optional(),
@@ -251,19 +251,16 @@ export const FirewallOptionsSchema = z
     radv: z.boolean().default(LXC_DEFAULTS.FIREWALL.RADV).optional(),
     macfilter: z.boolean().default(LXC_DEFAULTS.FIREWALL.MACFILTER).optional(),
     ipfilter: z.boolean().default(LXC_DEFAULTS.FIREWALL.IPFILTER).optional(),
-    log_level_in: z
+    logLevelIn: z
       .enum(FirewallLogLevel)
       .default(FirewallLogLevel.nolog)
       .optional(),
-    log_level_out: z
+    logLevelOut: z
       .enum(FirewallLogLevel)
       .default(FirewallLogLevel.nolog)
       .optional(),
-    input_policy: z
-      .enum(FirewallPolicy)
-      .default(FirewallPolicy.DROP)
-      .optional(),
-    output_policy: z
+    inputPolicy: z.enum(FirewallPolicy).default(FirewallPolicy.DROP).optional(),
+    outputPolicy: z
       .enum(FirewallPolicy)
       .default(FirewallPolicy.ACCEPT)
       .optional(),
@@ -289,7 +286,7 @@ export const FirewallRuleSchema = z
     macro: z.enum(FirewallMacro).optional(),
     pos: z.number().optional(),
     proto: z.string().optional(),
-    security_group: z.string().optional(),
+    securityGroup: z.string().optional(),
   })
   .strict()
   .readonly();
@@ -339,14 +336,14 @@ export const FirewallSchema = z
   .object({
     ebtables: z.boolean().optional(),
     enabled: z.boolean().optional(),
-    forward_policy: z.enum(Object.values(FirewallForwardPolicy)).optional(),
-    input_policy: z.enum(Object.values(FirewallInputOutputPolicy)).optional(),
-    log_ratelimit: FirewallLogRatelimitSchema.default({
+    forwardPolicy: z.enum(Object.values(FirewallForwardPolicy)).optional(),
+    inputPolicy: z.enum(Object.values(FirewallInputOutputPolicy)).optional(),
+    logRatelimit: FirewallLogRatelimitSchema.default({
       enabled: false,
       burst: PVE_DEFAULTS.FIREWALL.RATE_LIMIT.BURST,
       rate: PVE_DEFAULTS.FIREWALL.RATE_LIMIT.RATE,
     }),
-    output_policy: z.enum(Object.values(FirewallInputOutputPolicy)).optional(),
+    outputPolicy: z.enum(Object.values(FirewallInputOutputPolicy)).optional(),
   })
   .strict()
   .readonly();
@@ -357,18 +354,18 @@ export const FirewallSchema = z
 export const DownloadFileSchema = z
   .object({
     checksum: z.string().optional(),
-    checksum_algorithm: z
+    checksumAlgorithm: z
       .enum(Object.values(DownloadFileChecksumAlgorithm))
       .optional(),
-    content_type: z.enum(Object.values(DownloadFileContentType)),
-    datastore_id: z.string().min(1),
-    decompression_algorithm: z
+    contentType: z.enum(Object.values(DownloadFileContentType)),
+    datastoreId: z.string().min(1),
+    decompressionAlgorithm: z
       .enum(Object.values(DownloadFileDecompressionAlgorithm))
       .optional(),
-    file_name: z.string().optional(),
+    fileName: z.string().optional(),
     overwrite: z.boolean().default(PVE_DEFAULTS.DOWNLOAD_FILE.OVERWRITE),
-    overwrite_unmanaged: z.boolean().optional(),
-    upload_timeout: z
+    overwriteUnmanaged: z.boolean().optional(),
+    uploadTimeout: z
       .number()
       .int()
       .default(PVE_DEFAULTS.DOWNLOAD_FILE.UPLOAD_TIMEOUT),
@@ -376,7 +373,7 @@ export const DownloadFileSchema = z
     verify: z.boolean().default(PVE_DEFAULTS.DOWNLOAD_FILE.VERIFY),
 
     // pulumi custom fields
-    retain_on_delete: z
+    retainOnDelete: z
       .boolean()
       .default(PVE_DEFAULTS.DOWNLOAD_FILE.RETAIN_ON_DELETE),
   })
@@ -389,22 +386,22 @@ export const DownloadFileSchema = z
 export const MetricsServerSchema = z
   .object({
     disable: z.boolean().optional(),
-    graphite_path: z.string().optional(),
-    graphite_proto: z
+    graphitePath: z.string().optional(),
+    graphiteProto: z
       .enum(Object.values(MetricsServerGraphiteProto))
       .default(MetricsServerGraphiteProto.UDP),
-    influx_api_path_prefix: z.string().optional(),
-    influx_bucket: z.string().optional(),
-    influx_db_proto: z
+    influxApiPathPrefix: z.string().optional(),
+    influxBucket: z.string().optional(),
+    influxDbProto: z
       .enum(Object.values(MetricsServerInfluxDbProto))
       .default(MetricsServerInfluxDbProto.UDP),
-    influx_max_body_size: z
+    influxMaxBodySize: z
       .number()
       .int()
       .default(PVE_DEFAULTS.METRICS_SERVER.INFLUX_MAX_BODY_SIZE),
-    influx_organization: z.string().optional(),
-    influx_token: z.string().optional(),
-    influx_verify: z.boolean().optional(),
+    influxOrganization: z.string().optional(),
+    influxToken: z.string().optional(),
+    influxVerify: z.boolean().optional(),
     mtu: z
       .number()
       .int()

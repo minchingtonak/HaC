@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { CamelCasedPropertiesDeep } from "type-fest";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { ct } from "@muhlba91/pulumi-proxmoxve";
 import { FirewallLogLevel, FirewallPolicy } from "../../constants";
@@ -36,17 +35,17 @@ export const LxcHostConfigSchema = z
     hostname: z.string().min(1),
     description: z.string().default(LXC_DEFAULTS.DESCRIPTION),
     unprivileged: z.boolean().default(LXC_DEFAULTS.UNPRIVILEGED),
-    start_on_boot: z.boolean().default(LXC_DEFAULTS.START_ON_BOOT),
+    startOnBoot: z.boolean().default(LXC_DEFAULTS.START_ON_BOOT),
     protection: z.boolean().default(LXC_DEFAULTS.PROTECTION),
     tags: z.array(z.string()).optional(),
     started: z.boolean().optional(),
     startup: StartupConfigSchema.optional(),
-    hook_script_file_id: z.string().optional(),
-    pool_id: z.string().optional(),
+    hookScriptFileId: z.string().optional(),
+    poolId: z.string().optional(),
     template: z.boolean().optional(),
     os: OsConfigSchema.default({
       type: LXC_DEFAULTS.OS.TYPE,
-      template_file_id: LXC_DEFAULTS.OS.TEMPLATE_FILE_ID,
+      templateFileId: LXC_DEFAULTS.OS.TEMPLATE_FILE_ID,
     }),
     cpu: CpuConfigSchema.default({
       architecture: LXC_DEFAULTS.CPU.ARCHITECTURE,
@@ -58,10 +57,10 @@ export const LxcHostConfigSchema = z
       swap: LXC_DEFAULTS.MEMORY.SWAP,
     }),
     disk: DiskConfigSchema.default({
-      datastore_id: LXC_DEFAULTS.DISK.DATASTORE_ID,
+      datastoreId: LXC_DEFAULTS.DISK.DATASTORE_ID,
       size: LXC_DEFAULTS.DISK.SIZE,
     }),
-    network_interfaces: z
+    networkInterfaces: z
       .array(NetworkInterfacesSchema)
       .default([
         {
@@ -74,7 +73,7 @@ export const LxcHostConfigSchema = z
     console: ConsoleSchema.default({
       enabled: LXC_DEFAULTS.CONSOLE.ENABLED,
       type: LXC_DEFAULTS.CONSOLE.TYPE,
-      tty_count: LXC_DEFAULTS.CONSOLE.TTY_COUNT,
+      ttyCount: LXC_DEFAULTS.CONSOLE.TTY_COUNT,
     }),
     features: FeaturesSchema.default({
       fuse: LXC_DEFAULTS.FEATURES.FUSE,
@@ -82,21 +81,21 @@ export const LxcHostConfigSchema = z
       nesting: LXC_DEFAULTS.FEATURES.NESTING,
     }),
     clone: CloneConfigSchema.optional(),
-    mount_points: z.array(MountPointSchema).optional(),
-    device_passthroughs: z.array(DevicePassthroughSchema).optional(),
-    firewall_options: FirewallOptionsSchema.default({
+    mountPoints: z.array(MountPointSchema).optional(),
+    devicePassthroughs: z.array(DevicePassthroughSchema).optional(),
+    firewallOptions: FirewallOptionsSchema.default({
       enabled: LXC_DEFAULTS.FIREWALL.ENABLED,
       dhcp: LXC_DEFAULTS.FIREWALL.DHCP,
       ndp: LXC_DEFAULTS.FIREWALL.NDP,
       radv: LXC_DEFAULTS.FIREWALL.RADV,
       macfilter: LXC_DEFAULTS.FIREWALL.MACFILTER,
       ipfilter: LXC_DEFAULTS.FIREWALL.IPFILTER,
-      input_policy: FirewallPolicy.DROP,
-      output_policy: FirewallPolicy.ACCEPT,
-      log_level_in: FirewallLogLevel.nolog,
-      log_level_out: FirewallLogLevel.nolog,
+      inputPolicy: FirewallPolicy.DROP,
+      outputPolicy: FirewallPolicy.ACCEPT,
+      logLevelIn: FirewallLogLevel.nolog,
+      logLevelOut: FirewallLogLevel.nolog,
     }),
-    firewall_rules: z.array(FirewallRuleSchema).optional(),
+    firewallRules: z.array(FirewallRuleSchema).optional(),
 
     // HaC custom fields
     stacks: StackSchemaMap.optional(),
@@ -105,5 +104,4 @@ export const LxcHostConfigSchema = z
   .strict()
   .readonly();
 
-export type LxcHostConfigToml = z.infer<typeof LxcHostConfigSchema>;
-export type LxcHostConfig = CamelCasedPropertiesDeep<LxcHostConfigToml>;
+export type LxcHostConfig = z.infer<typeof LxcHostConfigSchema>;

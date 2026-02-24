@@ -12,12 +12,12 @@ export function deployHomelab() {
 
     const enabledConfigs = pveConfigs.filter((c) => c.enabled);
     const context = new TemplateContext<HomelabPveHostContext>({
-      enabled_pve_hosts: enabledConfigs,
+      enabledPveHosts: enabledConfigs,
     });
 
     for (const pveConfig of enabledConfigs) {
       new HomelabPveHost(pveConfig.node, {
-        context: context.withData({ pve_config: pveConfig }),
+        context: context.withData({ pveConfig }),
       });
     }
   });

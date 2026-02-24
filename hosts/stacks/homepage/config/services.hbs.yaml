@@ -164,7 +164,7 @@ siteMonitor: https://{{{domainForApp ../serviceName hostname=../hostname}}}
 # {{/ifnoteq}}
 # {{/partial}}
 
-# {{#each @lxc_hosts}}
+# {{#each @lxcHosts}}
 - "{{{this.hostname}}}":
     # {{#if this.stacks}}
     # {{#each this.stacks}}

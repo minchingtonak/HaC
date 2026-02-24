@@ -18,7 +18,7 @@ swap = 2048
 size = 64
 
 [[mount_points]]
-volume = "{{{@pve.lxc.app_data_dir}}}/windmill"
+volume = "{{{@pve.lxc.appDataDir}}}/windmill"
 mount_point = "/docker"
 
 [[provisioners]]

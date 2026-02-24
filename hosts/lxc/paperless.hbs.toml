@@ -17,7 +17,7 @@ swap = 4096
 size = 16
 
 [[mount_points]]
-volume = "{{{@pve.lxc.app_data_dir}}}/paperless"
+volume = "{{{@pve.lxc.appDataDir}}}/paperless"
 mount_point = "/docker"
 
 [[mount_points]]

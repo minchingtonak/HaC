@@ -15,6 +15,7 @@ import { ParseResult } from "@hac/schema/result";
 import { TemplateProcessor } from "@hac/templates/template-processor";
 import { PulumiTemplateProcessor } from "@hac/templates/pulumi/template-processor";
 import { PulumiVariableResolver } from "@hac/templates/pulumi/variable-resolver";
+import { ConfigNamespaceTemplateContext as BaseConfigNamespaceTemplateContext } from "@hac/templates/pulumi/template-file";
 
 import { sharedHandlebars } from "../templates/shared-handlebars";
 
@@ -40,15 +41,10 @@ export function logFileParseErrors(errors: FileParseError[]): void {
 
 /**
  * Context variables available when rendering the config namespace template.
+ * Extends the base context with parser-specific fields.
  */
-export interface ConfigNamespaceTemplateContext {
-  parser_type: ConfigType;
-  /** The filename including extensions (e.g., "my-host.hbs.toml") */
-  file_name: string;
-  /** The full absolute path to the file */
-  file_path: string;
-  /** The name of the parent directory (e.g., "lxc") */
-  dir_name: string;
+export interface ConfigNamespaceTemplateContext extends BaseConfigNamespaceTemplateContext {
+  parserType: ConfigType;
 }
 
 export class ConfigParser<TConfig> {
@@ -107,10 +103,10 @@ export class ConfigParser<TConfig> {
   ): pulumi.Output<FileParseResult<TConfig>> {
     const fileName = path.basename(filePath);
     const templateContext: ConfigNamespaceTemplateContext = {
-      parser_type: this.type,
-      file_name: fileName,
-      file_path: filePath,
-      dir_name: path.basename(path.dirname(filePath)),
+      parserType: this.type,
+      fileName: fileName,
+      filePath: filePath,
+      dirName: path.basename(path.dirname(filePath)),
     };
     const configNamespace = this.compiledNamespaceTemplate(templateContext);
 

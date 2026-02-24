@@ -1,5 +1,4 @@
 import { z } from "zod";
-import type { CamelCasedPropertiesDeep } from "type-fest";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { remote } from "@pulumi/command/types/input";
 import { LXC_DEFAULTS } from "./pve";
@@ -16,7 +15,7 @@ export const AnsibleConnectionOverrideSchema = z
     /**
      * Path to private key file. Required to invoke Ansible
      */
-    private_key_path: z.string().optional(),
+    privateKeyPath: z.string().optional(),
   })
   .strict()
   .readonly();
@@ -29,7 +28,7 @@ export const ScriptConnectionOverrideSchema = z
     host: z.string().optional(),
     user: z.string().optional(),
     port: z.number().positive().optional(),
-    private_key: z.string().optional(),
+    privateKey: z.string().optional(),
   })
   .strict()
   .readonly();
@@ -38,17 +37,17 @@ export const ScriptProvisionerSchema = z
   .object({
     type: z.literal("script"),
     script: z.string().min(1),
-    working_directory: z
+    workingDirectory: z
       .string()
       .default(LXC_DEFAULTS.PROVISIONER.WORKING_DIRECTORY),
-    run_as: z.string().default(LXC_DEFAULTS.SSH_USER),
+    runAs: z.string().default(LXC_DEFAULTS.SSH_USER),
     environment: z.record(z.string(), z.string()).optional(),
     timeout: z
       .number()
       .positive()
       .default(LXC_DEFAULTS.PROVISIONER.TIMEOUT_SECONDS),
     connection: ScriptConnectionOverrideSchema.optional(),
-    run_on: z
+    runOn: z
       .array(z.enum(Object.values(ScriptProvisionerRunOn)))
       .optional()
       // @ts-expect-error allowing use of readonly type since LXC_DEFAULTS uses `as const`
@@ -84,12 +83,6 @@ export const ProvisionerSchema = z.discriminatedUnion("type", [
   AnsibleProvisionerSchema,
 ]);
 
-export type Provisioner = CamelCasedPropertiesDeep<
-  z.infer<typeof ProvisionerSchema>
->;
-export type ScriptProvisioner = CamelCasedPropertiesDeep<
-  z.infer<typeof ScriptProvisionerSchema>
->;
-export type AnsibleProvisioner = CamelCasedPropertiesDeep<
-  z.infer<typeof AnsibleProvisionerSchema>
->;
+export type Provisioner = z.infer<typeof ProvisionerSchema>;
+export type ScriptProvisioner = z.infer<typeof ScriptProvisionerSchema>;
+export type AnsibleProvisioner = z.infer<typeof AnsibleProvisionerSchema>;

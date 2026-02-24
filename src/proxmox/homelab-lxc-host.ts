@@ -17,6 +17,8 @@ import {
 } from "../hosts/provisioner-engine";
 import { type HomelabPveHostContext } from "./homelab-pve-host";
 import { LXC_DEFAULTS } from "../hosts/schema/pve";
+import type { PveHostConfig } from "../hosts/schema/pve-host-config";
+import type { LxcHostConfig } from "../hosts/schema/lxc-host-config";
 import {
   FirewallDirection,
   FirewallMacro,
@@ -308,7 +310,7 @@ export class HomelabLxcHost extends pulumi.ComponentResource {
             {
               connection,
               context: args.context.withData<ComposeStackContext>({
-                stack_name: stackName,
+                stackName: stackName,
               }),
             },
             {
@@ -348,7 +350,9 @@ sharedHandlebars.registerHelper("idForContainer", (options: HelperOptions) => {
   }
 
   // look up the hostname in the pve host's list of lxcs
-  const pve = context.pve_hosts.find((host) => host.node === context.pve.node);
+  const pve = context.pveHosts.find(
+    (host: PveHostConfig) => host.node === context.pve.node,
+  );
   const lxc = pve?.lxc.hosts[hostname];
 
   if (!lxc) {
@@ -378,13 +382,13 @@ sharedHandlebars.registerHelper(
 
     // if hostname, look up lxc id and use that as the last octet
     if (!Number.isInteger(hostnameOrLxcId)) {
-      const lxcHost = context.lxc_hosts.find(
-        (host) => host.hostname === hostnameOrLxcId,
+      const lxcHost = context.lxcHosts.find(
+        (host: LxcHostConfig) => host.hostname === hostnameOrLxcId,
       );
 
       if (!lxcHost) {
         throw new Error(
-          `LXC host with hostname "${hostnameOrLxcId}" not found in lxc_hosts`,
+          `LXC host with hostname "${hostnameOrLxcId}" not found in lxcHosts`,
         );
       }
 

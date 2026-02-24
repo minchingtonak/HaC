@@ -24,7 +24,7 @@ swap = 4096
 size = 16
 
 [[mount_points]]
-volume = "{{{@pve.lxc.app_data_dir}}}/music"
+volume = "{{{@pve.lxc.appDataDir}}}/music"
 mount_point = "/docker"
 
 [[mount_points]]

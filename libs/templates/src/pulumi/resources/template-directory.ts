@@ -17,8 +17,8 @@ export type TemplateDirectoryArgs<TContext extends Record<string, unknown>> = {
    * Can be a static string or a Handlebars template.
    *
    * Available variables:
-   * - file_name, file_path, dir_name (from template file path)
-   * - All fields from templateContext (e.g., lxc.hostname, stack_name)
+   * - fileName, filePath, dirName (from template file path)
+   * - All fields from templateContext (e.g., lxc.hostname, stackName)
    */
   configNamespace: string;
   /** Template context data */

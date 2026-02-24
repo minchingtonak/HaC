@@ -12,6 +12,7 @@ import {
 import { EnvUtils } from "../utils/env-utils";
 import { pathToResourceId } from "@hac/templates/pulumi/path-utils";
 import { LXC_DEFAULTS } from "./schema/pve";
+import { camelToSnakeKeys } from "@hac/schema/case-conversion";
 
 export type ProvisionerResource = command.remote.Command | ansible.Playbook;
 
@@ -257,8 +258,9 @@ export class ProvisionerEngine {
           ansible_ssh_retries: "3",
           // disable warning due to ansible automatically choosing the python version on the target
           ansible_python_interpreter: "auto_silent",
+          // Convert camelCase keys back to snake_case for Ansible compatibility
           ...(provisioner.variables ?
-            Object.entries(provisioner.variables).reduce(
+            Object.entries(camelToSnakeKeys(provisioner.variables)).reduce(
               (acc, [k, v]) => {
                 acc[k] = String(v);
                 return acc;

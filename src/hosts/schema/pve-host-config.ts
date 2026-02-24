@@ -1,4 +1,3 @@
-import { CamelCasedPropertiesDeep } from "type-fest";
 import { z } from "zod";
 import {
   DnsSchema,
@@ -24,12 +23,12 @@ const StorageConfigSchema = z
 const LxcAuthSchema = z.object({ password: z.string() }).strict().readonly();
 
 const SshSchema = z
-  .object({ user: z.string(), public_key: z.string(), private_key: z.string() })
+  .object({ user: z.string(), publicKey: z.string(), privateKey: z.string() })
   .strict()
   .readonly();
 
 const PorkbunProviderSchema = z
-  .object({ api_key: z.string(), secret_key: z.string() })
+  .object({ apiKey: z.string(), secretKey: z.string() })
   .strict()
   .readonly();
 
@@ -64,7 +63,7 @@ const LxcNetworkSchema = z
 
 const LxcConfigSchema = z
   .object({
-    app_data_dir: z.string().min(1),
+    appDataDir: z.string().min(1),
     hosts: LxcHostsSchema,
     network: LxcNetworkSchema,
     auth: LxcAuthSchema,
@@ -80,9 +79,9 @@ export const PveHostConfigSchema = z
     auth: PveAuthSchema,
     dns: DnsSchema.optional(),
     firewall: FirewallSchema.optional(),
-    firewall_rules: z.array(FirewallRuleSchema).optional(),
+    firewallRules: z.array(FirewallRuleSchema).optional(),
     files: z.array(DownloadFileSchema).optional(),
-    metrics_servers: z.array(MetricsServerSchema).optional(),
+    metricsServers: z.array(MetricsServerSchema).optional(),
 
     // HaC custom fields
     enabled: z.boolean().default(PVE_DEFAULTS.HOST.ENABLED),
@@ -97,5 +96,4 @@ export const PveHostConfigSchema = z
   .strict()
   .readonly();
 
-export type PveHostConfigToml = z.infer<typeof PveHostConfigSchema>;
-export type PveHostConfig = CamelCasedPropertiesDeep<PveHostConfigToml>;
+export type PveHostConfig = z.infer<typeof PveHostConfigSchema>;

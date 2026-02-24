@@ -22,7 +22,7 @@ swap = 4096
 size = 32
 
 [[mount_points]]
-volume = "{{{@pve.lxc.app_data_dir}}}/life"
+volume = "{{{@pve.lxc.appDataDir}}}/life"
 mount_point = "/docker"
 
 [[provisioners]]

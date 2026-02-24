@@ -9,6 +9,11 @@ import { ParseResult, createValidationError } from "./result";
  * Generic schema parser that validates content against a Zod schema.
  * Decouples deserialization (Format) from validation (Zod).
  *
+ * The parsing flow is:
+ * 1. Format.parse() - Parse raw content to native format (e.g., TOML with snake_case)
+ * 2. Format.normalizeKeys() - Convert keys to camelCase for TypeScript
+ * 3. Schema.validate() - Validate against Zod schema
+ *
  * @example
  * ```typescript
  * import { SchemaParser } from "@hac/schema/parser";
@@ -47,11 +52,16 @@ export class SchemaParser<TSchema extends z.ZodSchema> {
    * @returns ParseResult with validated data or error
    */
   parse(content: string, format?: Format): ParseResult<z.infer<TSchema>> {
-    const formatResult = (format ?? this.defaultFormat).parse(content);
+    const resolvedFormat = format ?? this.defaultFormat;
+
+    const formatResult = resolvedFormat.parse(content);
     if (!formatResult.success) {
       return formatResult;
     }
-    return this.validate(formatResult.data);
+
+    const normalizedData = resolvedFormat.normalizeKeys(formatResult.data);
+
+    return this.validate(normalizedData);
   }
 
   /**

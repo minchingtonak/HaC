@@ -12,20 +12,21 @@ import {
   HomelabLxcHost,
   type HomelabLxcHostContext,
 } from "../proxmox/homelab-lxc-host";
-import { PveHostConfigToml } from "../hosts/schema/pve-host-config";
-import { LxcHostConfigToml } from "../hosts/schema/lxc-host-config";
-import { DualCaseContext } from "@hac/templates/dual-case-types";
+import { PveHostConfig } from "../hosts/schema/pve-host-config";
+import { LxcHostConfig } from "../hosts/schema/lxc-host-config";
 
-export type ComposeStackContext = HomelabLxcHostContext &
-  DualCaseContext<{ stack_name: string; template_directory: string }>;
+export type ComposeStackContext = HomelabLxcHostContext & {
+  stackName: string;
+  templateDirectory: string;
+};
 
 export type TemplateFileContext = {
-  pve: PveHostConfigToml;
-  pve_hosts: PveHostConfigToml[];
-  lxc: LxcHostConfigToml;
-  lxc_hosts: LxcHostConfigToml[];
-  stack_name: string;
-  template_path: string;
+  pve: PveHostConfig;
+  pveHosts: PveHostConfig[];
+  lxc: LxcHostConfig;
+  lxcHosts: LxcHostConfig[];
+  stackName: string;
+  templatePath: string;
 };
 
 export type ComposeStackArgs = {
@@ -62,15 +63,10 @@ export class ComposeStack extends pulumi.ComponentResource {
 
     const contextData = args.context.get(
       "stackName",
-      "stack_name",
       "lxcConfig",
-      "lxc_config",
       "pveConfig",
-      "pve_config",
       "enabledLxcHosts",
-      "enabled_lxc_hosts",
       "enabledPveHosts",
-      "enabled_pve_hosts",
     );
 
     const stackDirectory = ComposeStack.STACK_DIRECTORY_FOR(
@@ -101,12 +97,12 @@ export class ComposeStack extends pulumi.ComponentResource {
         templateDirectory: stackDirectory,
         configNamespace: STACK_CONFIG_NAMESPACE_TEMPLATE,
         templateContext: new TemplateContext<TemplateFileContext>({
-          pve: contextData.pve_config,
-          pve_hosts: contextData.enabled_pve_hosts,
-          lxc: contextData.lxc_config,
-          lxc_hosts: contextData.enabled_lxc_hosts,
-          stack_name: contextData.stack_name,
-          template_path: stackDirectory,
+          pve: contextData.pveConfig,
+          pveHosts: contextData.enabledPveHosts,
+          lxc: contextData.lxcConfig,
+          lxcHosts: contextData.enabledLxcHosts,
+          stackName: contextData.stackName,
+          templatePath: stackDirectory,
         }),
         handlebars: sharedHandlebars,
       },
