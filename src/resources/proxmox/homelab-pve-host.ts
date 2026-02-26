@@ -1,0 +1,196 @@
+import * as pulumi from "@pulumi/pulumi";
+import * as proxmox from "@muhlba91/pulumi-proxmoxve";
+import * as command from "@pulumi/command";
+import * as path from "node:path";
+import type { HelperOptions } from "@hac/templates/handlebars";
+import { TemplateContext } from "@hac/templates/template-context";
+import { pathToResourceId } from "@hac/templates/pulumi/path-utils";
+import { sharedHandlebars } from "../../utils/handlebars";
+import { HomelabLxcHost } from "./homelab-lxc-host";
+import { HomelabPveProvider } from "./homelab-pve-provider";
+import { PveHostConfig } from "../../config-schema/pve-host-config";
+import { LxcHostConfig } from "../../config-schema/lxc-host-config";
+import {
+  ProvisionerEngine,
+  ProvisionerResource,
+} from "../../provisioner-engine/provisioner-engine";
+import { TemplateFileContext } from "../compose-stack";
+import {
+  logFileParseErrors,
+  partitionFileParseResults,
+} from "../../config-parser/utils";
+import { lxcConfigParser } from "../../config-parser/parsers";
+
+/**
+ * Context for HomelabPveHost with camelCase keys.
+ */
+export type HomelabPveHostContext = {
+  pveConfig: PveHostConfig;
+  enabledPveHosts: PveHostConfig[];
+  lxcConfig: LxcHostConfig;
+  enabledLxcHosts: LxcHostConfig[];
+};
+
+export interface HomelabPveHostArgs {
+  context: TemplateContext<HomelabPveHostContext>;
+}
+
+export class HomelabPveHost extends pulumi.ComponentResource {
+  public static RESOURCE_TYPE = "HaC:proxmoxve:HomelabPveHost";
+
+  public static PVE_HOST_BASE_DOMAIN = (
+    subDomain: string,
+    rootDomain: string,
+  ) => `${subDomain}.${rootDomain}`;
+
+  public static LXC_HOST_CONFIG_PATH_FOR = (hostname: string) =>
+    `./hosts/lxc/${hostname}.hbs.toml`;
+
+  public readonly provider: HomelabPveProvider;
+  public readonly dns?: proxmox.DNS;
+  public readonly firewall?: proxmox.network.Firewall;
+  public readonly files?: proxmox.download.File[];
+  public readonly metricsServers?: proxmox.metrics.MetricsServer[];
+  public readonly provisionerResources?: ProvisionerResource[];
+  public readonly containers: HomelabLxcHost[] = [];
+
+  constructor(
+    name: string,
+    args: HomelabPveHostArgs,
+    opts?: pulumi.ComponentResourceOptions,
+  ) {
+    super(HomelabPveHost.RESOURCE_TYPE, name, {}, opts);
+
+    const { pveConfig, enabledPveHosts } = args.context.get(
+      "pveConfig",
+      "enabledPveHosts",
+    );
+
+    this.provider = new HomelabPveProvider(
+      `${name}-provider`,
+      { pveConfig: pveConfig },
+      { parent: this },
+    );
+
+    if (pveConfig.dns) {
+      this.dns = new proxmox.DNS(`${name}-dns`, {
+        nodeName: pveConfig.node,
+        domain: pveConfig.dns.domain,
+        servers: pveConfig.dns.servers,
+      });
+    }
+
+    if (pveConfig.firewall) {
+      this.firewall = new proxmox.network.Firewall(
+        `${name}-firewall`,
+        pveConfig.firewall,
+        { provider: this.provider },
+      );
+    }
+
+    this.files = pveConfig.files?.map((file) => {
+      const url = new URL(file.url);
+      const sanitizedName = pathToResourceId(`${url.host}${url.pathname}`);
+
+      return new proxmox.download.File(
+        `${name}-file-${sanitizedName}`,
+        { nodeName: pveConfig.node, ...file },
+        {
+          provider: this.provider,
+          retainOnDelete: file.retainOnDelete,
+          parent: this,
+        },
+      );
+    });
+
+    this.metricsServers = pveConfig.metricsServers?.map((server) => {
+      return new proxmox.metrics.MetricsServer(
+        `${name}-${server.type}`,
+        server,
+        { provider: this.provider, parent: this },
+      );
+    });
+
+    const connection: command.types.input.remote.ConnectionArgs = {
+      host: pveConfig.ip,
+      user: pveConfig.ssh.user,
+      privateKey: pveConfig.ssh.privateKey,
+    };
+
+    if (pveConfig.provisioners && pveConfig.provisioners.length > 0) {
+      const provisionerEngine = new ProvisionerEngine({ name, connection });
+
+      this.provisionerResources = provisionerEngine.executeProvisioners(
+        pveConfig.provisioners,
+        this,
+      );
+    }
+
+    const enabledHostnames = Object.keys(pveConfig.lxc.hosts).filter(
+      (hostname) => pveConfig.lxc.hosts[hostname].enabled,
+    );
+
+    const enabledLxcResults = enabledHostnames.map((hostname) => {
+      const hostConfigPath = HomelabPveHost.LXC_HOST_CONFIG_PATH_FOR(hostname);
+      return lxcConfigParser.parseConfigFile(hostConfigPath, {
+        pve: pveConfig,
+        pveHosts: enabledPveHosts,
+      });
+    });
+
+    pulumi.all(enabledLxcResults).apply((results) => {
+      const [hostConfigs, parseErrors] = partitionFileParseResults(results);
+
+      logFileParseErrors(parseErrors);
+
+      for (const config of hostConfigs) {
+        const appDataDirPath = path.join(
+          pveConfig.lxc.appDataDir,
+          config.hostname,
+        );
+
+        const createAppDataDir = new command.remote.Command(
+          `${name}-${config.hostname}-appdata-dir`,
+          {
+            create: `mkdir -p ${appDataDirPath} && chmod 777 ${appDataDirPath}`,
+            delete: `rm -rf ${appDataDirPath}`,
+            connection,
+          },
+          {
+            parent: this,
+            dependsOn: this.metricsServers ?? this.files ?? this.dns,
+            retainOnDelete: true,
+          },
+        );
+
+        const container = new HomelabLxcHost(
+          `${name}-${config.hostname}`,
+          {
+            context: args.context.withData({
+              lxcConfig: config,
+              enabledLxcHosts: hostConfigs,
+            }),
+            provider: this.provider,
+          },
+          { dependsOn: createAppDataDir, parent: this },
+        );
+
+        this.containers.push(container);
+      }
+    });
+
+    this.registerOutputs({ files: this.files, containers: this.containers });
+  }
+}
+
+sharedHandlebars.registerHelper(
+  "domainForPveHost",
+  (options: HelperOptions) => {
+    const context = options.data as TemplateFileContext;
+
+    return HomelabPveHost.PVE_HOST_BASE_DOMAIN(
+      context.pve.node,
+      context.pve.domain,
+    );
+  },
+);

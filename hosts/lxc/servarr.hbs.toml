@@ -47,7 +47,7 @@ proto = "tcp"
 comment = "slskd-listen"
 
 [[mount_points]]
-volume = "{{{@pve.lxc.app_data_dir}}}/servarr"
+volume = "{{{@pve.lxc.appDataDir}}}/servarr"
 mount_point = "/docker"
 
 [[mount_points]]

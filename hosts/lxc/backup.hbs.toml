@@ -52,7 +52,7 @@ proto = "udp"
 comment = "syncthing-local-discovery"
 
 [[mount_points]]
-volume = "{{{@pve.lxc.app_data_dir}}}/backup"
+volume = "{{{@pve.lxc.appDataDir}}}/backup"
 mount_point = "/docker"
 
 [[mount_points]]
@@ -118,8 +118,8 @@ playbook = "provisioners/ansible/create-ssh-key.yaml"
 replayable = false
 
 [provisioners.variables]
-public_key = "{{{@pve.ssh.public_key}}}"
-private_key = """{{{@pve.ssh.private_key}}}"""
+public_key = "{{{@pve.ssh.publicKey}}}"
+private_key = """{{{@pve.ssh.privateKey}}}"""
 
 [[provisioners]]
 type = "script"

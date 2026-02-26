@@ -1,0 +1,42 @@
+{
+  "name": "@hac/templates",
+  "version": "0.1.0",
+  "description": "Handlebars templating library with pluggable variable resolution and Pulumi integration",
+  "exports": {
+    "./template-processor": "./src/template-processor.ts",
+    "./template-context": "./src/template-context.ts",
+    "./variable-resolver": "./src/variable-resolver.ts",
+    "./helpers": "./src/helpers/register.ts",
+    "./handlebars": "./src/handlebars.ts",
+    "./pulumi/template-processor": "./src/pulumi/pulumi-template-processor.ts",
+    "./pulumi/variable-resolver": "./src/pulumi/pulumi-variable-resolver.ts",
+    "./pulumi/template-file": "./src/pulumi/resources/template-file.ts",
+    "./pulumi/template-directory": "./src/pulumi/resources/template-directory.ts",
+    "./pulumi/path-utils": "./src/pulumi/path-utils.ts"
+  },
+  "scripts": {
+    "check": "prettier --check src/",
+    "format": "prettier --write src/",
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "handlebars": "^4.7.8",
+    "type-fest": "^5.4.3"
+  },
+  "peerDependencies": {
+    "@hanseltime/pulumi-file-utils": "^1.2.0",
+    "@pulumi/pulumi": "^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@hanseltime/pulumi-file-utils": {
+      "optional": true
+    },
+    "@pulumi/pulumi": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.10",
+    "typescript": "^5.9.3"
+  }
+}

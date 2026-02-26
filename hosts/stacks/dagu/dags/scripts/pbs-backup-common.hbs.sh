@@ -138,7 +138,7 @@ function backup_app_data() {
     # Collect all backup arguments for app data
     backup_args=()
 
-    for folder in {{{@pve.lxc.app_data_dir}}}/*/; do
+    for folder in {{{@pve.lxc.appDataDir}}}/*/; do
         if [ -d "$folder" ]; then
             foldername=$(basename "$folder")
 
@@ -254,7 +254,7 @@ function backup_combined() {
     backup_args=()
 
     # Add app data folders
-    for folder in {{{@pve.lxc.app_data_dir}}}/*/; do
+    for folder in {{{@pve.lxc.appDataDir}}}/*/; do
         if [ -d "$folder" ]; then
             foldername=$(basename "$folder")
             echo "Adding app data folder to backup: $foldername"

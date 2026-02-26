@@ -17,7 +17,7 @@ swap = 2048
 size = 64
 
 [[mount_points]]
-volume = "{{{@pve.lxc.app_data_dir}}}/immich"
+volume = "{{{@pve.lxc.appDataDir}}}/immich"
 mount_point = "/docker"
 
 [[mount_points]]

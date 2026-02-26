@@ -1,3 +1,6 @@
+packages:
+  - "libs/*"
+
 onlyBuiltDependencies:
   - "@pulumi/ansible"
   - "@pulumi/command"

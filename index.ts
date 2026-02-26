@@ -1,4 +1,4 @@
-import { deployHomelab } from "./src/proxmox/homelab-orchestrator";
+import deployHomelab from "./src/deploy-homelab";
 
 function main() {
   deployHomelab();

@@ -48,7 +48,7 @@ gid = 104
 mode = "0660"
 
 [[mount_points]]
-volume = "{{{@pve.lxc.app_data_dir}}}/jellyfin"
+volume = "{{{@pve.lxc.appDataDir}}}/jellyfin"
 mount_point = "/docker"
 
 [[mount_points]]
