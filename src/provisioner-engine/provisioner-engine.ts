@@ -8,10 +8,10 @@ import {
   Provisioner,
   ScriptProvisioner,
   AnsibleProvisioner,
-} from "./schema/provisioner";
+} from "../config-schema/provisioner";
 import { EnvUtils } from "../utils/env-utils";
 import { pathToResourceId } from "@hac/templates/pulumi/path-utils";
-import { LXC_DEFAULTS } from "./schema/pve";
+import { LXC_DEFAULTS } from "../config-schema/pve";
 import { camelToSnakeKeys } from "@hac/schema/case-conversion";
 
 export type ProvisionerResource = command.remote.Command | ansible.Playbook;

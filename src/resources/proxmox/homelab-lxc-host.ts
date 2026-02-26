@@ -4,27 +4,27 @@ import * as proxmox from "@muhlba91/pulumi-proxmoxve";
 import * as porkbun from "@pulumi/porkbun";
 import type { HelperOptions } from "@hac/templates/handlebars";
 import { TemplateContext } from "@hac/templates/template-context";
-import { sharedHandlebars } from "../templates/shared-handlebars";
+import { sharedHandlebars } from "../../utils/handlebars";
 import { HomelabPveProvider } from "./homelab-pve-provider";
 import {
   ComposeStack,
   ComposeStackContext,
   TemplateFileContext,
-} from "../docker/compose-stack";
+} from "../compose-stack";
 import {
   ProvisionerEngine,
   ProvisionerResource,
-} from "../hosts/provisioner-engine";
+} from "../../provisioner-engine/provisioner-engine";
 import { type HomelabPveHostContext } from "./homelab-pve-host";
-import { LXC_DEFAULTS } from "../hosts/schema/pve";
-import type { PveHostConfig } from "../hosts/schema/pve-host-config";
-import type { LxcHostConfig } from "../hosts/schema/lxc-host-config";
+import { LXC_DEFAULTS } from "../../config-schema/pve";
+import type { PveHostConfig } from "../../config-schema/pve-host-config";
+import type { LxcHostConfig } from "../../config-schema/lxc-host-config";
 import {
   FirewallDirection,
   FirewallMacro,
   FirewallPolicy,
   TemplatePaths,
-} from "../constants";
+} from "../../utils/constants";
 
 export type HomelabLxcHostContext = HomelabPveHostContext;
 

@@ -48,7 +48,7 @@ export class PulumiSchemaParser<TSchema extends z.ZodSchema> {
 
   constructor(
     private readonly schema: TSchema,
-    private readonly options?: SchemaParserOptions,
+    options?: SchemaParserOptions,
   ) {
     this.defaultFormat = options?.defaultFormat ?? TomlFormat;
   }

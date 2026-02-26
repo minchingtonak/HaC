@@ -6,14 +6,17 @@ import type { HelperOptions } from "@hac/templates/handlebars";
 import { TemplateContext } from "@hac/templates/template-context";
 import { TemplateProcessor } from "@hac/templates/template-processor";
 import { TemplateDirectory } from "@hac/templates/pulumi/template-directory";
-import { sharedHandlebars } from "../templates/shared-handlebars";
-import { STACK_CONFIG_NAMESPACE_TEMPLATE, TemplatePaths } from "../constants";
+import { sharedHandlebars } from "../utils/handlebars";
+import {
+  STACK_CONFIG_NAMESPACE_TEMPLATE,
+  TemplatePaths,
+} from "../utils/constants";
 import {
   HomelabLxcHost,
   type HomelabLxcHostContext,
-} from "../proxmox/homelab-lxc-host";
-import { PveHostConfig } from "../hosts/schema/pve-host-config";
-import { LxcHostConfig } from "../hosts/schema/lxc-host-config";
+} from "./proxmox/homelab-lxc-host";
+import { PveHostConfig } from "../config-schema/pve-host-config";
+import { LxcHostConfig } from "../config-schema/lxc-host-config";
 
 export type ComposeStackContext = HomelabLxcHostContext & {
   stackName: string;

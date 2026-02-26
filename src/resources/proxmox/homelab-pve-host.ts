@@ -5,19 +5,21 @@ import * as path from "node:path";
 import type { HelperOptions } from "@hac/templates/handlebars";
 import { TemplateContext } from "@hac/templates/template-context";
 import { pathToResourceId } from "@hac/templates/pulumi/path-utils";
-import { sharedHandlebars } from "../templates/shared-handlebars";
+import { sharedHandlebars } from "../../utils/handlebars";
 import { HomelabLxcHost } from "./homelab-lxc-host";
 import { HomelabPveProvider } from "./homelab-pve-provider";
-import { partitionFileParseResults } from "@hac/schema/file-result";
-import { logFileParseErrors } from "../hosts/config-parser";
-import { lxcConfigParser } from "../hosts/lxc-config-parser";
-import { PveHostConfig } from "../hosts/schema/pve-host-config";
-import { LxcHostConfig } from "../hosts/schema/lxc-host-config";
+import { PveHostConfig } from "../../config-schema/pve-host-config";
+import { LxcHostConfig } from "../../config-schema/lxc-host-config";
 import {
   ProvisionerEngine,
   ProvisionerResource,
-} from "../hosts/provisioner-engine";
-import { TemplateFileContext } from "../docker/compose-stack";
+} from "../../provisioner-engine/provisioner-engine";
+import { TemplateFileContext } from "../compose-stack";
+import {
+  logFileParseErrors,
+  partitionFileParseResults,
+} from "../../config-parser/utils";
+import { lxcConfigParser } from "../../config-parser/parsers";
 
 /**
  * Context for HomelabPveHost with camelCase keys.

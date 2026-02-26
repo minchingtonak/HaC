@@ -2,7 +2,7 @@ import { z } from "zod";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { remote } from "@pulumi/command/types/input";
 import { LXC_DEFAULTS } from "./pve";
-import { ScriptProvisionerRunOn } from "../../constants";
+import { ScriptProvisionerRunOn } from "../utils/constants";
 
 /**
  * @see {@link remote.ConnectionArgs}

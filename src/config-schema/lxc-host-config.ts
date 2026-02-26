@@ -1,7 +1,7 @@
 import { z } from "zod";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { ct } from "@muhlba91/pulumi-proxmoxve";
-import { FirewallLogLevel, FirewallPolicy } from "../../constants";
+import { FirewallLogLevel, FirewallPolicy } from "../utils/constants";
 import { ProvisionerSchema } from "./provisioner";
 import {
   LXC_DEFAULTS,

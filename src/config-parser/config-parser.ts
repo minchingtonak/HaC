@@ -6,38 +6,17 @@ import { z } from "zod";
 
 import { PulumiSchemaParser } from "@hac/schema/pulumi/parser";
 import { TomlFormat } from "@hac/schema/formats/toml";
-import {
-  FileParseError,
-  FileParseResult,
-  partitionFileParseResults,
-} from "@hac/schema/file-result";
 import { ParseResult } from "@hac/schema/result";
 import { TemplateProcessor } from "@hac/templates/template-processor";
 import { PulumiTemplateProcessor } from "@hac/templates/pulumi/template-processor";
 import { PulumiVariableResolver } from "@hac/templates/pulumi/variable-resolver";
 import { ConfigNamespaceTemplateContext as BaseConfigNamespaceTemplateContext } from "@hac/templates/pulumi/template-file";
 
-import { sharedHandlebars } from "../templates/shared-handlebars";
+import { sharedHandlebars } from "../utils/handlebars";
+import { partitionFileParseResults } from "./utils";
+import { FileParseError, FileParseResult } from "./types";
 
 type ConfigType = "pve" | "lxc";
-
-/**
- * Log file parse errors using Pulumi's logging system.
- */
-export function logFileParseErrors(errors: FileParseError[]): void {
-  errors.forEach(({ filePath, error }) => {
-    switch (error.kind) {
-      case "format":
-        pulumi.log.warn(
-          `[${filePath}] ${error.formatName} ${error.kind} error:\n${error.message}${error.cause ? ` (${error.cause})` : ""}`,
-        );
-        break;
-      case "validation":
-        pulumi.log.warn(`[${filePath}] ${error.kind} error:\n${error.message}`);
-        break;
-    }
-  });
-}
 
 /**
  * Context variables available when rendering the config namespace template.

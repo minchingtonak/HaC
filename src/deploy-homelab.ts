@@ -1,10 +1,13 @@
 import { TemplateContext } from "@hac/templates/template-context";
 
-import { logFileParseErrors } from "../hosts/config-parser";
-import { pveConfigParser } from "../hosts/pve-config-parser";
-import { HomelabPveHost, HomelabPveHostContext } from "./homelab-pve-host";
+import {
+  HomelabPveHost,
+  HomelabPveHostContext,
+} from "./resources/proxmox/homelab-pve-host";
+import { pveConfigParser } from "./config-parser/parsers";
+import { logFileParseErrors } from "./config-parser/utils";
 
-export function deployHomelab() {
+export default function deployHomelab() {
   const pveConfigResults = pveConfigParser.loadAllConfigs("./hosts/pve");
 
   pveConfigResults.apply(([pveConfigs, parseErrors]) => {

@@ -1,6 +1,6 @@
 import * as proxmox from "@muhlba91/pulumi-proxmoxve";
 import * as pulumi from "@pulumi/pulumi";
-import { PveHostConfig } from "../hosts/schema/pve-host-config";
+import { PveHostConfig } from "../../config-schema/pve-host-config";
 
 export interface HomelabPveProviderArgs {
   pveConfig: PveHostConfig;

@@ -34,7 +34,7 @@ import {
   FirewallPolicy,
   FirewallMacro,
   FirewallDirection,
-} from "../../constants";
+} from "../utils/constants";
 
 export const PVE_DEFAULTS = {
   AUTH: { USERNAME: "root", INSECURE: false },

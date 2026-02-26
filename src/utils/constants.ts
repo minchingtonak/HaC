@@ -1,8 +1,5 @@
 // https://www.totaltypescript.com/books/total-typescript-essentials/deriving-types#using-as-const-for-javascript-style-enums
 
-export const CONFIG_NAMESPACE_TEMPLATE =
-  "{{{parserType}}}#{{{trimExtension fileName}}}";
-
 export const STACK_CONFIG_NAMESPACE_TEMPLATE =
   "lxc#{{{lxc.hostname}}}#{{{stackName}}}";
 
