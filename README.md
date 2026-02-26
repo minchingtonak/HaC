@@ -107,9 +107,32 @@ flowchart LR
 │       └── */
 │           ├── compose[.hbs].yaml  # Docker Compose yaml
 │           └── *                   # Additional config files/folders
+├── libs/
+│   ├── templates/                  # @hac/templates - Handlebars templating library
+│   └── schema/                     # @hac/schema - Schema parsing with Zod validation
 ├── src/                            # TypeScript source code
 └── provisioners/                   # Provisioning scripts and playbooks
 ```
+
+### Workspace Packages
+
+HaC is structured as a pnpm monorepo with reusable workspace packages under `libs/`:
+
+#### @hac/templates
+
+Handlebars templating library with pluggable variable resolution. Features:
+
+- **Isolated Handlebars instances** - Each processor uses its own instance with builtin helpers
+- **Pluggable variable resolution** - Swap backends (objects, Pulumi Config, environment variables)
+- **Pulumi integration** - `PulumiTemplateProcessor` handles `pulumi.Output<string>` values and secrets
+
+#### @hac/schema
+
+Schema parsing and validation library with pluggable format support. Features:
+
+- **Extensible format support** - Can add support for other file formats
+- **Zod validation** - Type-safe parsing with detailed error messages
+- **Pulumi integration** - `PulumiSchemaParser` handles `pulumi.Output<string>` content
 
 ## Configuration & Secrets with Templating
 
