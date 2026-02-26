@@ -35,7 +35,9 @@ export class ConfigParser<TConfig> {
     configSchema: z.ZodSchema<TConfig>,
     configNamespaceTemplate: string,
   ) {
-    this.parser = new PulumiSchemaParser(configSchema);
+    this.parser = new PulumiSchemaParser(configSchema, {
+      defaultFormat: TomlFormat,
+    });
     this.compiledNamespaceTemplate =
       sharedHandlebars.compile<ConfigNamespaceTemplateContext>(
         configNamespaceTemplate,
@@ -117,6 +119,6 @@ export class ConfigParser<TConfig> {
   public parseConfigString(
     tomlContent: pulumi.Output<string>,
   ): pulumi.Output<ParseResult<TConfig>> {
-    return this.parser.parse(tomlContent, TomlFormat);
+    return this.parser.parse(tomlContent);
   }
 }

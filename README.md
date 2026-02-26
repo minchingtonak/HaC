@@ -710,9 +710,6 @@ flowchart TB
 
 #### schema
 
-- add a transform to the top level lxc and pve schemas that does a recursive Object.freeze on the parsed result
-- look into adding resources for networking (requires some learning)
-  - vlans, bridges
 - is .min(1) really necessary?
 - would be nice to be able to have pve config field that allows setting fields for all lxcs (potentially stacks as well)
   - can extend this type of this for stacks within lxc config
@@ -720,6 +717,8 @@ flowchart TB
 
 #### everything else
 
+- look into adding resources for networking (requires some learning)
+  - vlans, bridges
 - lifecycle for provisioners (i.e. when to run). for now can be before-stacks or after-stacks. should be able to provide optional list of domains to ping and wait on to be up?
 - implement stack configs. can be stack.toml or config.toml or smth with a zod schema
   - can use this to define stack-specific properties
