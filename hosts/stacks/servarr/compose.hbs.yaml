@@ -557,7 +557,7 @@ services:
       - traefik
 
   huntarr:
-    image: huntarr/huntarr:9.2.3@sha256:d23614d775dc8f9cc2c5d89c0d51ff1d2d6b692203897226993f76b2b43074ff
+    image: huntarr/huntarr:9.4.3@sha256:b68c9e12e67d600f5b7bc573a48a23caaf98be9143d69c73045bc420b1418312
     container_name: huntarr
     restart: unless-stopped
     # ports:
