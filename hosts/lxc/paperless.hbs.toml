@@ -4,6 +4,7 @@ description = "paperless document management systems"
 [stacks]
 traefik = {}
 dozzle = {}
+newt = {}
 paperless-ngx = {}
 
 [cpu]

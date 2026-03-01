@@ -251,6 +251,12 @@ config:
     secure: v1:JxqT6is3fVQm9rgB:gh9l1H81msgZQUe//4VaIhkJ8H7Zu2iPdMV3JuRT35B44g13sIBb1lloLxPNsdzwm74iuQ==
   lxc#paperless#paperless-ngx:SECRET_OIDC_CLIENT_SECRET:
     secure: v1:0PsdwSxXfu52+a7t:J1gT1zIUCWguAVcU3UEtv67lLvpsdCqHButJTLT/YvAaozbRMCYWmIwOI8uqmfL3
+  lxc#paperless#newt:SECRET_PANGOLIN_ENDPOINT:
+    secure: v1:d+ZLISpNwM6N0r9j:Pr+Z6ivT1unROemufpwXBb5BamPVOF2GC69BhGx0Nbg+t7NR+TAQhYLuBw==
+  lxc#paperless#newt:SECRET_NEWT_ID:
+    secure: v1:FXwvOSVB8FPKxAuy:/PlAALropDrQFVGEHaRetq27NCQsngS+WeHurPOI/A==
+  lxc#paperless#newt:SECRET_NEWT_SECRET:
+    secure: v1:fwuIRP7Ook1COF+b:C1XlxQup40i9NZwUGm9uWc6Xo6q1qdgBniMSdW6cJkYHWW0UTL/TR1Tw3aND2gay/MFE+ELJAfT39c9H/7xq+w==
   # music
   lxc#music#navidrome:SECRET_LASTFM_APIKEY:
     secure: v1:gvt3vIfX9NTkf9tQ:8bIKcNzkJtSvd/R/h2A8wHq1xPqQHTurz8JrlxXHj1DStEyU0030sx1u0K1qlga7

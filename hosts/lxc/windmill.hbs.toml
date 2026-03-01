@@ -8,7 +8,7 @@ windmill = {}
 archiveteam-warrior = {}
 
 [cpu]
-cores = 2
+cores = 8
 
 [memory]
 dedicated = 4096
