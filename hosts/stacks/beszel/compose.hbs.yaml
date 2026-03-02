@@ -1,6 +1,6 @@
 services:
   beszel:
-    image: henrygd/beszel:0.18.3@sha256:d1326b5cd73838b1d1acc5f1764c4b993c9668aa26df149082695894cb2805ae
+    image: henrygd/beszel:0.18.4@sha256:64bcaa60d1ed4149f0628c70cf68044b5d1ea90b3437de41e009e873f50e3f36
     container_name: beszel
     restart: unless-stopped
     # ports:
