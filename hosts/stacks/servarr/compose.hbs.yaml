@@ -394,7 +394,7 @@ services:
       - traefik
 
   bazarr:
-    image: ghcr.io/linuxserver/bazarr:1.5.5@sha256:d40ee61030a9afafddfdd58d160281b865bfcad7cb66e920116fd6fd40668cbb
+    image: ghcr.io/linuxserver/bazarr:1.5.6@sha256:94eee5e3e14430b7b144d4556be73963a7daf6f1bddc25586627f426465482ce
     container_name: bazarr
     restart: unless-stopped
     environment:
