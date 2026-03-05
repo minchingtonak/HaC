@@ -20,8 +20,8 @@ importers:
         specifier: workspace:*
         version: link:libs/templates
       '@muhlba91/pulumi-proxmoxve':
-        specifier: ^7.11.0
-        version: 7.11.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
+        specifier: ^7.13.0
+        version: 7.13.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
       '@pulumi/ansible':
         specifier: file:sdks/ansible
         version: file:sdks/ansible(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))
@@ -307,8 +307,8 @@ packages:
     resolution: {integrity: sha512-XGSsWDweP80Fks16lwkAUIr54ICyBs6PsI4mpfTLQaWgEJRtY9xEV+PeyDpJ+sJEGZxqINlpmAwe/6tS1pP8Ng==}
     engines: {node: '>=10.3.0'}
 
-  '@muhlba91/pulumi-proxmoxve@7.11.0':
-    resolution: {integrity: sha512-q9MV+jCXJYI3iA1FufPdS0d/u4/Y1ajQhH9qGqiclUQtIaDyAew907q/Pkq26Byg5inG7/+tYZIodUW2Vcv5QQ==}
+  '@muhlba91/pulumi-proxmoxve@7.13.0':
+    resolution: {integrity: sha512-gpnwSK1v8Ji1J5lWuz+fZtH+78GlIQbg6+PGBruk5phVkkndW4gj5YSP4PzKEjVYdg34Lt9BO2dRFsv3nSv9Gw==}
 
   '@npmcli/agent@4.0.0':
     resolution: {integrity: sha512-kAQTcEN9E8ERLVg5AsGwLNoFb+oEG6engbqAU2P43gD4JEIkNGMHdVQ096FsOAAYpZPB0RSt0zgInKIAS1l5QA==}
@@ -995,6 +995,7 @@ packages:
   git-raw-commits@4.0.0:
     resolution: {integrity: sha512-ICsMM1Wk8xSGMowkOmPrzo2Fgmfo4bMHLNX6ytHjajRJUqvHOw/TFapQ+QG75c3X/tTDDhOSRPGC52dDbNM8FQ==}
     engines: {node: '>=16'}
+    deprecated: This package is no longer maintained. For the JavaScript API, please use @conventional-changelog/git-client instead.
     hasBin: true
 
   glob-parent@6.0.2:
@@ -1666,6 +1667,7 @@ packages:
   tar@7.5.7:
     resolution: {integrity: sha512-fov56fJiRuThVFXD6o6/Q354S7pnWMJIVlDBYijsTNx6jKSE4pvrDTs6lUnmGvNyfJwFQQwWy3owKz1ucIhveQ==}
     engines: {node: '>=18'}
+    deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exorbitant rates) by contacting i@izs.me
 
   tinyexec@1.0.1:
     resolution: {integrity: sha512-5uC6DDlmeqiOwCPmK9jMSdOuZTh8bU39Ys6yidB+UTt5hfZUPGAypSgFRiEp+jbi9qH40BLDvy85jIU88wKSqw==}
@@ -2059,7 +2061,7 @@ snapshots:
 
   '@logdna/tail-file@2.2.0': {}
 
-  '@muhlba91/pulumi-proxmoxve@7.11.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)':
+  '@muhlba91/pulumi-proxmoxve@7.13.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
       '@pulumi/pulumi': 3.218.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
     transitivePeerDependencies:
