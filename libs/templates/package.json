@@ -20,17 +20,14 @@
     "lint": "eslint src/"
   },
   "dependencies": {
+    "@pulumi/command": "^1.2.1",
     "handlebars": "^4.7.8",
     "type-fest": "^5.4.3"
   },
   "peerDependencies": {
-    "@hanseltime/pulumi-file-utils": "^1.2.0",
     "@pulumi/pulumi": "^3.0.0"
   },
   "peerDependenciesMeta": {
-    "@hanseltime/pulumi-file-utils": {
-      "optional": true
-    },
     "@pulumi/pulumi": {
       "optional": true
     }

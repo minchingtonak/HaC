@@ -124,7 +124,7 @@ export class ComposeStack extends pulumi.ComponentResource {
         new command.remote.CopyToRemote(
           `${name}-copy-rendered-${templateFile.idSafeName}`,
           {
-            source: templateFile.asset.copyableSource,
+            source: templateFile.asset,
             remotePath: ComposeStack.getRemoteOutputPath(stacksRelativePath),
             connection: args.connection,
           },

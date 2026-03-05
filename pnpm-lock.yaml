@@ -5,9 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 patchedDependencies:
-  '@hanseltime/pulumi-file-utils':
-    hash: e5d211be610d1ebcd0e4781e82cb1ec57ab59635056aa758f4366f001a469c10
-    path: patches/@hanseltime__pulumi-file-utils.patch
   '@pulumi/command':
     hash: 919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6
     path: patches/@pulumi__command.patch
@@ -22,9 +19,6 @@ importers:
       '@hac/templates':
         specifier: workspace:*
         version: link:libs/templates
-      '@hanseltime/pulumi-file-utils':
-        specifier: 1.2.0
-        version: 1.2.0(patch_hash=e5d211be610d1ebcd0e4781e82cb1ec57ab59635056aa758f4366f001a469c10)(@pulumi/pulumi@3.218.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3))
       '@muhlba91/pulumi-proxmoxve':
         specifier: ^7.11.0
         version: 7.11.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
@@ -32,8 +26,8 @@ importers:
         specifier: file:sdks/ansible
         version: file:sdks/ansible(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))
       '@pulumi/command':
-        specifier: ^1.1.3
-        version: 1.1.3(patch_hash=919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6)(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
+        specifier: ^1.2.1
+        version: 1.2.1(patch_hash=919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6)(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
       '@pulumi/porkbun':
         specifier: file:sdks/porkbun
         version: file:sdks/porkbun(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))
@@ -105,9 +99,9 @@ importers:
 
   libs/templates:
     dependencies:
-      '@hanseltime/pulumi-file-utils':
-        specifier: ^1.2.0
-        version: 1.2.0(patch_hash=e5d211be610d1ebcd0e4781e82cb1ec57ab59635056aa758f4366f001a469c10)(@pulumi/pulumi@3.218.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3))
+      '@pulumi/command':
+        specifier: ^1.2.1
+        version: 1.2.1(patch_hash=919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6)(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
       '@pulumi/pulumi':
         specifier: ^3.0.0
         version: 3.218.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
@@ -264,12 +258,6 @@ packages:
     resolution: {integrity: sha512-tMXdRCfYVixjuFK+Hk0Q1s38gV9zDiDJfWL3h1rv4Qc39oILCu1TRTDt7+fGUI8K4G1Fj125Hx/ru3azECWTyQ==}
     engines: {node: '>=6'}
     hasBin: true
-
-  '@hanseltime/pulumi-file-utils@1.2.0':
-    resolution: {integrity: sha512-aWRpM7x8aasguuG4a8aVA6DWD60gbK7CYg59M167VF6kxsxVpjBEGIB2Vpq64xA0q212Fhf9h+N9/SokksGaoA==}
-    engines: {node: '>=20'}
-    peerDependencies:
-      '@pulumi/pulumi': ^3.158.0
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -489,8 +477,8 @@ packages:
   '@pulumi/ansible@file:sdks/ansible':
     resolution: {directory: sdks/ansible, type: directory}
 
-  '@pulumi/command@1.1.3':
-    resolution: {integrity: sha512-eBzGE/BQlxMNcxrrA62N4cLaHdL0xDSRACXxB0Hjc4rJG60vhpDVO130xxb4x3cZ7HT1kvjS4KuuoH8R5JRbIQ==}
+  '@pulumi/command@1.2.1':
+    resolution: {integrity: sha512-mutNDIUYP67yCBYOVIidQyxuTwZDY9v/sx9EGbgIv4PXfyfolOKGgGLeoHEbI1lxRwaw2wbTZ3VNIynDnA5VKA==}
 
   '@pulumi/porkbun@file:sdks/porkbun':
     resolution: {directory: sdks/porkbun, type: directory}
@@ -2035,10 +2023,6 @@ snapshots:
       protobufjs: 7.5.3
       yargs: 17.7.2
 
-  '@hanseltime/pulumi-file-utils@1.2.0(patch_hash=e5d211be610d1ebcd0e4781e82cb1ec57ab59635056aa758f4366f001a469c10)(@pulumi/pulumi@3.218.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3))':
-    dependencies:
-      '@pulumi/pulumi': 3.218.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
-
   '@humanfs/core@0.19.1': {}
 
   '@humanfs/node@0.16.7':
@@ -2316,7 +2300,7 @@ snapshots:
       - supports-color
       - ts-node
 
-  '@pulumi/command@1.1.3(patch_hash=919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6)(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)':
+  '@pulumi/command@1.2.1(patch_hash=919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6)(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
       '@pulumi/pulumi': 3.218.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
     transitivePeerDependencies:

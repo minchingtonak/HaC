@@ -1,6 +1,5 @@
 import * as pulumi from "@pulumi/pulumi";
 import * as path from "node:path";
-import { CopyableAsset } from "@hanseltime/pulumi-file-utils";
 
 import { type RenderedTemplateFile } from "../../template-processor-interface";
 import { type TemplateContext } from "../../template-context";
@@ -81,7 +80,7 @@ export class TemplateFile<
 
   processedTemplate: RenderedTemplateFile<pulumi.Output<string>>;
 
-  asset: CopyableAsset;
+  asset: pulumi.Output<pulumi.asset.StringAsset>;
 
   processor: PulumiTemplateProcessor;
 
@@ -114,19 +113,8 @@ export class TemplateFile<
       args.templateContext.get(),
     );
 
-    this.asset = new CopyableAsset(
-      `${name}-rendered-template-${this.idSafeName}`,
-      {
-        asset:
-          pulumi.Output.isInstance(this.processedTemplate.content) ?
-            this.processedTemplate.content.apply(
-              (val) => new pulumi.asset.StringAsset(val),
-            )
-          : new pulumi.asset.StringAsset(this.processedTemplate.content),
-        synthName: this.idSafeName,
-        tmpCopyDir: "tmp",
-        noClean: false,
-      },
+    this.asset = this.processedTemplate.content.apply(
+      (val) => new pulumi.asset.StringAsset(val),
     );
 
     this.registerOutputs();
