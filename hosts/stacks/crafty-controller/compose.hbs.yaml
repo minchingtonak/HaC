@@ -1,7 +1,7 @@
 services:
   crafty:
     container_name: crafty_container
-    image: registry.gitlab.com/crafty-controller/crafty-4:4.9.0@sha256:ea04b6c57716c48f80039f7837417bde722b8fecaba2826846076f77675ab395
+    image: registry.gitlab.com/crafty-controller/crafty-4:4.10.1@sha256:dff45185258fe8664a8e2da72f6ce33a3ec103aa3e4b9c463a6c577740d4e49c
     restart: unless-stopped
     environment:
       - TZ={{{global:TIMEZONE}}}
