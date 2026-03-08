@@ -251,6 +251,8 @@ config:
     secure: v1:JxqT6is3fVQm9rgB:gh9l1H81msgZQUe//4VaIhkJ8H7Zu2iPdMV3JuRT35B44g13sIBb1lloLxPNsdzwm74iuQ==
   lxc#paperless#paperless-ngx:SECRET_OIDC_CLIENT_SECRET:
     secure: v1:0PsdwSxXfu52+a7t:J1gT1zIUCWguAVcU3UEtv67lLvpsdCqHButJTLT/YvAaozbRMCYWmIwOI8uqmfL3
+  lxc#paperless#paperless-ngx:SECRET_PANGOLIN_DOMAIN:
+    secure: v1:WnPq3XbdoGw2IugK:RvPBSs9/t6AD4KN1Ab5KWFQnTj6ziE8fxfPiJWqvniH3wH82
   lxc#paperless#newt:SECRET_PANGOLIN_ENDPOINT:
     secure: v1:d+ZLISpNwM6N0r9j:Pr+Z6ivT1unROemufpwXBb5BamPVOF2GC69BhGx0Nbg+t7NR+TAQhYLuBw==
   lxc#paperless#newt:SECRET_NEWT_ID:
