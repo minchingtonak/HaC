@@ -241,7 +241,7 @@ services:
       - traefik
 
   sonarr:
-    image: ghcr.io/linuxserver/sonarr:4.0.16@sha256:6f73bbba33391a338e20d836a60c86beaf2a865a89b706b339fc8cb0b8ce1559
+    image: ghcr.io/linuxserver/sonarr:4.0.16@sha256:21c1c3d52248589bb064f5adafec18cad45812d7a01d317472955eef051e619b
     container_name: sonarr
     restart: unless-stopped
     environment:
