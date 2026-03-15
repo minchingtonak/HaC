@@ -32,8 +32,8 @@ importers:
         specifier: file:sdks/porkbun
         version: file:sdks/porkbun(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))
       '@pulumi/pulumi':
-        specifier: ^3.218.0
-        version: 3.218.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
+        specifier: ^3.225.1
+        version: 3.226.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
       smol-toml:
         specifier: ^1.6.0
         version: 1.6.0
@@ -81,8 +81,8 @@ importers:
   libs/schema:
     dependencies:
       '@pulumi/pulumi':
-        specifier: ^3.0.0
-        version: 3.218.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
+        specifier: ^3.225.1
+        version: 3.226.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
       smol-toml:
         specifier: ^1.6.0
         version: 1.6.0
@@ -103,8 +103,8 @@ importers:
         specifier: ^1.2.1
         version: 1.2.1(patch_hash=919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6)(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
       '@pulumi/pulumi':
-        specifier: ^3.0.0
-        version: 3.218.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
+        specifier: ^3.225.1
+        version: 3.226.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
       handlebars:
         specifier: ^4.7.8
         version: 4.7.8
@@ -382,11 +382,23 @@ packages:
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.10.0'
 
+  '@opentelemetry/core@1.28.0':
+    resolution: {integrity: sha512-ZLwRMV+fNDpVmF2WYUdBHlq0eOWtEaUJSusrzjGnBt7iSRvfjFE3RXYUZJrqou/wIDWV0DwQ5KIfYe9WXg9Xqw==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@opentelemetry/api': '>=1.0.0 <1.10.0'
+
   '@opentelemetry/core@1.30.1':
     resolution: {integrity: sha512-OOCM2C/QIURhJMuKaekP3TRBxBKxG/TWWA0TL2J6nXUtDnuCtccy49LUJF8xPFXMX+0LMcxFpCo8M9cGY1W6rQ==}
     engines: {node: '>=14'}
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.10.0'
+
+  '@opentelemetry/exporter-trace-otlp-grpc@0.55.0':
+    resolution: {integrity: sha512-ohIkCLn2Wc3vhhFuf1bH8kOXHMEdcWiD847x7f3Qfygc+CGiatGLzQYscTcEYsWGMV22gVwB/kVcNcx5a3o8gA==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@opentelemetry/api': ^1.3.0
 
   '@opentelemetry/exporter-zipkin@1.30.1':
     resolution: {integrity: sha512-6S2QIMJahIquvFaaxmcwpvQQRD/YFaMTNoIxrfPIPOeITN+a8lfEcPDxNxn8JDAaxkg+4EnXhz8upVDYenoQjA==}
@@ -406,6 +418,24 @@ packages:
     peerDependencies:
       '@opentelemetry/api': ^1.3.0
 
+  '@opentelemetry/otlp-exporter-base@0.55.0':
+    resolution: {integrity: sha512-iHQI0Zzq3h1T6xUJTVFwmFl5Dt5y1es+fl4kM+k5T/3YvmVyeYkSiF+wHCg6oKrlUAJfk+t55kaAu3sYmt7ZYA==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@opentelemetry/api': ^1.3.0
+
+  '@opentelemetry/otlp-grpc-exporter-base@0.55.0':
+    resolution: {integrity: sha512-gebbjl9FiSp52igWXuGjcWQKfB6IBwFGt5z1VFwTcVZVeEZevB6bJIqoFrhH4A02m7OUlpJ7l4EfRi3UtkNANQ==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@opentelemetry/api': ^1.3.0
+
+  '@opentelemetry/otlp-transformer@0.55.0':
+    resolution: {integrity: sha512-kVqEfxtp6mSN2Dhpy0REo1ghP4PYhC1kMHQJ2qVlO99Pc+aigELjZDfg7/YKmL71gR6wVGIeJfiql/eXL7sQPA==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@opentelemetry/api': ^1.3.0
+
   '@opentelemetry/propagator-b3@1.30.1':
     resolution: {integrity: sha512-oATwWWDIJzybAZ4pO76ATN5N6FFbOA1otibAVlS8v90B4S1wClnhRUk7K+2CHAwN1JKYuj4jh/lpCEG5BAqFuQ==}
     engines: {node: '>=14'}
@@ -418,8 +448,32 @@ packages:
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.10.0'
 
+  '@opentelemetry/resources@1.28.0':
+    resolution: {integrity: sha512-cIyXSVJjGeTICENN40YSvLDAq4Y2502hGK3iN7tfdynQLKWb3XWZQEkPc+eSx47kiy11YeFAlYkEfXwR1w8kfw==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@opentelemetry/api': '>=1.0.0 <1.10.0'
+
   '@opentelemetry/resources@1.30.1':
     resolution: {integrity: sha512-5UxZqiAgLYGFjS4s9qm5mBVo433u+dSPUFWVWXmLAD4wB65oMCoXaJP1KJa9DIYYMeHu3z4BZcStG3LC593cWA==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@opentelemetry/api': '>=1.0.0 <1.10.0'
+
+  '@opentelemetry/sdk-logs@0.55.0':
+    resolution: {integrity: sha512-TSx+Yg/d48uWW6HtjS1AD5x6WPfLhDWLl/WxC7I2fMevaiBuKCuraxTB8MDXieCNnBI24bw9ytyXrDCswFfWgA==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@opentelemetry/api': '>=1.4.0 <1.10.0'
+
+  '@opentelemetry/sdk-metrics@1.28.0':
+    resolution: {integrity: sha512-43tqMK/0BcKTyOvm15/WQ3HLr0Vu/ucAl/D84NO7iSlv6O4eOprxSHa3sUtmYkaZWHqdDJV0AHVz/R6u4JALVQ==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@opentelemetry/api': '>=1.3.0 <1.10.0'
+
+  '@opentelemetry/sdk-trace-base@1.28.0':
+    resolution: {integrity: sha512-ceUVWuCpIao7Y5xE02Xs3nQi0tOGmMea17ecBdwtCvdo9ekmO+ijc9RFDgfifMl7XCBf41zne/1POM3LqSTZDA==}
     engines: {node: '>=14'}
     peerDependencies:
       '@opentelemetry/api': '>=1.0.0 <1.10.0'
@@ -483,8 +537,8 @@ packages:
   '@pulumi/porkbun@file:sdks/porkbun':
     resolution: {directory: sdks/porkbun, type: directory}
 
-  '@pulumi/pulumi@3.218.0':
-    resolution: {integrity: sha512-xqPX9zIi6cHFpO6f6W6vcTifLtjvTnlMnvCykvIdYhaHCHPbtx6QxCbOcS/YULpaWa4P7LzO219z3KMJ43/7jA==}
+  '@pulumi/pulumi@3.226.0':
+    resolution: {integrity: sha512-GvBt9emcdUi4NjShXcH+nhd0yNUUAxydFhGl7pYCDHs2SRHMkhciGhbvlQwZniZZwff5SUGE+pR7DAlsTXdXuw==}
     engines: {node: '>=20'}
     peerDependencies:
       ts-node: '>= 7.0.1 < 12'
@@ -2072,7 +2126,7 @@ snapshots:
 
   '@muhlba91/pulumi-proxmoxve@7.11.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
-      '@pulumi/pulumi': 3.218.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
+      '@pulumi/pulumi': 3.226.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -2208,10 +2262,25 @@ snapshots:
     dependencies:
       '@opentelemetry/api': 1.9.0
 
+  '@opentelemetry/core@1.28.0(@opentelemetry/api@1.9.0)':
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/semantic-conventions': 1.27.0
+
   '@opentelemetry/core@1.30.1(@opentelemetry/api@1.9.0)':
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/semantic-conventions': 1.28.0
+
+  '@opentelemetry/exporter-trace-otlp-grpc@0.55.0(@opentelemetry/api@1.9.0)':
+    dependencies:
+      '@grpc/grpc-js': 1.13.4
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/otlp-grpc-exporter-base': 0.55.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/otlp-transformer': 0.55.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-base': 1.28.0(@opentelemetry/api@1.9.0)
 
   '@opentelemetry/exporter-zipkin@1.30.1(@opentelemetry/api@1.9.0)':
     dependencies:
@@ -2241,6 +2310,31 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@opentelemetry/otlp-exporter-base@0.55.0(@opentelemetry/api@1.9.0)':
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/otlp-transformer': 0.55.0(@opentelemetry/api@1.9.0)
+
+  '@opentelemetry/otlp-grpc-exporter-base@0.55.0(@opentelemetry/api@1.9.0)':
+    dependencies:
+      '@grpc/grpc-js': 1.13.4
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/otlp-exporter-base': 0.55.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/otlp-transformer': 0.55.0(@opentelemetry/api@1.9.0)
+
+  '@opentelemetry/otlp-transformer@0.55.0(@opentelemetry/api@1.9.0)':
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/api-logs': 0.55.0
+      '@opentelemetry/core': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-logs': 0.55.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-metrics': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-base': 1.28.0(@opentelemetry/api@1.9.0)
+      protobufjs: 7.5.3
+
   '@opentelemetry/propagator-b3@1.30.1(@opentelemetry/api@1.9.0)':
     dependencies:
       '@opentelemetry/api': 1.9.0
@@ -2251,11 +2345,37 @@ snapshots:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 1.30.1(@opentelemetry/api@1.9.0)
 
+  '@opentelemetry/resources@1.28.0(@opentelemetry/api@1.9.0)':
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions': 1.27.0
+
   '@opentelemetry/resources@1.30.1(@opentelemetry/api@1.9.0)':
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/core': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/semantic-conventions': 1.28.0
+
+  '@opentelemetry/sdk-logs@0.55.0(@opentelemetry/api@1.9.0)':
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/api-logs': 0.55.0
+      '@opentelemetry/core': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources': 1.28.0(@opentelemetry/api@1.9.0)
+
+  '@opentelemetry/sdk-metrics@1.28.0(@opentelemetry/api@1.9.0)':
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources': 1.28.0(@opentelemetry/api@1.9.0)
+
+  '@opentelemetry/sdk-trace-base@1.28.0(@opentelemetry/api@1.9.0)':
+    dependencies:
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources': 1.28.0(@opentelemetry/api@1.9.0)
+      '@opentelemetry/semantic-conventions': 1.27.0
 
   '@opentelemetry/sdk-trace-base@1.30.1(@opentelemetry/api@1.9.0)':
     dependencies:
@@ -2303,7 +2423,7 @@ snapshots:
 
   '@pulumi/ansible@file:sdks/ansible(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))':
     dependencies:
-      '@pulumi/pulumi': 3.218.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@4.9.5)
+      '@pulumi/pulumi': 3.226.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@4.9.5)
       '@types/node': 18.19.127
       async-mutex: 0.5.0
       typescript: 4.9.5
@@ -2313,7 +2433,7 @@ snapshots:
 
   '@pulumi/command@1.2.1(patch_hash=919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6)(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
-      '@pulumi/pulumi': 3.218.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
+      '@pulumi/pulumi': 3.226.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -2321,7 +2441,7 @@ snapshots:
 
   '@pulumi/porkbun@file:sdks/porkbun(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))':
     dependencies:
-      '@pulumi/pulumi': 3.218.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@4.9.5)
+      '@pulumi/pulumi': 3.226.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@4.9.5)
       '@types/node': 18.19.127
       async-mutex: 0.5.0
       typescript: 4.9.5
@@ -2329,12 +2449,13 @@ snapshots:
       - supports-color
       - ts-node
 
-  '@pulumi/pulumi@3.218.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@4.9.5)':
+  '@pulumi/pulumi@3.226.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@4.9.5)':
     dependencies:
       '@grpc/grpc-js': 1.13.4
       '@logdna/tail-file': 2.2.0
       '@npmcli/arborist': 9.1.10
       '@opentelemetry/api': 1.9.0
+      '@opentelemetry/exporter-trace-otlp-grpc': 0.55.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/exporter-zipkin': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation': 0.55.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-grpc': 0.55.0(@opentelemetry/api@1.9.0)
@@ -2365,12 +2486,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@pulumi/pulumi@3.218.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)':
+  '@pulumi/pulumi@3.226.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
       '@grpc/grpc-js': 1.13.4
       '@logdna/tail-file': 2.2.0
       '@npmcli/arborist': 9.1.10
       '@opentelemetry/api': 1.9.0
+      '@opentelemetry/exporter-trace-otlp-grpc': 0.55.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/exporter-zipkin': 1.30.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation': 0.55.0(@opentelemetry/api@1.9.0)
       '@opentelemetry/instrumentation-grpc': 0.55.0(@opentelemetry/api@1.9.0)
