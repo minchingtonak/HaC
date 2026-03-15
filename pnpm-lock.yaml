@@ -21,25 +21,25 @@ importers:
         version: link:libs/templates
       '@muhlba91/pulumi-proxmoxve':
         specifier: ^7.13.0
-        version: 7.13.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
+        version: 7.13.0(ts-node@10.9.2(@types/node@24.12.0)(typescript@5.9.3))(typescript@5.9.3)
       '@pulumi/ansible':
         specifier: file:sdks/ansible
-        version: file:sdks/ansible(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))
+        version: file:sdks/ansible(ts-node@10.9.2(@types/node@24.12.0)(typescript@5.9.3))
       '@pulumi/command':
         specifier: ^1.2.1
-        version: 1.2.1(patch_hash=919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6)(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
+        version: 1.2.1(patch_hash=919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6)(ts-node@10.9.2(@types/node@24.12.0)(typescript@5.9.3))(typescript@5.9.3)
       '@pulumi/porkbun':
         specifier: file:sdks/porkbun
-        version: file:sdks/porkbun(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))
+        version: file:sdks/porkbun(ts-node@10.9.2(@types/node@24.12.0)(typescript@5.9.3))
       '@pulumi/pulumi':
         specifier: ^3.225.1
-        version: 3.226.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
+        version: 3.226.0(ts-node@10.9.2(@types/node@24.12.0)(typescript@5.9.3))(typescript@5.9.3)
       smol-toml:
         specifier: ^1.6.0
         version: 1.6.0
       ts-node:
         specifier: ^10.9.2
-        version: 10.9.2(@types/node@24.10.11)(typescript@5.9.3)
+        version: 10.9.2(@types/node@24.12.0)(typescript@5.9.3)
       type-fest:
         specifier: ^5.4.4
         version: 5.4.4
@@ -49,7 +49,7 @@ importers:
     devDependencies:
       '@commitlint/cli':
         specifier: ^20.4.3
-        version: 20.5.0(@types/node@24.10.11)(conventional-commits-parser@6.3.0)(typescript@5.9.3)
+        version: 20.5.0(@types/node@24.12.0)(conventional-commits-parser@6.3.0)(typescript@5.9.3)
       '@commitlint/config-conventional':
         specifier: ^20.4.3
         version: 20.5.0
@@ -57,8 +57,8 @@ importers:
         specifier: ^9.39.4
         version: 9.39.4
       '@types/node':
-        specifier: ^24.10.10
-        version: 24.10.11
+        specifier: ^24.12.0
+        version: 24.12.0
       eslint:
         specifier: ^9.39.4
         version: 9.39.4(jiti@2.6.1)
@@ -82,7 +82,7 @@ importers:
     dependencies:
       '@pulumi/pulumi':
         specifier: ^3.225.1
-        version: 3.226.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
+        version: 3.226.0(ts-node@10.9.2(@types/node@24.12.0)(typescript@5.9.3))(typescript@5.9.3)
       smol-toml:
         specifier: ^1.6.0
         version: 1.6.0
@@ -91,8 +91,8 @@ importers:
         version: 4.3.6
     devDependencies:
       '@types/node':
-        specifier: ^24.10.10
-        version: 24.10.11
+        specifier: ^24.12.0
+        version: 24.12.0
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -101,10 +101,10 @@ importers:
     dependencies:
       '@pulumi/command':
         specifier: ^1.2.1
-        version: 1.2.1(patch_hash=919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6)(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
+        version: 1.2.1(patch_hash=919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6)(ts-node@10.9.2(@types/node@24.12.0)(typescript@5.9.3))(typescript@5.9.3)
       '@pulumi/pulumi':
         specifier: ^3.225.1
-        version: 3.226.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
+        version: 3.226.0(ts-node@10.9.2(@types/node@24.12.0)(typescript@5.9.3))(typescript@5.9.3)
       handlebars:
         specifier: ^4.7.8
         version: 4.7.8
@@ -113,8 +113,8 @@ importers:
         version: 5.4.4
     devDependencies:
       '@types/node':
-        specifier: ^24.10.10
-        version: 24.10.11
+        specifier: ^24.12.0
+        version: 24.12.0
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -624,8 +624,8 @@ packages:
   '@types/node@18.19.127':
     resolution: {integrity: sha512-gSjxjrnKXML/yo0BO099uPixMqfpJU0TKYjpfLU7TrtA2WWDki412Np/RSTPRil1saKBhvVVKzVx/p/6p94nVA==}
 
-  '@types/node@24.10.11':
-    resolution: {integrity: sha512-/Af7O8r1frCVgOz0I62jWUtMohJ0/ZQU/ZoketltOJPZpnb17yoNc9BSoVuV9qlaIXJiPNOpsfq4ByFajSArNQ==}
+  '@types/node@24.12.0':
+    resolution: {integrity: sha512-GYDxsZi3ChgmckRT9HPU0WEhKLP08ev/Yfcq2AstjrDASOYCSXeyjDsHg4v5t4jOj7cyDX3vmprafKlWIG9MXQ==}
 
   '@types/responselike@1.0.3':
     resolution: {integrity: sha512-H/+L+UkTV33uf49PH5pCAUBVPNj2nDBXTN+qS1dOwyyg24l3CcicicCA7ca+HMvJBZcFgl5r8e+RR6elsb4Lyw==}
@@ -1890,11 +1890,11 @@ snapshots:
 
   '@babel/helper-validator-identifier@7.27.1': {}
 
-  '@commitlint/cli@20.5.0(@types/node@24.10.11)(conventional-commits-parser@6.3.0)(typescript@5.9.3)':
+  '@commitlint/cli@20.5.0(@types/node@24.12.0)(conventional-commits-parser@6.3.0)(typescript@5.9.3)':
     dependencies:
       '@commitlint/format': 20.5.0
       '@commitlint/lint': 20.5.0
-      '@commitlint/load': 20.5.0(@types/node@24.10.11)(typescript@5.9.3)
+      '@commitlint/load': 20.5.0(@types/node@24.12.0)(typescript@5.9.3)
       '@commitlint/read': 20.5.0(conventional-commits-parser@6.3.0)
       '@commitlint/types': 20.5.0
       tinyexec: 1.0.1
@@ -1943,14 +1943,14 @@ snapshots:
       '@commitlint/rules': 20.5.0
       '@commitlint/types': 20.5.0
 
-  '@commitlint/load@20.5.0(@types/node@24.10.11)(typescript@5.9.3)':
+  '@commitlint/load@20.5.0(@types/node@24.12.0)(typescript@5.9.3)':
     dependencies:
       '@commitlint/config-validator': 20.5.0
       '@commitlint/execute-rule': 20.0.0
       '@commitlint/resolve-extends': 20.5.0
       '@commitlint/types': 20.5.0
       cosmiconfig: 9.0.1(typescript@5.9.3)
-      cosmiconfig-typescript-loader: 6.1.0(@types/node@24.10.11)(cosmiconfig@9.0.1(typescript@5.9.3))(typescript@5.9.3)
+      cosmiconfig-typescript-loader: 6.1.0(@types/node@24.12.0)(cosmiconfig@9.0.1(typescript@5.9.3))(typescript@5.9.3)
       is-plain-obj: 4.1.0
       lodash.mergewith: 4.6.2
       picocolors: 1.1.1
@@ -2104,9 +2104,9 @@ snapshots:
 
   '@logdna/tail-file@2.2.0': {}
 
-  '@muhlba91/pulumi-proxmoxve@7.13.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)':
+  '@muhlba91/pulumi-proxmoxve@7.13.0(ts-node@10.9.2(@types/node@24.12.0)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
-      '@pulumi/pulumi': 3.226.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
+      '@pulumi/pulumi': 3.226.0(ts-node@10.9.2(@types/node@24.12.0)(typescript@5.9.3))(typescript@5.9.3)
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -2401,9 +2401,9 @@ snapshots:
 
   '@protobufjs/utf8@1.1.0': {}
 
-  '@pulumi/ansible@file:sdks/ansible(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))':
+  '@pulumi/ansible@file:sdks/ansible(ts-node@10.9.2(@types/node@24.12.0)(typescript@5.9.3))':
     dependencies:
-      '@pulumi/pulumi': 3.226.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@4.9.5)
+      '@pulumi/pulumi': 3.226.0(ts-node@10.9.2(@types/node@24.12.0)(typescript@5.9.3))(typescript@4.9.5)
       '@types/node': 18.19.127
       async-mutex: 0.5.0
       typescript: 4.9.5
@@ -2411,17 +2411,17 @@ snapshots:
       - supports-color
       - ts-node
 
-  '@pulumi/command@1.2.1(patch_hash=919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6)(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)':
+  '@pulumi/command@1.2.1(patch_hash=919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6)(ts-node@10.9.2(@types/node@24.12.0)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
-      '@pulumi/pulumi': 3.226.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)
+      '@pulumi/pulumi': 3.226.0(ts-node@10.9.2(@types/node@24.12.0)(typescript@5.9.3))(typescript@5.9.3)
     transitivePeerDependencies:
       - supports-color
       - ts-node
       - typescript
 
-  '@pulumi/porkbun@file:sdks/porkbun(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))':
+  '@pulumi/porkbun@file:sdks/porkbun(ts-node@10.9.2(@types/node@24.12.0)(typescript@5.9.3))':
     dependencies:
-      '@pulumi/pulumi': 3.226.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@4.9.5)
+      '@pulumi/pulumi': 3.226.0(ts-node@10.9.2(@types/node@24.12.0)(typescript@5.9.3))(typescript@4.9.5)
       '@types/node': 18.19.127
       async-mutex: 0.5.0
       typescript: 4.9.5
@@ -2429,7 +2429,7 @@ snapshots:
       - supports-color
       - ts-node
 
-  '@pulumi/pulumi@3.226.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@4.9.5)':
+  '@pulumi/pulumi@3.226.0(ts-node@10.9.2(@types/node@24.12.0)(typescript@5.9.3))(typescript@4.9.5)':
     dependencies:
       '@grpc/grpc-js': 1.13.4
       '@logdna/tail-file': 2.2.0
@@ -2461,12 +2461,12 @@ snapshots:
       tmp: 0.2.5
       upath: 1.2.0
     optionalDependencies:
-      ts-node: 10.9.2(@types/node@24.10.11)(typescript@5.9.3)
+      ts-node: 10.9.2(@types/node@24.12.0)(typescript@5.9.3)
       typescript: 4.9.5
     transitivePeerDependencies:
       - supports-color
 
-  '@pulumi/pulumi@3.226.0(ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3))(typescript@5.9.3)':
+  '@pulumi/pulumi@3.226.0(ts-node@10.9.2(@types/node@24.12.0)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
       '@grpc/grpc-js': 1.13.4
       '@logdna/tail-file': 2.2.0
@@ -2498,7 +2498,7 @@ snapshots:
       tmp: 0.2.5
       upath: 1.2.0
     optionalDependencies:
-      ts-node: 10.9.2(@types/node@24.10.11)(typescript@5.9.3)
+      ts-node: 10.9.2(@types/node@24.12.0)(typescript@5.9.3)
       typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
@@ -2566,7 +2566,7 @@ snapshots:
     dependencies:
       '@types/http-cache-semantics': 4.0.4
       '@types/keyv': 3.1.4
-      '@types/node': 24.10.11
+      '@types/node': 24.12.0
       '@types/responselike': 1.0.3
 
   '@types/estree@1.0.8': {}
@@ -2579,19 +2579,19 @@ snapshots:
 
   '@types/keyv@3.1.4':
     dependencies:
-      '@types/node': 24.10.11
+      '@types/node': 24.12.0
 
   '@types/node@18.19.127':
     dependencies:
       undici-types: 5.26.5
 
-  '@types/node@24.10.11':
+  '@types/node@24.12.0':
     dependencies:
       undici-types: 7.16.0
 
   '@types/responselike@1.0.3':
     dependencies:
-      '@types/node': 24.10.11
+      '@types/node': 24.12.0
 
   '@types/semver@7.7.0': {}
 
@@ -2842,9 +2842,9 @@ snapshots:
       '@simple-libs/stream-utils': 1.2.0
       meow: 13.2.0
 
-  cosmiconfig-typescript-loader@6.1.0(@types/node@24.10.11)(cosmiconfig@9.0.1(typescript@5.9.3))(typescript@5.9.3):
+  cosmiconfig-typescript-loader@6.1.0(@types/node@24.12.0)(cosmiconfig@9.0.1(typescript@5.9.3))(typescript@5.9.3):
     dependencies:
-      '@types/node': 24.10.11
+      '@types/node': 24.12.0
       cosmiconfig: 9.0.1(typescript@5.9.3)
       jiti: 2.6.1
       typescript: 5.9.3
@@ -3553,7 +3553,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 24.10.11
+      '@types/node': 24.12.0
       long: 5.3.2
 
   pump@3.0.3:
@@ -3716,14 +3716,14 @@ snapshots:
     dependencies:
       typescript: 5.9.3
 
-  ts-node@10.9.2(@types/node@24.10.11)(typescript@5.9.3):
+  ts-node@10.9.2(@types/node@24.12.0)(typescript@5.9.3):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 24.10.11
+      '@types/node': 24.12.0
       acorn: 8.15.0
       acorn-walk: 8.3.4
       arg: 4.1.3
