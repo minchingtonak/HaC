@@ -1,6 +1,6 @@
 services:
   bentopdf:
-    image: ghcr.io/alam00000/bentopdf:2.1.0@sha256:1be1c12c7c222f9ea01bf7bfc849ebb96e48d4da112f45ef1bab7ef47563a744
+    image: ghcr.io/alam00000/bentopdf:2.5.0@sha256:c3729000f885059680cee9d49df50b21410cf80896be06f7e070de8f85a37816
     container_name: bentopdf
     # ports:
     #   - "3000:8080"
