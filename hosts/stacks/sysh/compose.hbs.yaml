@@ -33,7 +33,7 @@ services:
 
   postgres:
     container_name: sysh-postgres
-    image: barmiro/sysh-postgres:latest@sha256:44bbd8665e11d390b2348eaa237bc8773780840fc0b12f41d05ff7fe6b95d049
+    image: barmiro/sysh-postgres:latest@sha256:c7435c1dd75e7ad4a1f238b7a8051412fbdb798b4056bceadf9c157dd1876a8a
     env_file:
       - .env
     environment:
