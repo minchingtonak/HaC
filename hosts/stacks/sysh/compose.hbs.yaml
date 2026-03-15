@@ -1,7 +1,7 @@
 services:
   app:
     container_name: sysh-server
-    image: barmiro/sysh-server:latest@sha256:de410f549a4e08f932d6f2d0d4f233094f08fb7232238838e38e1a2335531686
+    image: barmiro/sysh-server:latest@sha256:97938813355512d794ce64f5262ad8bdcf14ba11d68d7c42e1789b648d4e2691
     env_file:
       - .env
     environment:
