@@ -197,7 +197,7 @@ services:
     restart: always
 
   prowlarr:
-    image: ghcr.io/linuxserver/prowlarr:2.3.0@sha256:5339e9050cfcc0cb5331e9c98610ed9d4ce70ef481a5461ea664a13dda3f1eb0
+    image: ghcr.io/linuxserver/prowlarr:2.3.0@sha256:9ef5d8bf832edcacb6082f9262cb36087854e78eb7b1c3e1d4375056055b2d82
     container_name: prowlarr
     environment:
       - PUID=0
