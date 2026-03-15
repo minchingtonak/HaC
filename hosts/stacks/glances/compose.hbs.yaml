@@ -1,6 +1,6 @@
 services:
   monitoring:
-    image: nicolargo/glances:4.4.1-full@sha256:07b19d5337bae76c125b8a56c7d33b1a542806732466a72391e733eaf4f039fe
+    image: nicolargo/glances:4.5.1-full@sha256:3d922086e891cd9e3c88257311ffe9c0540d987d1010f0e8f9da843719eee4de
     container_name: glances
     restart: unless-stopped
     pid: host
