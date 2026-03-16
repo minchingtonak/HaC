@@ -345,6 +345,10 @@ config:
     secure: v1:aKX31KeMyEle0jLI:W0JtJ6X0JOG3zywo7yQhsZk9uASUr18wUioQDEcsH94+oCD+fA6jTG/GmeawmQ==
   lxc#servarr#servarr:SECRET_PUSHOVER_CLEANUPARR_TOKEN:
     secure: v1:geaaX2PKt+tYIoIY:Fa/4jE1tcX6wSj9NeDlNCK+ax9JpXsImqbWMluRz1r36Fx720o7Rdpfko+/PNg==
+  lxc#servarr#servarr:SECRET_RADARR_API_KEY:
+    secure: v1:RVeovyrkckIkaLKF:qEb7ViqZvTRyICy/U5ouN/+OtMr/DpCKyjTouuuPays8dGHgUFiwgg7N/I2vicHx
+  lxc#servarr#servarr:SECRET_SONARR_API_KEY:
+    secure: v1:/RAkuC0eNZQCD6nh:JLZKUQXriobRkE0cuJEZWF9h0nzLxVNADFb9nN0YaQ3Z5VaVcYjA31juaMeLhJBP
   # gameserver
   lxc#gameserver#newt:SECRET_PANGOLIN_ENDPOINT:
     secure: v1:ivr9DGrC1lA18oUz:J3/6ceDOCzs7itABrbNDHPASoCbyWGaz8XviKbiBvMw/oL5ufY01BGB/Bg==

@@ -16,7 +16,7 @@ subdomains = [
     "prowlarr",
     "bazarr",
     "profilarr",
-    "huntarr",
+    "triggarr",
     "cleanuparr",
 ]
 

@@ -556,45 +556,55 @@ services:
     networks:
       - traefik
 
-  # huntarr:
-  #   image: huntarr/huntarr:9.2.3@sha256:d23614d775dc8f9cc2c5d89c0d51ff1d2d6b692203897226993f76b2b43074ff
-  #   container_name: huntarr
-  #   restart: unless-stopped
-  #   # ports:
-  #   #   - "9705:9705"
-  #   depends_on:
-  #     sonarr:
-  #       condition: service_healthy
-  #       restart: true
-  #     radarr:
-  #       condition: service_healthy
-  #       restart: true
-  #     lidarr:
-  #       condition: service_healthy
-  #       restart: true
-  #     qbittorrent:
-  #       condition: service_healthy
-  #       restart: true
-  #     nzbget:
-  #       condition: service_healthy
-  #       restart: true
-  #   volumes:
-  #     - /docker/huntarr:/config
-  #   environment:
-  #     - TZ={{{global:TIMEZONE}}}
-  #   labels:
-  #     - deunhealth.restart.on.unhealthy=true
-  #     - traefik.enable=true
-  #     - traefik.docker.network=traefik
-  #     - traefik.http.routers.huntarr.rule=Host(`{{{domainForApp "huntarr"}}}`)
-  #     - traefik.http.routers.huntarr.entrypoints=https
-  #     - traefik.http.routers.huntarr.tls=true
-  #     - traefik.http.routers.huntarr.tls.certresolver=porkbun
-  #     - traefik.http.routers.huntarr.service=huntarr
-  #     - traefik.http.services.huntarr.loadbalancer.server.port=9705
-  #     - traefik.http.routers.huntarr.middlewares=oidc-auth@file
-  #   networks:
-  #     - traefik
+  triggarr:
+    image: ghcr.io/thejuran/triggarr:v2.2.1@sha256:02d041f1b7d001da6e7e433268aa932ef7b8b9f1f9dca837a346bdcd3577d3bf
+    container_name: triggarr
+    restart: unless-stopped
+    environment:
+      - PUID=0
+      - PGID=0
+    volumes:
+      - /docker/triggarr:/config
+      - ./config/triggarr.toml:/config/triggarr.toml
+    # ports:
+    #   - "127.0.0.1:8080:8080"
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - DAC_OVERRIDE
+      - FOWNER
+      - SETUID
+      - SETGID
+    depends_on:
+      sonarr:
+        condition: service_healthy
+        restart: true
+      radarr:
+        condition: service_healthy
+        restart: true
+      lidarr:
+        condition: service_healthy
+        restart: true
+      qbittorrent:
+        condition: service_healthy
+        restart: true
+      nzbget:
+        condition: service_healthy
+        restart: true
+    labels:
+      - deunhealth.restart.on.unhealthy=true
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.triggarr.rule=Host(`{{{domainForApp "triggarr"}}}`)
+      - traefik.http.routers.triggarr.entrypoints=https
+      - traefik.http.routers.triggarr.tls=true
+      - traefik.http.routers.triggarr.tls.certresolver=porkbun
+      - traefik.http.routers.triggarr.service=triggarr
+      - traefik.http.services.triggarr.loadbalancer.server.port=8080
+      - traefik.http.routers.triggarr.middlewares=oidc-auth@file
+    networks:
+      - traefik
 
 networks:
   traefik:

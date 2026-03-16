@@ -1,0 +1,32 @@
+[general]
+# Log level: debug, info, warning, error
+log_level = "info" # default: "info"
+
+# Hard max items searched per app per cycle. 0 = unlimited.
+# When set, the limit is split proportionally between missing and cutoff searches.
+hard_max_per_cycle = 0 # default: 0 (unlimited), valid: 0+
+
+max_history_rows = 0 # 0 = unlimited. Max resolved rows kept in search history.
+request_timeout = 60 # Timeout for outbound HTTP requests to *arr apps.
+page_size = 50 # Items per page when querying *arr APIs.
+tracking_window_minutes = 60 # How long to wait for grabs after a search before marking unresolved.
+tracking_delay_seconds = 90
+skip_unreleased = true #  Skip Radarr movies without a past digital or physical release date.
+
+[radarr]
+url = "https://{{{domainForApp 'radarr'}}}"    # Radarr base URL (string, required if enabled)
+api_key = "{{{SECRET_RADARR_API_KEY}}}" # From Radarr > Settings > General > API Key
+enabled = true               # default: false -- set to true to activate
+
+search_interval = 30     # default: 30 (minutes between search cycles)
+search_missing_count = 2 # default: 5 (missing items to search per cycle)
+search_cutoff_count = 1  # default: 5 (cutoff/upgrade items to search per cycle)
+
+[sonarr]
+url = "https://{{{domainForApp 'sonarr'}}}"    # Sonarr base URL (string, required if enabled)
+api_key = "{{{SECRET_SONARR_API_KEY}}}" # From Sonarr > Settings > General > API Key
+enabled = true               # default: false -- set to true to activate
+
+search_interval = 30     # default: 30 (minutes between search cycles)
+search_missing_count = 2 # default: 5 (missing items to search per cycle)
+search_cutoff_count = 1  # default: 5 (cutoff/upgrade items to search per cycle)
