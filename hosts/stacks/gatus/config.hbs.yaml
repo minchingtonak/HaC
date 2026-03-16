@@ -1,0 +1,17 @@
+storage:
+  type: sqlite
+  path: data.db
+
+# https://github.com/TwiN/gatus?tab=readme-ov-file#keeping-your-configuration-small
+default-endpoint: &defaults
+  group: core
+  interval: 5m
+  client:
+    timeout: 30s
+  conditions:
+    - "[STATUS] == 200"
+
+endpoints:
+  - name: homepage
+    <<: *defaults
+    url: "https://{{{domainForApp 'homepage'}}}"

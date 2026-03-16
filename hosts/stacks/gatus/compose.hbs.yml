@@ -1,0 +1,23 @@
+services:
+  gatus:
+    image: ghcr.io/twin/gatus:v5.35.0@sha256:21609f31be8c4e680ce3004b24276305666239c99aff58391503f3fb6142f39d
+    container_name: gatus
+    # ports:
+    #   - "8080:8080"
+    volumes:
+      - ./config.yaml:/config/config.yaml:ro
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.gatus.rule=Host(`{{{domainForApp "gatus"}}}`)
+      - traefik.http.routers.gatus.entrypoints=https
+      - traefik.http.routers.gatus.tls=true
+      - traefik.http.routers.gatus.tls.certresolver=porkbun
+      - traefik.http.routers.gatus.service=gatus
+      - traefik.http.services.gatus.loadbalancer.server.port=8080
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
