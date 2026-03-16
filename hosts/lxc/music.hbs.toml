@@ -10,7 +10,6 @@ navidrome = {}
 audiobookshelf = {}
 spotizerr = {}
 picard = {}
-sonobarr = {}
 your-spotify = {}
 
 [cpu]
