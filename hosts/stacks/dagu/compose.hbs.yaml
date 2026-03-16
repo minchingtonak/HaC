@@ -5,17 +5,34 @@ services:
     restart: unless-stopped
     # ports:
     #   - "8080:8080"
+    user: "0:0" # Run as root for Docker in Docker (DinD) support
+    command: ["dagu", "start-all"] # run all-in-one (server + scheduler + coordinator in-process)
     environment:
       - DAGU_TZ={{{global:TIMEZONE}}}
+      - DAGU_HOST=0.0.0.0 # Bind inside container
       - DAGU_PORT=8080 # optional. default is 8080
       - DAGU_HOME=/dagu # optional.
+      # - DAGU_BASE_PATH=/dagu
+      - DAGU_DAGS_DIR=/dagu/dags
+      - DAGU_BASE_CONFIG=/dagu/base.yaml
       - PUID=0 # optional. default is 1000
       - PGID=0 # optional. default is 1000
+
+      # Frontend server
+      # Builtin authentication (RBAC) - CHANGE TOKEN_SECRET IN PRODUCTION
+      - DAGU_AUTH_MODE=none
+      # Token secret: auto-generated if not set (persisted to {dataDir}/auth/token_secret)
+      # - DAGU_AUTH_TOKEN_SECRET=
+      # First admin account created via /setup page on first browser visit
+      # - DAGU_AUTH_TOKEN_TTL=24h        # default is 24h
     volumes:
       - /docker/dagu:/dagu
       - /root/.ssh:/root/.ssh
       - /root/.ssh:/home/dagu/.ssh
       - ./dags:/dagu/dags
+      - ./base.yaml:/dagu/base.yaml:ro
+      # docker-in-docker
+      - /var/run/docker.sock:/var/run/docker.sock
     labels:
       - traefik.enable=true
       - traefik.http.routers.dagu.rule=Host(`{{{domainForApp "dagu"}}}`)

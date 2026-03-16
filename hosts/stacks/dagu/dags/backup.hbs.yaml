@@ -1,17 +1,15 @@
 description: execute appdata + personal files backup scripts
 schedule: "0 0 * * *" # 12:00am
 
-handlerOn:
+handler_on:
   exit: # always runs
     command: rm -rf /tmp/dag-${DAG_RUN_ID}
-    executor:
-      type: ssh
-      config:
-        user: "{{{@pve.ssh.user}}}"
-        host: "{{{@pve.ip}}}"
-        # key: https://docs.dagu.io/features/executors/ssh#ssh-key-auto-detection
-        port: 22
-        strictHostKey: false
+    type: ssh
+    config:
+      user: "{{{@pve.ssh.user}}}"
+      host: "{{{@pve.ip}}}"
+      strict_host_key: false
+      shell: "/bin/bash -e"
 
 steps:
   - name: setup
@@ -38,25 +36,21 @@ steps:
   - name: run-local-pbs-backup-script
     command: cd /tmp/dag-${DAG_RUN_ID} && ./local-pbs-backup.sh
     shell: bash
-    continueOn:
+    continue_on:
       failure: true
-    executor:
-      type: ssh
-      config:
-        user: "{{{@pve.ssh.user}}}"
-        host: "{{{@pve.ip}}}"
-        # key: https://docs.dagu.io/features/executors/ssh#ssh-key-auto-detection
-        port: 22
-        strictHostKey: false
+    type: ssh
+    config:
+      user: "{{{@pve.ssh.user}}}"
+      host: "{{{@pve.ip}}}"
+      strict_host_key: false
+      shell: "/bin/bash -e"
 
   - name: run-cloud-pbs-backup-script
     command: cd /tmp/dag-${DAG_RUN_ID} && ./cloud-pbs-backup.sh
     shell: bash
-    executor:
-      type: ssh
-      config:
-        user: "{{{@pve.ssh.user}}}"
-        host: "{{{@pve.ip}}}"
-        # key: https://docs.dagu.io/features/executors/ssh#ssh-key-auto-detection
-        port: 22
-        strictHostKey: false
+    type: ssh
+    config:
+      user: "{{{@pve.ssh.user}}}"
+      host: "{{{@pve.ip}}}"
+      strict_host_key: false
+      shell: "/bin/bash -e"
