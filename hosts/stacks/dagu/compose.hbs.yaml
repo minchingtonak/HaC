@@ -1,6 +1,6 @@
 services:
   dagu:
-    image: ghcr.io/dagu-org/dagu:2.3.0@sha256:deeee830af042a72c39f369e4f0a974645da468e1d08cac27c75ac35f4b878fc
+    image: ghcr.io/dagu-org/dagu:2.3.1@sha256:493d2ae640b991372777dcb2e95962a4939b26af0e09214902a86e6ab5bb5472
     container_name: dagu
     restart: unless-stopped
     # ports:
