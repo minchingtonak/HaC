@@ -22,7 +22,7 @@
     "zod": "^4.3.6"
   },
   "peerDependencies": {
-    "@pulumi/pulumi": "^3.225.1"
+    "@pulumi/pulumi": "^3.226.0"
   },
   "peerDependenciesMeta": {
     "@pulumi/pulumi": {
