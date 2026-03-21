@@ -557,7 +557,7 @@ services:
       - traefik
 
   triggarr:
-    image: ghcr.io/thejuran/triggarr:v2.2.1@sha256:02d041f1b7d001da6e7e433268aa932ef7b8b9f1f9dca837a346bdcd3577d3bf
+    image: ghcr.io/thejuran/triggarr:v2.4.0@sha256:abea74e5dbb2e5b275dff105ffebb1b2a43aecf1f95818facf7331bdb54af29d
     container_name: triggarr
     restart: unless-stopped
     environment:
