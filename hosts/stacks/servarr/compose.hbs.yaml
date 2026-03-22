@@ -560,12 +560,18 @@ services:
     image: ghcr.io/thejuran/triggarr:v2.4.0@sha256:abea74e5dbb2e5b275dff105ffebb1b2a43aecf1f95818facf7331bdb54af29d
     container_name: triggarr
     restart: unless-stopped
+    entrypoint:
+      [
+        "/bin/sh",
+        "-c",
+        "cp /triggarr.toml.src /config/triggarr.toml && exec /entrypoint.sh",
+      ]
     environment:
       - PUID=0
       - PGID=0
     volumes:
       - /docker/triggarr:/config
-      - ./config/triggarr.toml:/config/triggarr.toml
+      - ./config/triggarr.toml:/triggarr.toml.src:ro
     # ports:
     #   - "127.0.0.1:8080:8080"
     cap_drop:
