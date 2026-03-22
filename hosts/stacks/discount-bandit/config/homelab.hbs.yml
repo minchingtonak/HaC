@@ -1,6 +1,0 @@
-tag:
-  - homelab
-
-urls:
-  - "{{{SECRET_SLACK_WEBHOOK}}}":
-      - tag: discount-bandit
