@@ -1,7 +1,8 @@
 services:
-  jellyseerr:
-    image: ghcr.io/fallenbagel/jellyseerr:2.7.3@sha256:9cc9e9ee6cd5cf5a23feb45c37742ba34cfd6314d81d259cddb373a97ac92cdd
-    container_name: jellyseerr
+  seerr:
+    image: ghcr.io/seerr-team/seerr:v3.1.0@sha256:b35ba0461c4a1033d117ac1e5968fd4cbe777899e4cbfbdeaf3d10a42a0eb7e9
+    init: true
+    container_name: seerr
     environment:
       - LOG_LEVEL=debug
       - TZ={{{global:TIMEZONE}}}
@@ -10,6 +11,12 @@ services:
     #   - 5055:5055
     volumes:
       - /docker/jellyseerr:/app/config
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:5055/api/v1/status || exit 1
+      start_period: 20s
+      timeout: 3s
+      interval: 15s
+      retries: 3
     restart: unless-stopped
     labels:
       - traefik.enable=true
