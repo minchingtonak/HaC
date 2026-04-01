@@ -17,7 +17,7 @@ dedicated = 4096
 swap = 2048
 
 [disk]
-size = 8
+size = 32
 
 [[firewall_rules]]
 enabled = true
