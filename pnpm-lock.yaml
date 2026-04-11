@@ -32,8 +32,8 @@ importers:
         specifier: file:sdks/porkbun
         version: file:sdks/porkbun(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))
       '@pulumi/pulumi':
-        specifier: ^3.228.0
-        version: 3.228.0(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@5.9.3)
+        specifier: ^3.229.0
+        version: 3.230.0(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@5.9.3)
       smol-toml:
         specifier: ^1.6.1
         version: 1.6.1
@@ -81,8 +81,8 @@ importers:
   libs/schema:
     dependencies:
       '@pulumi/pulumi':
-        specifier: ^3.228.0
-        version: 3.228.0(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@5.9.3)
+        specifier: ^3.229.0
+        version: 3.230.0(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@5.9.3)
       smol-toml:
         specifier: ^1.6.1
         version: 1.6.1
@@ -103,8 +103,8 @@ importers:
         specifier: ^1.2.1
         version: 1.2.1(patch_hash=919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6)(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@5.9.3)
       '@pulumi/pulumi':
-        specifier: ^3.228.0
-        version: 3.228.0(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@5.9.3)
+        specifier: ^3.229.0
+        version: 3.230.0(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@5.9.3)
       handlebars:
         specifier: ^4.7.9
         version: 4.7.9
@@ -510,12 +510,12 @@ packages:
   '@pulumi/porkbun@file:sdks/porkbun':
     resolution: {directory: sdks/porkbun, type: directory}
 
-  '@pulumi/pulumi@3.228.0':
-    resolution: {integrity: sha512-yAwieapB/Huro8/psool1sKhe2rGT80GTnEFLDWbKPHTMo6oSegGb6aYg+bzPuC3vgBOn2dnHkobSuwbBhQ7gQ==}
+  '@pulumi/pulumi@3.230.0':
+    resolution: {integrity: sha512-wWHP65RKj2zz8R8N4sImPie4bQM/walrCOeNUl46TkdHOOihFdg6cMO2l1IPufh/EBBLtiUBrzpP0wi8OWqhsQ==}
     engines: {node: '>=20'}
     peerDependencies:
       ts-node: '>= 7.0.1 < 12'
-      typescript: '>= 3.8.3 < 6'
+      typescript: '>= 3.8.3 < 7'
     peerDependenciesMeta:
       ts-node:
         optional: true
@@ -1463,10 +1463,6 @@ packages:
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
-  picomatch@3.0.1:
-    resolution: {integrity: sha512-I3EurrIQMlRc9IaAZnqRR044Phh2DXY+55o7uJ0V+hYZAcQYSuFWsc9q5PvyDHUSCe1Qxn/iBz+78s86zWnGag==}
-    engines: {node: '>=10'}
-
   picomatch@4.0.3:
     resolution: {integrity: sha512-5gTmgEY/sqK6gFXLIsQNH19lWb4ebPDLA4SdLP7dsWkIXHWlG66oPuVvXSGFPppYZz8ZDZq0dYYrbHfBCVUb1Q==}
     engines: {node: '>=12'}
@@ -2038,7 +2034,7 @@ snapshots:
 
   '@muhlba91/pulumi-proxmoxve@7.13.0(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
-      '@pulumi/pulumi': 3.228.0(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@5.9.3)
+      '@pulumi/pulumi': 3.230.0(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@5.9.3)
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -2316,7 +2312,7 @@ snapshots:
 
   '@pulumi/ansible@file:sdks/ansible(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))':
     dependencies:
-      '@pulumi/pulumi': 3.228.0(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@4.9.5)
+      '@pulumi/pulumi': 3.230.0(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@4.9.5)
       '@types/node': 18.19.127
       async-mutex: 0.5.0
       typescript: 4.9.5
@@ -2326,7 +2322,7 @@ snapshots:
 
   '@pulumi/command@1.2.1(patch_hash=919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6)(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
-      '@pulumi/pulumi': 3.228.0(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@5.9.3)
+      '@pulumi/pulumi': 3.230.0(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@5.9.3)
     transitivePeerDependencies:
       - supports-color
       - ts-node
@@ -2334,7 +2330,7 @@ snapshots:
 
   '@pulumi/porkbun@file:sdks/porkbun(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))':
     dependencies:
-      '@pulumi/pulumi': 3.228.0(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@4.9.5)
+      '@pulumi/pulumi': 3.230.0(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@4.9.5)
       '@types/node': 18.19.127
       async-mutex: 0.5.0
       typescript: 4.9.5
@@ -2342,7 +2338,7 @@ snapshots:
       - supports-color
       - ts-node
 
-  '@pulumi/pulumi@3.228.0(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@4.9.5)':
+  '@pulumi/pulumi@3.230.0(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@4.9.5)':
     dependencies:
       '@grpc/grpc-js': 1.13.4
       '@logdna/tail-file': 2.2.0
@@ -2359,7 +2355,7 @@ snapshots:
       '@types/semver': 7.7.0
       '@types/tmp': 0.2.6
       execa: 5.1.1
-      fdir: 6.5.0(picomatch@3.0.1)
+      fdir: 6.5.0(picomatch@4.0.3)
       google-protobuf: 3.21.4
       got: 11.8.6
       ini: 2.0.0
@@ -2367,7 +2363,7 @@ snapshots:
       minimist: 1.2.8
       normalize-package-data: 6.0.2
       package-directory: 8.1.0
-      picomatch: 3.0.1
+      picomatch: 4.0.3
       require-from-string: 2.0.2
       semver: 7.7.3
       source-map-support: 0.5.21
@@ -2379,7 +2375,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@pulumi/pulumi@3.228.0(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@5.9.3)':
+  '@pulumi/pulumi@3.230.0(ts-node@10.9.2(@types/node@24.12.2)(typescript@5.9.3))(typescript@5.9.3)':
     dependencies:
       '@grpc/grpc-js': 1.13.4
       '@logdna/tail-file': 2.2.0
@@ -2396,7 +2392,7 @@ snapshots:
       '@types/semver': 7.7.0
       '@types/tmp': 0.2.6
       execa: 5.1.1
-      fdir: 6.5.0(picomatch@3.0.1)
+      fdir: 6.5.0(picomatch@4.0.3)
       google-protobuf: 3.21.4
       got: 11.8.6
       ini: 2.0.0
@@ -2404,7 +2400,7 @@ snapshots:
       minimist: 1.2.8
       normalize-package-data: 6.0.2
       package-directory: 8.1.0
-      picomatch: 3.0.1
+      picomatch: 4.0.3
       require-from-string: 2.0.2
       semver: 7.7.3
       source-map-support: 0.5.21
@@ -2902,10 +2898,6 @@ snapshots:
 
   fast-uri@3.1.0: {}
 
-  fdir@6.5.0(picomatch@3.0.1):
-    optionalDependencies:
-      picomatch: 3.0.1
-
   fdir@6.5.0(picomatch@4.0.3):
     optionalDependencies:
       picomatch: 4.0.3
@@ -3399,8 +3391,6 @@ snapshots:
       minipass: 7.1.2
 
   picocolors@1.1.1: {}
-
-  picomatch@3.0.1: {}
 
   picomatch@4.0.3: {}
 
