@@ -504,7 +504,7 @@ services:
     #   start_period: 5s
 
   cleanuparr:
-    image: ghcr.io/cleanuparr/cleanuparr:2.8.1@sha256:086470c766e2e2f6f010fc192ba728daa0a1ba77a7b17ff5e451f7c98c379a16
+    image: ghcr.io/cleanuparr/cleanuparr:2.9.6@sha256:be51a6a382072dfa98480a01a111d3ff7a8a032ab0e91421b627c11fc14e9eb3
     container_name: cleanuparr
     restart: unless-stopped
     depends_on:
