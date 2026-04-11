@@ -10,7 +10,7 @@ jellyseerr = {}
 watcharr = {}
 
 [cpu]
-cores = 4
+cores = 8
 
 [memory]
 dedicated = 4096
