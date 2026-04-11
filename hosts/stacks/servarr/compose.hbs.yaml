@@ -118,7 +118,7 @@ services:
       - traefik
 
   qbittorrent:
-    image: ghcr.io/linuxserver/qbittorrent:5.1.4@sha256:570aeb63bdedcb5f9dd2500bd8f0a75581ba07c518c05cabbef0cfeb15451b3f
+    image: ghcr.io/linuxserver/qbittorrent:5.1.4@sha256:ef0c57d5b7b8d90fa561419baa083cf599338f36ee6769cbbd21cb009cfc816c
     container_name: qbittorrent
     restart: unless-stopped
     labels:
