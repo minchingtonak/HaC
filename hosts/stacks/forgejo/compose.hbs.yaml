@@ -12,9 +12,9 @@ services:
       - ./conf/app.ini:/data/gitea/conf/app.ini:ro
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
-    # ports:
-    #   - "3000:3000"
-    #   - "222:22"
+    ports:
+      #   - "3000:3000"
+      - "222:22"
     labels:
       - traefik.enable=true
       - traefik.http.routers.forgejo.rule=Host(`{{{domainForApp "forgejo"}}}`)
@@ -23,11 +23,6 @@ services:
       - traefik.http.routers.forgejo.tls.certresolver=porkbun
       - traefik.http.routers.forgejo.service=forgejo
       - traefik.http.services.forgejo.loadbalancer.server.port=3000
-      #
-      - traefik.tcp.routers.forgejo-ssh.rule=HostSNI(`*`)
-      - traefik.tcp.routers.forgejo-ssh.entrypoints=ssh-222-tcp
-      - traefik.tcp.routers.forgejo-ssh.service=forgejo-ssh
-      - traefik.tcp.services.forgejo-ssh.loadbalancer.server.port=22
     networks:
       - traefik
 
