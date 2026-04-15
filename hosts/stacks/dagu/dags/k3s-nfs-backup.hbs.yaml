@@ -1,0 +1,59 @@
+description: back up k3s NFS PVC data (ZFS snapshot -> PBS)
+schedule: "0 2 * * *" # 02:00am, 2h after existing midnight backup
+
+handler_on:
+  exit: # always runs
+    command: >-
+      zfs destroy fast/k3s-nfs@k3s-nfs-backup-${DAG_RUN_ID} 2>/dev/null || true;
+      rm -rf /tmp/dag-${DAG_RUN_ID}
+    type: ssh
+    config:
+      user: "{{{@pve.ssh.user}}}"
+      host: "{{{@pve.ip}}}"
+      strict_host_key: false
+      shell: "/bin/bash -e"
+
+steps:
+  - name: setup
+    script: |
+      #!/bin/bash
+      set -Eeuxo pipefail
+
+      apt-get -qq update
+      # install scp
+      DEBIAN_FRONTEND=noninteractive apt-get -y -qq install openssh-client
+
+      WORK_DIR="/tmp/dag-${DAG_RUN_ID}"
+
+      scp -r \
+        -o StrictHostKeyChecking=no \
+        -o UserKnownHostsFile=/dev/null \
+        ./scripts/* {{{@pve.ssh.user}}}@{{{@pve.ip}}}:$WORK_DIR
+
+      ssh \
+        -o StrictHostKeyChecking=no \
+        -o UserKnownHostsFile=/dev/null \
+        {{{@pve.ssh.user}}}@{{{@pve.ip}}} \
+        "chmod +x $WORK_DIR/*.sh && zfs snapshot fast/k3s-nfs@k3s-nfs-backup-${DAG_RUN_ID}"
+
+  - name: run-local-pbs-backup-script
+    command: cd /tmp/dag-${DAG_RUN_ID} && ./k3s-nfs-local-pbs-backup.sh "k3s-nfs-backup-${DAG_RUN_ID}"
+    shell: bash
+    continue_on:
+      failure: true
+    type: ssh
+    config:
+      user: "{{{@pve.ssh.user}}}"
+      host: "{{{@pve.ip}}}"
+      strict_host_key: false
+      shell: "/bin/bash -e"
+
+  - name: run-cloud-pbs-backup-script
+    command: cd /tmp/dag-${DAG_RUN_ID} && ./k3s-nfs-cloud-pbs-backup.sh "k3s-nfs-backup-${DAG_RUN_ID}"
+    shell: bash
+    type: ssh
+    config:
+      user: "{{{@pve.ssh.user}}}"
+      host: "{{{@pve.ip}}}"
+      strict_host_key: false
+      shell: "/bin/bash -e"
