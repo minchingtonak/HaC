@@ -19,7 +19,7 @@ services:
       - cleanslate
 
   graphql-server:
-    image: ghcr.io/successible/cleanslate/graphql-server:v4.15.0@sha256:b646e57c031dcbba23b10a28e2725ab6aa4b1b57016f3c4be6433d02a9e19a80
+    image: ghcr.io/successible/cleanslate/graphql-server:v4.18.0@sha256:00d8f96a888a8d9ac1b45cccc4728f7dddd0aa8e8adcfb21466c1b69d525c8f9
     pull_policy: always
     restart: always
     container_name: graphql-server
