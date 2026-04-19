@@ -9,7 +9,6 @@ fittrackee = {}
 wallos = {}
 dawarich = {}
 trip = {}
-memos = {}
 
 [cpu]
 cores = 4
