@@ -3,7 +3,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    image: docuseal/docuseal:2.4.3@sha256:8b24dd6e661c98b64f3b54f219d1c596629501cb143b6eeddfecafa1c5877150
+    image: docuseal/docuseal:2.5.0@sha256:79e89341233352ac73dea757be97ee451baca786aa42eefe4538b16e1a92cf01
     # ports:
     #   - 3000:3000
     volumes:
