@@ -6,7 +6,6 @@ traefik = {}
 dozzle = {}
 backrest = {}
 dagu = {}
-forgejo = {}
 syncthing = {}
 
 [cpu]

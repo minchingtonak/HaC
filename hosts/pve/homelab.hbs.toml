@@ -36,10 +36,7 @@ admin = { id = 213 }
 backup = { id = 202 }
 music = { id = 216 }
 servarr = { id = 201 }
-immich = { id = 207 }
-paperless = { id = 214 }
 gameserver = { id = 210 }
-windmill = { id = 209 }
 
 [lxc.network]
 domain = "akmin.dev"
