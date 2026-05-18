@@ -10,7 +10,6 @@ navidrome = {}
 audiobookshelf = {}
 spotizerr = {}
 picard = {}
-your-spotify = {}
 
 [cpu]
 cores = 2

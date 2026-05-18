@@ -7,7 +7,6 @@ dozzle = {}
 pocket-id = {}
 homepage = {}
 tailscale = {}
-copyparty = {}
 
 [cpu]
 cores = 2
