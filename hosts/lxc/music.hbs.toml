@@ -5,7 +5,6 @@ start_on_boot = true
 [stacks]
 traefik = {}
 dozzle = {}
-newt = {}
 spotizerr = {}
 picard = {}
 
