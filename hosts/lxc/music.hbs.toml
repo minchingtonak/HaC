@@ -6,8 +6,6 @@ start_on_boot = true
 traefik = {}
 dozzle = {}
 newt = {}
-navidrome = {}
-audiobookshelf = {}
 spotizerr = {}
 picard = {}
 
