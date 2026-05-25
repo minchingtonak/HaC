@@ -457,6 +457,16 @@ services:
       # - EXCLUDE_PATHS=/movies/temp,/tv/downloads # Exclude certain sub-directories from the scan
       - MAX_CONCURRENT_SYNC_TASKS=1 # Defaults to 1 if not set. Higher number will consume more CPU but sync your library faster
       - INCLUDE_ENGINES=ffsubsync,autosubsync # If not set, all engines are used by default
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.subsyncarr.rule=Host(`{{{domainForApp "subsyncarr"}}}`)
+      - traefik.http.routers.subsyncarr.entrypoints=https
+      - traefik.http.routers.subsyncarr.tls=true
+      - traefik.http.routers.subsyncarr.tls.certresolver=porkbun
+      - traefik.http.routers.subsyncarr.service=subsyncarr
+      - traefik.http.services.subsyncarr.loadbalancer.server.port=3000
+      - traefik.http.routers.subsyncarr.middlewares=oidc-auth@file
 
   profilarr:
     image: santiagosayshey/profilarr:v1.1.4@sha256:8a514f8429cd33885166facc9eb6504fa9ded056c737609e5e8ef32ae0afb350

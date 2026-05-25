@@ -18,6 +18,7 @@ subdomains = [
     "profilarr",
     "triggarr",
     "cleanuparr",
+    "subsyncarr"
 ]
 
 [cpu]
