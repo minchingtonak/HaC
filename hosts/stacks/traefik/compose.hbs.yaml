@@ -1,6 +1,6 @@
 services:
   traefik:
-    image: traefik:v3.6.12@sha256:171c9c3565b29f6c133f1c1b43c5d4e5853415198e9e1078c001f8702ff66aec
+    image: traefik:v3.7.1@sha256:6b9cbca6fac42ab0075f5437d8dc1685cfd188626d8d515839ea94f8b6271c42
     container_name: traefik
     restart: unless-stopped
     ports:
