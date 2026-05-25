@@ -1,6 +1,6 @@
 services:
   loggifly:
-    image: ghcr.io/clemcer/loggifly:v1.8.1@sha256:9f6a673cd11fb90ffd0cfdb9675d5d3b9b3dfac060800fab52ec8dfbd4cc0293
+    image: ghcr.io/clemcer/loggifly:v2.0.1@sha256:5eae87a3fd141dd7af12a53bb470bd6902d8dc6c8d6ec1d5017d5abdd4c64930
     container_name: loggifly
     # It is recommended to run the container as the same UID/GID as the owner of your docker socket to avoid running as root.
     # But you can also just comment out the user line and run as root.
