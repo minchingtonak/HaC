@@ -446,7 +446,7 @@ services:
     container_name: subsyncarr
     user: 0:0
     # run every 30 minutes (1800 seconds). workaround since builtin cron functionality doesn't work
-    command: "sh -c 'set -x && while true; do /app/startup.sh & sleep 1800 && killall startup.sh tail; done'"
+    command: "sh -c 'set -x && while true; do node --optimize-for-size dist/index-server.js & sleep 1800 && killall startup.sh tail; done'"
     volumes:
       - /mnt/media/movies:/movies
       - /mnt/media/tv:/tv
