@@ -13,6 +13,9 @@ tracking_window_minutes = 60 # How long to wait for grabs after a search before 
 tracking_delay_seconds = 90
 skip_unreleased = true #  Skip Radarr movies without a past digital or physical release date.
 
+[auth]
+method = "Disabled" # Forms, Basic, External, or Disabled
+
 [radarr]
 url = "https://{{{domainForApp 'radarr'}}}"    # Radarr base URL (string, required if enabled)
 api_key = "{{{SECRET_RADARR_API_KEY}}}" # From Radarr > Settings > General > API Key
