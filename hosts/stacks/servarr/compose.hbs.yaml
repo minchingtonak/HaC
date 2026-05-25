@@ -453,6 +453,7 @@ services:
     restart: unless-stopped
     environment:
       - TZ={{{global:TIMEZONE}}}
+      - CRON_SCHEDULE=*/30 * * * *
       - SCAN_PATHS=/movies,/tv # Remember to mount these as volumes. Must begin with /. Default value is '/scan_dir'
       # - EXCLUDE_PATHS=/movies/temp,/tv/downloads # Exclude certain sub-directories from the scan
       - MAX_CONCURRENT_SYNC_TASKS=1 # Defaults to 1 if not set. Higher number will consume more CPU but sync your library faster
