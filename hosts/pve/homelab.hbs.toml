@@ -34,7 +34,6 @@ app_data_dir = "/fast/appdata"
 jellyfin = { id = 203 }
 admin = { id = 213 }
 backup = { id = 202 }
-servarr = { id = 201 }
 
 [lxc.network]
 domain = "akmin.dev"
