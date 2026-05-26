@@ -28,7 +28,7 @@ steps:
       scp -r \
         -o StrictHostKeyChecking=no \
         -o UserKnownHostsFile=/dev/null \
-        ./scripts/* {{{@pve.ssh.user}}}@{{{@pve.ip}}}:$WORK_DIR
+        /dagu/dags/scripts/* {{{@pve.ssh.user}}}@{{{@pve.ip}}}:$WORK_DIR
 
       ssh \
         -o StrictHostKeyChecking=no \
@@ -47,6 +47,7 @@ steps:
       host: "{{{@pve.ip}}}"
       strict_host_key: false
       shell: "/bin/bash -e"
+    depends: setup
 
   # - name: run-cloud-pbs-backup-script
   #   command: cd /tmp/dag-${DAG_RUN_ID} && ./k3s-nfs-cloud-pbs-backup.sh "k3s-nfs-backup-${DAG_RUN_ID}"
@@ -57,3 +58,4 @@ steps:
   #     host: "{{{@pve.ip}}}"
   #     strict_host_key: false
   #     shell: "/bin/bash -e"
+  #   depends: run-local-pbs-backup-script
