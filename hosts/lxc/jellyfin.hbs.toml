@@ -6,7 +6,6 @@ traefik = {}
 dozzle = {}
 newt = {}
 jellyfin = {}
-jellyseerr = {}
 
 [cpu]
 cores = 8
