@@ -4,7 +4,6 @@ description = "various backup-related services"
 [stacks]
 traefik = {}
 dozzle = {}
-dagu = {}
 syncthing = {}
 
 [cpu]
