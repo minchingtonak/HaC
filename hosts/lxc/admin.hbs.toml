@@ -6,7 +6,6 @@ traefik = {}
 dozzle = {}
 pocket-id = {}
 homepage = {}
-tailscale = {}
 
 [cpu]
 cores = 2
