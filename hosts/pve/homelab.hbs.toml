@@ -33,6 +33,7 @@ app_data_dir = "/fast/appdata"
 [lxc.hosts]
 jellyfin = { id = 203 }
 admin = { id = 213 }
+servarr = { id = 201 }
 backup = { id = 202 }
 
 [lxc.network]
