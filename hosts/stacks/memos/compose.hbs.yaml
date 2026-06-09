@@ -1,6 +1,6 @@
 services:
   memos:
-    image: neosmemo/memos:0.26.2@sha256:3eefcc231141369accbd2f42bdc1a4c1e3b291fb6e288ff0deb60afa1b5d4727
+    image: neosmemo/memos:0.29.1@sha256:3e1253477066eb2aefa91145f7f9038bb931ed88c8a3ee05310a933594cdba7d
     container_name: memos
     # ports:
     #   - "5230:5230"
