@@ -1,6 +1,6 @@
 node = "homelab"
-endpoint = "https://192.168.8.89:8006"
-ip = "192.168.8.89"
+endpoint = "https://192.168.20.89:8006"
+ip = "192.168.20.89"
 domain = "akmin.dev"
 
 [auth]
@@ -38,8 +38,8 @@ backup = { id = 202 }
 
 [lxc.network]
 domain = "akmin.dev"
-subnet = "192.168.8"
-gateway = "192.168.8.1"
+subnet = "192.168.20"
+gateway = "192.168.20.1"
 
 [lxc.auth]
 password = "{{{SECRET_CONTAINER_ROOT_PASSWORD}}}"

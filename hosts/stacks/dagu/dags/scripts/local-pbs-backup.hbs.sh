@@ -23,7 +23,7 @@ TAG="pbs-local$(date '+%y%m%d%H%M%S')"
 # shellcheck source=/dev/null
 source "$(dirname "$0")/pbs-backup-common.sh"
 
-LOCAL_PBS_IP='192.168.8.189'
+LOCAL_PBS_IP='192.168.20.189'
 
 function backup() {
     setup_error_handling "$TAG"

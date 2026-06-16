@@ -13,7 +13,7 @@
 # and the password as SECRET_K3S_NFS_ENCRYPTION_PASSWORD in Pulumi.
 # The key is SCP'd to the PVE host at backup runtime — it does not need to live there.
 #
-# A 'k3s-nfs' datastore must exist on the local PBS (192.168.8.189).
+# A 'k3s-nfs' datastore must exist on the local PBS (192.168.20.189).
 #
 
 set -Eeuo pipefail
@@ -24,7 +24,7 @@ TAG="pbs-k3s-nfs-local$(date '+%y%m%d%H%M%S')"
 
 SNAPSHOT_PATH="/fast/k3s-nfs/.zfs/snapshot/${SNAPSHOT_NAME}"
 
-LOCAL_PBS_IP='192.168.8.189'
+LOCAL_PBS_IP='192.168.20.189'
 
 # shellcheck source=/dev/null
 source "$(dirname "$0")/pbs-backup-common.sh"
