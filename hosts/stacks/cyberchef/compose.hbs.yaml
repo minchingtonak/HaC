@@ -1,6 +1,6 @@
 services:
   cyberchef:
-    image: ghcr.io/gchq/cyberchef:10.23.0@sha256:9a3449fc564dcf86ba0165dadffe0eb95f207bfb1123672ec739eaa99aace050
+    image: ghcr.io/gchq/cyberchef:11.2.0@sha256:a150391b667ecf2626418fcecddfbfc0e8aebd671ef1ecdbb3be20fe9656f878
     container_name: cyberchef
     # ports:
     #   - 8081:80
