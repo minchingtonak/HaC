@@ -13,6 +13,7 @@ subdomains = [
     "radarr",
     "sonarr",
     "lidarr",
+    "listenarr",
     "prowlarr",
     "bazarr",
     "profilarr",
