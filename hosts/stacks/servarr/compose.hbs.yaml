@@ -292,7 +292,7 @@ services:
       - traefik
 
   radarr:
-    image: ghcr.io/linuxserver/radarr:6.1.1@sha256:079e48870584baf2a3e7e43e7ba6d3c834555931851a59c82c51cc792d285caf
+    image: ghcr.io/linuxserver/radarr:6.2.1@sha256:1e95b5c13fe015361a9ae1c4d99fc2336816790aaea60fa74b2ffebe076a69e0
     container_name: radarr
     restart: unless-stopped
     environment:
