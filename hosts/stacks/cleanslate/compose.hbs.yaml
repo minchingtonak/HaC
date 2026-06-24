@@ -73,7 +73,7 @@ services:
       - cleanslate
 
   authentication-server:
-    image: ghcr.io/successible/cleanslate/authentication-server:v4.15.0@sha256:42f7470595e32781622414e3865309fccd1e68e7754c95bea7d773e86e12dbec
+    image: ghcr.io/successible/cleanslate/authentication-server:v4.23.0@sha256:46253bacd373237b6ce50b9d71f566d74edafa6ac52aa4fd8ba1bee723a05944
     pull_policy: always
     restart: always
     container_name: authentication-server
