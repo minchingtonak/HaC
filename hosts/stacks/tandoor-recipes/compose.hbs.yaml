@@ -12,7 +12,7 @@ services:
 
   web_recipes:
     restart: always
-    image: vabene1111/recipes:2.6.4@sha256:8ab96a23f16b80531a82aee6b18d5afb5c6a9adaa09c46c7b832e92f85bb00b8
+    image: vabene1111/recipes:2.6.11@sha256:2eb9a80a0b03f905eaa9cea18b0d31ae0c49f37dbd53e0f55215070e7e9b7108
     env_file:
       - ./.env
     volumes:
