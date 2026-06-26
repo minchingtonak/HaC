@@ -442,7 +442,7 @@ services:
       - traefik
 
   subsyncarr:
-    image: mrorbitman/subsyncarr:1.2.15@sha256:36ffb4a235caa5cbd07cc9e871155825f18f48e3723a544b24a2875ca91b66a1
+    image: mrorbitman/subsyncarr:1.3.0@sha256:0fde5901345dfb95c6b072eb85699f10c6c3aa7eb49caa1ccc4221cb55157d02
     container_name: subsyncarr
     user: 0:0
     # run every 30 minutes (1800 seconds). workaround since builtin cron functionality doesn't work
