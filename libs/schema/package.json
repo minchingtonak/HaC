@@ -18,7 +18,7 @@
     "lint": "eslint src/"
   },
   "dependencies": {
-    "smol-toml": "^1.6.1",
+    "smol-toml": "^1.7.0",
     "zod": "^4.3.6"
   },
   "peerDependencies": {
