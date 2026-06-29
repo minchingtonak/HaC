@@ -1,0 +1,26 @@
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:0.9.6@sha256:90eae5b419e40b4c3dd684582b2c83440b36f9ae2f6532c09639b2ba4ee65158
+    container_name: open-webui
+    restart: unless-stopped
+    # ports:
+    #   - "3000:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+    volumes:
+      - /docker/open-webui:/app/backend/data
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.open-webui.rule=Host(`{{{domainForApp "open-webui"}}}`)
+      - traefik.http.routers.open-webui.entrypoints=https
+      - traefik.http.routers.open-webui.tls=true
+      - traefik.http.routers.open-webui.tls.certresolver=porkbun
+      - traefik.http.routers.open-webui.service=open-webui
+      - traefik.http.services.open-webui.loadbalancer.server.port=8080
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

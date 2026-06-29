@@ -1,0 +1,28 @@
+services:
+  ollama:
+    image: ollama/ollama:0.30.11@sha256:c484b703176aa19dfc0a54cbfb60ab8094b38faa04283fb77eba1d33319e5eca
+    container_name: ollama
+    restart: unless-stopped
+    # ports:
+    #   - "11434:11434"          # REST API
+    volumes:
+      - /docker/ollama:/root/.ollama
+    environment:
+      - OLLAMA_KEEP_ALIVE=30m
+      - OLLAMA_NUM_PARALLEL=2
+      - OLLAMA_MAX_LOADED_MODELS=1
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.ollama.rule=Host(`{{{domainForApp "ollama"}}}`)
+      - traefik.http.routers.ollama.entrypoints=https
+      - traefik.http.routers.ollama.tls=true
+      - traefik.http.routers.ollama.tls.certresolver=porkbun
+      - traefik.http.routers.ollama.service=ollama
+      - traefik.http.services.ollama.loadbalancer.server.port=11434
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true

@@ -1,0 +1,42 @@
+hostname = "ai"
+description = "ollama runner"
+
+[stacks]
+traefik = {}
+dozzle = {}
+ollama = {}
+open-webui = {}
+
+[cpu]
+cores = 16
+
+[memory]
+dedicated = 30720
+swap = 30720
+
+[disk]
+size = 128
+
+[[mount_points]]
+volume = "{{{@pve.lxc.appDataDir}}}/ai"
+mount_point = "/docker"
+
+[[provisioners]]
+type = "ansible"
+playbook = "provisioners/ansible/configure-apparmor-unconfined.yaml"
+replayable = false
+
+[provisioners.variables]
+lxc_id = "{{{idForContainer hostname='ai'}}}"
+
+[provisioners.connection]
+host = "{{{@pve.ip}}}"
+
+[[provisioners]]
+type = "ansible"
+playbook = "provisioners/ansible/lxc-init.yaml"
+replayable = false
+
+[[provisioners]]
+type = "script"
+script = "provisioners/scripts/install-docker.sh"
