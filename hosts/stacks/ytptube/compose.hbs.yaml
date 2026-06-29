@@ -1,7 +1,7 @@
 services:
   ytptube:
     user: 0:0
-    image: ghcr.io/arabcoders/ytptube:v2.0.6@sha256:eb043fe0b0037b6d4998de08ed3499adb1043ebe060d2b675f8382c145b226b3
+    image: ghcr.io/arabcoders/ytptube:v2.5.8@sha256:8790aaf2b0fccce127475196f0f3862403ef8ca24d87d0b12451ef4ef50869ce
     container_name: ytptube
     restart: unless-stopped
     # ports:
