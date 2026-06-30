@@ -1,6 +1,6 @@
 services:
   dozzle:
-    image: amir20/dozzle:v10.3.0@sha256:034bb79c668dbd861e8d1ea131ad9c7abfe136e423edf80efaf502f8aae9c127
+    image: amir20/dozzle:v10.6.6@sha256:2e14180fa14c195b8e86705b7ab2234b87599215bcf06f7f56396cb45f57f963
     container_name: dozzle
     restart: unless-stopped
     volumes:
