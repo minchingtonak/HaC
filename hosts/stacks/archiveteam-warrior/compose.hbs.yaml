@@ -1,6 +1,6 @@
 services:
   archiveteam:
-    image: atdr.meo.ws/archiveteam/warrior-dockerfile:latest@sha256:ef212e47037a8de8425cc3f56629890d3e0aad7b630ddbc8aff0189e3efa2e37
+    image: atdr.meo.ws/archiveteam/warrior-dockerfile:latest@sha256:cdacda79bc812672975d34867e0a3d08a7681370b3c64633d413e9e1e7a9ab78
     container_name: archiveteam-warrior
     # ports:
     #   - '8001:8001'
