@@ -32,7 +32,7 @@ services:
       - traefik
 
   redis:
-    image: redis:alpine@sha256:81b6f81d6a6c5b9019231a2e8eb10085e3a139a34f833dcc965a8a959b040b72
+    image: redis:alpine@sha256:978f0e01593e65eed801f2402944efcd936d43b5027e4908a7897baf88ed6241
     container_name: spotizerr-redis
     restart: unless-stopped
     env_file:
