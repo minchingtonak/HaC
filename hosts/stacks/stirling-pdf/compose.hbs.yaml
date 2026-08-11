@@ -1,6 +1,6 @@
 services:
   stirling-pdf:
-    image: stirlingtools/stirling-pdf:2.9.2@sha256:3fcfa4d6b6ff22fdbf96ff2aae98dc2fb6d8c1ba0afab1dd2fdfdcdc9ab543c4
+    image: stirlingtools/stirling-pdf:2.14.3@sha256:3b3670fce70b396ec56ba380a3cc7858e0abf83fe13f31c88f7737847763a396
     # ports:
     #   - '8080:8080'
     volumes:
