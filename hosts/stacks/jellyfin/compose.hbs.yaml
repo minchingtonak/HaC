@@ -1,6 +1,6 @@
 services:
   jellyfin:
-    image: ghcr.io/linuxserver/jellyfin:10.11.8@sha256:e622a48adf7193c7d626c2325a40f9b01c932c8e7bf3f50ffa40e7e9b6ce1d39
+    image: ghcr.io/linuxserver/jellyfin:10.11.11@sha256:0dd18f8de37c7cfbe76877a8b928943b3588beb9678fb223121914ec9a3cdf7c
     container_name: jellyfin
     environment:
       - PUID=0
