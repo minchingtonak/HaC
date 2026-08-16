@@ -38,21 +38,6 @@ config:
     secure: v1:rmEFiMK6HEmWFjly:tXvkKa3JnAfaikhCSZ4khwu/xwKaXHfWGmE12feIea+guA5eQNetN3vmsp00r8n+
   # OIDC global
   oidc:PROVIDER_URL: https://{{{domainForApp "pocket-id" hostname="admin"}}}
-  # komodo global
-  komodo:SECRET_DB_PASSWORD:
-    secure: v1:8mSv1bssR+dsJZed:gp9dM48zcgnbK6KOWO+ITbIsqw1Of6UpD9rFYwdarfTXqP+OpQ==
-  komodo:SECRET_PASSKEY:
-    secure: v1:FHrL0nB5OM/4fJm2:DchBowFw98LiIr6ky2FXFSmq7i3XJmsXYWf4DoAADWvNym+qp+akp33yBsQ9rXw=
-  komodo:SECRET_WEBHOOK_SECRET:
-    secure: v1:cT6hMe+16mKMOR1D:U/vKdAqEkDP8eZiP8rcOfMMnVSOp1OOEP4QgEokkGFJGxqM0gdwEQ0FSZTdHQrAU
-  komodo:SECRET_JWT_SECRET:
-    secure: v1:BN93OGgecVHWkzWv:edyepO2dIenDfeAEYzjHlsPzl5Qpzc/QVCwZD0hdP3syQ33ZOIEouBJDMiwqXw==
-  komodo:SECRET_ADMIN_USERNAME:
-    secure: v1:Hpo/vpPMRkgofDd2:338xTSbTmwQIUxmIyls/jK5IV6HC
-  komodo:SECRET_ADMIN_PASSWORD:
-    secure: v1:MJgjUhdcYZG/Afnk:C+duYylljKZE2k1C0JZnpBkmsqcI8XZ5oH7JpZTfBzTTx1jg
-  komodo:SECRET_SLACK_WEBHOOK:
-    secure: v1:aF0/x9eDUoulzWyT:VxLAQPL64UO/x/J5BegvI+AE9RIbXLUBozakOYNYx+BMOxjbr8DXHDIoi2S072Y0itowK49HeKcZp/GVtlEEvFaLlnfRfIBTMKBM58mzXnl3ar0uHd5hq/SMc1jkwiguXg==
   # dozzle global
   dozzle:SECRET_ADMIN_EMAIL:
     secure: v1:3tBP2U6rb5s5dFxt:PtbIK5ixChRsG5TJIXzuYdDhoiGgJiuDjZCg9Zbvcw==
@@ -60,26 +45,13 @@ config:
     secure: v1:tMQPJSabwVBN5e5D:MnlzNXOPWw5tpsyVJTlmfN5Xs0Jk
   dozzle:SECRET_ADMIN_PASSWORD:
     secure: v1:IiZyTmntx50ts2Zv:2pIeeVPS++VrnTz+mlG6Ok2ecjv0JnGaSYJRMdtxUWGA4g87c8U9tqmWXSfigkVozoX1bRrm0MPXFJv1ZA3smbhyEJaJ2liTRvCCSA==
-  # beszel global
-  beszel:SECRET_TOKEN:
-    secure: v1:IIUwxsr3I1KdxI6k:Kk9/1n7AwS3llWL1tas9iCdjMqzU6gJlQH/+5nNEq6hjg+FZH9Gk3EIK/Mj6i2Ctnsb6jA==
   # loggifly global
-  loggifly:SECRET_SLACK_WEBHOOK:
-    secure: v1:np+7j9i6PPh2CQsD:4ULi1u2NrP9UTiL6cFk8m5aptFzs3GZbAQjg+r+hQ5edgw6YAdM3xlXHlqhqL0WR6io79S8DSwV44yI1CNffgSQlmz6Z8aQb0eUxHNyuhx01jwXIDn/HCDggN4mKZAdISA==
   loggifly:SECRET_PUSHOVER_TOKEN:
     secure: v1:EYiXHSWiTzeyUybO:tiG7hT7DT3wmfICOyiYw3UVdAK9pp32A5uPf9Tt7t7JCPHI2KD/SJScOeOn5vQ==
   # pushover global
   pushover:SECRET_USER_TOKEN:
     secure: v1:gmPZz6jkhxu/feyP:49BPolhAhkOUODGZlFWXlDz3vqGAF8zSY/ILhjVyD3lVd9F6caoyen6H2YOfhw==
   # admin
-  lxc#admin#semaphore:SECRET_ADMIN_USERNAME:
-    secure: v1:hfzh9QFJQ1EIzwfo:YvPybPDxT0B3iA1b8GstY1jk7Xnv
-  lxc#admin#semaphore:SECRET_ADMIN_PASSWORD:
-    secure: v1:plRgEnlEJqjTfGNG:gY1Dwltn/5FV+MVjoo0KCIVpqNM/GyDUzpWJM8i1SOyKgOIH
-  lxc#admin#semaphore:SECRET_ADMIN_EMAIL:
-    secure: v1:Ioz4e16dxqVtKDDV:1wWrm9MhEPGtfApKyGSQQFWBJMM+JWyqUAU1jU423dk1ZA==
-  lxc#admin#semaphore:SECRET_SLACK_WEBHOOK_URL:
-    secure: v1:TssVt21kCosYCKbY:vFlhMwP39dCP7Uf8R87YdMM88+lXSDYL1nyGb8KTgpwY/N9Pu6lDPPfuajwhCycV1wf9PxxBscwbkPc3nCHA8+Vgnhc9fHSw+Q1a8RgApZTCAZksNuGLKMZjDaS0ZZMY/A==
   lxc#admin#homepage:SECRET_JELLYFIN_API_KEY:
     secure: v1:uqGGAqLhLWUdx3+R:QT5rQMMIBUhkr4A1EUrCi2xhdmUMFvX9Srbb7aHFAnhzI8U0PPl/U779stnmAuS+
   lxc#admin#homepage:SECRET_IMMICH_API_KEY:
@@ -144,223 +116,12 @@ config:
     secure: v1:cLjsKKn5oITaNJQz:pzEp+35UocZzkfQEARKsizx4M4iFTHpdvo+TxNyCIjkg3Hfog/aKFyZUC4+iraLo
   lxc#admin#homepage:SECRET_YOUR_SPOTIFY_TOKEN:
     secure: v1:KwttXGbRHvKgLL4w:VPVxFmym/TbBWSxRcho3kQlg/VCF7M93XTPAeDfg6+ZZTYZYL3jOX+frT51BRBHm+dBu8g==
-  lxc#admin#tailscale:SECRET_TAILSCALE_AUTHKEY:
-    secure: v1:yEEBnoB6cf0obDSk:jrn14SA6XkSdYOfeK2Yn7ZB7sQd19YCpxHssBCY4GYGG3wxRfr+pVaNl1z/QvCyiGxhmM0hh7M6vJpxTZGWNj/91es8yDAP54NoZZ5MY
-  lxc#admin#tailscale:TAILSCALE_SUBNET_ROUTES: 192.168.20.0/24
   lxc#admin#pocket-id:SECRET_ENCRYPTION_KEY:
     secure: v1:wzP6B4YNoNuX5q3D:ZFsDC+0PvR2rwcgc/uZGFhtJWb8gQI1Q1S1H3OIFVZ4ZFplBPHikIUSe6Fr4pfdT7QarYCxvwFee1oe2
-  # jellyfin
-  lxc#jellyfin#newt:SECRET_PANGOLIN_ENDPOINT:
-    secure: v1:v/fRcosLb5F80QSQ:v8tsYNhKvXX3E4rdG/KgU6oobTk2OKkVxqKcC3PfKAGuecqaaSkWwu/ljw==
-  lxc#jellyfin#newt:SECRET_NEWT_ID:
-    secure: v1:IR9ey5UembobicQN:JT9ITfSEwh0i8G1PukfMWLA7xGl4azZhxMrwhFaClQ==
-  lxc#jellyfin#newt:SECRET_NEWT_SECRET:
-    secure: v1:oC6GH15ofs8jCf/P:PSE9wHDLRpegwM5jUyjoIN7giQ/0ZcUMZXls5cMY0F01ww68n/Fji3kITjMMXDgfKAOztY2CSTNyhvI4OIjNnQ==
-  # immich
-  lxc#immich#immich:SECRET_DB_PASSWORD:
-    secure: v1:ECc5/vJz6VnDlxsj:xgdWvCAj0NxBmWNBrAg4cP+l8j7DAk9cij/mO/JSNm+S8zVq
-  # backup
-  lxc#backup#cronicle:SECRET_CRONICLE_UNIVERSAL_WEB_HOOK:
-    secure: v1:UiKAJNHijNn0sxiS:QWspnq95k6UcAZ6hxzMQw3LsE3JDfDdsjxx2gB0s2ChJ3nTj0LRmcuqTdF6PWCQrjlOhP5KOM2XFniDlF/4bOUpwOkioAdB+W3dwoepydWEpxk2poFWxZHEs0aznDstYeQ==
-  lxc#backup#cronicle:SECRET_B2_ACCOUNT_ID:
-    secure: v1:NV+g80iUpRXDXKxH:wIKyVkc8oAelpyd/VJL1OniVzHB8EJ89PXusTdPVYj2gQFQ7PE7k+B0=
-  lxc#backup#cronicle:SECRET_B2_ACCOUNT_KEY:
-    secure: v1:KizcajXuoIQS9RBs:xWhD7CtabpiC++zF38W8snyTLXkxTT+jeefzt5zupN+myMqMm1buxQ4zWTPQQVY=
-  lxc#backup#cronicle:SECRET_B2_EU_ACCOUNT_ID:
-    secure: v1:SxP/vasdeAL6ipQS:1+LBAHcByyqi6tCzja4CMZ+RKekkORCgt4r2vhDkwqtgXkZLkmlHHdM=
-  lxc#backup#cronicle:SECRET_B2_EU_ACCOUNT_KEY:
-    secure: v1:pBsI5ni0nPIeDKwO:Hhp06vRV3ZjpQaHR0T06+V9ypJGiVjwNnVAKz+6AqHeqihtxj5oro3Kw7WJ5kuE=
-  lxc#backup#cronicle:SECRET_RESTIC_PASSWORD:
-    secure: v1:K5gnxDKtlcOHst6z:qsdkR4AOO+5As2VslPO6ERzlJlA01xcTglsp6Ct8i374V6G/TqwUifpw+8gKHiU30SPJMfsI3dF7xfFFAnAcPg==
-  lxc#backup#cronicle:RESTIC_CHECK_PERCENTAGE: "5"
-  lxc#backup#cronicle:SECRET_B2_HEALTHCHECK_URL:
-    secure: v1:+wCA5m2zsGeupOzU:0TqufLdbUSRVv6HMHfsCjYF5q/q6d8TWTGYmIbPDTAB4BjV/sq8uXJdZswAeIH1MzC7Bz418ppHq/1JrlyHPDvlm+Z0/GOvK
-  lxc#backup#dagu:SECRET_APPDATA_PBS_CLIENT_KEY:
-    secure: v1:UZPFlFtFXSJa4gTT:13C3KVu+OHSj06DlcRffOKsXuwyzXck0VTEp/kiD7It7fnUHrTq4oavpHBuS7XJ5po53Ruiyev8rTwhIsMIwHhjwC0GpQeaWFGdBQwWzz2EyVENAyfbfeVcYvVil5j8/fh4Dgp7RnHkSo9qUqQT1SKw/DSxcWzK0Vwv172FZESWISgmNSA3DcxiCshFv4943AjoipRu/KWdjune5iApKQIqw1FO6lRx2mdoNYjJUgHkAXanUs5NoJkbh+t8HNAnwOjyDxQX2zMxtogxOEBAXOg/2n16mqooeroCWKU69Xa4ifodSPXJsmy5LRShZzsqE0+Fdoe2v8UvP3YXvg7tsPDoV+38E0i4JbNDlm8K3xr55bg4ZUYc5tcbrZVxsYYG/IPOEYkVJ6k72SnpHKm248SC65+7cafyNX7aAlimitDdCK/xLxhFtAwhKeohwVsYBqtfR3knVHB2n1cNyEX7irH7GhLmk38HTSnQWv3LzgMeo59aMCnENUSCI5b1XAU2809zNJGXGOga9dzgbK6rr
-  lxc#backup#dagu:SECRET_BACKUP_SCRIPT_SLACK_WEBHOOK:
-    secure: v1:qVBMCfJrNAYa9kXe:4FgKvVXUtesE+FmlNocgKrm7RkWE7CTrXdiDqYYouAVqpdRMxGGoCpfOWQM4o4uqyAKnKKUSebwmB5yLPRPn2Yf7GdF8h0ois3ooAg/+BAKVQ2rY0sJrVt9Zd4iTBT6K9A==
-  lxc#backup#dagu:SECRET_APPDATA_ENCRYPTION_PASSWORD:
-    secure: v1:ugJ9kzTvT6tFXmtJ:8SuTMHnukjo6Z0nR2x5GPLvaE4BzuerGPn8o5ArK3RaNm+KF5rVutdxMylJ7l95T
-  lxc#backup#dagu:SECRET_EDSAC_PBS_PASSWORD:
-    secure: v1:y0UwK2GCoXHA7v5Q:iaHaRyg65XoVbohdHI9fjxtDs2lbixBuUgM=
-  lxc#backup#dagu:SECRET_PERSONAL_FILES_AND_CLOUD_PBS_ENCRYPTION_PASSWORD:
-    secure: v1:XrRLiAyaxgf0HSLj:MeRv7+r25n2sAlJ+prp6ObdpJ3L3YKw1GyhEljksM73fl5EGN1VXKVXGKyi3cQ==
-  lxc#backup#dagu:SECRET_CLOUD_PBS_API_TOKEN_SECRET:
-    secure: v1:NfjPns+iyuoRPL1q:RRJ5e0pSn9aNEyTqhh7s/my4y9PgT8IogKD1jWrt0/nsYNgjaIneocwkMh2oLA4xWVRGGA==
-  lxc#backup#dagu:SECRET_CLOUD_PBS_PBS_CLIENT_KEY:
-    secure: v1:2/3cAknfNpJY4Zs2:15v10hsra9Ee0+q4OsTgVI8qofdx+IK6YjZHbj/7YQgvAvSdwsC1YtaRoEJkvfnj5MmdHpPHEIqHJ7UWuSXuGStLW/hCjmuXhar7yfAHLzFO4uPWee0DCejvmexezJYvE/DwPIstbp92McZAdqVO9XRkY7Y8eMOaNLIYvPdKtdHqoI80oBUMauwuS46En7IVrySen5Tt3LQpo7Bn+eCY30HCiEdtBlJqElSI1GIRcN0L0XYvmiGVyLUmxQ+2ttmfqKp32mPErUhNQYbhfjSEDsNa/Byt3rePR/q4SB/h1TNMNke75WMOHV2FhPtJEC36Pf4N0WPU+ykt+6QW63SGfYQ5BZnh7QtcsQDIhbgaKn49sTJuEdlcNK/a7lGO9hbyMD3AzHxljHoTA7ipUsdLbtdr/SJ3IZA+GewlSzogDEnfunhR09WUkPXvFZfonxqYibzJwPy8TXNOcMIFdFynSQeKRZCnIsDEmb0leFjV+iWAQNy8vIXv2V9IwychJAB/MqXw48ND/5a3m3/aFErF
-  lxc#backup#dagu:SECRET_PERSONAL_FILES_PBS_CLIENT_KEY:
-    secure: v1:WMY5vfivaMqgnHLn:ahm2lhdS4vWy+E62pLtlAiWVf4oA4WDqiXl3heqAXSAMK0TPK1mqecBm0HOAJcMqh8u1aN1CeyRkU+kSRVQ57CUeP2pkwMVf5v98RdP6ueMkdeXnzxMgP2IH/EiLdkbYcOsUDx2GCbL0SRgmjBOXMdtjucFU+fK6Sl+6ChdItCw4BrY34wj9VmFoVMlE2eOA8Me6egPaLXCqFE0y+4BPe1D0J1qypC4YL4zrPrreoExTFRslvmye8L5guAKFNt2Jfr23TaSynbAVYwd4vtjf/Qfwib6qlvHRndstm78GierLaUgt0J2i804bXojDFFEVzem6oYKkDZ/JcxVaoKJozCGAwDOVhjOnIMW9lOFG9NWcCMVQztLls0aPaly7K38SItm1/lJQdLgAsGEQqJGnj/ThKX7MQHg30XyliVBdtgljXYtFcU8joNxfys8XtxZBV5K536klu2Lme/SpHiIilkO3ODliUpw6w5PRyyzkUxBWF3MaKDpv+II1RSmV+UdnBKsFl4wohjEFeeGOTtQ3
-  lxc#backup#dagu:SECRET_LOCAL_PBS_FINGERPRINT:
-    secure: v1:97fDK5iL7CSE0sZy:Hl01fWRnLuigeVuvGB9DgQDAYUMkP0o8FkmhvvyIPiG3EtOdeEk9oUpvZWHR0zqPn8KqztlZduzpisd4AQqnomLdGnJeYVkQAsgpQ1MAHIxUAnmxd6CwEjh0AmXoGFeqzfKP6xEIUrj/6MgOigZK
-  lxc#backup#dagu:SECRET_PUSHOVER_BACKUP_JOB_TOKEN:
-    secure: v1:Pfv3SsMKMSBFFI+a:Flzy0Bcpy/xR8Gy3pHDgR77roWTe4XST9lD03rD/49f/fq30wlb4UjexFAJ16Q==
-  lxc#backup#dagu:SECRET_CLOUD_PBS_BACKUP_HEALTHCHECK_URL:
-    secure: v1:jmddUCiioUwylPJr:d0zbQd0LT62Nkm1VJ90cA6deokPP+k/8uqiCyli3uX3Dz49jmWA0XdOosCj9MzHEy5Ky9M7+DXwCQa+NDtUKVs/LtpnlVUon
-  lxc#backup#dagu:SECRET_MUSIC_HEALTHCHECK_URL:
-    secure: v1:LnmQS6t8rMdeFoAd:ijvI5BbU6e+hAkV1rOuLijJddGGFn0WYbXFoQF05ZW/3dfLHmhz5xgzaZ2jQKfyNeTlwz89FRLPTQagvj5W+KY2ekpm+RBKb
-  lxc#backup#dagu:SECRET_APPDATA_HEALTHCHECK_URL:
-    secure: v1:f8EenU2Pi0qJ4cHB:MS8DHEz4RF1qjiriJ2j+o9/v/E8Edwo/JJkX0QD0z2TfRedbNAaIJ3x+hM0LmkwofAG6iCSQbmbPNb1ap+1BKmh7raMKOqYF
-  lxc#backup#dagu:SECRET_PERSONAL_FILES_HEALTHCHECK_URL:
-    secure: v1:iJMTADhRdFN9A6eK:YTFUeSU0+Mg6fXpVuGYeJLqCYw9csl9n5aMlPaQumKfqrdb3XHTJgBGF5A5CUl7eJY5wYeFPVao2NdeIrxUOG8U+jFm1cL11
-  lxc#backup#dagu:SECRET_K3S_NFS_ENCRYPTION_PASSWORD:
-    secure: v1:jGGd/LESmbzsOMAP:yrtczn+hlHh7nLAp3OeLJ+eGh1pq8Ltg7EthkLHBMK3W+fPN
-  lxc#backup#dagu:SECRET_K3S_NFS_CLOUD_HEALTHCHECK_URL:
-    secure: v1:hYCzLYMBWz0RwiQX:y7iH1S+rYOSMXX4H3rZspvcL5KEotm9+dBQNQP7Z4Fw+J02MmctqNqhFboZvoE3rmUj2r4PVmyim0jvsW6m8txbm7I/feDZf
-  lxc#backup#dagu:SECRET_K3S_NFS_HEALTHCHECK_URL:
-    secure: v1:vy4OefBsF7KtRgKN:6HoUL1qWoSlhtnH5YfYsIEqlTLyosjcY5gbDIpp6Hph0mxB7WE7w4r6LGJ7suikljU5vimkIoXdr+XPlr0FFeWxJ4z+VxYnN
-  lxc#backup#dagu:SECRET_K3S_NFS_PBS_CLIENT_KEY:
-    secure: v1:A0gKMhUOS3ADDbRJ:jF8gepPldVagG/mjLrZ60if+VnYPS5k4zkQEVkPiTGZw+FKjai8dNSS6z1+0EBmXzBOqwUs9X1u/KzvhBBGpyWOoyALL7qZyjtQe/tc7DNrQCPNmcgvJnCZDkL2hDwLWzlkUuisvOD86vKLoQrtsu4oq420bfTx6nAKn4uv/kDSDKFjWWPmvPeZ3GrMjlelTT67uVCVpJ6jvRb1tuj5zUsSU6kE+sbyQ44Dtm84tWVoQcvPXOhcYfvLKB8mi2l7eDeC4ZpyFs33ZTIIyNd+0gZ3OSEKLDcRsVp6GfBSTOHLPjknK/hyvi1I1YDNXFEV1uxyaLA+dXr6uskB2gldyZcMXo4FbMSbamKWq/cU1avffAnNz9xziMk7aJpLzQll0ZJcwkSwnoEC5YG4M3llTq/61esDo3/MFmE1U4LHVxUu66XC1dX15AkwXWz8OLxbVOEW6nvDrWWZdXLAlgZ916kRMM0EY2Xhdf0bXADVp4h1OdPjuEJ+zbD8ooXkdz6cX8ENvEAg0UX72bkWUYiu6
-  lxc#backup#forgejo:SECRET_LFS_JWT_SECRET:
-    secure: v1:wwrv4/7jP12dYID9:SXNe8F900y2BzjW+3OXw9+AHTw0pl+VZaZw/6Ulf6Jv7OfjX2kVbdljUjINypYz/EfLuQOd/MiQf28M=
-  lxc#backup#forgejo:SECRET_INTERNAL_TOKEN:
-    secure: v1:yO2mJgscLnc/c8JT:MvbOhHjEO6PVV+wjtGUNRZeQa+LUIXET+DZO7cCM8LbKuGoHje91eeVX6OjShJ7Iuqx1HbpbM2j2wwq4sNQ8h83Rh9kOsUXJS88R2WUhiErsfWynlYazOfEMhEa2d5lanJpcAAW4qzoaALpe3EzPShB2gTF+O5KItA==
-  lxc#backup#forgejo:SECRET_JWT_SECRET:
-    secure: v1:ayUsAZZn5opBcroE:966gcy7jKPtjymzlnMQpR2VYtY1WjdHXBmpo47e+5hj3Mwz/2jlMz738wRVJBQ/ZQtfWxGimGXH2R0k=
-  # life
-  lxc#life#dawarich:SECRET_DB_PASSWORD:
-    secure: v1:xEWsp+rmkp0ekfX0:fDOUcy1psCZEQPCgfxHGBMzi0oTNJdmNENQTIYNNxjQoc3Mt
-  lxc#life#dawarich:SECRET_OIDC_CLIENT_ID:
-    secure: v1:U1bJJNKc8oGeH8On:fFt16CIh2zIi7VH8h246fuRqNzoaKWV2kqPVrScJ8yw0oBYWCDHJl1nPqTbOjrE8SzTZPw==
-  lxc#life#dawarich:SECRET_OIDC_CLIENT_SECRET:
-    secure: v1:cz0S8FJwNZHbfzLy:ihLVISBWEsYv0K4E19cjxfC/B/Y5TABoZ8qho0sIe7x1OIBwm5PMeDmHvUmloEsS
-  lxc#life#fittrackee:SECRET_SECRET_KEY:
-    secure: v1:ifCk9F9zZ+3sHV+R:05/13+YnJnaBGpU131t0FIplYRNxyXT/0StRQu+VGe1uIcp3ppDY0lJxTCV3Gg==
-  lxc#life#fittrackee:SECRET_DB_PASSWORD:
-    secure: v1:2SC5AIdLdytL3l7R:CJhjXr0pdvtwClww4/fnwDjZHKE8F4Cxs4SxPW5wNIItrxTfXwtMAdzmkiE=
-  lxc#life#tandoor-recipes:SECRET_KEY:
-    secure: v1:nuKklw9Lw7CB/wXi:RBXhq2GUMtjebUOaMIYCfqwVi/PMudiccrCDgRkS4xKSX1bJ0Q+kQG+zrIRFMcKDriIRxWa+IHcNlEI01taVuz1h
-  lxc#life#tandoor-recipes:SECRET_DB_PASSWORD:
-    secure: v1:WuyLZFlEVBAu8GqV:FBUtTYuDvxAso2+utSe2/A7MPEh2S0pg8jW3q1hdb1ANDqWvDwWrySdwwWRy8M0T89L3i5Bqe0EBQbn1h8oKnA==
-  lxc#life#tandoor-recipes:SECRET_OIDC_CLIENT_ID:
-    secure: v1:k1KJeBq/deoDpMHD:4fxZDmVucggb/Ar3dUjL2u0X939nUty8gf8jVUm7r0sFFAnXu5Vu7pIfcGae8hu2anBUQA==
-  lxc#life#tandoor-recipes:SECRET_OIDC_CLIENT_SECRET:
-    secure: v1:afKSPBbHQ8vRJ92I:klgSmHlrw29LmFnsh3CRxnkME3rN20aJ4xu4LnwVBWNmCYTUtsFJg3GTiq22rycX
-  lxc#life#discount-bandit:SECRET_EXCHANGE_RATE_API_KEY:
-    secure: v1:RQ6dK/n0hI/KviTJ:ilXLNdiJrb6fUpL0vySEjNVRiWNZXX7T6DXBCogXzC2L6IkU1fwzuw==
-  lxc#life#discount-bandit:SECRET_APP_KEY:
-    secure: v1:LHlQ2zKTgYm40nWj:DXKMSJmGhCzGKSEZNcqubZPDry9PtNDil66bLfG74eA8Z4o3iUbfJGUbDmaGni+Cb2X90O3A7Ru2s+GIZs/vTdX4Qg==
-  lxc#life#discount-bandit:SECRET_SLACK_WEBHOOK:
-    secure: v1:Dmt3tyTahKp/D+r2:r42FFwkQx0yIxHci28zKL0BCmkWU5bdQnV2WtY57/OgO4h+iF0jHrUipgCS/mvvu7cpNZzCe8p30kwDOgGhxP7AJt6Z+sEVAohloSrn9xlvdud2Yf6UGmDk5kLmeHfvhAw==
-  lxc#life#cleanslate:SECRET_POSTGRES_PASSWORD:
-    secure: v1:ehvxfKGSQdzXe56A:xfbXHrWGCQfoyKbhHp25+NlwiTTURN0PP4O2BVkuaxyLWMXZYiS5p8Rl9ZHQIUarRtzPBtYH/NwvJdRiM1sHgQ==
-  lxc#life#cleanslate:SECRET_HASURA_GRAPHQL_ADMIN_SECRET:
-    secure: v1:m3NCAkGOfyYtLdcI:11F6+ATl0NgFyIMKIfpbXlZIkyalYnZitPl9FAU6CZxAB/g2Ms1+ZjS/b52kQMoXMkFjIKB4WUNfsSuLFhmo0w==
-  lxc#life#cleanslate:SECRET_JWT_SIGNING_SECRET:
-    secure: v1:heiyg0tHr0E6COhN:Q/gQEPj67DJMdEt9hc0D4GLOo8xcd/AHD1AYnpn4JhypxD3ocG4Gi74TRBFAklrdYYag6EFeP+5Groj9dWpfsQ==
-  lxc#life#cleanslate:SECRET_HASURA_GRAPHQL_JWT_SECRET:
-    secure: v1:fX3N8AnuxLTOMAkG:kEB4FvHmTibjxsTGfu2UBY4fnVmCUM/LItY1VthQ2KMZWTcPSm6LUbH9KCQUvrk2Xw4MqZSv++7QYpTuzEMxaiqZdm7YJPA9GhPw6lWb5+S2wnKDGrQUvE23g24f4RYdQQ==
-  # paperless
-  lxc#paperless#paperless-ngx:SECRET_ADMIN_USERNAME:
-    secure: v1:ZN1VLNMSu60BAhxf:okOhImt9d3D9NVlmztIPHDRv9noH
-  lxc#paperless#paperless-ngx:SECRET_ADMIN_PASSWORD:
-    secure: v1:0NpMQ0oelz/GSKbW:LNPX/H4nomIsrwR7uH0med0p02S2vEf7VPfOZaqiTe441JqS
-  lxc#paperless#paperless-ngx:SECRET_OIDC_CLIENT_ID:
-    secure: v1:JxqT6is3fVQm9rgB:gh9l1H81msgZQUe//4VaIhkJ8H7Zu2iPdMV3JuRT35B44g13sIBb1lloLxPNsdzwm74iuQ==
-  lxc#paperless#paperless-ngx:SECRET_OIDC_CLIENT_SECRET:
-    secure: v1:0PsdwSxXfu52+a7t:J1gT1zIUCWguAVcU3UEtv67lLvpsdCqHButJTLT/YvAaozbRMCYWmIwOI8uqmfL3
-  lxc#paperless#paperless-ngx:SECRET_PANGOLIN_DOMAIN:
-    secure: v1:WnPq3XbdoGw2IugK:RvPBSs9/t6AD4KN1Ab5KWFQnTj6ziE8fxfPiJWqvniH3wH82
-  lxc#paperless#newt:SECRET_PANGOLIN_ENDPOINT:
-    secure: v1:d+ZLISpNwM6N0r9j:Pr+Z6ivT1unROemufpwXBb5BamPVOF2GC69BhGx0Nbg+t7NR+TAQhYLuBw==
-  lxc#paperless#newt:SECRET_NEWT_ID:
-    secure: v1:FXwvOSVB8FPKxAuy:/PlAALropDrQFVGEHaRetq27NCQsngS+WeHurPOI/A==
-  lxc#paperless#newt:SECRET_NEWT_SECRET:
-    secure: v1:fwuIRP7Ook1COF+b:C1XlxQup40i9NZwUGm9uWc6Xo6q1qdgBniMSdW6cJkYHWW0UTL/TR1Tw3aND2gay/MFE+ELJAfT39c9H/7xq+w==
-  # music
-  lxc#music#navidrome:SECRET_LASTFM_APIKEY:
-    secure: v1:gvt3vIfX9NTkf9tQ:8bIKcNzkJtSvd/R/h2A8wHq1xPqQHTurz8JrlxXHj1DStEyU0030sx1u0K1qlga7
-  lxc#music#navidrome:SECRET_LASTFM_SECRET:
-    secure: v1:FZ5g3LGrRrEiTcJb:d+KvrmDiHbcaltG5xuUE1s3XjkwJyHZ6Pfwv9xc2OhPPl0ENuHnGergBhe/UxLbU
-  lxc#music#your-spotify:SECRET_SPOTIFY_CLIENT_ID:
-    secure: v1:w/o6ZsYbS5sUTcQC:DNy5wi+ud/rWyPqDiqpE8Kcbo6WrrVrz3JymjQqW+/Mie7RT5THNvbEAI4y439m2
-  lxc#music#your-spotify:SECRET_SPOTIFY_CLIENT_SECRET:
-    secure: v1:vOfwntO6rFuwv7HX:TfO4gitQRKUjvAuVgrObOpfQubcKbAGG36aKGPBKcGUaRoKe+1u0QUQV9WdskLg3
-  lxc#music#sonobarr:SECRET_SECRET_KEY:
-    secure: v1:+MZeMvGNqVFcoS4X:md3AK1GkENZu85q2I6RZdMD9nRENO9BxVXGr2KHZixYj0/+m0ULqE2W5Nth66xb6aEJzHfmL2FARN0+Rks2n8g==
-  lxc#music#sonobarr:SECRET_LIDARR_API_KEY:
-    secure: v1:R7fKpYjlJh4dnbQ+:iCDDZQTovQdzmnL9wHC+gL3lRuiDAE+JKKxnxZq1JakAHp23vRbDX8YdI6Zh8ahl
-  lxc#music#sonobarr:SECRET_LASTFM_API_KEY:
-    secure: v1:B+wEckCfN1XP0UQf:lAKLPw7M8roWVpohokhDHbmR+WSzCIMojS/pxz5V2dTeXGqECI967g9T1qerZZgi
-  lxc#music#sonobarr:SECRET_LASTFM_API_SECRET:
-    secure: v1:fnQkH8rr/mWuoz9L:Uk6V2SpbGUSk0RMnDwaiE4irMDB8lUz/+baak9tmUDZ+cATo8xsFtiYHEFt6lX5Z
-  lxc#music#sonobarr:SECRET_SUPERADMIN_PASSWORD:
-    secure: v1:Q8u3HtbannGUWOKt:6URtN03PVCyH6x0DpR/6ZlNmTTpgGjt58FpL6r62D9DTDRak
-  lxc#music#sonobarr:SECRET_OIDC_CLIENT_ID:
-    secure: v1:6yYCrbX2fd8RlXc3:tWQtbv/Fuirw83h8zwpr8Jbj8Ac0K9JUTQnbes5bYpnm+GK3nYzKjG92Ed+6sIexIsDXWA==
-  lxc#music#sonobarr:SECRET_CLIENT_SECRET:
-    secure: v1:e+IILLwkBJKuUtjw:Kis0IPmsnhpWnQsL4YofVwbKpjxMrD7dv8EgSWbwPiy43blylU7eHxFnhCBe8Bmu
-  lxc#music#sonobarr:ADMIN_GROUP: sonobarr_admin
-  lxc#music#nit:SECRET_SPOTIFY_CLIENT_ID:
-    secure: v1:vWxPnLrp5JAm4cbZ:bsfe8/XfcDHxrgJTQPatmEM10GxLyJazL7ycRYBnJUvsgEyzPveTuYvLkiXvwr5h
-  lxc#music#nit:SECRET_SPOTIFY_CLIENT_SECRET:
-    secure: v1:KQOUP532ohSWFhab:sXZ9UUq7T7GppVMOcYT0eY3zYsXKmM6mgWfRZmw51AhbLIB0SMu/DaJdHHn9y9v0
-  lxc#music#spotizerr:SECRET_REDIS_PASSWORD:
-    secure: v1:AkluPIxFkBkw7IKi:+d3oPLIeLFhHWx/ng/EWk05HQrDA8GAY
-  lxc#music#spotizerr:EXPLICIT_FILTER: "false"
-  lxc#music#spotizerr:UMASK: "0022"
-  lxc#music#spotizerr:SECRET_JWT_SECRET:
-    secure: v1:eaUNejx9H+m9IsbG:28BhUBRYU/0k6aXrmnFIUApzHTN26/3maM+RbRFpa2N5bN68EjY3xDorPdqVfX9KRf9QSPGpwHW452orj1Ldp8sakR5VlczHYbEqsfeGLMQ=
-  lxc#music#spotizerr:SECRET_ADMIN_USERNAME:
-    secure: v1:JhFA3jup9KDcKGik:stzKvoWo1b7ojuXjxaJBtLwAdG+b
-  lxc#music#spotizerr:SECRET_ADMIN_PASSWORD:
-    secure: v1:TYd62f7VrwyStoht:YvNjeuAXUF7vmaLzb1zuqD2RMoCdS+PZlk5912C/cXIKiMeB
-  lxc#music#spotisub:SECRET_SPOTIFY_CLIENT_ID:
-    secure: v1:DqTBpnD/17jThq0q:ppLBdfUVcuQyBKIdzXxTJibS3FE9Ulcxv5D7VOOWlVbK9F5unm77V8WjTcMShjT3
-  lxc#music#spotisub:SECRET_SPOTIFY_CLIENT_SECRET:
-    secure: v1:1WVi2pgTznLH+m1z:K6tPNxDJ5B49I6hKCQnsAju2gFpA0ZIqhcj1AMAPFgsP42Ozl4Bdbd7RCC6cOob3
-  lxc#music#spotisub:SECRET_SUBSONIC_USERNAME:
-    secure: v1:tuBCtEYXk4CaFweF:gGB1Ewsnj/Gnig3agb0p6kMAfc+Q
-  lxc#music#spotisub:SECRET_SUBSONIC_PASSWORD:
-    secure: v1:ZfcXEySfjZNJ4w2b:0JaZeR5Bz3tEW5C3njaqcfGKduBzFDzcb5WvAv1AvLxEogib
-  lxc#music#newt:SECRET_PANGOLIN_ENDPOINT:
-    secure: v1:1tVgWK4iHnwBPhlF:3WrDzNOEXAwnDjaQ4L2yH2W4BCxg2HpfhNiNB0Hzwz0QPb9l3W0OpUouAw==
-  lxc#music#newt:SECRET_NEWT_ID:
-    secure: v1:+zUnT6OwWpyAjTPm:gjdFXhJBV2NNjRuqSJZEPrNmK1RzG2WuHB9SzxPSlA==
-  lxc#music#newt:SECRET_NEWT_SECRET:
-    secure: v1:7Udy1J4LARwwXgEW:8HpV8tm9t6fLato7cj10Mr3CjVWF0929E09w0iLnZfPxyWXpm23/ZkP9+vmK1/mFl9fd/V1SBHLSbr9B6oR3Eg==
-  # windmill
-  lxc#windmill#windmill:SECRET_DB_PASSWORD:
-    secure: v1:o/l5rWI9Pdv7C2lQ:fktUJhe1pR3EcFvC/GoAGmqSJ9xSsQCGJycZYSMudmPe4yJupQKrUlX0OPAT7g==
-  # servarr
-  lxc#servarr#servarr:SECRET_WIREGUARD_PRIVATE_KEY:
-    secure: v1:ArRJkUDsRGGmEzuE:vy9pp4C9ZNzuhdttz5XOUrEJix0dKDRrHqQDJNe+7Wc/rTGIlE4e9vqvyIRjnhFWAnlEr1l6TmjEL+Pf
-  lxc#servarr#servarr:SECRET_WIREGUARD_PRESHARED_KEY:
-    secure: v1:cZSWFDKqB9Z5BmNz:FkQLV90mYNdrMYkIc06yBSPTInhQtojxr9NMxGdHLQvt6qMAJwwLktFCqqJI77nH2OXdEgOShlonUbeS
-  lxc#servarr#servarr:SECRET_WIREGUARD_ADDRESSES:
-    secure: v1:Eo7uReieV6Sx3xX9:grVPbB5e74eclBDVJbYKh0V0uVN2AHufs2rFcQ+XDVNZ
-  lxc#servarr#servarr:SECRET_SERVARR_SLACK_WEBHOOK:
-    secure: v1:WsS7ZU2EH2dvJwmu:nrRyndrzO45Te8/ARtzdo3bDzdc3jRDoZNWUNyO7qWcV/AFTRVhO+bNRMoc3VWyTz2e8abYC3aUYy474nnzTpUgs62S/SMI0cBLagEDf/YExO/QvpZ/KXTC6cca4ea8jsw==
-  lxc#servarr#servarr:SECRET_SOULSEEK_USER:
-    secure: v1:05ba1gjzluVulIkx:TGQmkQMSulxl9MhgolucXA2/ZATE4A==
-  lxc#servarr#servarr:SECRET_SOULSEEK_PASSWORD:
-    secure: v1:SEmgoMTywtlMY+Dw:3psHtlLm4on/ynkjixDQ+dW/hMNGNl0W1z3s+w3JU8aC/B6U
-  lxc#servarr#servarr:SECRET_SLSKD_USERNAME:
-    secure: v1:Khms6meSimnEELVh:JZJTsYoW3vcvxDp/eFWHDBvQVa+6
-  lxc#servarr#servarr:SECRET_SLSKD_PASSWORD:
-    secure: v1:mLcvvhwkReE+AYUQ:lq1bSqqZumiouMHoZB9gIA8YkW7z
-  lxc#servarr#servarr:SECRET_SLSKD_API_KEY:
-    secure: v1:tievgzN+s8hRWDeq:WaQHm/1SxBNxW8JNiI69WBo1cEN/WJB7mJBEsfG+Hv6onaWrFytXE8wz+Mkt5brEUAX0Gq03fI9DkTlQTsp3cu8sfgldIHWlawNWl9KaYNY=
-  lxc#servarr#servarr:SECRET_PUSHOVER_LIDARR_TOKEN:
-    secure: v1:5kB7Yj5ULEIjHJES:Iig8mX1vKMT6+YEZ/fnAqZ1MnHvXfeW5RuN6cLfW5mXUQkv0EryI2Nd0XBG8/g==
-  lxc#servarr#servarr:SECRET_PUSHOVER_RADARR_TOKEN:
-    secure: v1:2LRmJgvm6G0ayfQM:QKl24MKyoJT3yQFHRUzzfM4qIWJvO3miW1VjormD7lDoqr47QhMREHwCN4lV/w==
-  lxc#servarr#servarr:SECRET_PUSHOVER_SONARR_TOKEN:
-    secure: v1:Qn7K7EMnZeIU53cL:wl+oafz83KJmIsGXbXkurG06x1GSTD1pfofer8TQrUCYfN4Osqh12KPL0LOUMw==
-  lxc#servarr#servarr:SECRET_PUSHOVER_BAZARR_TOKEN:
-    secure: v1:0aMLsa8DCro7uF9u:B6QhhiaGX4BD5pOLZin4lBrD0lAfv1I/MbwrW6xAPd6qA7zk0qC3usGjrGsRBQ==
-  lxc#servarr#servarr:SECRET_PUSHOVER_HUNTARR_TOKEN:
-    secure: v1:aKX31KeMyEle0jLI:W0JtJ6X0JOG3zywo7yQhsZk9uASUr18wUioQDEcsH94+oCD+fA6jTG/GmeawmQ==
-  lxc#servarr#servarr:SECRET_PUSHOVER_CLEANUPARR_TOKEN:
-    secure: v1:geaaX2PKt+tYIoIY:Fa/4jE1tcX6wSj9NeDlNCK+ax9JpXsImqbWMluRz1r36Fx720o7Rdpfko+/PNg==
-  lxc#servarr#servarr:SECRET_RADARR_API_KEY:
-    secure: v1:RVeovyrkckIkaLKF:qEb7ViqZvTRyICy/U5ouN/+OtMr/DpCKyjTouuuPays8dGHgUFiwgg7N/I2vicHx
-  lxc#servarr#servarr:SECRET_SONARR_API_KEY:
-    secure: v1:/RAkuC0eNZQCD6nh:JLZKUQXriobRkE0cuJEZWF9h0nzLxVNADFb9nN0YaQ3Z5VaVcYjA31juaMeLhJBP
-  # gameserver
-  lxc#gameserver#newt:SECRET_PANGOLIN_ENDPOINT:
-    secure: v1:ivr9DGrC1lA18oUz:J3/6ceDOCzs7itABrbNDHPASoCbyWGaz8XviKbiBvMw/oL5ufY01BGB/Bg==
-  lxc#gameserver#newt:SECRET_NEWT_ID:
-    secure: v1:rRF0Meadlh7iJ1uH:p89tMZo8j8bbCAkZ+tZeX9ERrcTmTCtm+Q2Nqx2xUw==
-  lxc#gameserver#newt:SECRET_NEWT_SECRET:
-    secure: v1:v1Si2cvyhErNnG2C:BsHcWbFMrKcw67OXzOEued33FVqrID3UVomuEKKTXADc9s077NBdRkL7O2aNkk2itFl+eo9gKoViQjVOPG/MYw==
+  # ai
+  lxc#ai#hermes:HERMES_API_SERVER_KEY:
+    secure: v1:xhozDiUfUYx5YRS8:FKHJZsZiD6L97wZf6Zu9AaRc8yilrYoCQsr6nOQIwm28zfkbcy2bcBQAJBkmw082phZlKJB94mu89OarqwWrlgzscxerZHHCwqYNS47aD+g=
+  lxc#ai#hermes:HERMES_GH_TOKEN:
+    secure: v1:uGzwAFx2cAlGJ/RY:MiKIqTymf+OOVcZvY0msKkGAaIQEdb/qZ+T4iObD3V0lGu53voYOSDiMpeRoBe+NujOphl/3/akahMROkkwteefZHY+2uGTkh2OOi/QQP7zkbpyFW3PcLQrJA957OHefBwAfL96IX4kyMnBztQ==
+  lxc#ai#hermes:HERMES_ZAI_API_KEY:
+    secure: v1:Tm7/aPmk7zeRwKE6:e9mzKayA1XVwEG3Wos77VKgETwaWXJ7QFzA+lNwRon+OX+xWfYXm/Ao5/QmyxR1ff6+oUHczsgNPZ4/f2GvL/Wc=

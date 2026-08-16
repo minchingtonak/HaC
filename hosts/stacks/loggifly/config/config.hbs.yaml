@@ -1,9 +1,0 @@
-containers:
-  # loggifly requires at least one container to be defined here
-  foo-container:
-    keywords:
-      - foo
-notifications:
-  apprise:
-    # Any Apprise-compatible URL (https://github.com/caronc/apprise/wiki)
-    url: "{{{loggifly:SECRET_SLACK_WEBHOOK}}}"
