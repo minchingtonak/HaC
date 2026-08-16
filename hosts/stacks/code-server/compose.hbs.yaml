@@ -1,6 +1,6 @@
 services:
   code-server:
-    image: ghcr.io/linuxserver/code-server:4.115.0@sha256:308f49acac8734542560f797d79b15e4c872c4d3f97d1b22862633fcce2af62a
+    image: ghcr.io/linuxserver/code-server:4.132.0@sha256:a6d1aa1083f224d1ebb47bf9e2eb9a5624c5107447014912b768c27bb30293fc
     container_name: code-server
     environment:
       - PUID=0
