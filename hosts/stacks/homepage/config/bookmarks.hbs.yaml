@@ -40,3 +40,6 @@
     - pushover:
         - icon: pushover.png
           href: https://pushover.net
+    - z.ai:
+        - abbr: Z
+          href: https://z.ai/manage-apikey/coding-plan/personal/usage
