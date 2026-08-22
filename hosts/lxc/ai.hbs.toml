@@ -6,6 +6,11 @@ traefik = {}
 dozzle = {}
 ollama = {}
 open-webui = {}
+[stacks.hermes]
+subdomains = [
+    "hermes",
+    "hermes-dashboard"
+]
 
 [cpu]
 cores = 16

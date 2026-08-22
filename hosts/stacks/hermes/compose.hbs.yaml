@@ -1,0 +1,284 @@
+# Anything that runs an agent process needs the same credentials, mounts and
+# toolchain. That is three services — hermes-agent, hermes-dashboard and
+# hermes-webui — and the dashboard was originally missing all of it, which
+# surfaced only as "no API key was found" plus a silently wrong working
+# directory. These anchors exist so a service cannot quietly drift again.
+#
+# GLM_BASE_URL is load-bearing: hermes defaults the zai provider to
+# https://api.z.ai/api/paas/v4, the PAY-PER-TOKEN endpoint. A coding-plan
+# subscription only bills through /api/coding/paas/v4 and Z.AI states the two
+# are not interchangeable, so pointing at the general endpoint bypasses the
+# subscription silently. (Verified: the coding-plan key returns 200 on the
+# coding endpoint and 429 on the general one.)
+#
+# Do NOT add a Claude Max subscription token here expecting it to be free.
+# Anthropic refuses third-party apps against plan limits — "Third-party apps
+# now draw from your extra usage, not your plan limits" (HTTP 400). It works
+# only once extra usage is purchased, which is the same economics as a plain
+# API key. Tested and rejected 2026-08-08. The var was CLAUDE_CODE_OAUTH_TOKEN,
+# sourced from HERMES_CLAUDE_CODE_OAUTH_TOKEN; it is named in prose rather than
+# left as a commented-out template expression because the template processor
+# discovers variables by scanning raw text, so a double-brace expression inside
+# a YAML comment still counts as a required config key and fails the render.
+#
+# SOPS_AGE_KEY_FILE is the agent's OWN age key, not the operator's master key.
+# It is a second recipient on every rule in .sops.yaml, so the agent can read
+# and write encrypted files and can be revoked by dropping that one recipient
+# without rotating the credentials inside them.
+x-agent-credentials: &agent-credentials
+  KUBECONFIG: /secrets/kubeconfig
+  GIT_SSH_COMMAND: ssh -i /secrets/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/secrets/known_hosts
+  ZAI_API_KEY: "{{HERMES_ZAI_API_KEY}}"
+  GLM_BASE_URL: https://api.z.ai/api/coding/paas/v4
+  SOPS_AGE_KEY_FILE: /secrets/age.key
+  # The image ships HERMES_WRITE_SAFE_ROOT=/opt/data, and writes are permitted
+  # ONLY beneath a safe root — so every edit under /workspace was rejected as
+  # "protected system/credential file", which is a misleading message for what
+  # is really a path-scope check. Colon-separated roots are supported.
+  HERMES_WRITE_SAFE_ROOT: /opt/data:/workspace
+
+# Timezone, applied to every service rather than just the agents.
+#
+# TZ alone is not enough. Hermes resolves its own clock in this order:
+# HERMES_TIMEZONE, then the `timezone` key in config.yaml, then the container's
+# local time — so TZ only reaches it via the last fallback, and config.yaml is
+# rewritten by hermes itself and cannot be relied on. Setting HERMES_TIMEZONE
+# explicitly is what actually pins it; TZ covers everything else (log
+# timestamps, `date`, coreutils) so the two do not disagree.
+#
+# This is load-bearing for the cron scheduler: compute_next_run() builds
+# croniter from a hermes-now base, so a cron expression means local time. With
+# the container on UTC, the weekly renovate-digest job's "0 9 * * 6" fired at
+# 05:00 EDT rather than the 09:00 it reads as.
+x-timezone: &timezone
+  TZ: "{{{global:TIMEZONE}}}"
+  HERMES_TIMEZONE: "{{{global:TIMEZONE}}}"
+
+# Mounted at the SAME absolute path in every agent-running container on
+# purpose: they share one HERMES_HOME, and `hermes project` stores absolute
+# paths that must resolve identically in any of them.
+x-mounts:
+  workspace: &mount-workspace /docker/hermes/workspace:/workspace
+  # Read-only so the agent cannot rewrite its own kubeconfig to point at
+  # something with more privilege.
+  secrets: &mount-secrets /docker/hermes/secrets:/secrets:ro
+  # Re-adds the tools dir to PATH for login shells, which /etc/profile
+  # otherwise resets — see the script for the full explanation.
+  toolspath: &mount-toolspath ./tools-path.sh:/etc/profile.d/zz-hermes-tools.sh:ro
+
+# Gate on the toolchain installer so kubectl/flux/sops/gitleaks exist in the
+# shared bin dir before anything tries to use them.
+x-tools-ready: &tools-ready
+  hermes-tools:
+    condition: service_completed_successfully
+
+services:
+  # One-shot toolchain installer. Populates /docker/hermes/home/bin with
+  # checksum-verified kubectl/flux/helm/gh/jq/yq/sops/gitleaks so the agent can
+  # actually administer the k3s cluster. Reuses the hermes-agent image (already
+  # digest pinned) so Renovate has nothing extra to track. Idempotent — a no-op
+  # once the version stamp matches, so redeploys stay fast and still work if
+  # GitHub is unreachable.
+  hermes-tools:
+    image: nousresearch/hermes-agent:v2026.7.7.2@sha256:9c841866021c54c4596849f6135717e8a4d52ba510b7f52c50aef1de1a283973
+    container_name: hermes-tools
+    entrypoint: ["/bin/bash", "/opt/install-tools.sh"]
+    volumes:
+      - /docker/hermes/home:/target
+      - ./install-tools.sh:/opt/install-tools.sh:ro
+      - ./aqua.yaml:/opt/aqua.yaml:ro
+      # The agent's hermes venv, so python deps can be installed into it.
+      # Mounted at a distinct path so it does not shadow this container's own
+      # /opt/hermes.
+      - hermes-agent-src:/opt/hermes-src
+      # Writable: aqua reads the repo's own aqua.yaml here (keeping the agent's
+      # dprint identical to CI's), and the installer sets core.hooksPath so the
+      # repo's .githooks actually run — the `make setup` step, automated.
+      - /docker/hermes/workspace:/workspace
+    environment:
+      <<: *timezone
+      # Used once to write gh's config into the shared volume. This container
+      # is not a model-run shell, so the credential filtering that hides
+      # GH_TOKEN from the agent does not apply here.
+      GH_TOKEN: "{{HERMES_GH_TOKEN}}"
+    restart: "no"
+    networks:
+      - hermes
+
+  hermes-agent:
+    image: nousresearch/hermes-agent:v2026.7.7.2@sha256:9c841866021c54c4596849f6135717e8a4d52ba510b7f52c50aef1de1a283973
+    container_name: hermes-agent
+    command: gateway run
+    volumes:
+      - /docker/hermes/home:/home/hermes/.hermes
+      - *mount-workspace
+      - *mount-secrets
+      - *mount-toolspath
+      - hermes-agent-src:/opt/hermes
+    environment:
+      <<: [*agent-credentials, *timezone]
+      HERMES_HOME: /home/hermes/.hermes
+      # Prepends the tools dir. The remaining entries mirror the image's own
+      # PATH — re-check against `docker inspect` after an image bump, since
+      # overriding PATH here masks any change upstream makes to it.
+      PATH: /home/hermes/.hermes/bin:/opt/hermes/bin:/opt/hermes/.venv/bin:/opt/data/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      # gh cannot read GH_TOKEN: hermes deliberately filters recognised provider
+      # credentials (GH_TOKEN is a Copilot key) out of every shell the model
+      # runs. The installer writes gh's own config here instead; this var is not
+      # secret-shaped, so it survives sanitisation and gh picks the auth up.
+      # Per-service because the shared volume mounts at a different home path
+      # in the webui container.
+      GH_CONFIG_DIR: /home/hermes/.hermes/gh
+      # Telegram, set HERE ONLY and not on the dashboard: platform adapters are
+      # started by `gateway run`, and a second container holding the same token
+      # would open a second long-poll against the same bot, which Telegram
+      # answers by making the two steal updates from each other.
+      #
+      # Its presence is the entire enablement switch — gateway/config.py maps
+      # Platform.TELEGRAM to this one variable, same as Discord and its token.
+      #
+      # Chosen over Discord for the weekly renovate digest because Telegram
+      # allows 4096 characters per message against Discord's 2000, and a digest
+      # covering every open pull request overran the smaller limit and arrived
+      # chunked mid-list.
+      TELEGRAM_BOT_TOKEN: "{{HERMES_TELEGRAM_BOT_TOKEN}}"
+      # Allowlist of numeric Telegram user ids permitted to drive the agent.
+      #
+      # This is the security boundary Discord got from a private server and
+      # Telegram has no equivalent of: anyone who finds the bot username can
+      # message it, and this agent holds a cluster kubeconfig, an SSH deploy key
+      # and a SOPS age key. The check is fail-closed — an empty value denies
+      # everyone rather than allowing them — so the risk is a wrong id here, not
+      # a missing one. Not secret, so it stays readable in the manifest.
+      TELEGRAM_ALLOWED_USERS: "8817233249"
+      # Serves the OpenAI-compatible API on :8642. Without these the adapter
+      # never loads and every cross-container probe of the gateway fails.
+      # connect() refuses to start the server unless a key is set.
+      API_SERVER_ENABLED: "1"
+      API_SERVER_HOST: 0.0.0.0
+      API_SERVER_PORT: "8642"
+      API_SERVER_KEY: "{{HERMES_API_SERVER_KEY}}"
+    depends_on: *tools-ready
+    restart: unless-stopped
+    networks:
+      - hermes
+
+  # The dashboard runs its own agent process rather than proxying to
+  # hermes-agent, so it needs the full credential set and the workspace mount
+  # exactly like the others.
+  hermes-dashboard:
+    image: nousresearch/hermes-agent:v2026.7.7.2@sha256:9c841866021c54c4596849f6135717e8a4d52ba510b7f52c50aef1de1a283973
+    container_name: hermes-dashboard
+    command: dashboard --host 0.0.0.0 --insecure
+    volumes:
+      - /docker/hermes/home:/home/hermes/.hermes
+      - *mount-workspace
+      - *mount-secrets
+      - *mount-toolspath
+    environment:
+      <<: [*agent-credentials, *timezone]
+      HERMES_HOME: /home/hermes/.hermes
+      # GATEWAY_HEALTH_URL is deliberately NOT set.
+      #
+      # The probe builds a bare urllib Request with no Authorization header, so
+      # with API_SERVER_KEY set (mandatory) /health/detailed is rejected every
+      # single cycle, filling the gateway log with auth warnings that bury real
+      # errors. Pointing the var at /health does not help: the probe normalises
+      # any /health or /health/detailed suffix back to the base URL and then
+      # always tries /health/detailed first regardless.
+      #
+      # The var is deprecated upstream ("scheduled for removal"), and the
+      # dashboard shares HERMES_HOME with the gateway, so leaving it unset
+      # costs a legacy widget and buys a readable log.
+      PATH: /home/hermes/.hermes/bin:/opt/hermes/bin:/opt/hermes/.venv/bin:/opt/data/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      # gh cannot read GH_TOKEN: hermes deliberately filters recognised provider
+      # credentials (GH_TOKEN is a Copilot key) out of every shell the model
+      # runs. The installer writes gh's own config here instead; this var is not
+      # secret-shaped, so it survives sanitisation and gh picks the auth up.
+      # Per-service because the shared volume mounts at a different home path
+      # in the webui container.
+      GH_CONFIG_DIR: /home/hermes/.hermes/gh
+    depends_on: *tools-ready
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.hermes-dashboard.rule=Host(`{{{domainForApp "hermes-dashboard"}}}`)
+      - traefik.http.routers.hermes-dashboard.entrypoints=https
+      - traefik.http.routers.hermes-dashboard.tls=true
+      - traefik.http.routers.hermes-dashboard.tls.certresolver=porkbun
+      - traefik.http.routers.hermes-dashboard.service=hermes-dashboard
+      - traefik.http.services.hermes-dashboard.loadbalancer.server.port=9119
+      # - traefik.http.routers.hermes-dashboard.middlewares=oidc-auth@file
+    networks:
+      - hermes
+      - traefik
+
+  # Thin client. hermes-webui normally runs the Hermes agent IN-PROCESS against
+  # the shared HERMES_HOME, which is why it previously needed a full duplicate
+  # of the toolchain, cluster credentials, git keys and the age key. Setting
+  # HERMES_WEBUI_CHAT_BACKEND=gateway routes chat through hermes-agent's API
+  # instead, so all execution happens in one place and this container needs no
+  # credentials at all — a smaller blast radius as well as less duplication.
+  #
+  # It is a different image (python 3.12 vs the agent's 3.13) with its own
+  # dependency set, so duplicating the toolchain here was never going to be a
+  # clean copy anyway.
+  hermes-webui:
+    image: ghcr.io/nesquena/hermes-webui:0.52.41@sha256:10eaa2d43efbdd01833e7ff64aaaa5557beb15e2a34d32a489af4fd4ed5fbff5
+    container_name: hermes-webui
+    depends_on:
+      hermes-agent:
+        condition: service_started
+    volumes:
+      - /docker/hermes/home:/home/hermeswebui/.hermes
+      - hermes-agent-src:/home/hermeswebui/.hermes/hermes-agent:ro
+      # Writable, not :ro. webui validates workspace candidates with
+      # R_OK|W_OK|X_OK, so a read-only mount is silently skipped and the default
+      # falls back to $HOME/workspace — which does not exist here, making every
+      # "new session" fail validation. Chat still executes in hermes-agent.
+      - /docker/hermes/workspace:/workspace
+    environment:
+      <<: *timezone
+      HERMES_WEBUI_HOST: 0.0.0.0
+      HERMES_WEBUI_PORT: "8787"
+      HERMES_WEBUI_STATE_DIR: /home/hermeswebui/.hermes/webui
+      # Without this webui defaults to $HOME/workspace, which does not exist in
+      # this container, and every session-creation request is rejected as an
+      # untrusted path.
+      HERMES_WEBUI_DEFAULT_WORKSPACE: /workspace
+      # Route chat to the gateway rather than running an agent in-process.
+      #
+      # The GATEWAY_* pair is what the chat backend actually reads. It is NOT
+      # the HERMES_API_* pair below: those only feed the Tasks/cron health
+      # probe. Without these, gateway chat silently defaults to
+      # http://127.0.0.1:8642 — inside this container, where nothing listens —
+      # and every run dies with "Connection refused" after the UI has already
+      # accepted the message.
+      HERMES_WEBUI_CHAT_BACKEND: gateway
+      HERMES_WEBUI_GATEWAY_BASE_URL: http://hermes-agent:8642
+      HERMES_WEBUI_GATEWAY_API_KEY: "{{HERMES_API_SERVER_KEY}}"
+      HERMES_API_URL: http://hermes-agent:8642
+      HERMES_API_KEY: "{{HERMES_API_SERVER_KEY}}"
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - traefik.http.routers.hermes.rule=Host(`{{{domainForApp "hermes"}}}`)
+      - traefik.http.routers.hermes.entrypoints=https
+      - traefik.http.routers.hermes.tls=true
+      - traefik.http.routers.hermes.tls.certresolver=porkbun
+      - traefik.http.routers.hermes.service=hermes
+      - traefik.http.services.hermes.loadbalancer.server.port=8787
+      # - traefik.http.routers.hermes.middlewares=oidc-auth@file
+    networks:
+      - hermes
+      - traefik
+
+networks:
+  hermes:
+  traefik:
+    external: true
+
+volumes:
+  hermes-agent-src:

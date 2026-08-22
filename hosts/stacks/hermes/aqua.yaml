@@ -1,0 +1,36 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/aquaproj/aqua/main/json-schema/aqua-yaml.json
+#
+# Toolchain for the Hermes agent that administers the k3s-homelab cluster.
+#
+# This file covers tools the AGENT needs but repo contributors do not, so they
+# are kept out of k3s-homelab's own aqua.yaml. Tools that CI also runs —
+# currently dprint — deliberately live in the repo's aqua.yaml instead: the
+# installer runs `aqua cp -a` from inside the checkout, so aqua reads BOTH this
+# file and the repo's. That makes the agent's dprint version identical to the
+# one CI enforces by construction, rather than by a hand-maintained duplicate
+# pin that silently rots the first time Renovate bumps one and not the other.
+#
+# Renovate updates these pins the same way it updates the repo's.
+registries:
+  - type: standard
+    ref: v4.549.0 # renovate: depName=aquaproj/aqua-registry
+
+packages:
+  # Inspecting HelmReleases (`helm template`, `helm get`). The agent must never
+  # run helm install/upgrade — Flux owns releases; see AGENTS.md.
+  - name: helm/helm@v4.2.3
+
+  # Pull requests. The agent proposes every change as a PR, so gh is on the
+  # critical path, not a convenience.
+  - name: cli/cli@v2.97.0
+
+  # Parsing kubectl/flux JSON and YAML output.
+  - name: jqlang/jq@jq-1.8.2
+  - name: mikefarah/yq@v4.53.3
+
+  # NOTE: dprint, gitleaks, uv, sops, kubectl and flux are deliberately NOT
+  # listed here. The repo's own scripts, hooks and docs use them, so they are
+  # pinned in k3s-homelab's aqua.yaml — which this installer also reads, since
+  # it runs `aqua cp -a` from inside the checkout. Pinning a tool in both files
+  # is how the agent and CI end up on different versions.

@@ -125,3 +125,5 @@ config:
     secure: v1:uGzwAFx2cAlGJ/RY:MiKIqTymf+OOVcZvY0msKkGAaIQEdb/qZ+T4iObD3V0lGu53voYOSDiMpeRoBe+NujOphl/3/akahMROkkwteefZHY+2uGTkh2OOi/QQP7zkbpyFW3PcLQrJA957OHefBwAfL96IX4kyMnBztQ==
   lxc#ai#hermes:HERMES_ZAI_API_KEY:
     secure: v1:Tm7/aPmk7zeRwKE6:e9mzKayA1XVwEG3Wos77VKgETwaWXJ7QFzA+lNwRon+OX+xWfYXm/Ao5/QmyxR1ff6+oUHczsgNPZ4/f2GvL/Wc=
+  lxc#ai#hermes:HERMES_TELEGRAM_BOT_TOKEN:
+    secure: v1:k2FsjbafHnMRGBuH:yJ60Mww5YqexbT9ZghGyzL0SaxY3/12kaIL/JxJgCK8/UhNtQ34TAuoLsk1/Wc64roGUNUA2RKuNCXjXej8=
