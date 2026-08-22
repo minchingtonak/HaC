@@ -17,7 +17,7 @@
     "@pulumi/ansible": "file:sdks/ansible",
     "@pulumi/command": "^1.2.1",
     "@pulumi/porkbun": "file:sdks/porkbun",
-    "@pulumi/pulumi": "^3.229.0",
+    "@pulumi/pulumi": "^3.258.0",
     "smol-toml": "^1.8.0",
     "ts-node": "^10.9.2",
     "type-fest": "^5.8.0",
