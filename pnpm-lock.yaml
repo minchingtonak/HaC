@@ -5,9 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 patchedDependencies:
-  '@pulumi/command':
-    hash: 919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6
-    path: patches/@pulumi__command.patch
+  '@pulumi/command': 919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6
 
 importers:
 
