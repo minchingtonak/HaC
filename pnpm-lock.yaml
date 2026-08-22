@@ -18,8 +18,8 @@ importers:
         specifier: workspace:*
         version: link:libs/templates
       '@muhlba91/pulumi-proxmoxve':
-        specifier: ^7.13.0
-        version: 7.13.0(ts-node@10.9.2(@types/node@24.13.3)(typescript@6.0.3))(typescript@6.0.3)
+        specifier: ^8.4.1
+        version: 8.4.1(ts-node@10.9.2(@types/node@24.13.3)(typescript@6.0.3))(typescript@6.0.3)
       '@pulumi/ansible':
         specifier: file:sdks/ansible
         version: file:sdks/ansible(ts-node@10.9.2(@types/node@24.13.3)(typescript@6.0.3))
@@ -313,8 +313,8 @@ packages:
     resolution: {integrity: sha512-XGSsWDweP80Fks16lwkAUIr54ICyBs6PsI4mpfTLQaWgEJRtY9xEV+PeyDpJ+sJEGZxqINlpmAwe/6tS1pP8Ng==}
     engines: {node: '>=10.3.0'}
 
-  '@muhlba91/pulumi-proxmoxve@7.13.0':
-    resolution: {integrity: sha512-gpnwSK1v8Ji1J5lWuz+fZtH+78GlIQbg6+PGBruk5phVkkndW4gj5YSP4PzKEjVYdg34Lt9BO2dRFsv3nSv9Gw==}
+  '@muhlba91/pulumi-proxmoxve@8.4.1':
+    resolution: {integrity: sha512-yjlB6hB/4ILH+CsUuNWO802ri5odftc04057CRSJJLI92t6MA8J6L4o7vY/IYcKbF0aKQ5YzO7/dWjI2AWyIoQ==}
 
   '@npmcli/agent@4.0.0':
     resolution: {integrity: sha512-kAQTcEN9E8ERLVg5AsGwLNoFb+oEG6engbqAU2P43gD4JEIkNGMHdVQ096FsOAAYpZPB0RSt0zgInKIAS1l5QA==}
@@ -1932,7 +1932,7 @@ snapshots:
 
   '@logdna/tail-file@2.2.0': {}
 
-  '@muhlba91/pulumi-proxmoxve@7.13.0(ts-node@10.9.2(@types/node@24.13.3)(typescript@6.0.3))(typescript@6.0.3)':
+  '@muhlba91/pulumi-proxmoxve@8.4.1(ts-node@10.9.2(@types/node@24.13.3)(typescript@6.0.3))(typescript@6.0.3)':
     dependencies:
       '@pulumi/pulumi': 3.259.0(ts-node@10.9.2(@types/node@24.13.3)(typescript@6.0.3))(typescript@6.0.3)
     transitivePeerDependencies:
