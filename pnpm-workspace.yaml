@@ -1,12 +1,15 @@
 packages:
   - "libs/*"
 
-onlyBuiltDependencies:
-  - "@pulumi/ansible"
-  - "@pulumi/command"
-  - "@pulumi/porkbun"
-  - esbuild
-  - protobufjs
+# pnpm 11 replaced onlyBuiltDependencies with this map and matches entries
+# against the full dependency id, so the local file: SDKs must be listed with
+# their specs or their postinstall (which compiles bin/index.js) is skipped.
+allowBuilds:
+  "@pulumi/ansible@file:sdks/ansible": true
+  "@pulumi/command": true
+  "@pulumi/porkbun@file:sdks/porkbun": true
+  esbuild: true
+  protobufjs: true
 
 patchedDependencies:
   "@pulumi/command": patches/@pulumi__command.patch
