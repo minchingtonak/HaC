@@ -33,7 +33,7 @@ AQUA_SHA256="89cb081adb19e425b1dca6b16d912c349a43535ce88d8713050738c9263618d0"
 
 # Bump when this script gains work not tied to a version change (venv,
 # wrappers, gh auth). It is part of the stamp, so raising it forces a re-run.
-SETUP_REVISION="9"
+SETUP_REVISION="10"
 
 # Bind-mounted Hermes home. Same volume the agent sees at ~/.hermes.
 TARGET="${HERMES_TOOLS_TARGET:-/target}"
@@ -116,20 +116,36 @@ log "installed: $(cd "${BIN_DIR}" && ls | grep -v '^\.' | tr '\n' ' ')"
 
 # --- python deps for hermes itself ------------------------------------------
 # web_search is configured to use the ddgs backend but the image does not ship
-# the package, so the tool fails with "ddgs package is not installed". Install
-# it into hermes' own venv, which lives in the hermes-agent-src volume and so
-# persists. That venv has no pip, hence uv.
-AGENT_VENV="${HERMES_TOOLS_AGENT_VENV:-/opt/hermes-src/.venv}"
-if [ -x "${AGENT_VENV}/bin/python" ]; then
-  if "${AGENT_VENV}/bin/python" -c 'import ddgs' 2>/dev/null; then
-    log "ddgs already present in the agent venv"
+# the package, so the tool fails with "ddgs package is not installed".
+#
+# Installed into the bind-mounted home, NOT into the image's own venv. The
+# earlier arrangement persisted it by mounting a named volume over the agent's
+# /opt/hermes, which pinned the entire hermes install to whichever image first
+# seeded that volume — docker only seeds a named volume while it is empty, so
+# image bumps stopped reaching the container. The v2026.8.16.2 bump then failed
+# outright because its new entrypoint did not exist in the stale tree. The
+# agent and dashboard pick these up via PYTHONPATH instead; nothing mounts
+# over /opt/hermes any more.
+#
+# --python pins resolution to the agent's interpreter — same image, so the
+# wheels selected here match the ABI the agent will import them with. That venv
+# has no pip, hence uv.
+PYLIBS="${HERMES_TOOLS_PYLIBS:-${TARGET}/pylibs}"
+AGENT_PYTHON="${HERMES_TOOLS_AGENT_PYTHON:-/opt/hermes/.venv/bin/python}"
+if [ -x "${AGENT_PYTHON}" ]; then
+  if PYTHONPATH="${PYLIBS}" "${AGENT_PYTHON}" -c 'import ddgs' 2>/dev/null; then
+    log "ddgs already present in ${PYLIBS}"
   else
-    log "installing ddgs into ${AGENT_VENV}"
-    uv pip install --quiet --python "${AGENT_VENV}/bin/python" ddgs \
+    log "installing ddgs into ${PYLIBS}"
+    mkdir -p "${PYLIBS}"
+    uv pip install --quiet --python "${AGENT_PYTHON}" --target "${PYLIBS}" ddgs \
       || log "WARNING: ddgs install failed — web_search will not work"
   fi
+  # Same uid/gid as the rest of the shared home; the agent runs as 10000 and
+  # cannot import from a root-owned 0700 tree.
+  chown -R "${OWNER_UID}:${OWNER_GID}" "${PYLIBS}"
 else
-  log "WARNING: agent venv not found at ${AGENT_VENV}; skipping ddgs"
+  log "WARNING: agent python not found at ${AGENT_PYTHON}; skipping ddgs"
 fi
 
 # --- enable the repo's git hooks -------------------------------------------

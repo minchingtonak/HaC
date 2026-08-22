@@ -87,10 +87,6 @@ services:
       - /docker/hermes/home:/target
       - ./install-tools.sh:/opt/install-tools.sh:ro
       - ./aqua.yaml:/opt/aqua.yaml:ro
-      # The agent's hermes venv, so python deps can be installed into it.
-      # Mounted at a distinct path so it does not shadow this container's own
-      # /opt/hermes.
-      - hermes-agent-src:/opt/hermes-src
       # Writable: aqua reads the repo's own aqua.yaml here (keeping the agent's
       # dprint identical to CI's), and the installer sets core.hooksPath so the
       # repo's .githooks actually run — the `make setup` step, automated.
@@ -114,7 +110,6 @@ services:
       - *mount-workspace
       - *mount-secrets
       - *mount-toolspath
-      - hermes-agent-src:/opt/hermes
     environment:
       <<: [*agent-credentials, *timezone]
       HERMES_HOME: /home/hermes/.hermes
@@ -122,6 +117,20 @@ services:
       # PATH — re-check against `docker inspect` after an image bump, since
       # overriding PATH here masks any change upstream makes to it.
       PATH: /home/hermes/.hermes/bin:/opt/hermes/bin:/opt/hermes/.venv/bin:/opt/data/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      # Extra python packages the image does not ship (ddgs, for web_search),
+      # installed by hermes-tools into the shared home rather than into the
+      # image's own venv.
+      #
+      # This indirection is load-bearing. Persisting them by mounting a named
+      # volume over /opt/hermes froze the whole hermes install at whatever
+      # image first seeded that volume: a docker named volume is only seeded
+      # when EMPTY, so after an image bump the container kept running the old
+      # tree. That surfaced on the v2026.7.7.2 -> v2026.8.16.2 bump as the new
+      # entrypoint being missing — "stat /opt/hermes/docker/
+      # entrypoint-dispatch.sh: no such file or directory" — and would
+      # otherwise have silently pinned the agent's code forever. Nothing may
+      # mount over /opt/hermes.
+      PYTHONPATH: /home/hermes/.hermes/pylibs
       # gh cannot read GH_TOKEN: hermes deliberately filters recognised provider
       # credentials (GH_TOKEN is a Copilot key) out of every shell the model
       # runs. The installer writes gh's own config here instead; this var is not
@@ -191,6 +200,9 @@ services:
       # dashboard shares HERMES_HOME with the gateway, so leaving it unset
       # costs a legacy widget and buys a readable log.
       PATH: /home/hermes/.hermes/bin:/opt/hermes/bin:/opt/hermes/.venv/bin:/opt/data/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      # Extra python packages the image does not ship — see hermes-agent for
+      # why they live in the shared home rather than in the image's own venv.
+      PYTHONPATH: /home/hermes/.hermes/pylibs
       # gh cannot read GH_TOKEN: hermes deliberately filters recognised provider
       # credentials (GH_TOKEN is a Copilot key) out of every shell the model
       # runs. The installer writes gh's own config here instead; this var is not
@@ -232,7 +244,6 @@ services:
         condition: service_started
     volumes:
       - /docker/hermes/home:/home/hermeswebui/.hermes
-      - hermes-agent-src:/home/hermeswebui/.hermes/hermes-agent:ro
       # Writable, not :ro. webui validates workspace candidates with
       # R_OK|W_OK|X_OK, so a read-only mount is silently skipped and the default
       # falls back to $HOME/workspace — which does not exist here, making every
@@ -279,6 +290,3 @@ networks:
   hermes:
   traefik:
     external: true
-
-volumes:
-  hermes-agent-src:
