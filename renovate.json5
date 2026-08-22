@@ -32,6 +32,10 @@
   // docker:enableMajor preset, this is disabled by default
   packageRules: [
     { matchPackagePatterns: ["^lavaforge\\.org/"], enabled: false },
+    // TypeScript 7 is the native port and no longer ships the JS compiler API.
+    // ts-node (which pulumi's nodejs runtime registers) and typescript-eslint
+    // both need it, so stay on 6.x until they support the native compiler.
+    { matchPackageNames: ["typescript"], allowedVersions: "<7" },
     {
       matchPackageNames: ["ghcr.io/linuxserver/jellyfin"],
       allowedVersions: "<2021",
