@@ -21,7 +21,7 @@
     "smol-toml": "^1.8.0",
     "ts-node": "^10.9.2",
     "type-fest": "^5.8.0",
-    "zod": "^4.4.3"
+    "zod": "^4.5.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.2",
