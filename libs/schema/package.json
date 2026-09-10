@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "smol-toml": "^1.8.0",
-    "zod": "^4.4.3"
+    "zod": "^4.5.4"
   },
   "peerDependencies": {
     "@pulumi/pulumi": "^3.258.0"
