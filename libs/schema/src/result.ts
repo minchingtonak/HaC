@@ -15,8 +15,7 @@ export type ParseError =
  * Result type for all parsing operations.
  */
 export type ParseResult<T> =
-  | { success: true; data: T }
-  | { success: false; error: ParseError };
+  { success: true; data: T } | { success: false; error: ParseError };
 
 /**
  * Format a ParseError into a human-readable string.
