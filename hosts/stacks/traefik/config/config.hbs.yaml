@@ -1,9 +1,16 @@
-global_keywords:
+# https://clemcer.github.io/LoggiFly/guide/migrate-to-v2
+version: 2
+global:
   keywords:
-    - reallylongkeywordthatwillnevermatchanything
-# loggifly requires at least one container to be defined here
+    # loggifly requires at least one keyword to be defined
+    - keyword: reallylongkeywordthatwillnevermatchanything
+  defaults:
+    # v1 defaulted to notification_cooldown: 5; v2 defaults to 0 (spam)
+    trigger_cooldown: 5
 containers:
-  "{{{@lxc.hostname}}}-dummy-container":
+  rules:
+    # loggifly requires at least one rule to be defined
+    - container_name: "{{{@lxc.hostname}}}-dummy-container"
 notifications:
   apprise:
     # Any Apprise-compatible URL (https://github.com/caronc/apprise/wiki)
