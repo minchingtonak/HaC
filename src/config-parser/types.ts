@@ -13,5 +13,4 @@ export type FileParseError = {
  * Result type for file-based parsing operations.
  */
 export type FileParseResult<T> =
-  | { success: true; data: T }
-  | { success: false; error: FileParseError };
+  { success: true; data: T } | { success: false; error: FileParseError };
