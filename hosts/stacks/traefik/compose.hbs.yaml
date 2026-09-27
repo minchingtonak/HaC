@@ -91,9 +91,12 @@ services:
       #   .*            - Match any characters
       #    ERR          - Match the literal string " ERR " (with spaces)
       - "loggifly.keywords.0.regex=^(?!.*:22000).* ERR "
-      - "loggifly.keywords.0.notification_title={{{@lxc.hostname}}}#{container} - error"
-      - "loggifly.keywords.0.action=restart"
-      - "loggifly.keywords.0.action_cooldown=60"
+      # v2: title_template replaces notification_title (Jinja2); this label only
+      # ever applied to the traefik container, so a static title avoids mixing
+      # Jinja2 braces into this handlebars template
+      - "loggifly.keywords.0.title_template={{{@lxc.hostname}}}#traefik - error"
+      - "loggifly.keywords.0.container_action=restart"
+      - "loggifly.keywords.0.container_action_cooldown=60"
     networks:
       - traefik
 
