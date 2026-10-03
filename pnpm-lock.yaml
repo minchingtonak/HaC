@@ -55,7 +55,7 @@ importers:
         specifier: ^10.0.1
         version: 10.0.1(eslint@10.11.0(jiti@2.6.1))
       '@types/node':
-        specifier: ^24.13.6
+        specifier: ^24.19.0
         version: 24.19.0
       eslint:
         specifier: ^10.11.0
@@ -89,7 +89,7 @@ importers:
         version: 4.6.5
     devDependencies:
       '@types/node':
-        specifier: ^24.13.6
+        specifier: ^24.19.0
         version: 24.19.0
       typescript:
         specifier: ^6.0.3
@@ -111,7 +111,7 @@ importers:
         version: 5.10.0
     devDependencies:
       '@types/node':
-        specifier: ^24.13.6
+        specifier: ^24.19.0
         version: 24.19.0
       typescript:
         specifier: ^6.0.3
