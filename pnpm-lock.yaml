@@ -30,7 +30,7 @@ importers:
         specifier: file:sdks/porkbun
         version: file:sdks/porkbun(ts-node@10.9.2(@types/node@24.19.0)(typescript@6.0.3))
       '@pulumi/pulumi':
-        specifier: ^3.264.0
+        specifier: ^3.265.0
         version: 3.265.0(ts-node@10.9.2(@types/node@24.19.0)(typescript@6.0.3))(typescript@6.0.3)
       smol-toml:
         specifier: ^1.9.0
@@ -79,7 +79,7 @@ importers:
   libs/schema:
     dependencies:
       '@pulumi/pulumi':
-        specifier: ^3.264.0
+        specifier: ^3.265.0
         version: 3.265.0(ts-node@10.9.2(@types/node@24.19.0)(typescript@6.0.3))(typescript@6.0.3)
       smol-toml:
         specifier: ^1.9.0
@@ -101,7 +101,7 @@ importers:
         specifier: ^1.2.1
         version: 1.2.1(patch_hash=919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6)(ts-node@10.9.2(@types/node@24.19.0)(typescript@6.0.3))(typescript@6.0.3)
       '@pulumi/pulumi':
-        specifier: ^3.264.0
+        specifier: ^3.265.0
         version: 3.265.0(ts-node@10.9.2(@types/node@24.19.0)(typescript@6.0.3))(typescript@6.0.3)
       handlebars:
         specifier: ^4.7.9
@@ -1129,10 +1129,6 @@ packages:
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
-
-  js-yaml@4.1.0:
-    resolution: {integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==}
-    hasBin: true
 
   js-yaml@4.3.2:
     resolution: {integrity: sha512-SFNOvSJ+Dgf/9An904Yx+CgSlIPCkIpao4qo51lpee25TIRejdH3rhR4EZMGoNx3/TP3O+wzWuiTFl4sqbltzA==}
@@ -2622,7 +2618,7 @@ snapshots:
     dependencies:
       env-paths: 2.2.1
       import-fresh: 3.3.1
-      js-yaml: 4.1.0
+      js-yaml: 4.3.2
       parse-json: 5.2.0
     optionalDependencies:
       typescript: 6.0.3
@@ -2910,10 +2906,6 @@ snapshots:
   jiti@2.6.1: {}
 
   js-tokens@4.0.0: {}
-
-  js-yaml@4.1.0:
-    dependencies:
-      argparse: 2.0.1
 
   js-yaml@4.3.2:
     dependencies:
