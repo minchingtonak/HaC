@@ -237,7 +237,7 @@ services:
   # dependency set, so duplicating the toolchain here was never going to be a
   # clean copy anyway.
   hermes-webui:
-    image: ghcr.io/nesquena/hermes-webui:0.52.379@sha256:daa38097ab602e4e7af757a8b1f2e3107ae50074634ff6fa58b8db830ee9da13
+    image: ghcr.io/nesquena/hermes-webui:0.52.406@sha256:3c91b37b93cd482db2c68f48def3d5dc81ba44d9d1b6cf1c6b96b75abedf2bc2
     container_name: hermes-webui
     depends_on:
       hermes-agent:
