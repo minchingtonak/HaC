@@ -1,6 +1,6 @@
 services:
   ollama:
-    image: ollama/ollama:0.34.3@sha256:7ab595e4ead391f6818c7215297781282babe0701f6d9a9f8862ac591360a58b
+    image: ollama/ollama:0.40.6@sha256:265409e1d931028a8f7d5a32bcbafddd7bffbc6cc629d77efe9560adf692a5e7
     container_name: ollama
     restart: unless-stopped
     # ports:
