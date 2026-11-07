@@ -15,7 +15,7 @@
     "@hac/templates": "workspace:*",
     "@muhlba91/pulumi-proxmoxve": "^7.13.0",
     "@pulumi/ansible": "file:sdks/ansible",
-    "@pulumi/command": "^1.2.1",
+    "@pulumi/command": "^1.3.0",
     "@pulumi/porkbun": "file:sdks/porkbun",
     "@pulumi/pulumi": "^3.264.0",
     "smol-toml": "^1.9.0",
