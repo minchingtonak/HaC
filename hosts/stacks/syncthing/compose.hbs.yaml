@@ -1,6 +1,6 @@
 services:
   syncthing:
-    image: ghcr.io/linuxserver/syncthing:2.1.5@sha256:26cfac865d0924afc7f1e34a65e34e41c22f7b6b61d0c23a6aaebad13104b113
+    image: ghcr.io/linuxserver/syncthing:2.1.7@sha256:c4207d8f5b66d5f67eedb636b75500b5a04898e9f33299d252f4b966c41a4128
     container_name: syncthing
     hostname: syncthing
     environment:
