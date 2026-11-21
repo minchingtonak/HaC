@@ -4,22 +4,10 @@
 # surfaced only as "no API key was found" plus a silently wrong working
 # directory. These anchors exist so a service cannot quietly drift again.
 #
-# GLM_BASE_URL is load-bearing: hermes defaults the zai provider to
-# https://api.z.ai/api/paas/v4, the PAY-PER-TOKEN endpoint. A coding-plan
-# subscription only bills through /api/coding/paas/v4 and Z.AI states the two
-# are not interchangeable, so pointing at the general endpoint bypasses the
-# subscription silently. (Verified: the coding-plan key returns 200 on the
-# coding endpoint and 429 on the general one.)
-#
-# Do NOT add a Claude Max subscription token here expecting it to be free.
-# Anthropic refuses third-party apps against plan limits — "Third-party apps
-# now draw from your extra usage, not your plan limits" (HTTP 400). It works
-# only once extra usage is purchased, which is the same economics as a plain
-# API key. Tested and rejected 2026-08-08. The var was CLAUDE_CODE_OAUTH_TOKEN,
-# sourced from HERMES_CLAUDE_CODE_OAUTH_TOKEN; it is named in prose rather than
-# left as a commented-out template expression because the template processor
-# discovers variables by scanning raw text, so a double-brace expression inside
-# a YAML comment still counts as a required config key and fails the render.
+# The model provider is OpenRouter. OPENROUTER_API_KEY is read from the env
+# by the openrouter provider profile in config.yaml. Do NOT add API keys for
+# other providers here — the agent(config.yaml) only loads credentials for the
+# provider it is configured to use.
 #
 # SOPS_AGE_KEY_FILE is the agent's OWN age key, not the operator's master key.
 # It is a second recipient on every rule in .sops.yaml, so the agent can read
@@ -28,8 +16,7 @@
 x-agent-credentials: &agent-credentials
   KUBECONFIG: /secrets/kubeconfig
   GIT_SSH_COMMAND: ssh -i /secrets/id_ed25519 -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=/secrets/known_hosts
-  ZAI_API_KEY: "{{HERMES_ZAI_API_KEY}}"
-  GLM_BASE_URL: https://api.z.ai/api/coding/paas/v4
+  OPENROUTER_API_KEY: "{{HERMES_OPENROUTER_API_KEY}}"
   SOPS_AGE_KEY_FILE: /secrets/age.key
   # The image ships HERMES_WRITE_SAFE_ROOT=/opt/data, and writes are permitted
   # ONLY beneath a safe root — so every edit under /workspace was rejected as
