@@ -39,8 +39,8 @@ importers:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@24.19.2)(typescript@6.0.3)
       type-fest:
-        specifier: ^5.10.0
-        version: 5.10.0
+        specifier: ^6.0.1
+        version: 6.0.3
       zod:
         specifier: ^4.6.7
         version: 4.6.7
@@ -107,8 +107,8 @@ importers:
         specifier: ^4.7.10
         version: 4.7.10
       type-fest:
-        specifier: ^5.10.0
-        version: 5.10.0
+        specifier: ^6.0.1
+        version: 6.0.3
     devDependencies:
       '@types/node':
         specifier: ^24.19.2
@@ -1211,9 +1211,9 @@ packages:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
     engines: {node: '>= 0.8.0'}
 
-  type-fest@5.10.0:
-    resolution: {integrity: sha512-NoSdpq/WEiAg5sjmBkmV/hfxv6HJH4NqPNrqjtSO5CwRmpsDfaf4begxW34KdJykH/l1yHtwBWQkCRdoXO8mPA==}
-    engines: {node: '>=20'}
+  type-fest@6.0.3:
+    resolution: {integrity: sha512-MOJXegkac3h+sWdVb6VY/ACclsa71z3BprNpedGV8ljIzYCo+LRWgyIkWhidKNoiNJOb6kUds1pNCyzQ2p6hJQ==}
+    engines: {node: '>=22'}
 
   typescript-eslint@8.73.0:
     resolution: {integrity: sha512-+EnKy9rkYPun4l+kG2bDuYWQ6y1tGVgdR/tY1U9AC6h21CjEwOoc7gsjwe0FXB8uWFzk4QiCFbuRWgX758PiAg==}
@@ -2488,7 +2488,7 @@ snapshots:
     dependencies:
       prelude-ls: 1.2.1
 
-  type-fest@5.10.0:
+  type-fest@6.0.3:
     dependencies:
       tagged-tag: 1.0.0
 
