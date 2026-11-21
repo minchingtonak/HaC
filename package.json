@@ -18,20 +18,20 @@
     "@pulumi/command": "^1.2.1",
     "@pulumi/porkbun": "file:sdks/porkbun",
     "@pulumi/pulumi": "^3.276.0",
-    "smol-toml": "^1.9.0",
+    "smol-toml": "^1.9.1",
     "ts-node": "^10.9.2",
     "type-fest": "^5.10.0",
-    "zod": "^4.6.5"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@commitlint/cli": "^21.2.3",
-    "@commitlint/config-conventional": "^21.2.3",
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
     "@eslint/js": "^10.0.1",
     "@types/node": "^26.6.6",
     "eslint": "^10.15.0",
-    "globals": "^17.12.0",
+    "globals": "^17.14.0",
     "husky": "^9.1.7",
-    "prettier": "^3.9.9",
+    "prettier": "^3.10.1",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.73.0"
   },
