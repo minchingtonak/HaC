@@ -21,11 +21,11 @@
   },
   "dependencies": {
     "@pulumi/command": "^1.2.1",
-    "handlebars": "^4.7.9",
+    "handlebars": "^4.7.10",
     "type-fest": "^5.10.0"
   },
   "peerDependencies": {
-    "@pulumi/pulumi": "^3.264.0"
+    "@pulumi/pulumi": "^3.276.0"
   },
   "peerDependenciesMeta": {
     "@pulumi/pulumi": {
