@@ -1,7 +1,7 @@
 {
   "name": "hac",
   "main": "index.ts",
-  "packageManager": "pnpm@11.28.12",
+  "packageManager": "pnpm@11.29.0",
   "scripts": {
     "check": "pnpm exec prettier --check .",
     "format": "pnpm exec prettier --write .",
