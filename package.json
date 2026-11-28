@@ -20,7 +20,7 @@
     "@pulumi/pulumi": "^3.276.0",
     "smol-toml": "^1.9.1",
     "ts-node": "^10.9.2",
-    "type-fest": "^6.0.1",
+    "type-fest": "^6.0.3",
     "zod": "^4.6.7"
   },
   "devDependencies": {
