@@ -30,7 +30,7 @@ importers:
         specifier: file:sdks/porkbun
         version: file:sdks/porkbun(ts-node@10.9.2(@types/node@26.6.6)(typescript@6.0.3))
       '@pulumi/pulumi':
-        specifier: ^3.276.0
+        specifier: ^3.277.0
         version: 3.277.0(ts-node@10.9.2(@types/node@26.6.6)(typescript@6.0.3))(typescript@6.0.3)
       smol-toml:
         specifier: ^1.9.1
@@ -79,7 +79,7 @@ importers:
   libs/schema:
     dependencies:
       '@pulumi/pulumi':
-        specifier: ^3.276.0
+        specifier: ^3.277.0
         version: 3.277.0(ts-node@10.9.2(@types/node@26.6.6)(typescript@6.0.3))(typescript@6.0.3)
       smol-toml:
         specifier: ^1.9.1
@@ -101,7 +101,7 @@ importers:
         specifier: ^1.2.1
         version: 1.2.1(patch_hash=919098b7983a0c44a474b49643a0b6dab49758d46ed3cee62c9cb630fd431dd6)(ts-node@10.9.2(@types/node@26.6.6)(typescript@6.0.3))(typescript@6.0.3)
       '@pulumi/pulumi':
-        specifier: ^3.276.0
+        specifier: ^3.277.0
         version: 3.277.0(ts-node@10.9.2(@types/node@26.6.6)(typescript@6.0.3))(typescript@6.0.3)
       handlebars:
         specifier: ^4.7.10
